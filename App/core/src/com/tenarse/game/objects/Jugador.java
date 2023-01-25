@@ -2,7 +2,9 @@ package com.tenarse.game.objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -57,7 +59,23 @@ public class Jugador extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha){
         super.draw(batch, parentAlpha);
-        batch.draw(AssetManager.playerDown, this.position.x, this.position.y, width, height);
+        batch.draw(getPLayerDirection(), this.position.x, this.position.y, width, height);
+    }
+
+    private TextureRegion getPLayerDirection() {
+        TextureRegion playerDir = AssetManager.playerDown;
+
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)){
+            playerDir = AssetManager.playerLeft;
+        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)){
+            playerDir = AssetManager.playerRight;
+        } else if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)){
+            playerDir = AssetManager.playerUp;
+        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)){
+            playerDir = AssetManager.playerDown;
+        }
+
+        return playerDir;
     }
 
 

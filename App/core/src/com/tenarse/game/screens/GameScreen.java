@@ -26,6 +26,8 @@ public class GameScreen implements Screen {
 
     public GameScreen(Batch prevBatch, Viewport prevViewport){
 
+        //Camara
+
         //Start music
 
         //Crear Shaperender
@@ -38,7 +40,7 @@ public class GameScreen implements Screen {
 
         //Crear el PJ
         jugador = new Jugador(Settings.PLAYER_STARTX, Settings.PLAYER_STARTY, Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT);
-        background = new Background(Settings.GAME_WIDTH, Settings.GAME_HEIGHT);
+        background = new Background(3840, 2160);
 
         //Afegir actors a l'stage
         stage.addActor(background);
@@ -58,8 +60,8 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        stage.getViewport().getCamera().position.set(jugador.getX(), jugador.getY(), 0);
-        stage.getViewport().getCamera().update();
+        System.out.println(stage.getViewport().getCamera().position);
+        stage.getViewport().getCamera().position.set(jugador.getCollisionRectPlayer().x, jugador.getCollisionRectPlayer().y, 0);
         stage.draw();
         stage.act(delta);
     }

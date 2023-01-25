@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.tenarse.game.helpers.AssetManager;
+import com.tenarse.game.utils.Settings;
 
 public class Background extends Actor {
 
@@ -19,7 +20,7 @@ public class Background extends Actor {
         this.height = height;
 
         texture = new TextureRegion(AssetManager.background);
-        setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        setBounds(0, 0, width, height);
     }
 
     @Override

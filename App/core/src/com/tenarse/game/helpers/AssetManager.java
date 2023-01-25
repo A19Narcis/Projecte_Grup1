@@ -3,15 +3,25 @@ package com.tenarse.game.helpers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.tenarse.game.utils.Settings;
 
 public class AssetManager {
 
     //Textures
-    public static Texture sheetPlayer, sheetMap;
+    public static Texture sheetMap;
+    public static Texture sheetPlayer;
+    public static Texture imgMainMenu;
 
     //Images
-    public static TextureRegion playerUp, playerDown, playerLeft, playerRight, background;
+    public static TextureRegion playerUp;
+    public static TextureRegion playerDown;
+    public static TextureRegion playerLeft;
+    public static TextureRegion playerRight;
+    public static TextureRegion background;
+
+    //Skins Buttons
+    public static Texture imgPlayBtn;
 
     //Sounds
 
@@ -29,14 +39,30 @@ public class AssetManager {
 
         //Sheet PJ
         playerDown = new TextureRegion(sheetPlayer, 0, 0, 16, 16);
-        playerDown.flip(true, false);
+        playerDown.flip(false, false);
 
-        background = new TextureRegion(sheetMap, 0, 0, Settings.GAME_WIDTH, Settings.GAME_HEIGHT);
+        playerUp = new TextureRegion(sheetPlayer, 16, 0, 16, 16);
+        playerUp.flip(false, false);
 
+        playerLeft = new TextureRegion(sheetPlayer, 32, 0, 16, 16);
+        playerLeft.flip(true, false);
+
+        playerRight = new TextureRegion(sheetPlayer, 32, 0, 16, 16);
+        playerRight.flip(false, false);
+
+        //Imatge fons menu
+        imgMainMenu = new Texture(Gdx.files.internal("mainScreen.png"));
+
+        //Mapa
+        background = new TextureRegion(sheetMap, 0, 0, 3840, 2160);
+
+        //Skins Buttons
+        imgPlayBtn = new Texture(Gdx.files.internal("button_jugar.png"));
     }
 
     public static void dispose() {
         sheetPlayer.dispose();
+        sheetMap.dispose();
     }
 
 }
