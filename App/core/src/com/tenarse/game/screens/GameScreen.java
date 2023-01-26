@@ -61,9 +61,20 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         System.out.println(stage.getViewport().getCamera().position);
-        stage.getViewport().getCamera().position.set(jugador.getCollisionRectPlayer().x, jugador.getCollisionRectPlayer().y, 0);
+        cameraMapPosition();
         stage.draw();
         stage.act(delta);
+    }
+
+    private void cameraMapPosition() {
+        if(jugador.getCollisionRectPlayer().x < background.getWidth() - (Gdx.graphics.getWidth() / 2) && jugador.getCollisionRectPlayer().x > (Gdx.graphics.getWidth() / 2)){
+            System.out.println("PRIMERA CONDICION XXXXXXXXXXX");
+            stage.getViewport().getCamera().position.set(jugador.getCollisionRectPlayer().x, stage.getViewport().getCamera().position.y, 0);
+        }
+        if(jugador.getCollisionRectPlayer().y < background.getHeight() - (Gdx.graphics.getHeight() / 2) && jugador.getCollisionRectPlayer().y > (Gdx.graphics.getHeight() / 2)) {
+            stage.getViewport().getCamera().position.set(stage.getViewport().getCamera().position.x, jugador.getCollisionRectPlayer().y, 0);
+            System.out.println("PRIMERA CONDICION YYYYYYYYYYY");
+        }
     }
 
     @Override

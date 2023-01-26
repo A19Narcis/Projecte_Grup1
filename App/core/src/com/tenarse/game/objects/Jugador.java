@@ -35,7 +35,6 @@ public class Jugador extends Actor {
 
     public void act(float delta){
         super.act(delta);
-
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)){
             this.position.x -= Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
         }
