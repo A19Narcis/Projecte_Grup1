@@ -11,12 +11,11 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.tenarse.game.Tenarse;
 import com.tenarse.game.helpers.AssetManager;
+import com.tenarse.game.objects.Jugador;
 import com.tenarse.game.utils.Settings;
 
 public class MainMenuScreen implements Screen {
@@ -24,6 +23,9 @@ public class MainMenuScreen implements Screen {
     private Stage stage;
     private Texture background;
     private Texture btnMenu;
+
+    //Imatge jugador que es mou sol
+    private Jugador botInici;
 
     private Image imgMenuJoc;
     private Tenarse game;
@@ -38,6 +40,12 @@ public class MainMenuScreen implements Screen {
         imgMenuJoc = new Image(background);
         imgMenuJoc.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
+        if (Gdx.app.getType() == Application.ApplicationType.Android){
+            botInici = new Jugador(-100, 0, Settings.PLAYER_WIDTH * 4, Settings.PLAYER_HEIGHT * 4, true);
+        } else {
+            botInici = new Jugador(-100, 0, Settings.PLAYER_WIDTH * 2, Settings.PLAYER_HEIGHT * 2, true);
+        }
+
         btnMenu = AssetManager.imgMainMenu;
 
         imgMenuJoc.setPosition(0, 0);
@@ -48,6 +56,9 @@ public class MainMenuScreen implements Screen {
 
         stage.addActor(jugarBTN);
         stage.addActor(jugarBTN);
+        stage.addActor(botInici);
+
+        botInici.desplazarAutomaticamente(0, Gdx.graphics.getHeight() * 0.175f);
 
         if (Gdx.app.getType() == Application.ApplicationType.Android){
             jugarBTN.setPosition(Gdx.graphics.getWidth() / 2 - jugarBTN.getWidth(), Gdx.graphics.getHeight() / 2 - jugarBTN.getHeight());
@@ -55,10 +66,6 @@ public class MainMenuScreen implements Screen {
         } else {
             jugarBTN.setPosition(Gdx.graphics.getWidth() / 2 - jugarBTN.getWidth() / 2, Gdx.graphics.getHeight()/ 2 - jugarBTN.getHeight() / 2);
         }
-
-        //jugarBTN.setPosition(Gdx.graphics.getWidth() / 2 - jugarBTN.getWidth() / 2, Gdx.graphics.getHeight()/ 2 - jugarBTN.getHeight() / 2);
-
-
 
         Gdx.input.setInputProcessor(stage);
     }
@@ -79,6 +86,7 @@ public class MainMenuScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.draw();
+        stage.act(delta);
     }
 
     @Override
