@@ -19,13 +19,16 @@ public class Jugador extends Actor {
     private Vector2 position;
     private int width, height;
     private int direction;
+    private boolean isBot;
 
     private Rectangle collisionRectPlayer;
 
-    public Jugador(float x, float y, int width, int height){
+    public Jugador(float x, float y, int width, int height, boolean isBot){
         this.width = width;
         this.height = height;
         position = new Vector2(x, y);
+
+        this.isBot = isBot;
 
         collisionRectPlayer = new Rectangle();
 
@@ -36,24 +39,46 @@ public class Jugador extends Actor {
     public void act(float delta){
         super.act(delta);
 
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)){
-            this.position.x -= Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)){
-            this.position.x += Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
-        }
+        if (this.isBot){
+            this.position.x += 10;
+            System.out.println(this.position.x);
+            if (this.position.x >= Gdx.graphics.getWidth()){
+                this.position.x = -400;
+            }
+        } else {
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)){
+                this.position.x -= Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)){
+                this.position.x += Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
+            }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)){
-            this.position.y += Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)){
-            this.position.y -= Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
-        }
+            if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)){
+                this.position.y += Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)){
+                this.position.y -= Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
+            }
 
-        collisionRectPlayer.x = this.position.x;
-        collisionRectPlayer.y = this.position.y;
-        collisionRectPlayer.width = this.width;
-        collisionRectPlayer.height = this.height;
+            //Colision personaje con los bordes del mapa
+            if (this.position.y <= 0 + 2){
+                this.position.y = 5 + 2;
+            }
+            if (this.position.x <= 0){
+                this.position.x = 5;
+            }
+            if (this.position.x >= 3840 - this.width - 5){
+                this.position.x = 3840 - this.width - 5;
+            }
+            if (this.position.y >= 2160 - this.height - 2){
+                this.position.y = 2160 - this.height- 2;
+            }
+
+            collisionRectPlayer.x = this.position.x;
+            collisionRectPlayer.y = this.position.y;
+            collisionRectPlayer.width = this.width;
+            collisionRectPlayer.height = this.height;
+        }
     }
 
     @Override
@@ -75,7 +100,16 @@ public class Jugador extends Actor {
             playerDir = AssetManager.playerDown;
         }
 
+        if (this.isBot){
+            playerDir = AssetManager.playerRight;
+        }
+
         return playerDir;
+    }
+
+    public void desplazarAutomaticamente(float x, float y){
+        this.position.x = x;
+        this.position.y = y;
     }
 
 
