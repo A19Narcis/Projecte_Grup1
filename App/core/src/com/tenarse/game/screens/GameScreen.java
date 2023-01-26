@@ -1,5 +1,6 @@
 package com.tenarse.game.screens;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
@@ -25,24 +26,21 @@ public class GameScreen implements Screen {
     private Batch batch;
 
     public GameScreen(Batch prevBatch, Viewport prevViewport){
-
-        //Camara
-
-        //Start music
-
-        //Crear Shaperender
         shapeRenderer = new ShapeRenderer();
+
+        background = new Background(3840, 2160);
+        jugador = new Jugador(background.getWidth() / 2, background.getHeight() / 2, Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT);
+
 
         //Crear stage
         stage = new Stage(prevViewport, prevBatch);
-
+        if (Gdx.app.getType() == Application.ApplicationType.Android){//Zoom para Android
+            stage.getViewport().setWorldSize(stage.getViewport().getWorldWidth() / 2, stage.getViewport().getWorldHeight() / 2);
+            stage.getViewport().apply();
+        }
         batch = stage.getBatch();
 
-        //Crear el PJ
-        jugador = new Jugador(Settings.PLAYER_STARTX, Settings.PLAYER_STARTY, Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT);
-        background = new Background(3840, 2160);
-
-        //Afegir actors a l'stage
+        //Añadir Actores
         stage.addActor(background);
         stage.addActor(jugador);
         jugador.setName("jugador");
@@ -67,14 +65,22 @@ public class GameScreen implements Screen {
     }
 
     private void cameraMapPosition() {
-        if(jugador.getCollisionRectPlayer().x < background.getWidth() - (Gdx.graphics.getWidth() / 2) && jugador.getCollisionRectPlayer().x > (Gdx.graphics.getWidth() / 2)){
-            System.out.println("PRIMERA CONDICION XXXXXXXXXXX");
-            stage.getViewport().getCamera().position.set(jugador.getCollisionRectPlayer().x, stage.getViewport().getCamera().position.y, 0);
+        if (Gdx.app.getType() == Application.ApplicationType.Android){
+            if(jugador.getCollisionRectPlayer().x < (background.getWidth() - (Gdx.graphics.getWidth() / 2) / 2) && jugador.getCollisionRectPlayer().x > (Gdx.graphics.getWidth() / 2) / 2){
+                stage.getViewport().getCamera().position.set(jugador.getCollisionRectPlayer().x, stage.getViewport().getCamera().position.y, 0);
+            }
+            if(jugador.getCollisionRectPlayer().y < (background.getHeight() - (Gdx.graphics.getHeight() / 2) / 2) && jugador.getCollisionRectPlayer().y > (Gdx.graphics.getHeight() / 2) / 2) {
+                stage.getViewport().getCamera().position.set(stage.getViewport().getCamera().position.x, jugador.getCollisionRectPlayer().y, 0);
+            }
+        } else {
+            if(jugador.getCollisionRectPlayer().x < (background.getWidth() - (Gdx.graphics.getWidth() / 2)) && jugador.getCollisionRectPlayer().x > (Gdx.graphics.getWidth() / 2)){
+                stage.getViewport().getCamera().position.set(jugador.getCollisionRectPlayer().x, stage.getViewport().getCamera().position.y, 0);
+            }
+            if(jugador.getCollisionRectPlayer().y < (background.getHeight() - (Gdx.graphics.getHeight() / 2)) && jugador.getCollisionRectPlayer().y > (Gdx.graphics.getHeight() / 2)) {
+                stage.getViewport().getCamera().position.set(stage.getViewport().getCamera().position.x, jugador.getCollisionRectPlayer().y, 0);
+            }
         }
-        if(jugador.getCollisionRectPlayer().y < background.getHeight() - (Gdx.graphics.getHeight() / 2) && jugador.getCollisionRectPlayer().y > (Gdx.graphics.getHeight() / 2)) {
-            stage.getViewport().getCamera().position.set(stage.getViewport().getCamera().position.x, jugador.getCollisionRectPlayer().y, 0);
-            System.out.println("PRIMERA CONDICION YYYYYYYYYYY");
-        }
+
     }
 
     @Override
