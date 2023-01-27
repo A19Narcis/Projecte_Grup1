@@ -8,8 +8,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.tenarse.game.helpers.AssetManager;
@@ -22,6 +25,8 @@ public class GameScreen implements Screen {
     private Jugador jugador;
 
     private TiledMap map;
+
+    private TiledMapTileLayer mapLayer;
 
     private OrthographicCamera camera;
 
@@ -41,6 +46,8 @@ public class GameScreen implements Screen {
         mapHeightInTiles  = properties.get("height", Integer.class);
         mapWidthInPixels  = mapWidthInTiles  * tileWidth;
         mapHeightInPixels = mapHeightInTiles * tileHeight;
+        mapLayer = (TiledMapTileLayer) map.getLayers().get("Mountains");
+        System.out.println(mapLayer);
 
         camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         prevViewport.setCamera(camera);
@@ -53,7 +60,7 @@ public class GameScreen implements Screen {
         //Crear stage
         stage = new Stage(prevViewport, prevBatch);
         if (Gdx.app.getType() == Application.ApplicationType.Android){//Zoom para Android
-            stage.getViewport().setWorldSize(stage.getViewport().getWorldWidth() / 2, stage.getViewport().getWorldHeight() / 2);
+            stage.getViewport().setWorldSize(stage.getViewport().getWorldWidth() / 2, stage.getViewport().getWorldHeight() / 2);//Da error esta linea
             stage.getViewport().apply();
         }
 
@@ -76,12 +83,24 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(.5f, .7f, .9f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        playerMapColision();
         cameraMapPosition();
         camera.update();
         renderer.setView(camera);
         renderer.render();
         stage.draw();
         stage.act(delta);
+    }
+
+    private void playerMapColision() {
+        int cellX = (int)(jugador.getCollisionRectPlayer().x / tileWidth);
+        int cellY = (int)(jugador.getCollisionRectPlayer().y / tileHeight);
+        System.out.println("CELDA: ("+ cellX +", "+ cellY +" )");
+        boolean colisionable = mapLayer.getCell(cellX, cellY).getTile().getProperties().containsKey("colisionable"); //<---------AQUÍ DA EL ERROR!!!!
+        System.out.println(colisionable);
+        //MapProperties properties = tile.getProperties();
+        //boolean colisionable = properties.get("colisionable", Boolean.class);
+        //System.out.println(colisionable);
     }
 
     private void cameraMapPosition() {

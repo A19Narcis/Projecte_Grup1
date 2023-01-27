@@ -41,7 +41,7 @@ public class AssetManager {
     public static void load(){
         //Tiled map load
         mapLoader = new TmxMapLoader();
-        map = mapLoader.load("colisionableMap.tmx");
+        map = mapLoader.load("Mapas/developmentMap/developmentMap.tmx");
 
 
         //Jugador AXE
