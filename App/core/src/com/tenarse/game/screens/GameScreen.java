@@ -5,12 +5,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.tenarse.game.helpers.AssetManager;
 import com.tenarse.game.objects.Jugador;
@@ -22,6 +28,9 @@ public class GameScreen implements Screen {
     private Jugador jugador;
 
     private TiledMap map;
+
+    private Texture btnUpTexture, btnDownTexture, btnLeftTexture, btnRightTexture;
+    private ImageButton jugarBTN, btnU_img, btnD_img, btnL_img, btnR_img;
 
     private OrthographicCamera camera;
 
@@ -55,11 +64,33 @@ public class GameScreen implements Screen {
         if (Gdx.app.getType() == Application.ApplicationType.Android){//Zoom para Android
             stage.getViewport().setWorldSize(stage.getViewport().getWorldWidth() / 2, stage.getViewport().getWorldHeight() / 2);
             stage.getViewport().apply();
+
+            //Cargar flechas para moverse en el movil
+            btnUpTexture = AssetManager.btnMovUp;
+            btnDownTexture = AssetManager.btnMovDown;
+            btnRightTexture = AssetManager.btnMovRight;
+            btnLeftTexture = AssetManager.btnMovLeft;
+
+            btnU_img = new ImageButton(new TextureRegionDrawable(new TextureRegion(btnUpTexture)));
+            btnD_img = new ImageButton(new TextureRegionDrawable(new TextureRegion(btnDownTexture)));
+            btnL_img = new ImageButton(new TextureRegionDrawable(new TextureRegion(btnLeftTexture)));
+            btnR_img = new ImageButton(new TextureRegionDrawable(new TextureRegion(btnRightTexture)));
+
+
+
+            btnU_img.setPosition(camera.position.x, camera.position.y);
+            btnL_img.setPosition(Gdx.graphics.getWidth() * 0.02f, Gdx.graphics.getHeight() * 0.11f);
+            btnD_img.setPosition(Gdx.graphics.getWidth() * 0.08f, Gdx.graphics.getHeight() * 0.00f);
+            btnR_img.setPosition(Gdx.graphics.getWidth() * 0.14f, Gdx.graphics.getHeight() * 0.11f);
         }
 
         //Añadir Actores
         jugador.setName("jugador");
         stage.addActor(jugador);
+        stage.addActor(btnU_img);
+        stage.addActor(btnD_img);
+        stage.addActor(btnL_img);
+        stage.addActor(btnR_img);
 
 
         //Gestor d'entrada la classe InputHandler
