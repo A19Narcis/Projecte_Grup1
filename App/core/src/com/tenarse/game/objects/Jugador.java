@@ -70,7 +70,6 @@ public class Jugador extends Actor {
 
     public void act(float delta){
         super.act(delta);
-
         if (this.isBot){
             this.position.x += 5;
             if (this.position.x >= Gdx.graphics.getWidth()){
@@ -92,10 +91,10 @@ public class Jugador extends Actor {
             }
 
             //Colision personaje con los bordes del mapa
-            if (this.position.y <= 0 + 2){
-                this.position.y = 5 + 2;
+            if (this.position.y <= 5){
+                this.position.y = 5;
             }
-            if (this.position.x <= 0){
+            if (this.position.x <= 5){
                 this.position.x = 5;
             }
             if (this.position.x >= 3840 - this.width - 5){

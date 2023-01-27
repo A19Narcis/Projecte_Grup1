@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextTooltip;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.tenarse.game.Tenarse;
@@ -24,6 +25,8 @@ public class MainMenuScreen implements Screen {
     private Texture background;
     private Texture btnMenu;
 
+    private Texture btnUpTexture, btnDownTexture, btnLeftTexture, btnRightTexture;
+
     //Imatge jugador que es mou sol
     private Jugador botIniciAxe;
     private Jugador botIniciWarHam;
@@ -32,7 +35,7 @@ public class MainMenuScreen implements Screen {
     private Image imgMenuJoc;
     private Tenarse game;
 
-    private ImageButton jugarBTN;
+    private ImageButton jugarBTN, btnU_img, btnD_img, btnL_img, btnR_img;
 
     public MainMenuScreen(Tenarse game){
         this.game = game;
@@ -59,9 +62,20 @@ public class MainMenuScreen implements Screen {
         stage.addActor(imgMenuJoc);
 
         btnMenu = AssetManager.imgPlayBtn;
+
+        btnUpTexture = AssetManager.btnMovUp;
+        btnDownTexture = AssetManager.btnMovDown;
+        btnRightTexture = AssetManager.btnMovRight;
+        btnLeftTexture = AssetManager.btnMovLeft;
+
         jugarBTN = new ImageButton(new TextureRegionDrawable(new TextureRegion(btnMenu)));
 
-        stage.addActor(jugarBTN);
+        btnU_img = new ImageButton(new TextureRegionDrawable(new TextureRegion(btnUpTexture)));
+        btnD_img = new ImageButton(new TextureRegionDrawable(new TextureRegion(btnDownTexture)));
+        btnL_img = new ImageButton(new TextureRegionDrawable(new TextureRegion(btnLeftTexture)));
+        btnR_img = new ImageButton(new TextureRegionDrawable(new TextureRegion(btnRightTexture)));
+
+
         stage.addActor(jugarBTN);
         stage.addActor(botIniciAxe);
         stage.addActor(botIniciWarHam);
@@ -74,9 +88,22 @@ public class MainMenuScreen implements Screen {
         if (Gdx.app.getType() == Application.ApplicationType.Android){
             jugarBTN.setPosition(Gdx.graphics.getWidth() / 2 - jugarBTN.getWidth(), Gdx.graphics.getHeight() / 2 - jugarBTN.getHeight());
             jugarBTN.getImage().setScale(2f);
+
+            stage.addActor(btnU_img);
+            stage.addActor(btnD_img);
+            stage.addActor(btnL_img);
+            stage.addActor(btnR_img);
+
+            btnU_img.setPosition(Gdx.graphics.getWidth() * 0.08f, Gdx.graphics.getHeight() * 0.23f);
+            btnL_img.setPosition(Gdx.graphics.getWidth() * 0.02f, Gdx.graphics.getHeight() * 0.11f);
+            btnD_img.setPosition(Gdx.graphics.getWidth() * 0.08f, Gdx.graphics.getHeight() * 0.00f);
+            btnR_img.setPosition(Gdx.graphics.getWidth() * 0.14f, Gdx.graphics.getHeight() * 0.11f);
+
         } else {
             jugarBTN.setPosition(Gdx.graphics.getWidth() / 2 - jugarBTN.getWidth() / 2, Gdx.graphics.getHeight()/ 2 - jugarBTN.getHeight() / 2);
         }
+
+
 
         Gdx.input.setInputProcessor(stage);
     }
