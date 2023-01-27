@@ -2,21 +2,19 @@ package com.tenarse.game.screens;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.tenarse.game.objects.Background;
 import com.tenarse.game.objects.Jugador;
 import com.tenarse.game.utils.Settings;
 
@@ -29,6 +27,8 @@ public class GameScreen implements Screen {
 
     private TmxMapLoader mapLoader;
 
+    private TiledMapTileLayer mapLayer;
+
     private OrthographicCamera camera;
 
     private OrthogonalTiledMapRenderer renderer;
@@ -40,7 +40,7 @@ public class GameScreen implements Screen {
     public GameScreen(Batch prevBatch, Viewport prevViewport){
 
         mapLoader = new TmxMapLoader();
-        map = mapLoader.load("assets/colisionableMap.tmx");
+        map = mapLoader.load("assets/Mapas/developmentMap/developmentMap.tmx");
         MapProperties properties = map.getProperties();
         tileWidth         = properties.get("tilewidth", Integer.class);
         tileHeight        = properties.get("tileheight", Integer.class);
@@ -48,6 +48,7 @@ public class GameScreen implements Screen {
         mapHeightInTiles  = properties.get("height", Integer.class);
         mapWidthInPixels  = mapWidthInTiles  * tileWidth;
         mapHeightInPixels = mapHeightInTiles * tileHeight;
+        mapLayer = (TiledMapTileLayer) map.getLayers().get("Mountains");
 
         camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         prevViewport.setCamera(camera);
@@ -83,13 +84,23 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(.5f, .7f, .9f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        //playerMapColision();
         cameraMapPosition();
-        System.out.println(camera.position.x);
         camera.update();
         renderer.setView(camera);
         renderer.render();
         stage.draw();
         stage.act(delta);
+    }
+
+    private void playerMapColision() {
+        Vector2 cellPosition = new Vector2();
+        int cellX = (int)(jugador.getCollisionRectPlayer().x / mapLayer.getTileWidth());
+        int cellY = (int)(jugador.getCollisionRectPlayer().y / mapLayer.getTileHeight());
+        TiledMapTile tile = mapLayer.getCell(cellX, cellY).getTile();
+        MapProperties properties = tile.getProperties();
+        boolean colisionable = properties.get("colisionable", Boolean.class);
+        System.out.println(colisionable);
     }
 
     private void cameraMapPosition() {

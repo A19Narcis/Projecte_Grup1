@@ -19,7 +19,6 @@ public class AssetManager {
     public static TextureRegion playerUpA, playerDownA, playerLeftA, playerRightA;
     public static TextureRegion playerUpW, playerDownW, playerLeftW, playerRightW;
     public static TextureRegion playerUpS, playerDownS, playerLeftS, playerRightS;
-    public static TextureRegion background;
 
     //Skins Buttons
     public static Texture imgPlayBtn;
@@ -43,9 +42,6 @@ public class AssetManager {
         //Jugador Shield
         sheetPlayerShield = new Texture(Gdx.files.internal("animate_kite_shield.png"));
         sheetPlayerShield.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
-
-        sheetMap = new Texture(Gdx.files.internal("sheetMap.png"));
-        sheetMap.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
         //Sheet PJ AXE
         playerDownA = new TextureRegion(sheetPlayerAxe, 0, 64*10, 64, 64);
@@ -90,9 +86,6 @@ public class AssetManager {
         //Imatge fons menu
         imgMainMenu = new Texture(Gdx.files.internal("mainScreen.png"));
 
-        //Mapa
-        background = new TextureRegion(sheetMap, 0, 0, 3840, 2160);
-
         //Skins Buttons
         imgPlayBtn = new Texture(Gdx.files.internal("button_jugar.png"));
     }
@@ -101,7 +94,6 @@ public class AssetManager {
         sheetPlayerAxe.dispose();
         sheetPlayerWar.dispose();
         sheetPlayerShield.dispose();
-        sheetMap.dispose();
     }
 
 }

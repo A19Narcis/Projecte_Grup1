@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.9" tiledversion="1.9.2" name="Cliff" tilewidth="16" tileheight="16" tilecount="63" columns="7">
- <image source="../colisionMap/MiniWorldSprites/Ground/Cliff.png" width="112" height="144"/>
+<tileset version="1.8" tiledversion="1.8.0" name="Cliff" tilewidth="16" tileheight="16" tilecount="63" columns="7">
+ <image source="MiniWorldSprites/Ground/Cliff.png" width="112" height="144"/>
  <tile id="42">
   <properties>
    <property name="colisionable" type="bool" value="true"/>
@@ -17,6 +17,11 @@
   </properties>
  </tile>
  <tile id="49">
+  <properties>
+   <property name="colisionable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="50">
   <properties>
    <property name="colisionable" type="bool" value="true"/>
   </properties>
