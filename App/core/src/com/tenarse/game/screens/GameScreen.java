@@ -2,21 +2,17 @@ package com.tenarse.game.screens;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.tenarse.game.objects.Background;
+import com.tenarse.game.helpers.AssetManager;
 import com.tenarse.game.objects.Jugador;
 import com.tenarse.game.utils.Settings;
 
@@ -26,8 +22,6 @@ public class GameScreen implements Screen {
     private Jugador jugador;
 
     private TiledMap map;
-
-    private TmxMapLoader mapLoader;
 
     private OrthographicCamera camera;
 
@@ -39,8 +33,7 @@ public class GameScreen implements Screen {
 
     public GameScreen(Batch prevBatch, Viewport prevViewport){
 
-        mapLoader = new TmxMapLoader();
-        map = mapLoader.load("assets/colisionableMap.tmx");
+        map = AssetManager.map;
         MapProperties properties = map.getProperties();
         tileWidth         = properties.get("tilewidth", Integer.class);
         tileHeight        = properties.get("tileheight", Integer.class);
@@ -55,7 +48,7 @@ public class GameScreen implements Screen {
 
         renderer = new OrthogonalTiledMapRenderer(map);
 
-        jugador = new Jugador(mapWidthInPixels / 2, mapHeightInPixels / 2, Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT, false, 2);
+        jugador = new Jugador(mapWidthInPixels / 2, mapHeightInPixels / 2, Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT, false, 1);
 
         //Crear stage
         stage = new Stage(prevViewport, prevBatch);
@@ -84,7 +77,6 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(.5f, .7f, .9f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         cameraMapPosition();
-        System.out.println(camera.position.x);
         camera.update();
         renderer.setView(camera);
         renderer.render();

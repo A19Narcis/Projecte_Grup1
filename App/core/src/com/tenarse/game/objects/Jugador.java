@@ -26,6 +26,14 @@ public class Jugador extends Actor {
     private boolean isBot;
     private int tipusJugador;
 
+    private TextureRegion[] animacionRight;
+    private TextureRegion[] animacionUp;
+    private TextureRegion[] animacionDown;
+    private TextureRegion[] animacionLeft;
+    private int currentFrame = 0;
+    private float frameTime = 0.1f;
+    private float stateTime = 0;
+
     private Rectangle collisionRectPlayer;
 
     public Jugador(float x, float y, int width, int height, boolean isBot, int tipusJugador){
@@ -39,22 +47,32 @@ public class Jugador extends Actor {
 
         this.tipusJugador = tipusJugador;
 
+        if (tipusJugador == AXE_PLAYER){
+            animacionRight = AssetManager.playerRightA_Animation;
+            animacionLeft = AssetManager.playerLeftA_Animation;
+            animacionUp = AssetManager.playerUpA_Animation;
+            animacionDown = AssetManager.playerDownA_Animation;
+        } else if (tipusJugador == WAR_PLAYER){
+            animacionRight = AssetManager.playerRightW_Animation;
+            animacionLeft = AssetManager.playerLeftW_Animation;
+            animacionUp = AssetManager.playerUpW_Animation;
+            animacionDown = AssetManager.playerDownW_Animation;
+        } else if (tipusJugador == SHI_PLAYER){
+            animacionRight = AssetManager.playerRightS_Animation;
+            animacionLeft = AssetManager.playerLeftS_Animation;
+            animacionUp = AssetManager.playerUpS_Animation;
+            animacionDown = AssetManager.playerDownS_Animation;
+        }
+
         setBounds(position.x, position.y, width, height);
         setTouchable(Touchable.enabled);
-        if (tipusJugador == 1){
-            System.out.println("Axe player: " + this.position);
-        } else if (tipusJugador == 2){
-            System.out.println("WarHammer player: " + this.position);
-        } else {
-            System.out.println("Shield player: " + this.position);
-        }
     }
 
     public void act(float delta){
         super.act(delta);
 
         if (this.isBot){
-            this.position.x += 10;
+            this.position.x += 5;
             if (this.position.x >= Gdx.graphics.getWidth()){
                 this.position.x = -400;
             }
@@ -91,6 +109,16 @@ public class Jugador extends Actor {
             collisionRectPlayer.y = this.position.y;
             collisionRectPlayer.width = this.width;
             collisionRectPlayer.height = this.height;
+
+
+        }
+        stateTime += delta;
+        if (stateTime >= frameTime){
+            currentFrame++;
+            if (currentFrame >= animacionRight.length){
+                currentFrame = 0;
+            }
+            stateTime = 0;
         }
     }
 
@@ -102,49 +130,28 @@ public class Jugador extends Actor {
 
     private TextureRegion getPLayerDirection() {
         TextureRegion playerDir = null;
+        //Posicio per si no es mou
         if (this.tipusJugador == AXE_PLAYER){
             playerDir = AssetManager.playerDownA;
-            if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)){
-                playerDir = AssetManager.playerLeftA;
-            } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)){
-                playerDir = AssetManager.playerRightA;
-            } else if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)){
-                playerDir = AssetManager.playerUpA;
-            } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)){
-                playerDir = AssetManager.playerDownA;
-            }
         } else if (this.tipusJugador == WAR_PLAYER){
             playerDir = AssetManager.playerDownW;
-            if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)){
-                playerDir = AssetManager.playerLeftW;
-            } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)){
-                playerDir = AssetManager.playerRightW;
-            } else if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)){
-                playerDir = AssetManager.playerUpW;
-            } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)){
-                playerDir = AssetManager.playerDownW;
-            }
         } else if (this.tipusJugador == SHI_PLAYER){
             playerDir = AssetManager.playerDownS;
-            if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)){
-                playerDir = AssetManager.playerLeftS;
-            } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)){
-                playerDir = AssetManager.playerRightS;
-            } else if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)){
-                playerDir = AssetManager.playerUpS;
-            } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)){
-                playerDir = AssetManager.playerDownS;
-            }
+        }
+
+        //ANIMACIONES POR DIRECCIONES
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)){
+            playerDir = animacionLeft[currentFrame];
+        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)){
+            playerDir = animacionRight[currentFrame];
+        } else if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)){
+            playerDir = animacionUp[currentFrame];
+        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)){
+            playerDir = animacionDown[currentFrame];
         }
 
         if (this.isBot){
-            if (this.tipusJugador == AXE_PLAYER){
-                playerDir = AssetManager.playerRightA;
-            } else if (this.tipusJugador == WAR_PLAYER){
-                playerDir = AssetManager.playerRightW;
-            } else if (this.tipusJugador == SHI_PLAYER){
-                playerDir = AssetManager.playerRightS;
-            }
+            playerDir = animacionRight[currentFrame];
         }
 
         return playerDir;
