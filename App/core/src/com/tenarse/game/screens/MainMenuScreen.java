@@ -25,7 +25,9 @@ public class MainMenuScreen implements Screen {
     private Texture btnMenu;
 
     //Imatge jugador que es mou sol
-    private Jugador botInici;
+    private Jugador botIniciAxe;
+    private Jugador botIniciWarHam;
+    private Jugador botIniciShield;
 
     private Image imgMenuJoc;
     private Tenarse game;
@@ -41,9 +43,14 @@ public class MainMenuScreen implements Screen {
         imgMenuJoc.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         if (Gdx.app.getType() == Application.ApplicationType.Android){
-            botInici = new Jugador(-100, 0, Settings.PLAYER_WIDTH * 4, Settings.PLAYER_HEIGHT * 4, true);
+            botIniciAxe = new Jugador(-100, 0, Settings.PLAYER_WIDTH * 4, Settings.PLAYER_HEIGHT * 4, true, 1);
+            botIniciWarHam = new Jugador(-200, 0, Settings.PLAYER_WIDTH * 4, Settings.PLAYER_HEIGHT * 4, true, 2);
+            botIniciShield = new Jugador(-300, 0, Settings.PLAYER_WIDTH * 4, Settings.PLAYER_HEIGHT * 4, true, 3);
+
         } else {
-            botInici = new Jugador(-100, 0, Settings.PLAYER_WIDTH * 2, Settings.PLAYER_HEIGHT * 2, true);
+            botIniciAxe = new Jugador(-100, 0, Settings.PLAYER_WIDTH * 2, Settings.PLAYER_HEIGHT * 2, true, 1);
+            botIniciWarHam = new Jugador(-200, 0, Settings.PLAYER_WIDTH * 2, Settings.PLAYER_HEIGHT * 2, true, 2);
+            botIniciShield = new Jugador(-300, 0, Settings.PLAYER_WIDTH * 2, Settings.PLAYER_HEIGHT * 2, true, 3);
         }
 
         btnMenu = AssetManager.imgMainMenu;
@@ -56,9 +63,13 @@ public class MainMenuScreen implements Screen {
 
         stage.addActor(jugarBTN);
         stage.addActor(jugarBTN);
-        stage.addActor(botInici);
+        stage.addActor(botIniciAxe);
+        stage.addActor(botIniciWarHam);
+        stage.addActor(botIniciShield);
 
-        botInici.desplazarAutomaticamente(0, Gdx.graphics.getHeight() * 0.175f);
+        botIniciAxe.desplazarAutomaticamente(0, Gdx.graphics.getHeight() * 0.163f);
+        botIniciWarHam.desplazarAutomaticamente(0, Gdx.graphics.getHeight() * 0.163f);
+        botIniciShield.desplazarAutomaticamente(0, Gdx.graphics.getHeight() * 0.163f);
 
         if (Gdx.app.getType() == Application.ApplicationType.Android){
             jugarBTN.setPosition(Gdx.graphics.getWidth() / 2 - jugarBTN.getWidth(), Gdx.graphics.getHeight() / 2 - jugarBTN.getHeight());

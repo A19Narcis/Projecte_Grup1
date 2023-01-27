@@ -10,14 +10,15 @@ public class AssetManager {
 
     //Textures
     public static Texture sheetMap;
-    public static Texture sheetPlayer;
+    public static Texture sheetPlayerAxe;
+    public static Texture sheetPlayerWar;
+    public static Texture sheetPlayerShield;
     public static Texture imgMainMenu;
 
     //Images
-    public static TextureRegion playerUp;
-    public static TextureRegion playerDown;
-    public static TextureRegion playerLeft;
-    public static TextureRegion playerRight;
+    public static TextureRegion playerUpA, playerDownA, playerLeftA, playerRightA;
+    public static TextureRegion playerUpW, playerDownW, playerLeftW, playerRightW;
+    public static TextureRegion playerUpS, playerDownS, playerLeftS, playerRightS;
     public static TextureRegion background;
 
     //Skins Buttons
@@ -31,24 +32,60 @@ public class AssetManager {
 
     public static void load(){
         //Textures
-        sheetPlayer = new Texture(Gdx.files.internal("sheetPlayer.png"));
-        sheetPlayer.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        //Jugador AXE
+        sheetPlayerAxe = new Texture(Gdx.files.internal("animate_axe_0.png"));
+        sheetPlayerAxe.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+
+        //Jugador Warhammer
+        sheetPlayerWar = new Texture(Gdx.files.internal("animate_warhammer.png"));
+        sheetPlayerWar.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+
+        //Jugador Shield
+        sheetPlayerShield = new Texture(Gdx.files.internal("animate_kite_shield.png"));
+        sheetPlayerShield.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
         sheetMap = new Texture(Gdx.files.internal("sheetMap.png"));
         sheetMap.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
-        //Sheet PJ
-        playerDown = new TextureRegion(sheetPlayer, 0, 0, 16, 16);
-        playerDown.flip(false, false);
+        //Sheet PJ AXE
+        playerDownA = new TextureRegion(sheetPlayerAxe, 0, 64*10, 64, 64);
+        playerDownA.flip(false, false);
 
-        playerUp = new TextureRegion(sheetPlayer, 16, 0, 16, 16);
-        playerUp.flip(false, false);
+        playerUpA = new TextureRegion(sheetPlayerAxe, 0, 64*8, 64, 64);
+        playerUpA.flip(false, false);
 
-        playerLeft = new TextureRegion(sheetPlayer, 32, 0, 16, 16);
-        playerLeft.flip(true, false);
+        playerLeftA = new TextureRegion(sheetPlayerAxe, 0, 64*9, 64, 64);
+        playerLeftA.flip(false, false);
 
-        playerRight = new TextureRegion(sheetPlayer, 32, 0, 16, 16);
-        playerRight.flip(false, false);
+        playerRightA = new TextureRegion(sheetPlayerAxe, 0, 64*11, 64, 64);
+        playerRightA.flip(false, false);
+
+        //Sheet PJ WAR
+        playerDownW = new TextureRegion(sheetPlayerWar, 0, 64*10, 64, 64);
+        playerDownW.flip(false, false);
+
+        playerUpW = new TextureRegion(sheetPlayerWar, 0, 64*8, 64, 64);
+        playerUpW.flip(false, false);
+
+        playerLeftW = new TextureRegion(sheetPlayerWar, 0, 64*9, 64, 64);
+        playerLeftW.flip(false, false);
+
+        playerRightW = new TextureRegion(sheetPlayerWar, 0, 64*11, 64, 64);
+        playerRightW.flip(false, false);
+
+        //Sheet PJ SHIELD
+        playerDownS = new TextureRegion(sheetPlayerShield, 0, 64*10, 64, 64);
+        playerDownS.flip(false, false);
+
+        playerUpS = new TextureRegion(sheetPlayerShield, 0, 64*8, 64, 64);
+        playerUpS.flip(false, false);
+
+        playerLeftS = new TextureRegion(sheetPlayerShield, 0, 64*9, 64, 64);
+        playerLeftS.flip(false, false);
+
+        playerRightS = new TextureRegion(sheetPlayerShield, 0, 64*11, 64, 64);
+        playerRightS.flip(false, false);
+
 
         //Imatge fons menu
         imgMainMenu = new Texture(Gdx.files.internal("mainScreen.png"));
@@ -61,7 +98,9 @@ public class AssetManager {
     }
 
     public static void dispose() {
-        sheetPlayer.dispose();
+        sheetPlayerAxe.dispose();
+        sheetPlayerWar.dispose();
+        sheetPlayerShield.dispose();
         sheetMap.dispose();
     }
 

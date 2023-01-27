@@ -29,7 +29,7 @@ public class GameScreen implements Screen {
         shapeRenderer = new ShapeRenderer();
 
         background = new Background(3840, 2160);
-        jugador = new Jugador(background.getWidth() / 2, background.getHeight() / 2, Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT);
+        jugador = new Jugador(background.getWidth() / 2, background.getHeight() / 2, Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT, false, 2);
 
 
         //Crear stage
