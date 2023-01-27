@@ -2,12 +2,15 @@ package com.tenarse.game.screens;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
@@ -17,10 +20,12 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
 import com.badlogic.gdx.math.Vector2;
 
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -30,6 +35,11 @@ import com.tenarse.game.utils.Settings;
 
 public class GameScreen implements Screen {
 
+    private Boolean buttonUpPressed = false;
+    private Boolean buttonDownPressed = false;
+    private Boolean buttonLeftPressed = false;
+    private Boolean buttonRightPressed = false;
+
     private Stage stage;
     private Jugador jugador;
 
@@ -38,8 +48,9 @@ public class GameScreen implements Screen {
     private TiledMapTileLayer mapLayer;
 
     private Texture btnUpTexture, btnDownTexture, btnLeftTexture, btnRightTexture;
-    private ImageButton jugarBTN, btnU_img, btnD_img, btnL_img, btnR_img;
+    private ImageButton btnU_img, btnD_img, btnL_img, btnR_img;
 
+    private ShapeRenderer shapeRenderer;
 
     private OrthographicCamera camera;
 
@@ -49,7 +60,13 @@ public class GameScreen implements Screen {
             mapWidthInTiles, mapHeightInTiles,
             mapWidthInPixels, mapHeightInPixels;
 
+    private Vector3 vector3;
+
     public GameScreen(Batch prevBatch, Viewport prevViewport){
+
+        shapeRenderer = new ShapeRenderer();
+
+        vector3 = new Vector3();
 
         map = AssetManager.map;
         MapProperties properties = map.getProperties();
@@ -87,31 +104,90 @@ public class GameScreen implements Screen {
             btnL_img = new ImageButton(new TextureRegionDrawable(new TextureRegion(btnLeftTexture)));
             btnR_img = new ImageButton(new TextureRegionDrawable(new TextureRegion(btnRightTexture)));
 
+            btnU_img.setSize(100, 100);
+            btnL_img.setSize(100, 100);
+            btnD_img.setSize(100, 100);
+            btnR_img.setSize(100, 100);
 
-
-            btnU_img.setPosition(camera.position.x, camera.position.y);
-            btnL_img.setPosition(Gdx.graphics.getWidth() * 0.02f, Gdx.graphics.getHeight() * 0.11f);
-            btnD_img.setPosition(Gdx.graphics.getWidth() * 0.08f, Gdx.graphics.getHeight() * 0.00f);
-            btnR_img.setPosition(Gdx.graphics.getWidth() * 0.14f, Gdx.graphics.getHeight() * 0.11f);
+            stage.addActor(btnU_img);
+            stage.addActor(btnD_img);
+            stage.addActor(btnL_img);
+            stage.addActor(btnR_img);
         }
 
         //Añadir Actores
         jugador.setName("jugador");
         stage.addActor(jugador);
-        stage.addActor(btnU_img);
-        stage.addActor(btnD_img);
-        stage.addActor(btnL_img);
-        stage.addActor(btnR_img);
 
 
         //Gestor d'entrada la classe InputHandler
-        Gdx.input.setInputProcessor(stage);
+        Gdx.input.setInputProcessor(new InputMultiplexer(stage, new InputAdapter(){
+            @Override
+            public boolean touchDragged(int screenX, int screenY, int pointer) {
+                // Acción a realizar cuando el dedo se mueve fuera del área del botón
+                Vector2 posDedo = new Vector2(screenX, screenY);
+                btnU_img.screenToLocalCoordinates(posDedo);
+
+                return true;
+            }
+        }));
     }
 
 
     @Override
     public void show() {
+        if (Gdx.app.getType() == Application.ApplicationType.Android){
+            btnU_img.addListener(new InputListener(){
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    buttonUpPressed = true;
+                    return true;
+                }
+                @Override
+                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                    buttonUpPressed = false;
+                }
+            });
 
+            btnL_img.addListener(new InputListener(){
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    buttonLeftPressed = true;
+                    return true;
+                }
+                @Override
+                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                    buttonLeftPressed = false;
+                }
+
+
+            });
+
+            btnD_img.addListener(new InputListener(){
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    buttonDownPressed = true;
+                    return true;
+                }
+                @Override
+                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                    buttonDownPressed = false;
+                }
+            });
+
+            btnR_img.addListener(new InputListener(){
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    buttonRightPressed = true;
+                    return true;
+                }
+                @Override
+                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                    buttonRightPressed = false;
+                }
+            });
+
+        }
     }
 
     @Override
@@ -121,6 +197,31 @@ public class GameScreen implements Screen {
         playerMapColision();
         cameraMapPosition();
         camera.update();
+        if (Gdx.app.getType() == Application.ApplicationType.Android){
+            btnU_img.setPosition(camera.position.x - camera.viewportWidth / 2 + 75, camera.position.y - camera.viewportHeight / 2 + 150);
+            btnD_img.setPosition(camera.position.x - camera.viewportWidth / 2 + 75, camera.position.y - camera.viewportHeight / 2);
+            btnL_img.setPosition(camera.position.x - camera.viewportWidth / 2, camera.position.y - camera.viewportHeight / 2 + 75);
+            btnR_img.setPosition(camera.position.x - camera.viewportWidth / 2 + 150, camera.position.y - camera.viewportHeight / 2 + 75);
+        }
+
+        if (buttonUpPressed){
+            jugador.goingUp();
+        } else {
+            jugador.stop();
+        }
+
+        if (buttonDownPressed){
+            jugador.goingDown();
+        }
+
+        if (buttonLeftPressed){
+            jugador.goingLeft();
+        }
+
+        if (buttonRightPressed){
+            jugador.goingRight();
+        }
+
         renderer.setView(camera);
         renderer.render();
         stage.draw();
@@ -130,9 +231,8 @@ public class GameScreen implements Screen {
     private void playerMapColision() {
         int cellX = (int)(jugador.getCollisionRectPlayer().x / tileWidth);
         int cellY = (int)(jugador.getCollisionRectPlayer().y / tileHeight);
-        System.out.println("CELDA: ("+ cellX +", "+ cellY +" )");
-        boolean colisionable = mapLayer.getCell(cellX, cellY).getTile().getProperties().containsKey("colisionable"); //<---------AQUÍ DA EL ERROR!!!!
-        System.out.println(colisionable);
+        //boolean colisionable = mapLayer.getCell(cellX, cellY).getTile().getProperties().containsKey("colisionable"); //<---------AQUÍ DA EL ERROR!!!!
+        //System.out.println(colisionable);
         //MapProperties properties = tile.getProperties();
         //boolean colisionable = properties.get("colisionable", Boolean.class);
         //System.out.println(colisionable);

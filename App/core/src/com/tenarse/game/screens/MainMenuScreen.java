@@ -75,7 +75,6 @@ public class MainMenuScreen implements Screen {
         btnL_img = new ImageButton(new TextureRegionDrawable(new TextureRegion(btnLeftTexture)));
         btnR_img = new ImageButton(new TextureRegionDrawable(new TextureRegion(btnRightTexture)));
 
-
         stage.addActor(jugarBTN);
         stage.addActor(botIniciAxe);
         stage.addActor(botIniciWarHam);
@@ -89,21 +88,9 @@ public class MainMenuScreen implements Screen {
             jugarBTN.setPosition(Gdx.graphics.getWidth() / 2 - jugarBTN.getWidth(), Gdx.graphics.getHeight() / 2 - jugarBTN.getHeight());
             jugarBTN.getImage().setScale(2f);
 
-            stage.addActor(btnU_img);
-            stage.addActor(btnD_img);
-            stage.addActor(btnL_img);
-            stage.addActor(btnR_img);
-
-            btnU_img.setPosition(Gdx.graphics.getWidth() * 0.08f, Gdx.graphics.getHeight() * 0.23f);
-            btnL_img.setPosition(Gdx.graphics.getWidth() * 0.02f, Gdx.graphics.getHeight() * 0.11f);
-            btnD_img.setPosition(Gdx.graphics.getWidth() * 0.08f, Gdx.graphics.getHeight() * 0.00f);
-            btnR_img.setPosition(Gdx.graphics.getWidth() * 0.14f, Gdx.graphics.getHeight() * 0.11f);
-
         } else {
             jugarBTN.setPosition(Gdx.graphics.getWidth() / 2 - jugarBTN.getWidth() / 2, Gdx.graphics.getHeight()/ 2 - jugarBTN.getHeight() / 2);
         }
-
-
 
         Gdx.input.setInputProcessor(stage);
     }

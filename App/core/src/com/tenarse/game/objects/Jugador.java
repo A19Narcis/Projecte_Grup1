@@ -2,7 +2,6 @@ package com.tenarse.game.objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
@@ -25,6 +24,11 @@ public class Jugador extends Actor {
     private int direction;
     private boolean isBot;
     private int tipusJugador;
+
+    private Boolean bntUpIsPressed = false;
+    private Boolean bntDownIsPressed = false;
+    private Boolean bntLeftIsPressed = false;
+    private Boolean bntRightIsPressed = false;
 
     private TextureRegion[] animacionRight;
     private TextureRegion[] animacionUp;
@@ -76,17 +80,16 @@ public class Jugador extends Actor {
                 this.position.x = -400;
             }
         } else {
-            if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)){
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A) || this.bntLeftIsPressed){
                 this.position.x -= Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)){
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D) || this.bntRightIsPressed){
                 this.position.x += Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
             }
-
-            if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)){
+            if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W) || this.bntUpIsPressed){
                 this.position.y += Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)){
+            if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S) || this.bntDownIsPressed){
                 this.position.y -= Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
             }
 
@@ -121,9 +124,7 @@ public class Jugador extends Actor {
         }
     }
 
-    @Override
     public void draw(Batch batch, float parentAlpha){
-        super.draw(batch, parentAlpha);
         batch.draw(getPLayerDirection(), this.position.x, this.position.y, width, height);
     }
 
@@ -139,13 +140,13 @@ public class Jugador extends Actor {
         }
 
         //ANIMACIONES POR DIRECCIONES
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)){
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A) || this.bntLeftIsPressed){
             playerDir = animacionLeft[currentFrame];
-        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)){
+        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D) || this.bntRightIsPressed){
             playerDir = animacionRight[currentFrame];
-        } else if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)){
+        } else if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W) || this.bntUpIsPressed){
             playerDir = animacionUp[currentFrame];
-        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)){
+        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S) || this.bntDownIsPressed){
             playerDir = animacionDown[currentFrame];
         }
 
@@ -166,4 +167,26 @@ public class Jugador extends Actor {
         return collisionRectPlayer;
     }
 
+    public void goingUp() {
+        this.bntUpIsPressed = true;
+    }
+
+    public void goingDown() {
+        this.bntDownIsPressed = true;
+    }
+
+    public void goingLeft() {
+        this.bntLeftIsPressed = true;
+    }
+
+    public void goingRight() {
+        this.bntRightIsPressed = true;
+    }
+
+    public void stop() {
+        this.bntUpIsPressed = false;
+        this.bntLeftIsPressed = false;
+        this.bntDownIsPressed = false;
+        this.bntRightIsPressed = false;
+    }
 }
