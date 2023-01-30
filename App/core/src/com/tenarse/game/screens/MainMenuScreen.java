@@ -70,11 +70,6 @@ public class MainMenuScreen implements Screen {
 
         jugarBTN = new ImageButton(new TextureRegionDrawable(new TextureRegion(btnMenu)));
 
-        btnU_img = new ImageButton(new TextureRegionDrawable(new TextureRegion(btnUpTexture)));
-        btnD_img = new ImageButton(new TextureRegionDrawable(new TextureRegion(btnDownTexture)));
-        btnL_img = new ImageButton(new TextureRegionDrawable(new TextureRegion(btnLeftTexture)));
-        btnR_img = new ImageButton(new TextureRegionDrawable(new TextureRegion(btnRightTexture)));
-
         stage.addActor(jugarBTN);
         stage.addActor(botIniciAxe);
         stage.addActor(botIniciWarHam);

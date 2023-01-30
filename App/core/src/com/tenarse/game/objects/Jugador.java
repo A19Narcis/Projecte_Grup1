@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -30,6 +31,12 @@ public class Jugador extends Actor {
     private Boolean bntLeftIsPressed = false;
     private Boolean bntRightIsPressed = false;
 
+    private boolean colisionUp;
+    private boolean colisionDown;
+    private boolean colisionLeft;
+    private boolean colisionRight;
+
+
     private TextureRegion[] animacionRight;
     private TextureRegion[] animacionUp;
     private TextureRegion[] animacionDown;
@@ -37,6 +44,9 @@ public class Jugador extends Actor {
     private int currentFrame = 0;
     private float frameTime = 0.1f;
     private float stateTime = 0;
+
+    private float oldx;
+    private float oldy;
 
     private Rectangle collisionRectPlayer;
 
@@ -80,16 +90,16 @@ public class Jugador extends Actor {
                 this.position.x = -400;
             }
         } else {
-            if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A) || this.bntLeftIsPressed){
+            if ((Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A) || this.bntLeftIsPressed) && !colisionLeft ){
                 this.position.x -= Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D) || this.bntRightIsPressed){
+            if ((Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D) || this.bntRightIsPressed) && !colisionRight){
                 this.position.x += Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W) || this.bntUpIsPressed){
+            if ((Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W) || this.bntUpIsPressed) && !colisionUp){
                 this.position.y += Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S) || this.bntDownIsPressed){
+            if ((Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S) || this.bntDownIsPressed) && !colisionDown){
                 this.position.y -= Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
             }
 
@@ -132,6 +142,7 @@ public class Jugador extends Actor {
         TextureRegion playerDir = null;
         //Posicio per si no es mou
         if (this.tipusJugador == AXE_PLAYER){
+
             playerDir = AssetManager.playerDownA;
         } else if (this.tipusJugador == WAR_PLAYER){
             playerDir = AssetManager.playerDownW;
@@ -155,6 +166,40 @@ public class Jugador extends Actor {
         }
 
         return playerDir;
+    }
+
+    public void playerMapColision(int tileWidth, int tileHeight, TiledMapTileLayer mapLayer) {
+
+        boolean colision = searchColision(tileWidth, tileHeight, mapLayer);
+        if ((Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A) || this.bntLeftIsPressed) && colision){
+            colisionLeft = true;
+            this.position.x += 5;
+        }else{
+            colisionLeft = false;
+        }
+        if ((Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D) || this.bntRightIsPressed) && colision){
+            colisionRight = true;
+            this.position.x -= 5;
+        }else{
+            colisionRight = false;
+        }
+        if ((Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W) || this.bntUpIsPressed) && colision) {
+            colisionUp = true;
+            this.position.y -= 5;
+        }else{
+            colisionUp = false;
+        }if ((Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S) || this.bntDownIsPressed) && colision){
+            colisionDown = true;
+            this.position.y += 5;
+        }else{
+            colisionDown = false;
+        }
+    }
+
+    private boolean searchColision(int tileWidth, int tileHeight, TiledMapTileLayer mapLayer ) {
+        int cellX = (int) ((this.position.x + (Settings.PLAYER_WIDTH / 2)) / tileWidth);
+        int cellY = (int) ((this.position.y + (Settings.PLAYER_HEIGHT / 2)) / tileHeight);
+        return mapLayer.getCell(cellX + 1, cellY).getTile().getProperties().containsKey("colisionable");
     }
 
     public void desplazarAutomaticamente(float x, float y){
