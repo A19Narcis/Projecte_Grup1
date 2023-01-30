@@ -177,30 +177,41 @@ public class Jugador extends Actor {
             colisionUp = false;
             colisionDown = false;
         }else{
-            if (!colisionRight) {
+            if (!colisionRight && !colisionUp && !colisionDown) {
                 if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A) || this.bntLeftIsPressed) {
                     colisionLeft = true;
+                    colisionRight = false;
+                    colisionUp = false;
+                    colisionDown = false;
                 }
-            } else {
-                colisionLeft = false;
             }
-            if (!colisionLeft) {
+
+            if (!colisionLeft && !colisionUp && !colisionDown) {
                 if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D) || this.bntRightIsPressed) {
+                    colisionLeft = false;
                     colisionRight = true;
+                    colisionUp = false;
+                    colisionDown = false;
                 }
-            } else {
-                colisionRight = false;
             }
-        /*if ((Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W) || this.bntUpIsPressed) && colision) {
-            colisionUp = true;
-        }else{
-            colisionUp = false;
-        }
-        if ((Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S) || this.bntDownIsPressed) && colision){
-            colisionDown = true;
-        }else{
-            colisionDown = false;
-        }*/
+
+            if (!colisionLeft && !colisionRight && !colisionDown) {
+                if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W) || this.bntUpIsPressed) {
+                    colisionLeft = false;
+                    colisionRight = false;
+                    colisionUp = true;
+                    colisionDown = false;
+                }
+            }
+
+            if (!colisionLeft && !colisionRight && !colisionUp) {
+                if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S) || this.bntDownIsPressed) {
+                    colisionLeft = false;
+                    colisionRight = false;
+                    colisionUp = false;
+                    colisionDown = true;
+                }
+            }
         }
     }
 
