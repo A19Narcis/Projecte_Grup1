@@ -177,7 +177,7 @@ public class Jugador extends Actor {
             colisionUp = false;
             colisionDown = false;
         }else{
-            if (!colisionRight && !colisionUp && !colisionDown) {
+            if (!colisionRight) {
                 if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A) || this.bntLeftIsPressed) {
                     colisionLeft = true;
                     colisionRight = false;
@@ -186,7 +186,7 @@ public class Jugador extends Actor {
                 }
             }
 
-            if (!colisionLeft && !colisionUp && !colisionDown) {
+            if (!colisionLeft) {
                 if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D) || this.bntRightIsPressed) {
                     colisionLeft = false;
                     colisionRight = true;
@@ -195,7 +195,7 @@ public class Jugador extends Actor {
                 }
             }
 
-            if (!colisionLeft && !colisionRight && !colisionDown) {
+            if (!colisionDown) {
                 if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W) || this.bntUpIsPressed) {
                     colisionLeft = false;
                     colisionRight = false;
@@ -204,7 +204,7 @@ public class Jugador extends Actor {
                 }
             }
 
-            if (!colisionLeft && !colisionRight && !colisionUp) {
+            if (!colisionUp) {
                 if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S) || this.bntDownIsPressed) {
                     colisionLeft = false;
                     colisionRight = false;
