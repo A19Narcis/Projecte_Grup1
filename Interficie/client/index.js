@@ -9,6 +9,26 @@ var vue_app = new Vue({
         showPassword: false,
         auth: false,
         ready: 0,
+        dialog_1: false,
+        dialog_2: false,
+        dialog_3: false,
+        dialog_zomb1: false,
+        dialog_zomb2: false,
+        value_vel: 10,
+        value_vida: 1,
+        value_fuerza: 1,
+        value_arm: 0,
+        num_zomb: 10,
+        num_boss: 1,
+        fuerza_zomb: 5,
+        vel_zomb: 10,
+        zomb: 0,
+        show: 0,
+        show2: 0,
+        show_dial: true,
+        vida_zombie: 1,
+        type_char: "",
+        type_zombie: ""
     },
     methods: {
         getAuth: function () {
@@ -79,11 +99,16 @@ var vue_app = new Vue({
                 (data) => {
                     this.postData = data;
                     this.auth = data.isAuth;
-                    if (this.auth == true) {
+                    console.log(this.ready);
+                    console.log(this.zomb);
+                    if (this.auth == true && this.ready == 0) {
                         this.ready = 1;
                     }
+                   
                     console.log(data.isAuth);
                     console.log(this.ready);
+                    console.log(this.zomb);
+                
                 }
             ).catch(
                 (error) => {
@@ -126,6 +151,8 @@ var vue_app = new Vue({
             }
         },
     },
+
+    
 
 
 
