@@ -13,6 +13,21 @@ h3{
 	color: red;
 }
 
+.dialog_title{
+	font-size: 3rem;
+	text-transform: uppercase;
+	font-family: 'Bebas Neue';
+	color: red;
+	text-align: center;
+}
+
+
+.dialog_vel{
+	font-size: 1.5rem;
+	text-transform: uppercase;
+	font-family: 'Bebas Neue';
+	color: grey;
+}
 body {
 	background-color: black;
 }
@@ -60,57 +75,127 @@ h2 {
 	background-size: 150% 150%;
 
 }
-
-.jug1{
+.zomb1{
 	transform: translate(-50%, -50%);
-	width: calc(900px / 6);
-	height: 152px;
+	width: calc(1050px / 7);
+	height: 150px;
 	left: 50%;
 	top: 50%;
 	position: absolute;
-	background: url(./sprites/animationAXE2.png);	
+	background: url(./sprites/zombi1.png);	
+}
+
+.zomb2{
+	transform: translate(-50%, -50%);
+	width: calc(1050px / 7);
+	height: 150px;
+	left: 50%;
+	top: 50%;
+	position: absolute;
+	background: url(./sprites/zombi2.png);	
+}
+
+.jug1{
+	transform: translate(-50%, -50%);
+	width: calc(1200px / 8);
+	height: 160px;
+	left: 50%;
+	top: 50%;
+	position: absolute;
+	background: url(./sprites/axe1.png);	
 }
 
 
 .jug2{
 	transform: translate(-50%, -50%);
-	width: calc(900px / 6);
-	height: 141px;
+	overflow: hidden;
+	width: calc(1394px / 8);
+	height: 175px;
 	left: 50%;
 	top: 50%;
 	position: absolute;
-	background: url(./sprites/animationWarH1.png);	
+	background: url(./sprites/warm1.png);
 }
 
 
 .jug3{
 	transform: translate(-50%, -50%);
-	width: calc(900px / 6);
-	height: 149px;
+	overflow: hidden;
+	width: calc(1200px / 8);
+	height: 150px;
 	left: 50%;
 	top: 50%;
 	position: absolute;
-	background: url(./sprites/animationShield.png);	
+	background: url(./sprites/shield2.png);
 }
 
-.jug1:hover, .jug2:hover, .jug3:hover{
+
+.jug1:hover{
 	position: absolute;
-	animation: moveJu 0.9s steps(6) infinite;
+	animation: moveJu 1.3s steps(8) infinite;
 }
 
+
+.jug2:hover{
+	position: absolute;
+	animation: moveJu2 1.3s steps(8) infinite;
+}
+.jug3:hover{
+	position: absolute;
+	animation: moveJu3 1.3s steps(8) infinite;
+}
+
+.zomb1:hover, .zomb2:hover{
+	position: absolute;
+	animation: moveZo 1.3s steps(7) infinite;
+}
+.pass{
+	-webkit-text-security:disc;
+}
 @keyframes colors{
-	0%{background-position:0% 60%}
+	0%{background-position:0% 70%}
     50%{background-position:0% 40%}
-    100%{background-position:0% 60%}
+    100%{background-position:0% 70%}
 }
 
 @keyframes moveJu{
+
 	from{
 		background-position: 0;
 	}
-
 	to{
-		background-position: 900px;
+		background-position: 1200px;
+	}
+}
+
+@keyframes moveJu2{
+
+	from{
+		background-position: 0;
+	}
+	to{
+		background-position: 1394px;
+	}
+}
+
+@keyframes moveJu3{
+
+	from{
+		background-position: 0;
+	}
+	to{
+		background-position: 1200px;
+	}
+}
+
+@keyframes moveZo{
+
+
+	from{
+		background-position: 0;
+	}
+	to{
+		background-position: 1050px;
 	}
 }
 
