@@ -87,6 +87,8 @@ public class GameScreen implements Screen {
         renderer = new OrthogonalTiledMapRenderer(map);
 
         jugador = new Jugador(mapWidthInPixels / 2 - (Settings.PLAYER_WIDTH / 2), mapHeightInPixels / 2 - (Settings.PLAYER_WIDTH / 2), Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT, false, 1);
+        jugador.setMapProperties(properties);
+        jugador.setMapLayer(mapLayer);
 
         //Crear stage
         stage = new Stage(prevViewport, prevBatch);
@@ -194,7 +196,6 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(.5f, .7f, .9f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        jugador.playerMapColision(tileWidth, tileHeight, mapLayer);
 
         cameraMapPosition();
 
