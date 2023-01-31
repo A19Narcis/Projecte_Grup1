@@ -21,7 +21,6 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
 import com.badlogic.gdx.math.Vector2;
 
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 
@@ -44,6 +43,9 @@ public class GameScreen implements Screen {
     private Stage stage;
     private Jugador jugador;
 
+    private int zoomAndroid;
+    private int zoomPc;
+
     private TiledMap map;
 
     private TiledMapTileLayer mapLayer;
@@ -61,13 +63,12 @@ public class GameScreen implements Screen {
             mapWidthInTiles, mapHeightInTiles,
             mapWidthInPixels, mapHeightInPixels;
 
-    private Vector3 vector3;
-
     public GameScreen(Batch prevBatch, Viewport prevViewport){
 
         shapeRenderer = new ShapeRenderer();
 
-        vector3 = new Vector3();
+        zoomAndroid = 6;
+        zoomPc = 3;
 
         map = AssetManager.map;
         MapProperties properties = map.getProperties();
@@ -93,7 +94,7 @@ public class GameScreen implements Screen {
         //Crear stage
         stage = new Stage(prevViewport, prevBatch);
         if (Gdx.app.getType() == Application.ApplicationType.Android){//Zoom para Android
-            stage.getViewport().setWorldSize(stage.getViewport().getWorldWidth() / 2, stage.getViewport().getWorldHeight() / 2);
+            stage.getViewport().setWorldSize(stage.getViewport().getWorldWidth() / zoomAndroid, stage.getViewport().getWorldHeight() / zoomAndroid);
             stage.getViewport().apply();
 
             //Cargar flechas para moverse en el movil
@@ -107,15 +108,18 @@ public class GameScreen implements Screen {
             btnL_img = new ImageButton(new TextureRegionDrawable(new TextureRegion(btnLeftTexture)));
             btnR_img = new ImageButton(new TextureRegionDrawable(new TextureRegion(btnRightTexture)));
 
-            btnU_img.setSize(100, 100);
-            btnL_img.setSize(100, 100);
-            btnD_img.setSize(100, 100);
-            btnR_img.setSize(100, 100);
+            btnU_img.setSize(20, 20);
+            btnL_img.setSize(20, 20);
+            btnD_img.setSize(20, 20);
+            btnR_img.setSize(20, 20);
 
             stage.addActor(btnU_img);
             stage.addActor(btnD_img);
             stage.addActor(btnL_img);
             stage.addActor(btnR_img);
+        }else{
+            stage.getViewport().setWorldSize(stage.getViewport().getWorldWidth() / zoomPc, stage.getViewport().getWorldHeight() / zoomPc);
+            stage.getViewport().apply();
         }
 
         //Añadir Actores
@@ -201,10 +205,10 @@ public class GameScreen implements Screen {
 
         camera.update();
         if (Gdx.app.getType() == Application.ApplicationType.Android){
-            btnU_img.setPosition(camera.position.x - camera.viewportWidth / 2 + 75, camera.position.y - camera.viewportHeight / 2 + 150);
-            btnD_img.setPosition(camera.position.x - camera.viewportWidth / 2 + 75, camera.position.y - camera.viewportHeight / 2);
-            btnL_img.setPosition(camera.position.x - camera.viewportWidth / 2, camera.position.y - camera.viewportHeight / 2 + 75);
-            btnR_img.setPosition(camera.position.x - camera.viewportWidth / 2 + 150, camera.position.y - camera.viewportHeight / 2 + 75);
+            btnU_img.setPosition(camera.position.x - camera.viewportWidth / 2 + 20, camera.position.y - camera.viewportHeight / 2 + 40);
+            btnD_img.setPosition(camera.position.x - camera.viewportWidth / 2 + 20, camera.position.y - camera.viewportHeight / 2);
+            btnL_img.setPosition(camera.position.x - camera.viewportWidth / 2, camera.position.y - camera.viewportHeight / 2 + 20);
+            btnR_img.setPosition(camera.position.x - camera.viewportWidth / 2 + 40, camera.position.y - camera.viewportHeight / 2 + 20);
         }
 
         if (buttonUpPressed){
@@ -235,17 +239,17 @@ public class GameScreen implements Screen {
 
     private void cameraMapPosition() {
         if (Gdx.app.getType() == Application.ApplicationType.Android){
-            if(jugador.getCollisionRectPlayer().x < (mapWidthInPixels - (Gdx.graphics.getWidth() / 2) / 2) - (Settings.PLAYER_WIDTH / 2) && jugador.getCollisionRectPlayer().x > (Gdx.graphics.getWidth() / 2) / 2 - (Settings.PLAYER_WIDTH / 2)){
+            if(jugador.getCollisionRectPlayer().x < (mapWidthInPixels - (Gdx.graphics.getWidth() / 2) / zoomAndroid) - (Settings.PLAYER_WIDTH / 2) && jugador.getCollisionRectPlayer().x > (Gdx.graphics.getWidth() / 2) / 2 - (Settings.PLAYER_WIDTH / 2)){
                 camera.position.x = jugador.getCollisionRectPlayer().x + (Settings.PLAYER_WIDTH / 2);
             }
-            if(jugador.getCollisionRectPlayer().y < (mapHeightInPixels - (Gdx.graphics.getHeight() / 2) / 2) - (Settings.PLAYER_WIDTH / 2) && jugador.getCollisionRectPlayer().y > (Gdx.graphics.getHeight() / 2) / 2 - (Settings.PLAYER_HEIGHT / 2)) {
+            if(jugador.getCollisionRectPlayer().y < (mapHeightInPixels - (Gdx.graphics.getHeight() / 2) / zoomAndroid) - (Settings.PLAYER_WIDTH / 2) && jugador.getCollisionRectPlayer().y > (Gdx.graphics.getHeight() / 2) / 2 - (Settings.PLAYER_HEIGHT / 2)) {
                 camera.position.y = jugador.getCollisionRectPlayer().y + (Settings.PLAYER_HEIGHT / 2);
             }
         } else {
-            if(jugador.getCollisionRectPlayer().x < (mapWidthInPixels - (Gdx.graphics.getWidth() / 2) - (Settings.PLAYER_WIDTH / 2)) && jugador.getCollisionRectPlayer().x > (Gdx.graphics.getWidth() / 2) - (Settings.PLAYER_WIDTH / 2)){
+            if(jugador.getCollisionRectPlayer().x < (mapWidthInPixels - (Gdx.graphics.getWidth() / 2) / zoomPc) - (Settings.PLAYER_WIDTH / 2) && jugador.getCollisionRectPlayer().x > (Gdx.graphics.getWidth() / 2) / zoomPc - (Settings.PLAYER_WIDTH / 2)){
                 camera.position.x = jugador.getCollisionRectPlayer().x + (Settings.PLAYER_WIDTH / 2);
             }
-            if(jugador.getCollisionRectPlayer().y < (mapHeightInPixels - (Gdx.graphics.getHeight() / 2) - (Settings.PLAYER_HEIGHT / 2)) && jugador.getCollisionRectPlayer().y > (Gdx.graphics.getHeight() / 2) - (Settings.PLAYER_HEIGHT / 2)) {
+            if(jugador.getCollisionRectPlayer().y < (mapHeightInPixels - (Gdx.graphics.getHeight() / 2) / zoomPc) - (Settings.PLAYER_WIDTH / 2) && jugador.getCollisionRectPlayer().y > (Gdx.graphics.getHeight() / 2) / zoomPc - (Settings.PLAYER_HEIGHT / 2)) {
                 camera.position.y = jugador.getCollisionRectPlayer().y + (Settings.PLAYER_HEIGHT / 2);
             }
         }

@@ -8,7 +8,7 @@ public class Settings {
 
     //Propietats del jugador
     public static final float PLAYER_VELOCITY = 250;
-    public static final int PLAYER_WIDTH = 64;
-    public static final int PLAYER_HEIGHT = 64;
+    public static final int PLAYER_WIDTH = 32;
+    public static final int PLAYER_HEIGHT = 32;
 
 }
