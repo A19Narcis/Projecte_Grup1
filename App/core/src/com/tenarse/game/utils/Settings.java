@@ -7,7 +7,7 @@ public class Settings {
     public static final int GAME_HEIGHT = 620;
 
     //Propietats del jugador
-    public static final float PLAYER_VELOCITY = 250;
+    public static final float PLAYER_VELOCITY = 1000;
     public static final int PLAYER_WIDTH = 64;
     public static final int PLAYER_HEIGHT = 64;
 

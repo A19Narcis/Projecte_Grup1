@@ -105,20 +105,42 @@ public class Jugador extends Actor {
             oldy = this.position.y;
                 if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A) || this.bntLeftIsPressed) {
                     this.position.x -= Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
+                    this.position.x -= 16;
+                    if(searchColision(mapProperties.get("tilewidth", Integer.class), mapProperties.get("tileheight", Integer.class), mapLayer)) {
+                        this.position.x = oldx;
+                        this.position.y = oldy;
+                    }else {
+                        this.position.x += 16;
+                    }
                 }
                 if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D) || this.bntRightIsPressed) {
                     this.position.x += Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
+                    this.position.x += 16;
+                    if(searchColision(mapProperties.get("tilewidth", Integer.class), mapProperties.get("tileheight", Integer.class), mapLayer)) {
+                        this.position.x = oldx;
+                        this.position.y = oldy;
+                    }else {
+                        this.position.x -= 16;
+                    }
                 }
                 if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W) || this.bntUpIsPressed) {
                     this.position.y += Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
+                    if(searchColision(mapProperties.get("tilewidth", Integer.class), mapProperties.get("tileheight", Integer.class), mapLayer)) {
+                        this.position.x = oldx;
+                        this.position.y = oldy;
+                    }
                 }
                 if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S) || this.bntDownIsPressed) {
                     this.position.y -= Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
+                    this.position.y -= 24;
+                    if(searchColision(mapProperties.get("tilewidth", Integer.class), mapProperties.get("tileheight", Integer.class), mapLayer)) {
+                        this.position.x = oldx;
+                        this.position.y = oldy;
+                    }else {
+                        this.position.y += 24;
+                    }
                 }
-                if(searchColision(mapProperties.get("tilewidth", Integer.class), mapProperties.get("tileheight", Integer.class), mapLayer)) {
-                    this.position.x = oldx;
-                    this.position.y = oldy;
-                }
+
 
 
             //Colision personaje con los bordes del mapa
