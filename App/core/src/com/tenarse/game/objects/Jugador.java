@@ -4,6 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapProperties;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -30,6 +33,12 @@ public class Jugador extends Actor {
     private Boolean bntLeftIsPressed = false;
     private Boolean bntRightIsPressed = false;
 
+    private boolean colisionUp;
+    private boolean colisionDown;
+    private boolean colisionLeft;
+    private boolean colisionRight;
+
+
     private TextureRegion[] animacionRight;
     private TextureRegion[] animacionUp;
     private TextureRegion[] animacionDown;
@@ -37,6 +46,12 @@ public class Jugador extends Actor {
     private int currentFrame = 0;
     private float frameTime = 0.1f;
     private float stateTime = 0;
+
+    private float oldx;
+    private float oldy;
+    private MapProperties mapProperties;
+
+    private TiledMapTileLayer mapLayer;
 
     private Rectangle collisionRectPlayer;
 
@@ -72,6 +87,12 @@ public class Jugador extends Actor {
         setTouchable(Touchable.enabled);
     }
 
+    private boolean searchColision(int tileWidth, int tileHeight, TiledMapTileLayer mapLayer ) {
+        int cellX = (int) ((this.position.x + (Settings.PLAYER_WIDTH / 2)) / tileWidth);
+        int cellY = (int) ((this.position.y + (Settings.PLAYER_HEIGHT / 2)) / tileHeight);
+        return mapLayer.getCell(cellX, cellY).getTile().getProperties().containsKey("colisionable");
+    }
+
     public void act(float delta){
         super.act(delta);
         if (this.isBot){
@@ -80,18 +101,47 @@ public class Jugador extends Actor {
                 this.position.x = -400;
             }
         } else {
-            if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A) || this.bntLeftIsPressed){
-                this.position.x -= Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
-            }
-            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D) || this.bntRightIsPressed){
-                this.position.x += Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
-            }
-            if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W) || this.bntUpIsPressed){
-                this.position.y += Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
-            }
-            if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S) || this.bntDownIsPressed){
-                this.position.y -= Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
-            }
+            oldx = this.position.x;
+            oldy = this.position.y;
+                if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A) || this.bntLeftIsPressed) {
+                    this.position.x -= Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
+                    this.position.x -= 16;
+                    if(searchColision(mapProperties.get("tilewidth", Integer.class), mapProperties.get("tileheight", Integer.class), mapLayer)) {
+                        this.position.x = oldx;
+                        this.position.y = oldy;
+                    }else {
+                        this.position.x += 16;
+                    }
+                }
+                if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D) || this.bntRightIsPressed) {
+                    this.position.x += Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
+                    this.position.x += 16;
+                    if(searchColision(mapProperties.get("tilewidth", Integer.class), mapProperties.get("tileheight", Integer.class), mapLayer)) {
+                        this.position.x = oldx;
+                        this.position.y = oldy;
+                    }else {
+                        this.position.x -= 16;
+                    }
+                }
+                if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W) || this.bntUpIsPressed) {
+                    this.position.y += Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
+                    if(searchColision(mapProperties.get("tilewidth", Integer.class), mapProperties.get("tileheight", Integer.class), mapLayer)) {
+                        this.position.x = oldx;
+                        this.position.y = oldy;
+                    }
+                }
+                if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S) || this.bntDownIsPressed) {
+                    this.position.y -= Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
+                    this.position.y -= 24;
+                    if(searchColision(mapProperties.get("tilewidth", Integer.class), mapProperties.get("tileheight", Integer.class), mapLayer)) {
+                        this.position.x = oldx;
+                        this.position.y = oldy;
+                    }else {
+                        this.position.y += 24;
+                    }
+                }
+
+
 
             //Colision personaje con los bordes del mapa
             if (this.position.y <= 5){
@@ -132,6 +182,7 @@ public class Jugador extends Actor {
         TextureRegion playerDir = null;
         //Posicio per si no es mou
         if (this.tipusJugador == AXE_PLAYER){
+
             playerDir = AssetManager.playerDownA;
         } else if (this.tipusJugador == WAR_PLAYER){
             playerDir = AssetManager.playerDownW;
@@ -188,5 +239,21 @@ public class Jugador extends Actor {
         this.bntLeftIsPressed = false;
         this.bntDownIsPressed = false;
         this.bntRightIsPressed = false;
+    }
+
+    public MapProperties getMapProperties() {
+        return mapProperties;
+    }
+
+    public void setMapProperties(MapProperties mapProperties) {
+        this.mapProperties = mapProperties;
+    }
+
+    public TiledMapTileLayer getMapLayer() {
+        return mapLayer;
+    }
+
+    public void setMapLayer(TiledMapTileLayer mapLayer) {
+        this.mapLayer = mapLayer;
     }
 }
