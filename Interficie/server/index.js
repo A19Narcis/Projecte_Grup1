@@ -4,6 +4,10 @@ const fs = require('fs');
 const path = require('path');
 const sessions = require('express-session');
 var cookieParser = require('cookie-parser');
+const database = require("./database/connection")
+const readDB = require('./database/read')
+const insertDB = require('./database/create')
+const updateDB = require('./database/update')
 const app = express();
 
 const PORT = 7073;
@@ -19,7 +23,7 @@ app.use(sessions({
     secret: "sadsadsadasd",
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 60000 },
+    cookie: { maxAge: 100000 },
     user:{ isAuth: false}
     
 }));
@@ -144,3 +148,81 @@ app.post("/getSession", async (req, res) => {
     res.send(JSON.stringify(ret));
       
 });
+
+
+
+/* =========== FUNCIONS RELACIONADES MONGODB =========== */
+
+//Insertat los primeros datos del juego (Stats Jugadores, Zombies)
+app.post("/", (req, res) => {
+    insertDB.insertStats(function () {
+        res.send({ success : true })
+    });
+})
+
+//Ver las estadisticas de todos los personajes
+app.post("/getStats", (req, res) => {
+    readDB.getStats(function (dades) {
+        res.send(dades)
+    })
+})
+
+//Actualiza las stats de un tipo de personaje segun el tipo -> req.body.values[0]
+app.post("/updateStats", (req, res) => {
+    const tipo = req.body.values[0]
+    let newStats = {}
+    if (tipo <= 3) {
+        newStats = {
+            velocidad: req.body.values[1],
+            fuerza: req.body.values[2],
+            vida: req.body.values[3],
+            armadura: req.body.values[4]
+        }
+    } else {
+        newStats = {
+            cantidad: req.body.values[1],
+            fuerza: req.body.values[2],
+            vida: req.body.values[3],
+            velocidad: req.body.values[4]
+        }
+    }
+    updateDB.updateStats(1, newStats, function () {
+        res.send(newStats)
+    })
+})
+
+
+//Insertar una nueva partida cuando acaba en la APP
+app.post("/newPartida", (req, res) => {
+    const partida = {
+        jugadores: [
+            {
+                username: "Narcis",
+                tipo: "Axe",
+                kills: 12
+            },
+            {
+                username: "Sergi",
+                tipo: "Warhammer",
+                kills: 32
+            },
+            {
+                username: "Teo",
+                tipo: "Shield",
+                kills: 28
+            },
+        ],
+        tiempo: "32:11"
+    }
+    insertDB.insertPartida(partida, function () {
+        res.send({ success: true })
+    })
+})
+
+
+//Obtener todas las partidas que hay registradas
+app.post("/getPartidas", (req, res) => {
+    readDB.getPartidas(function (partidas) {
+        res.send(partidas)
+    })
+})

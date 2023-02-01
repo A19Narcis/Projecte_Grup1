@@ -6,6 +6,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -23,9 +25,7 @@ public class MainMenuScreen implements Screen {
 
     private Stage stage;
     private Texture background;
-    private Texture btnMenu;
-
-    private Texture btnUpTexture, btnDownTexture, btnLeftTexture, btnRightTexture;
+    private Texture btnMenu, btnSingle, btnMulti, btnReturn;
 
     //Imatge jugador que es mou sol
     private Jugador botIniciAxe;
@@ -35,7 +35,7 @@ public class MainMenuScreen implements Screen {
     private Image imgMenuJoc;
     private Tenarse game;
 
-    private ImageButton jugarBTN, btnU_img, btnD_img, btnL_img, btnR_img;
+    private ImageButton jugarBTN, multiBTN, singleBTN, returnBTN;
 
     public MainMenuScreen(Tenarse game){
         this.game = game;
@@ -56,24 +56,32 @@ public class MainMenuScreen implements Screen {
             botIniciShield = new Jugador(-300, 0, Settings.PLAYER_WIDTH * 4, Settings.PLAYER_HEIGHT * 4, true, 3);
         }
 
-        btnMenu = AssetManager.imgMainMenu;
 
         imgMenuJoc.setPosition(0, 0);
         stage.addActor(imgMenuJoc);
 
         btnMenu = AssetManager.imgPlayBtn;
-
-        btnUpTexture = AssetManager.btnMovUp;
-        btnDownTexture = AssetManager.btnMovDown;
-        btnRightTexture = AssetManager.btnMovRight;
-        btnLeftTexture = AssetManager.btnMovLeft;
+        btnSingle = AssetManager.imgSingleBtn;
+        btnMulti = AssetManager.imgMultiBtn;
+        btnReturn = AssetManager.imgReturnBtn;
 
         jugarBTN = new ImageButton(new TextureRegionDrawable(new TextureRegion(btnMenu)));
+        multiBTN = new ImageButton(new TextureRegionDrawable(new TextureRegion(btnMulti)));
+        singleBTN = new ImageButton(new TextureRegionDrawable(new TextureRegion(btnSingle)));
+        returnBTN = new ImageButton(new TextureRegionDrawable(new TextureRegion(btnReturn)));
 
-        stage.addActor(jugarBTN);
-        stage.addActor(botIniciAxe);
-        stage.addActor(botIniciWarHam);
-        stage.addActor(botIniciShield);
+        stage.addActor(jugarBTN);        //0
+        stage.addActor(botIniciAxe);     //1
+        stage.addActor(botIniciWarHam);  //2
+        stage.addActor(botIniciShield);  //3
+        stage.addActor(multiBTN);        //4
+        stage.addActor(singleBTN);       //5
+        stage.addActor(returnBTN);       //6
+
+
+        stage.getActors().get(4).setVisible(false);
+        stage.getActors().get(5).setVisible(false);
+        stage.getActors().get(6).setVisible(false);
 
         botIniciAxe.desplazarAutomaticamente(0, Gdx.graphics.getHeight() * 0.163f);
         botIniciWarHam.desplazarAutomaticamente(-200, Gdx.graphics.getHeight() * 0.163f);
@@ -87,6 +95,8 @@ public class MainMenuScreen implements Screen {
             jugarBTN.setPosition(Gdx.graphics.getWidth() / 2 - jugarBTN.getWidth() / 2, Gdx.graphics.getHeight()/ 2 - jugarBTN.getHeight() / 2);
         }
 
+        System.out.println(stage.getActors().get(1));
+
         Gdx.input.setInputProcessor(stage);
     }
 
@@ -96,7 +106,59 @@ public class MainMenuScreen implements Screen {
         jugarBTN.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                stage.getActors().get(1).setVisible(false);
+                stage.getActors().get(4).setVisible(true);
+                stage.getActors().get(5).setVisible(true);
+                stage.getActors().get(6).setVisible(true);
+
+                if (Gdx.app.getType() == Application.ApplicationType.Android){
+                    multiBTN.setPosition(Gdx.graphics.getWidth() / 2 - multiBTN.getWidth(), Gdx.graphics.getHeight() / 2 - multiBTN.getHeight() / 2 - multiBTN.getHeight() + multiBTN.getHeight() - multiBTN.getHeight() / 2);
+                    multiBTN.getImage().setScale(2f);
+                    singleBTN.setPosition(Gdx.graphics.getWidth() / 2 - singleBTN.getWidth(), Gdx.graphics.getHeight() / 2 - singleBTN.getHeight() / 2 + multiBTN.getHeight() * 2);
+                    singleBTN.getImage().setScale(2f);
+                    returnBTN.setPosition(0 + returnBTN.getWidth(), Gdx.graphics.getHeight() - returnBTN.getHeight() * 3);
+                    returnBTN.getImage().setScale(2f);
+
+                } else {
+                    singleBTN.setPosition(Gdx.graphics.getWidth() / 2 - singleBTN.getWidth() / 2, Gdx.graphics.getHeight() / 2 + singleBTN.getHeight());
+                    multiBTN.setPosition(Gdx.graphics.getWidth() / 2 - multiBTN.getWidth() / 2, Gdx.graphics.getHeight() / 2 + multiBTN.getHeight() - multiBTN.getHeight() * 1.2f);
+                    returnBTN.setPosition(0 + returnBTN.getWidth() / 2, Gdx.graphics.getHeight() - returnBTN.getHeight() * 1.5f);
+                }
+
+                return true;
+            }
+        });
+
+        multiBTN.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 game.setScreen(new GameScreen(stage.getBatch(), stage.getViewport()));
+                return true;
+            }
+        });
+
+        singleBTN.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                game.setScreen(new GameScreen(stage.getBatch(), stage.getViewport()));
+                return true;
+            }
+        });
+
+        returnBTN.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                stage.getActors().get(1).setVisible(true);
+                stage.getActors().get(4).setVisible(false);
+                stage.getActors().get(5).setVisible(false);
+                stage.getActors().get(6).setVisible(false);
+                if (Gdx.app.getType() == Application.ApplicationType.Android){
+                    jugarBTN.setPosition(Gdx.graphics.getWidth() / 2 - jugarBTN.getWidth(), Gdx.graphics.getHeight() / 2 - jugarBTN.getHeight());
+                    jugarBTN.getImage().setScale(2f);
+
+                } else {
+                    jugarBTN.setPosition(Gdx.graphics.getWidth() / 2 - jugarBTN.getWidth() / 2, Gdx.graphics.getHeight()/ 2 - jugarBTN.getHeight() / 2);
+                }
                 return true;
             }
         });
