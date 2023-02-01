@@ -18,12 +18,17 @@ public class Zombie extends Actor{
     private TextureRegion[] animacionUp;
     private TextureRegion[] animacionDown;
     private TextureRegion[] animacionLeft;
+    private TextureRegion[] animacionSpawn;
 
-    TextureRegion zombieDir;
+    private int currentFrame = 0;
+    private float frameTime = 0.1f;
+    private float stateTime = 0;
 
     private int tileWidth, tileHeight,
             mapWidthInTiles, mapHeightInTiles,
             mapWidthInPixels, mapHeightInPixels;
+
+    boolean spawned;
 
     public Zombie(int width, int height, MapProperties mapProperties) {
         this.width = width;
@@ -37,14 +42,13 @@ public class Zombie extends Actor{
         this.position.y = getRandomIntInclusive((int)(mapHeightInPixels / 2 - (Settings.ZOMBIE_WIDTH / 2) - 100), (int)(mapHeightInPixels / 2 - (Settings.ZOMBIE_WIDTH / 2) + 100));//(int) Math.random()* (mapHeightInPixels / 2 - (Settings.ZOMBIE_HEIGHT / 2) - 100) + (mapHeightInPixels / 2 - (Settings.ZOMBIE_HEIGHT / 2) + 100);
         System.out.println(this.position.x+ ", " +this.position.y);
 
-
-
         animacionRight = AssetManager.zombieRight_Animation;
         animacionLeft = AssetManager.zombieLeft_Animation;
         animacionUp = AssetManager.zombieUp_Animation;
         animacionDown = AssetManager.zombieDown_Animation;
+        animacionSpawn = AssetManager.zombieSpawn_Animation;
 
-
+        spawned = false;
     }
 
     private int getRandomIntInclusive(int min, int max) {
@@ -67,11 +71,24 @@ public class Zombie extends Actor{
     }
 
     private TextureRegion getZombieDirection() {
-        return AssetManager.zombieDown;
+        if(!spawned){
+            return AssetManager.zombieSpawn_Animation[currentFrame];
+        }
+        else{
+            return AssetManager.zombieDown;
+        }
     }
 
     public void act(float delta){
-
+        stateTime += delta;
+        if (stateTime >= frameTime){
+            currentFrame++;
+            if (currentFrame >= animacionSpawn.length){
+                spawned = true;
+                currentFrame = 0;
+            }
+            stateTime = 0;
+        }
     }
 
     public void draw(Batch batch, float parentAlpha){

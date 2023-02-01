@@ -25,12 +25,12 @@ public class AssetManager {
     public static TextureRegion playerUpA, playerDownA, playerLeftA, playerRightA;
     public static TextureRegion playerUpW, playerDownW, playerLeftW, playerRightW;
     public static TextureRegion playerUpS, playerDownS, playerLeftS, playerRightS;
-    public static TextureRegion zombieUp, zombieDown, zombieLeft, zombieRight;
+    public static TextureRegion zombieUp, zombieDown, zombieLeft, zombieRight, zombieSpawn;
 
     public static TextureRegion[] playerRightA_Animation, playerLeftA_Animation, playerUpA_Animation, playerDownA_Animation;
     public static TextureRegion[] playerRightW_Animation, playerLeftW_Animation, playerUpW_Animation, playerDownW_Animation;
     public static TextureRegion[] playerRightS_Animation, playerLeftS_Animation, playerUpS_Animation, playerDownS_Animation;
-    public static TextureRegion[] zombieRight_Animation, zombieLeft_Animation, zombieUp_Animation, zombieDown_Animation;
+    public static TextureRegion[] zombieRight_Animation, zombieLeft_Animation, zombieUp_Animation, zombieDown_Animation, zombieSpawn_Animation;
 
     //Skins Buttons
     public static Texture imgPlayBtn;
@@ -117,6 +117,10 @@ public class AssetManager {
         zombieRight = new TextureRegion(sheetZombie, 0, 64*11, 64, 64);
         zombieRight.flip(false, false);
 
+        //Sheet Zombie spawn
+        zombieSpawn = new TextureRegion(sheetZombie, 0, 64*20, 64, 64);
+        zombieSpawn.flip(false, false);
+
 
         //Animaciones en Arrays[]
         //Derecha Axe
@@ -158,25 +162,33 @@ public class AssetManager {
         //Derecha Zombie
         zombieRight_Animation = new TextureRegion[9];
         for (int i = 0; i < playerRightA_Animation.length; i++) {
-            zombieRight_Animation[i] = new TextureRegion(sheetPlayerAxe, i * 64, 64 * 11, 64, 64);
+            zombieRight_Animation[i] = new TextureRegion(sheetZombie, i * 64, 64 * 11, 64, 64);
         }
 
         //Izquierda Zombie
         zombieLeft_Animation = new TextureRegion[9];
         for (int i = 0; i < playerLeftA_Animation.length; i++) {
-            zombieLeft_Animation[i] = new TextureRegion(sheetPlayerAxe, i * 64, 64 * 9, 64, 64);
+            zombieLeft_Animation[i] = new TextureRegion(sheetZombie, i * 64, 64 * 9, 64, 64);
         }
 
         //Arriba Zombie
         zombieUp_Animation = new TextureRegion[9];
         for (int i = 0; i < playerUpA_Animation.length; i++) {
-            zombieUp_Animation[i] = new TextureRegion(sheetPlayerAxe, i * 64, 64 * 8, 64, 64);
+            zombieUp_Animation[i] = new TextureRegion(sheetZombie, i * 64, 64 * 8, 64, 64);
         }
 
         //Abajo Zombie
         zombieDown_Animation = new TextureRegion[9];
-        for (int i = 0; i < playerDownA_Animation.length; i++) {
-            zombieDown_Animation[i] = new TextureRegion(sheetPlayerAxe, i * 64, 64 * 10, 64, 64);
+        for (int i = 0; i < zombieDown_Animation.length; i++) {
+            zombieDown_Animation[i] = new TextureRegion(sheetZombie, i * 64, 64 * 10, 64, 64);
+        }
+
+        //Spawn Zombie
+        zombieSpawn_Animation = new TextureRegion[5];
+        for (int i = zombieSpawn_Animation.length - 1; i >= 0 ; i--) {
+            zombieSpawn_Animation[(zombieSpawn_Animation.length - 1) - i] = new TextureRegion(sheetZombie, i * 64, 64 * 20, 64, 64);
+            //zombieSpawn_Animation = rotar(zombieSpawn_Animation);
+
         }
 
         //Imatge fons menu
@@ -194,6 +206,15 @@ public class AssetManager {
         sheetPlayerAxe.dispose();
         sheetPlayerWar.dispose();
         sheetPlayerShield.dispose();
+    }
+
+    public static TextureRegion[] rotar (TextureRegion [] texturas){
+        TextureRegion primero = texturas[0];
+        int x;
+        for(x= 0; x < texturas.length-1; x++)
+            texturas[x] = texturas[x+1];
+        texturas[x]= primero;
+        return texturas;
     }
 
 }
