@@ -33,7 +33,7 @@ public class AssetManager {
     public static TextureRegion[] zombieRight_Animation, zombieLeft_Animation, zombieUp_Animation, zombieDown_Animation;
 
     //Skins Buttons
-    public static Texture imgPlayBtn;
+    public static Texture imgPlayBtn, imgSingleBtn, imgMultiBtn, imgReturnBtn;
     public static Texture btnMovUp, btnMovDown, btnMovLeft, btnMovRight;
 
 
@@ -184,6 +184,9 @@ public class AssetManager {
 
         //Skins Buttons
         imgPlayBtn = new Texture(Gdx.files.internal("button_jugar.png"));
+        imgSingleBtn = new Texture(Gdx.files.internal("button_single.png"));
+        imgMultiBtn = new Texture(Gdx.files.internal("button_multi.png"));
+        imgReturnBtn = new Texture(Gdx.files.internal("returnArrow.png"));
         btnMovUp = new Texture(Gdx.files.internal("up_arr.png"));
         btnMovDown = new Texture(Gdx.files.internal("down_arr.png"));
         btnMovLeft = new Texture(Gdx.files.internal("left_arr.png"));
