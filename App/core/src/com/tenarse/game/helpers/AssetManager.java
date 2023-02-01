@@ -18,16 +18,19 @@ public class AssetManager {
     public static Texture sheetPlayerAxe;
     public static Texture sheetPlayerWar;
     public static Texture sheetPlayerShield;
+    public static Texture sheetZombie;
     public static Texture imgMainMenu;
 
     //Images
     public static TextureRegion playerUpA, playerDownA, playerLeftA, playerRightA;
     public static TextureRegion playerUpW, playerDownW, playerLeftW, playerRightW;
     public static TextureRegion playerUpS, playerDownS, playerLeftS, playerRightS;
+    public static TextureRegion zombieUp, zombieDown, zombieLeft, zombieRight;
 
     public static TextureRegion[] playerRightA_Animation, playerLeftA_Animation, playerUpA_Animation, playerDownA_Animation;
     public static TextureRegion[] playerRightW_Animation, playerLeftW_Animation, playerUpW_Animation, playerDownW_Animation;
     public static TextureRegion[] playerRightS_Animation, playerLeftS_Animation, playerUpS_Animation, playerDownS_Animation;
+    public static TextureRegion[] zombieRight_Animation, zombieLeft_Animation, zombieUp_Animation, zombieDown_Animation;
 
     //Skins Buttons
     public static Texture imgPlayBtn;
@@ -57,6 +60,10 @@ public class AssetManager {
         //Jugador Shield
         sheetPlayerShield = new Texture(Gdx.files.internal("animate_kite_shield.png"));
         sheetPlayerShield.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+
+        //Jugador Shield
+        sheetZombie = new Texture(Gdx.files.internal("Zombie.png"));
+        sheetZombie.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
         //Sheet PJ AXE
         playerDownA = new TextureRegion(sheetPlayerAxe, 0, 64*10, 64, 64);
@@ -97,6 +104,19 @@ public class AssetManager {
         playerRightS = new TextureRegion(sheetPlayerShield, 0, 64*11, 64, 64);
         playerRightS.flip(false, false);
 
+        //Sheet Zombie
+        zombieDown = new TextureRegion(sheetZombie, 0, 64*10, 64, 64);
+        zombieDown.flip(false, false);
+
+        zombieUp = new TextureRegion(sheetZombie, 0, 64*8, 64, 64);
+        zombieUp.flip(false, false);
+
+        zombieLeft = new TextureRegion(sheetZombie, 0, 64*9, 64, 64);
+        zombieLeft.flip(false, false);
+
+        zombieRight = new TextureRegion(sheetZombie, 0, 64*11, 64, 64);
+        zombieRight.flip(false, false);
+
 
         //Animaciones en Arrays[]
         //Derecha Axe
@@ -105,7 +125,7 @@ public class AssetManager {
             playerRightA_Animation[i] = new TextureRegion(sheetPlayerAxe, i * 64, 64 * 11, 64, 64);
         }
 
-        //Izq Axe
+        //Izquierda Axe
         playerLeftA_Animation = new TextureRegion[9];
         for (int i = 0; i < playerLeftA_Animation.length; i++) {
             playerLeftA_Animation[i] = new TextureRegion(sheetPlayerAxe, i * 64, 64 * 9, 64, 64);
@@ -133,6 +153,30 @@ public class AssetManager {
         playerRightS_Animation = new TextureRegion[9];
         for (int i = 0; i < playerRightS_Animation.length; i++) {
             playerRightS_Animation[i] = new TextureRegion(sheetPlayerShield, i * 64, 64 * 11, 64, 64);
+        }
+
+        //Derecha Zombie
+        zombieRight_Animation = new TextureRegion[9];
+        for (int i = 0; i < playerRightA_Animation.length; i++) {
+            zombieRight_Animation[i] = new TextureRegion(sheetPlayerAxe, i * 64, 64 * 11, 64, 64);
+        }
+
+        //Izquierda Zombie
+        zombieLeft_Animation = new TextureRegion[9];
+        for (int i = 0; i < playerLeftA_Animation.length; i++) {
+            zombieLeft_Animation[i] = new TextureRegion(sheetPlayerAxe, i * 64, 64 * 9, 64, 64);
+        }
+
+        //Arriba Zombie
+        zombieUp_Animation = new TextureRegion[9];
+        for (int i = 0; i < playerUpA_Animation.length; i++) {
+            zombieUp_Animation[i] = new TextureRegion(sheetPlayerAxe, i * 64, 64 * 8, 64, 64);
+        }
+
+        //Abajo Zombie
+        zombieDown_Animation = new TextureRegion[9];
+        for (int i = 0; i < playerDownA_Animation.length; i++) {
+            zombieDown_Animation[i] = new TextureRegion(sheetPlayerAxe, i * 64, 64 * 10, 64, 64);
         }
 
         //Imatge fons menu

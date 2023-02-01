@@ -46,14 +46,14 @@ public class MainMenuScreen implements Screen {
         imgMenuJoc.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         if (Gdx.app.getType() == Application.ApplicationType.Android){
+            botIniciAxe = new Jugador(-100, 0, Settings.PLAYER_WIDTH * 7, Settings.PLAYER_HEIGHT * 7, true, 1);
+            botIniciWarHam = new Jugador(-200, 0, Settings.PLAYER_WIDTH * 7, Settings.PLAYER_HEIGHT * 7, true, 2);
+            botIniciShield = new Jugador(-300, 0, Settings.PLAYER_WIDTH * 7, Settings.PLAYER_HEIGHT * 7, true, 3);
+
+        } else {
             botIniciAxe = new Jugador(-100, 0, Settings.PLAYER_WIDTH * 4, Settings.PLAYER_HEIGHT * 4, true, 1);
             botIniciWarHam = new Jugador(-200, 0, Settings.PLAYER_WIDTH * 4, Settings.PLAYER_HEIGHT * 4, true, 2);
             botIniciShield = new Jugador(-300, 0, Settings.PLAYER_WIDTH * 4, Settings.PLAYER_HEIGHT * 4, true, 3);
-
-        } else {
-            botIniciAxe = new Jugador(-100, 0, Settings.PLAYER_WIDTH * 2, Settings.PLAYER_HEIGHT * 2, true, 1);
-            botIniciWarHam = new Jugador(-200, 0, Settings.PLAYER_WIDTH * 2, Settings.PLAYER_HEIGHT * 2, true, 2);
-            botIniciShield = new Jugador(-300, 0, Settings.PLAYER_WIDTH * 2, Settings.PLAYER_HEIGHT * 2, true, 3);
         }
 
         btnMenu = AssetManager.imgMainMenu;

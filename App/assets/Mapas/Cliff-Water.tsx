@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.8" tiledversion="1.8.0" name="Cliff" tilewidth="16" tileheight="16" tilecount="63" columns="7">
- <image source="MiniWorldSprites/Ground/Cliff.png" width="112" height="144"/>
+<tileset version="1.8" tiledversion="1.8.0" name="Cliff-Water" tilewidth="16" tileheight="16" tilecount="30" columns="5">
+ <image source="MiniWorldSprites/Ground/Cliff-Water.png" width="80" height="96"/>
  <tile id="0">
   <properties>
    <property name="colisionable" type="bool" value="true"/>
@@ -26,6 +26,11 @@
    <property name="colisionable" type="bool" value="true"/>
   </properties>
  </tile>
+ <tile id="5">
+  <properties>
+   <property name="colisionable" type="bool" value="true"/>
+  </properties>
+ </tile>
  <tile id="7">
   <properties>
    <property name="colisionable" type="bool" value="true"/>
@@ -41,7 +46,17 @@
    <property name="colisionable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="14">
+ <tile id="10">
+  <properties>
+   <property name="colisionable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="11">
+  <properties>
+   <property name="colisionable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="12">
   <properties>
    <property name="colisionable" type="bool" value="true"/>
   </properties>
@@ -62,6 +77,16 @@
   </properties>
  </tile>
  <tile id="18">
+  <properties>
+   <property name="colisionable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="19">
+  <properties>
+   <property name="colisionable" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="20">
   <properties>
    <property name="colisionable" type="bool" value="true"/>
   </properties>
@@ -91,117 +116,12 @@
    <property name="colisionable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="28">
+ <tile id="26">
   <properties>
    <property name="colisionable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="29">
-  <properties>
-   <property name="colisionable" type="bool" value="true"/>
-  </properties>
- </tile>
- <tile id="30">
-  <properties>
-   <property name="colisionable" type="bool" value="true"/>
-  </properties>
- </tile>
- <tile id="31">
-  <properties>
-   <property name="colisionable" type="bool" value="true"/>
-  </properties>
- </tile>
- <tile id="32">
-  <properties>
-   <property name="colisionable" type="bool" value="true"/>
-  </properties>
- </tile>
- <tile id="35">
-  <properties>
-   <property name="colisionable" type="bool" value="true"/>
-  </properties>
- </tile>
- <tile id="36">
-  <properties>
-   <property name="colisionable" type="bool" value="true"/>
-  </properties>
- </tile>
- <tile id="37">
-  <properties>
-   <property name="colisionable" type="bool" value="true"/>
-  </properties>
- </tile>
- <tile id="38">
-  <properties>
-   <property name="colisionable" type="bool" value="true"/>
-  </properties>
- </tile>
- <tile id="39">
-  <properties>
-   <property name="colisionable" type="bool" value="true"/>
-  </properties>
- </tile>
- <tile id="42">
-  <properties>
-   <property name="colisionable" type="bool" value="true"/>
-  </properties>
- </tile>
- <tile id="43">
-  <properties>
-   <property name="colisionable" type="bool" value="true"/>
-  </properties>
- </tile>
- <tile id="44">
-  <properties>
-   <property name="colisionable" type="bool" value="true"/>
-  </properties>
- </tile>
- <tile id="49">
-  <properties>
-   <property name="colisionable" type="bool" value="true"/>
-  </properties>
- </tile>
- <tile id="50">
-  <properties>
-   <property name="colisionable" type="bool" value="true"/>
-  </properties>
- </tile>
- <tile id="51">
-  <properties>
-   <property name="colisionable" type="bool" value="true"/>
-  </properties>
- </tile>
- <tile id="52">
-  <properties>
-   <property name="colisionable" type="bool" value="true"/>
-  </properties>
- </tile>
- <tile id="53">
-  <properties>
-   <property name="colisionable" type="bool" value="true"/>
-  </properties>
- </tile>
- <tile id="56">
-  <properties>
-   <property name="colisionable" type="bool" value="true"/>
-  </properties>
- </tile>
- <tile id="57">
-  <properties>
-   <property name="colisionable" type="bool" value="true"/>
-  </properties>
- </tile>
- <tile id="58">
-  <properties>
-   <property name="colisionable" type="bool" value="true"/>
-  </properties>
- </tile>
- <tile id="59">
-  <properties>
-   <property name="colisionable" type="bool" value="true"/>
-  </properties>
- </tile>
- <tile id="60">
+ <tile id="27">
   <properties>
    <property name="colisionable" type="bool" value="true"/>
   </properties>
