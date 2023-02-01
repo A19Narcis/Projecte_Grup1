@@ -187,8 +187,6 @@ public class AssetManager {
         zombieSpawn_Animation = new TextureRegion[5];
         for (int i = zombieSpawn_Animation.length - 1; i >= 0 ; i--) {
             zombieSpawn_Animation[(zombieSpawn_Animation.length - 1) - i] = new TextureRegion(sheetZombie, i * 64, 64 * 20, 64, 64);
-            //zombieSpawn_Animation = rotar(zombieSpawn_Animation);
-
         }
 
         //Imatge fons menu
@@ -207,14 +205,4 @@ public class AssetManager {
         sheetPlayerWar.dispose();
         sheetPlayerShield.dispose();
     }
-
-    public static TextureRegion[] rotar (TextureRegion [] texturas){
-        TextureRegion primero = texturas[0];
-        int x;
-        for(x= 0; x < texturas.length-1; x++)
-            texturas[x] = texturas[x+1];
-        texturas[x]= primero;
-        return texturas;
-    }
-
 }
