@@ -246,6 +246,7 @@ public class GameScreen implements Screen {
     private void spawnZombie() {
         if(TimeUtils.nanoTime() - lastDropTime > Settings.SPAWN_INTERVAL){
             Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, properties);
+            zombie.setMapLayer(mapLayer);
             stage.addActor(zombie);
             lastDropTime = TimeUtils.nanoTime();
         }
@@ -254,10 +255,10 @@ public class GameScreen implements Screen {
 
     private void cameraMapPosition() {
         if (Gdx.app.getType() == Application.ApplicationType.Android){
-            if(jugador.getCollisionRectPlayer().x < (mapWidthInPixels - (Gdx.graphics.getWidth() / 2) / zoomAndroid) - (Settings.PLAYER_WIDTH / 2) && jugador.getCollisionRectPlayer().x > (Gdx.graphics.getWidth() / 2) / 2 - (Settings.PLAYER_WIDTH / 2)){
+            if(jugador.getCollisionRectPlayer().x < (mapWidthInPixels - (Gdx.graphics.getWidth() / 2) / zoomAndroid) - (Settings.PLAYER_WIDTH / 2) && jugador.getCollisionRectPlayer().x > (Gdx.graphics.getWidth() / 2) / zoomAndroid - (Settings.PLAYER_WIDTH / 2)){
                 camera.position.x = jugador.getCollisionRectPlayer().x + (Settings.PLAYER_WIDTH / 2);
             }
-            if(jugador.getCollisionRectPlayer().y < (mapHeightInPixels - (Gdx.graphics.getHeight() / 2) / zoomAndroid) - (Settings.PLAYER_WIDTH / 2) && jugador.getCollisionRectPlayer().y > (Gdx.graphics.getHeight() / 2) / 2 - (Settings.PLAYER_HEIGHT / 2)) {
+            if(jugador.getCollisionRectPlayer().y < (mapHeightInPixels - (Gdx.graphics.getHeight() / 2) / zoomAndroid) - (Settings.PLAYER_WIDTH / 2) && jugador.getCollisionRectPlayer().y > (Gdx.graphics.getHeight() / 2) / zoomAndroid - (Settings.PLAYER_HEIGHT / 2)) {
                 camera.position.y = jugador.getCollisionRectPlayer().y + (Settings.PLAYER_HEIGHT / 2);
             }
         } else {

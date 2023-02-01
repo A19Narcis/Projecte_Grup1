@@ -70,18 +70,18 @@ public class MainMenuScreen implements Screen {
         singleBTN = new ImageButton(new TextureRegionDrawable(new TextureRegion(btnSingle)));
         returnBTN = new ImageButton(new TextureRegionDrawable(new TextureRegion(btnReturn)));
 
-        stage.addActor(jugarBTN);        //0
-        stage.addActor(botIniciAxe);     //1
-        stage.addActor(botIniciWarHam);  //2
-        stage.addActor(botIniciShield);  //3
-        stage.addActor(multiBTN);        //4
-        stage.addActor(singleBTN);       //5
-        stage.addActor(returnBTN);       //6
+        stage.addActor(jugarBTN);        //1
+        stage.addActor(botIniciAxe);     //2
+        stage.addActor(botIniciWarHam);  //3
+        stage.addActor(botIniciShield);  //4
+        stage.addActor(multiBTN);        //5
+        stage.addActor(singleBTN);       //6
+        stage.addActor(returnBTN);       //7
 
 
-        stage.getActors().get(4).setVisible(false);
         stage.getActors().get(5).setVisible(false);
         stage.getActors().get(6).setVisible(false);
+        stage.getActors().get(7).setVisible(false);
 
         botIniciAxe.desplazarAutomaticamente(0, Gdx.graphics.getHeight() * 0.163f);
         botIniciWarHam.desplazarAutomaticamente(-200, Gdx.graphics.getHeight() * 0.163f);
@@ -107,9 +107,9 @@ public class MainMenuScreen implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 stage.getActors().get(1).setVisible(false);
-                stage.getActors().get(4).setVisible(true);
                 stage.getActors().get(5).setVisible(true);
                 stage.getActors().get(6).setVisible(true);
+                stage.getActors().get(7).setVisible(true);
 
                 if (Gdx.app.getType() == Application.ApplicationType.Android){
                     multiBTN.setPosition(Gdx.graphics.getWidth() / 2 - multiBTN.getWidth(), Gdx.graphics.getHeight() / 2 - multiBTN.getHeight() / 2 - multiBTN.getHeight() + multiBTN.getHeight() - multiBTN.getHeight() / 2);
@@ -149,9 +149,9 @@ public class MainMenuScreen implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 stage.getActors().get(1).setVisible(true);
-                stage.getActors().get(4).setVisible(false);
                 stage.getActors().get(5).setVisible(false);
                 stage.getActors().get(6).setVisible(false);
+                stage.getActors().get(7).setVisible(false);
                 if (Gdx.app.getType() == Application.ApplicationType.Android){
                     jugarBTN.setPosition(Gdx.graphics.getWidth() / 2 - jugarBTN.getWidth(), Gdx.graphics.getHeight() / 2 - jugarBTN.getHeight());
                     jugarBTN.getImage().setScale(2f);

@@ -24,6 +24,8 @@ public class Zombie extends Actor{
     private float frameTime = 0.1f;
     private float stateTime = 0;
 
+    private TiledMapTileLayer mapLayer;
+
     private int tileWidth, tileHeight,
             mapWidthInTiles, mapHeightInTiles,
             mapWidthInPixels, mapHeightInPixels;
@@ -34,12 +36,7 @@ public class Zombie extends Actor{
         this.width = width;
         this.height = height;
         this.mapProperties = mapProperties;
-        Vector2 startPosition = createSpawnPosition();
-        /*this.position.x = startPosition.x;
-        this.position.y = startPosition.y;*/
-        this.position = new Vector2();
-        this.position.x = getRandomIntInclusive((int)(mapWidthInPixels / 2 - (Settings.ZOMBIE_WIDTH / 2) - 100), (int)(mapWidthInPixels / 2 - (Settings.ZOMBIE_WIDTH / 2) + 100));//Math.random()* (mapWidthInPixels / 2 - (Settings.ZOMBIE_WIDTH / 2) - 100) - (mapWidthInPixels / 2 - (Settings.ZOMBIE_WIDTH / 2) + 100);
-        this.position.y = getRandomIntInclusive((int)(mapHeightInPixels / 2 - (Settings.ZOMBIE_WIDTH / 2) - 100), (int)(mapHeightInPixels / 2 - (Settings.ZOMBIE_WIDTH / 2) + 100));//(int) Math.random()* (mapHeightInPixels / 2 - (Settings.ZOMBIE_HEIGHT / 2) - 100) + (mapHeightInPixels / 2 - (Settings.ZOMBIE_HEIGHT / 2) + 100);
+        position = createSpawnPosition();
         System.out.println(this.position.x+ ", " +this.position.y);
 
         animacionRight = AssetManager.zombieRight_Animation;
@@ -65,9 +62,18 @@ public class Zombie extends Actor{
         mapHeightInTiles  = mapProperties.get("height", Integer.class);
         mapWidthInPixels  = mapWidthInTiles  * tileWidth;
         mapHeightInPixels = mapHeightInTiles * tileHeight;
-        position.x = (int) Math.random()* (mapWidthInPixels - 64) + 64;
-        position.y = (int) Math.random()* (mapHeightInPixels - 64) + 64;
+        do {
+            position.x = getRandomIntInclusive((int)(64), (mapWidthInPixels - 64));
+            position.y = getRandomIntInclusive((int)(64), (mapHeightInPixels - 64));
+            System.out.println(position.x + ", " + position.y);
+        } while (searchColision(this.mapLayer));
         return position;
+    }
+
+    private boolean searchColision(TiledMapTileLayer mapLayer ) {
+        int cellX = (int) ((this.position.x + (Settings.PLAYER_WIDTH / 2)) / tileWidth);
+        int cellY = (int) ((this.position.y + (Settings.PLAYER_HEIGHT / 2)) / tileHeight);
+        return mapLayer.getCell(cellX, cellY).getTile().getProperties().containsKey("colisionable");
     }
 
     private TextureRegion getZombieDirection() {
@@ -89,6 +95,14 @@ public class Zombie extends Actor{
             }
             stateTime = 0;
         }
+    }
+
+    public TiledMapTileLayer getMapLayer() {
+        return mapLayer;
+    }
+
+    public void setMapLayer(TiledMapTileLayer mapLayer) {
+        this.mapLayer = mapLayer;
     }
 
     public void draw(Batch batch, float parentAlpha){
