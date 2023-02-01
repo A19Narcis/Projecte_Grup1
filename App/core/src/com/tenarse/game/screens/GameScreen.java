@@ -28,9 +28,11 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.tenarse.game.helpers.AssetManager;
 import com.tenarse.game.objects.Jugador;
+import com.tenarse.game.objects.Zombie;
 import com.tenarse.game.utils.Settings;
 
 public class GameScreen implements Screen {
@@ -59,9 +61,13 @@ public class GameScreen implements Screen {
 
     private OrthogonalTiledMapRenderer renderer;
 
+    private MapProperties properties;
+
     private int tileWidth, tileHeight,
             mapWidthInTiles, mapHeightInTiles,
             mapWidthInPixels, mapHeightInPixels;
+
+    long lastDropTime = 0;
 
     public GameScreen(Batch prevBatch, Viewport prevViewport){
 
@@ -71,7 +77,7 @@ public class GameScreen implements Screen {
         zoomPc = 3;
 
         map = AssetManager.map;
-        MapProperties properties = map.getProperties();
+        properties = map.getProperties();
         tileWidth         = properties.get("tilewidth", Integer.class);
         tileHeight        = properties.get("tileheight", Integer.class);
         mapWidthInTiles   = properties.get("width", Integer.class);
@@ -229,12 +235,21 @@ public class GameScreen implements Screen {
             jugador.goingRight();
         }
 
+        spawnZombie();
+
         renderer.setView(camera);
         renderer.render();
         stage.draw();
         stage.act(delta);
     }
 
+    private void spawnZombie() {
+        if(TimeUtils.nanoTime() - lastDropTime > Settings.SPAWN_INTERVAL){
+            Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, properties);
+            stage.addActor(zombie);
+            lastDropTime = TimeUtils.nanoTime();
+        }
+    }
 
 
     private void cameraMapPosition() {
