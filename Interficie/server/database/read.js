@@ -20,7 +20,8 @@ const getStats = async (callback) => {
     const resBoss = await BossStats.find({});
     fullStats.push(resBoss)
 
-     callback(fullStats)
+    console.log("Cogiendo datos de los personajes i de los zombies...");
+    callback(fullStats)
 }
 
 //Select de les partides

@@ -39,7 +39,6 @@ app.use(express.json());
 app.use(cors({ 
     credentials: true,
     origin: function(origin, callback){
-        console.log(origin);
         return callback(null, true)
     }
 }));
@@ -169,26 +168,29 @@ app.post("/getStats", (req, res) => {
 
 //Actualiza las stats de un tipo de personaje segun el tipo -> req.body.values[0]
 app.post("/updateStats", (req, res) => {
-    const tipo = req.body.values[0]
-    let newStats = {}
-    if (tipo <= 3) {
-        newStats = {
-            velocidad: req.body.values[1],
-            fuerza: req.body.values[2],
-            vida: req.body.values[3],
-            armadura: req.body.values[4]
+    if (session.user.isAuth == true){
+        const tipo = req.body.values[0];
+        let newStats = {}
+        if (tipo <= 3) {
+            newStats = {
+                velocidad: req.body.values[1],
+                fuerza: req.body.values[2],
+                vida: req.body.values[3],
+                armadura: req.body.values[4]
+            }
+        } else {
+            newStats = {
+                cantidad: req.body.values[1],
+                fuerza: req.body.values[2],
+                vida: req.body.values[3],
+                velocidad: req.body.values[4]
+            }
         }
-    } else {
-        newStats = {
-            cantidad: req.body.values[1],
-            fuerza: req.body.values[2],
-            vida: req.body.values[3],
-            velocidad: req.body.values[4]
-        }
+        
+        updateDB.updateStats(tipo, newStats, function () {
+            res.send(newStats)
+        })
     }
-    updateDB.updateStats(1, newStats, function () {
-        res.send(newStats)
-    })
 })
 
 
