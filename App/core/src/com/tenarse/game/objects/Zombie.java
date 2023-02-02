@@ -62,11 +62,12 @@ public class Zombie extends Actor{
         mapHeightInTiles  = mapProperties.get("height", Integer.class);
         mapWidthInPixels  = mapWidthInTiles  * tileWidth;
         mapHeightInPixels = mapHeightInTiles * tileHeight;
-        do {
-            position.x = getRandomIntInclusive((int)(64), (mapWidthInPixels - 64));
-            position.y = getRandomIntInclusive((int)(64), (mapHeightInPixels - 64));
-            System.out.println(position.x + ", " + position.y);
-        } while (searchColision(this.mapLayer));
+        position.x = getRandomIntInclusive((int)(64), (mapWidthInPixels - 64));
+        position.y = getRandomIntInclusive((int)(64), (mapHeightInPixels - 64));
+        System.out.println(position.x + ", " + position.y);
+        /*do {
+
+        } while (searchColision(this.mapLayer));*/
         return position;
     }
 

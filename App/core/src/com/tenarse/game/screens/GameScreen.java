@@ -32,6 +32,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.tenarse.game.helpers.AssetManager;
 import com.tenarse.game.objects.Jugador;
+import com.tenarse.game.objects.Map;
 import com.tenarse.game.objects.Zombie;
 import com.tenarse.game.utils.Settings;
 
@@ -48,9 +49,7 @@ public class GameScreen implements Screen {
     private int zoomAndroid;
     private int zoomPc;
 
-    private TiledMap map;
-
-    private TiledMapTileLayer mapLayer;
+    private Map map;
 
     private Texture btnUpTexture, btnDownTexture, btnLeftTexture, btnRightTexture;
     private ImageButton btnU_img, btnD_img, btnL_img, btnR_img;
@@ -61,12 +60,6 @@ public class GameScreen implements Screen {
 
     private OrthogonalTiledMapRenderer renderer;
 
-    private MapProperties properties;
-
-    private int tileWidth, tileHeight,
-            mapWidthInTiles, mapHeightInTiles,
-            mapWidthInPixels, mapHeightInPixels;
-
     long lastDropTime = 0;
 
     public GameScreen(Batch prevBatch, Viewport prevViewport){
@@ -76,26 +69,17 @@ public class GameScreen implements Screen {
         zoomAndroid = 6;
         zoomPc = 3;
 
-        map = AssetManager.map;
-        properties = map.getProperties();
-        tileWidth         = properties.get("tilewidth", Integer.class);
-        tileHeight        = properties.get("tileheight", Integer.class);
-        mapWidthInTiles   = properties.get("width", Integer.class);
-        mapHeightInTiles  = properties.get("height", Integer.class);
-        mapWidthInPixels  = mapWidthInTiles  * tileWidth;
-        mapHeightInPixels = mapHeightInTiles * tileHeight;
-        mapLayer = (TiledMapTileLayer) map.getLayers().get("Ground");
-        System.out.println(mapLayer);
+        map = new Map(AssetManager.map);
 
         camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         prevViewport.setCamera(camera);
 
 
-        renderer = new OrthogonalTiledMapRenderer(map);
+        renderer = new OrthogonalTiledMapRenderer(map.getMap());
 
-        jugador = new Jugador(mapWidthInPixels / 2 - (Settings.PLAYER_WIDTH / 2), mapHeightInPixels / 2 - (Settings.PLAYER_WIDTH / 2), Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT, false, 1);
-        jugador.setMapProperties(properties);
-        jugador.setMapLayer(mapLayer);
+        jugador = new Jugador(map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT, false, 1);
+        jugador.setMapProperties(map.getProperties());
+        jugador.setMapLayer(map.getMapLayer());
 
         //Crear stage
         stage = new Stage(prevViewport, prevBatch);
@@ -245,8 +229,8 @@ public class GameScreen implements Screen {
 
     private void spawnZombie() {
         if(TimeUtils.nanoTime() - lastDropTime > Settings.SPAWN_INTERVAL){
-            Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, properties);
-            zombie.setMapLayer(mapLayer);
+            Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map.getProperties());
+            zombie.setMapLayer(map.getMapLayer());
             stage.addActor(zombie);
             lastDropTime = TimeUtils.nanoTime();
         }
@@ -255,17 +239,17 @@ public class GameScreen implements Screen {
 
     private void cameraMapPosition() {
         if (Gdx.app.getType() == Application.ApplicationType.Android){
-            if(jugador.getCollisionRectPlayer().x < (mapWidthInPixels - (Gdx.graphics.getWidth() / 2) / zoomAndroid) - (Settings.PLAYER_WIDTH / 2) && jugador.getCollisionRectPlayer().x > (Gdx.graphics.getWidth() / 2) / zoomAndroid - (Settings.PLAYER_WIDTH / 2)){
+            if(jugador.getCollisionRectPlayer().x < (map.getMapWidthInPixels() - (Gdx.graphics.getWidth() / 2) / zoomAndroid) - (Settings.PLAYER_WIDTH / 2) && jugador.getCollisionRectPlayer().x > (Gdx.graphics.getWidth() / 2) / zoomAndroid - (Settings.PLAYER_WIDTH / 2)){
                 camera.position.x = jugador.getCollisionRectPlayer().x + (Settings.PLAYER_WIDTH / 2);
             }
-            if(jugador.getCollisionRectPlayer().y < (mapHeightInPixels - (Gdx.graphics.getHeight() / 2) / zoomAndroid) - (Settings.PLAYER_WIDTH / 2) && jugador.getCollisionRectPlayer().y > (Gdx.graphics.getHeight() / 2) / zoomAndroid - (Settings.PLAYER_HEIGHT / 2)) {
+            if(jugador.getCollisionRectPlayer().y < (map.getMapHeightInPixels() - (Gdx.graphics.getHeight() / 2) / zoomAndroid) - (Settings.PLAYER_WIDTH / 2) && jugador.getCollisionRectPlayer().y > (Gdx.graphics.getHeight() / 2) / zoomAndroid - (Settings.PLAYER_HEIGHT / 2)) {
                 camera.position.y = jugador.getCollisionRectPlayer().y + (Settings.PLAYER_HEIGHT / 2);
             }
         } else {
-            if(jugador.getCollisionRectPlayer().x < (mapWidthInPixels - (Gdx.graphics.getWidth() / 2) / zoomPc) - (Settings.PLAYER_WIDTH / 2) && jugador.getCollisionRectPlayer().x > (Gdx.graphics.getWidth() / 2) / zoomPc - (Settings.PLAYER_WIDTH / 2)){
+            if(jugador.getCollisionRectPlayer().x < (map.getMapWidthInPixels() - (Gdx.graphics.getWidth() / 2) / zoomPc) - (Settings.PLAYER_WIDTH / 2) && jugador.getCollisionRectPlayer().x > (Gdx.graphics.getWidth() / 2) / zoomPc - (Settings.PLAYER_WIDTH / 2)){
                 camera.position.x = jugador.getCollisionRectPlayer().x + (Settings.PLAYER_WIDTH / 2);
             }
-            if(jugador.getCollisionRectPlayer().y < (mapHeightInPixels - (Gdx.graphics.getHeight() / 2) / zoomPc) - (Settings.PLAYER_WIDTH / 2) && jugador.getCollisionRectPlayer().y > (Gdx.graphics.getHeight() / 2) / zoomPc - (Settings.PLAYER_HEIGHT / 2)) {
+            if(jugador.getCollisionRectPlayer().y < (map.getMapHeightInPixels() - (Gdx.graphics.getHeight() / 2) / zoomPc) - (Settings.PLAYER_WIDTH / 2) && jugador.getCollisionRectPlayer().y > (Gdx.graphics.getHeight() / 2) / zoomPc - (Settings.PLAYER_HEIGHT / 2)) {
                 camera.position.y = jugador.getCollisionRectPlayer().y + (Settings.PLAYER_HEIGHT / 2);
             }
         }
@@ -303,5 +287,9 @@ public class GameScreen implements Screen {
 
     public Jugador getJugador() {
         return jugador;
+    }
+
+    public Map getMap() {
+        return map;
     }
 }
