@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.tenarse.game.helpers.AssetManager;
+import com.tenarse.game.screens.GameScreen;
 import com.tenarse.game.utils.Settings;
 
 public class Jugador extends Actor {
@@ -40,9 +41,8 @@ public class Jugador extends Actor {
 
     private float oldx;
     private float oldy;
-    private MapProperties mapProperties;
 
-    private TiledMapTileLayer mapLayer;
+    private Map map;
 
     private Rectangle collisionRectPlayer;
 
@@ -50,6 +50,42 @@ public class Jugador extends Actor {
         this.width = width;
         this.height = height;
         position = new Vector2(x, y);
+
+        this.map = map;
+
+        this.isBot = isBot;
+
+        collisionRectPlayer = new Rectangle();
+
+        this.tipusJugador = tipusJugador;
+
+        if (tipusJugador == AXE_PLAYER){
+            animacionRight = AssetManager.playerRightA_Animation;
+            animacionLeft = AssetManager.playerLeftA_Animation;
+            animacionUp = AssetManager.playerUpA_Animation;
+            animacionDown = AssetManager.playerDownA_Animation;
+        } else if (tipusJugador == WAR_PLAYER){
+            animacionRight = AssetManager.playerRightW_Animation;
+            animacionLeft = AssetManager.playerLeftW_Animation;
+            animacionUp = AssetManager.playerUpW_Animation;
+            animacionDown = AssetManager.playerDownW_Animation;
+        } else if (tipusJugador == SHI_PLAYER){
+            animacionRight = AssetManager.playerRightS_Animation;
+            animacionLeft = AssetManager.playerLeftS_Animation;
+            animacionUp = AssetManager.playerUpS_Animation;
+            animacionDown = AssetManager.playerDownS_Animation;
+        }
+
+        setBounds(position.x, position.y, width, height);
+        setTouchable(Touchable.enabled);
+    }
+
+    public Jugador(float x, float y, int width, int height, boolean isBot, int tipusJugador, Map map){
+        this.width = width;
+        this.height = height;
+        position = new Vector2(x, y);
+
+        this.map = map;
 
         this.isBot = isBot;
 
@@ -94,6 +130,8 @@ public class Jugador extends Actor {
         } else {
             oldx = this.position.x;
             oldy = this.position.y;
+            MapProperties mapProperties = map.getProperties();
+            TiledMapTileLayer mapLayer = map.getMapLayer();
                 if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A) || this.bntLeftIsPressed) {
                     this.position.x -= Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
                     this.position.x -= 8;
@@ -230,21 +268,5 @@ public class Jugador extends Actor {
         this.bntLeftIsPressed = false;
         this.bntDownIsPressed = false;
         this.bntRightIsPressed = false;
-    }
-
-    public MapProperties getMapProperties() {
-        return mapProperties;
-    }
-
-    public void setMapProperties(MapProperties mapProperties) {
-        this.mapProperties = mapProperties;
-    }
-
-    public TiledMapTileLayer getMapLayer() {
-        return mapLayer;
-    }
-
-    public void setMapLayer(TiledMapTileLayer mapLayer) {
-        this.mapLayer = mapLayer;
     }
 }
