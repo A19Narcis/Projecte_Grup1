@@ -231,8 +231,7 @@ public class GameScreen implements Screen {
 
     private void spawnZombie() {
         if (TimeUtils.nanoTime() - lastDropTime > Settings.SPAWN_INTERVAL) {
-            Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map.getProperties());
-            zombie.setMapLayer(map.getMapLayer());
+            Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
             stage.addActor(zombie);
             lastDropTime = TimeUtils.nanoTime();
         }

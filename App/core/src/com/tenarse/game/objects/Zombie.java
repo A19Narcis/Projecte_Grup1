@@ -12,7 +12,6 @@ import com.tenarse.game.utils.Settings;
 public class Zombie extends Actor{
     private Vector2 position;
     private int width, height;
-    private MapProperties mapProperties;
 
     private TextureRegion[] animacionRight;
     private TextureRegion[] animacionUp;
@@ -24,19 +23,17 @@ public class Zombie extends Actor{
     private float frameTime = 0.1f;
     private float stateTime = 0;
 
-    private TiledMapTileLayer mapLayer;
-
-    private int tileWidth, tileHeight,
-            mapWidthInTiles, mapHeightInTiles,
-            mapWidthInPixels, mapHeightInPixels;
+    private Map map;
 
     boolean spawned;
 
-    public Zombie(int width, int height, MapProperties mapProperties) {
+    public Zombie(int width, int height, Map map) {
         this.width = width;
         this.height = height;
-        this.mapProperties = mapProperties;
-        position = createSpawnPosition();
+        this.map = map;
+        position = new Vector2();
+        createSpawnPosition();
+
         System.out.println(this.position.x+ ", " +this.position.y);
 
         animacionRight = AssetManager.zombieRight_Animation;
@@ -54,27 +51,11 @@ public class Zombie extends Actor{
         return (int) Math.floor(Math.random() * (max - min + 1) + min); // The maximum is inclusive and the minimum is inclusive
     }
 
-    public Vector2 createSpawnPosition(){
-        Vector2 position = new Vector2();
-        tileWidth         = mapProperties.get("tilewidth", Integer.class);
-        tileHeight        = mapProperties.get("tileheight", Integer.class);
-        mapWidthInTiles   = mapProperties.get("width", Integer.class);
-        mapHeightInTiles  = mapProperties.get("height", Integer.class);
-        mapWidthInPixels  = mapWidthInTiles  * tileWidth;
-        mapHeightInPixels = mapHeightInTiles * tileHeight;
-        position.x = getRandomIntInclusive((int)(64), (mapWidthInPixels - 64));
-        position.y = getRandomIntInclusive((int)(64), (mapHeightInPixels - 64));
-        System.out.println(position.x + ", " + position.y);
-        /*do {
-
-        } while (searchColision(this.mapLayer));*/
-        return position;
-    }
-
-    private boolean searchColision(TiledMapTileLayer mapLayer ) {
-        int cellX = (int) ((this.position.x + (Settings.PLAYER_WIDTH / 2)) / tileWidth);
-        int cellY = (int) ((this.position.y + (Settings.PLAYER_HEIGHT / 2)) / tileHeight);
-        return mapLayer.getCell(cellX, cellY).getTile().getProperties().containsKey("colisionable");
+    public void createSpawnPosition(){
+        do {
+            this.position.x = getRandomIntInclusive((int)(64), (map.getMapWidthInPixels() - 64));
+            this.position.y = getRandomIntInclusive((int)(64), (map.getMapHeightInPixels() - 64));
+        } while (map.searchColision(this.position.x, this.position.y));
     }
 
     private TextureRegion getZombieDirection() {
@@ -96,14 +77,6 @@ public class Zombie extends Actor{
             }
             stateTime = 0;
         }
-    }
-
-    public TiledMapTileLayer getMapLayer() {
-        return mapLayer;
-    }
-
-    public void setMapLayer(TiledMapTileLayer mapLayer) {
-        this.mapLayer = mapLayer;
     }
 
     public void draw(Batch batch, float parentAlpha){

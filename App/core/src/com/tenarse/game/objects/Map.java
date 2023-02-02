@@ -3,6 +3,7 @@ package com.tenarse.game.objects;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.tenarse.game.utils.Settings;
 
 public class Map {
 
@@ -60,5 +61,11 @@ public class Map {
 
     public TiledMapTileLayer getMapLayer() {
         return mapLayer;
+    }
+
+    public boolean searchColision(float positionX, float positionY) {
+        int cellX = (int) ((positionX + (Settings.PLAYER_WIDTH / 2)) / this.getTileWidth());
+        int cellY = (int) ((positionY + (Settings.PLAYER_HEIGHT / 2)) / this.getTileHeight());
+        return this.getMapLayer().getCell(cellX, cellY).getTile().getProperties().containsKey("colisionable");
     }
 }

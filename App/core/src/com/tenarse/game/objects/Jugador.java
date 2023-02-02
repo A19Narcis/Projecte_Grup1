@@ -114,13 +114,7 @@ public class Jugador extends Actor {
         setTouchable(Touchable.enabled);
     }
 
-    private boolean searchColision(int tileWidth, int tileHeight, TiledMapTileLayer mapLayer ) {
-        int cellX = (int) ((this.position.x + (Settings.PLAYER_WIDTH / 2)) / tileWidth);
-        int cellY = (int) ((this.position.y + (Settings.PLAYER_HEIGHT / 2)) / tileHeight);
-        return mapLayer.getCell(cellX, cellY).getTile().getProperties().containsKey("colisionable");
-    }
-
-    public void act(float delta){
+        public void act(float delta){
         super.act(delta);
         if (this.isBot){
             this.position.x += 5;
@@ -135,7 +129,7 @@ public class Jugador extends Actor {
                 if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A) || this.bntLeftIsPressed) {
                     this.position.x -= Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
                     this.position.x -= 8;
-                    if(searchColision(mapProperties.get("tilewidth", Integer.class), mapProperties.get("tileheight", Integer.class), mapLayer)) {
+                    if(map.searchColision(position.x, position.y)) {
                         this.position.x = oldx;
                         this.position.y = oldy;
                     }else {
@@ -145,7 +139,7 @@ public class Jugador extends Actor {
                 if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D) || this.bntRightIsPressed) {
                     this.position.x += Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
                     this.position.x += 8;
-                    if(searchColision(mapProperties.get("tilewidth", Integer.class), mapProperties.get("tileheight", Integer.class), mapLayer)) {
+                    if(map.searchColision(position.x, position.y)) {
                         this.position.x = oldx;
                         this.position.y = oldy;
                     }else {
@@ -154,7 +148,7 @@ public class Jugador extends Actor {
                 }
                 if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W) || this.bntUpIsPressed) {
                     this.position.y += Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
-                    if(searchColision(mapProperties.get("tilewidth", Integer.class), mapProperties.get("tileheight", Integer.class), mapLayer)) {
+                    if(map.searchColision(position.x, position.y)) {
                         this.position.x = oldx;
                         this.position.y = oldy;
                     }
@@ -162,7 +156,7 @@ public class Jugador extends Actor {
                 if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S) || this.bntDownIsPressed) {
                     this.position.y -= Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
                     this.position.y -= 12;
-                    if(searchColision(mapProperties.get("tilewidth", Integer.class), mapProperties.get("tileheight", Integer.class), mapLayer)) {
+                    if(map.searchColision(position.x, position.y)) {
                         this.position.x = oldx;
                         this.position.y = oldy;
                     }else {
