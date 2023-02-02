@@ -36,6 +36,8 @@ import com.tenarse.game.objects.Map;
 import com.tenarse.game.objects.Zombie;
 import com.tenarse.game.utils.Settings;
 
+import java.util.ArrayList;
+
 public class GameScreen implements Screen {
 
     private Boolean buttonUpPressed = false;
@@ -61,6 +63,8 @@ public class GameScreen implements Screen {
     private OrthogonalTiledMapRenderer renderer;
 
     long lastDropTime = 0;
+
+    ArrayList<Zombie> enemies = new ArrayList<>();
 
     public GameScreen(Batch prevBatch, Viewport prevViewport) {
 
@@ -220,6 +224,9 @@ public class GameScreen implements Screen {
         if (buttonRightPressed) {
             jugador.goingRight();
         }
+        for (int i = 0; i < enemies.size(); i++) {
+            enemies.get(i).calculateMovement(jugador.getCollisionRectPlayer().x, jugador.getCollisionRectPlayer().y, delta);
+        }
 
         spawnZombie();
 
@@ -232,6 +239,7 @@ public class GameScreen implements Screen {
     private void spawnZombie() {
         if (TimeUtils.nanoTime() - lastDropTime > Settings.SPAWN_INTERVAL) {
             Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
+            enemies.add(zombie);
             stage.addActor(zombie);
             lastDropTime = TimeUtils.nanoTime();
         }

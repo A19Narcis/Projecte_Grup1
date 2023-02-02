@@ -14,6 +14,7 @@ public class Zombie extends Actor{
     private Vector2 position;
     private float oldX, oldY;
     private int width, height;
+    private int direction = 3;
 
     private TextureRegion[] animacionRight;
     private TextureRegion[] animacionUp;
@@ -34,9 +35,9 @@ public class Zombie extends Actor{
         this.height = height;
         this.map = map;
         position = new Vector2();
-        //createSpawnPosition();
-        position.x = map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2);
-        position.y = map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2);
+        createSpawnPosition();
+        //position.x = map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2); //SPAWN EN EL CENTRO PARA PRUEBAS
+        //position.y = map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2);
 
         System.out.println(this.position.x+ ", " +this.position.y);
 
@@ -62,6 +63,13 @@ public class Zombie extends Actor{
         } while (map.searchColision(this.position.x, this.position.y));
     }
 
+    public void calculateMovement(float playerPositionX, float playerPositionY, float delta){
+        Vector2 direction = new Vector2(playerPositionX - position.x, playerPositionY - position.y);
+        direction.nor();
+        position.x += direction.x * Settings.ZOMBIE_VELOCITY * delta;
+        position.y += direction.y * Settings.ZOMBIE_VELOCITY * delta;
+    }
+
     private TextureRegion getZombieDirection() {
         TextureRegion result = null;
         if(!spawned){
@@ -70,17 +78,37 @@ public class Zombie extends Actor{
             oldY = this.position.y;
         }
         else{
-            this.position.x += Settings.ZOMBIE_VELOCITY * Gdx.graphics.getDeltaTime();
-            this.position.y += Settings.ZOMBIE_VELOCITY * Gdx.graphics.getDeltaTime();
+            switch (direction){
+                case Settings.PRESSED_UP:
+                    result = animacionUp[0];
+                    break;
+                case Settings.PRESSED_LEFT:
+                    result = animacionLeft[0];
+                    break;
+                case Settings.PRESSED_DOWN:
+                    result = animacionDown[0];
+                    break;
+                case Settings.PRESSED_RIGHT:
+                    result = animacionRight[0];
+                    break;
+            }
+
+
             if(oldX < this.position.x){
                 result = AssetManager.zombieRight_Animation[currentFrame];
+                direction = Settings.PRESSED_RIGHT;
             }else if(oldX > this.position.x){
                 result = AssetManager.zombieLeft_Animation[currentFrame];
+                direction = Settings.PRESSED_LEFT;
             }else if(oldY < this.position.y){
                 result = AssetManager.zombieUp_Animation[currentFrame];
-            }else if(oldY > this.position.y){
+                direction = Settings.PRESSED_UP;
+            }else if(oldY > this.position.y) {
                 result = AssetManager.zombieDown_Animation[currentFrame];
+                direction = Settings.PRESSED_DOWN;
             }
+            oldX = this.position.x;
+            oldY = this.position.y;
 
         }
         return result;

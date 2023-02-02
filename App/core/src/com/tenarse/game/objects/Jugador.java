@@ -4,15 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.MapProperties;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.tenarse.game.helpers.AssetManager;
-import com.tenarse.game.screens.GameScreen;
 import com.tenarse.game.utils.Settings;
 
 public class Jugador extends Actor {
@@ -21,8 +17,7 @@ public class Jugador extends Actor {
     private final int WAR_PLAYER = 2;
     private final int SHI_PLAYER = 3;
 
-
-    private int pressed = 3;
+    private int direction = 3;
 
     private Vector2 position;
     private int width, height;
@@ -130,7 +125,7 @@ public class Jugador extends Actor {
             oldx = this.position.x;
             oldy = this.position.y;
                 if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A) || this.bntLeftIsPressed) {
-                    this.pressed = Settings.PRESSED_LEFT;
+                    this.direction = Settings.PRESSED_LEFT;
                     this.position.x -= Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
                     this.position.x -= 8;
                     if(map.searchColision(position.x, position.y)) {
@@ -141,7 +136,7 @@ public class Jugador extends Actor {
                     }
                 }
                 if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D) || this.bntRightIsPressed) {
-                    this.pressed = Settings.PRESSED_RIGHT;
+                    this.direction = Settings.PRESSED_RIGHT;
                     this.position.x += Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
                     this.position.x += 8;
                     if(map.searchColision(position.x, position.y)) {
@@ -152,7 +147,7 @@ public class Jugador extends Actor {
                     }
                 }
                 if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W) || this.bntUpIsPressed) {
-                    this.pressed = Settings.PRESSED_UP;
+                    this.direction = Settings.PRESSED_UP;
                     this.position.y += Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
                     if(map.searchColision(position.x, position.y)) {
                         this.position.x = oldx;
@@ -160,7 +155,7 @@ public class Jugador extends Actor {
                     }
                 }
                 if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S) || this.bntDownIsPressed) {
-                    this.pressed = Settings.PRESSED_DOWN;
+                    this.direction = Settings.PRESSED_DOWN;
                     this.position.y -= Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
                     this.position.y -= 12;
                     if(map.searchColision(position.x, position.y)) {
@@ -212,7 +207,7 @@ public class Jugador extends Actor {
         TextureRegion playerDir = null;
         //Posicio per si no es mou
         if(!isBot){
-            switch (pressed){
+            switch (direction){
                 case Settings.PRESSED_UP:
                     playerDir = animacionUp[0];
                     break;
