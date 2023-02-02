@@ -10,6 +10,7 @@ const insertPartida = function (partida, callback) {
     const newPartida = new Partida(partida);
     newPartida.save(function (err) {
         if (err) return console.log(err);
+        console.log("¡Nueva partida insertada!");
         callback();
     })
 }
@@ -19,7 +20,6 @@ const insertPartida = function (partida, callback) {
 const insertStats = function(callback) {
     AxeStats.find().then((result) => {
         if (result.length == 0) {
-            console.log("Introduciendo stats Axe player...");
             const axeStats = new AxeStats();
             axeStats.save(function (err) {
                 if (err) return console.log(err);
@@ -29,7 +29,6 @@ const insertStats = function(callback) {
 
     WarStats.find().then((result) => {
         if (result.length == 0) {
-            console.log("Introduciendo stats Warhammer player...");
             const warStats = new WarStats();
             warStats.save(function (err) {
                 if (err) return console.log(err);
@@ -39,7 +38,6 @@ const insertStats = function(callback) {
 
     ShieldStats.find().then((result) => {
         if (result.length == 0) {
-            console.log("Introduciendo stats Shield player...");
             const shiStats = new ShieldStats();
             shiStats.save(function (err) {
                 if (err) return console.log(err);
@@ -49,7 +47,6 @@ const insertStats = function(callback) {
 
     ZombieStats.find().then((result) => {
         if (result.length == 0) {
-            console.log("Introduciendo stats Zombie enemy...");
             const zombieStats = new ZombieStats();
             zombieStats.save(function (err) {
                 if (err) return console.log(err);
@@ -59,7 +56,6 @@ const insertStats = function(callback) {
 
     BossStats.find().then((result) => {
         if (result.length == 0) {
-            console.log("Introduciendo stats Zombie Boss enemy...");
             const bossStats = new BossStats();
             bossStats.save(function (err) {
                 if (err) return console.log(err);

@@ -15,7 +15,7 @@ const updateStats = function(tipo, newStats, callback){
                 callback(updatedStats)
             }
         })
-    } else if (tipo == 2) {
+    } else if (tipo == 2) {       
         WarStats.updateOne({}, newStats, (err, updatedStats) => {
             if (err) {
                 console.log(err);
