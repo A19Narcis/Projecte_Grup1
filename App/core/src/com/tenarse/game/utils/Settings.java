@@ -7,6 +7,11 @@ public class Settings {
     public static final int GAME_HEIGHT = 620;
     public static final long SPAWN_INTERVAL = 1000000000l;// X nanosegundos * 1000000000 = X Zombies * Segundos
 
+    public static final int PRESSED_UP = 1;
+    public static final int PRESSED_LEFT = 2;
+    public static final int PRESSED_DOWN = 3;
+    public static final int PRESSED_RIGHT = 4;
+
     //Propietats jugador
     public static final float PLAYER_VELOCITY = 100;
     public static final int PLAYER_WIDTH = 32;

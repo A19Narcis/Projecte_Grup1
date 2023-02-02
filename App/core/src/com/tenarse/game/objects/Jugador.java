@@ -21,6 +21,9 @@ public class Jugador extends Actor {
     private final int WAR_PLAYER = 2;
     private final int SHI_PLAYER = 3;
 
+
+    private int pressed = 3;
+
     private Vector2 position;
     private int width, height;
     private boolean isBot;
@@ -31,11 +34,7 @@ public class Jugador extends Actor {
     private Boolean bntLeftIsPressed = false;
     private Boolean bntRightIsPressed = false;
 
-    private final int PRESSED_W = 1;
-    private final int PRESSED_A = 2;
-    private final int PRESSED_S = 3;
-    private final int PRESSED_D = 4;
-    private int pressed = 3;
+
 
     private TextureRegion[] animacionRight;
     private TextureRegion[] animacionUp;
@@ -131,7 +130,7 @@ public class Jugador extends Actor {
             oldx = this.position.x;
             oldy = this.position.y;
                 if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A) || this.bntLeftIsPressed) {
-                    this.pressed = PRESSED_A;
+                    this.pressed = Settings.PRESSED_LEFT;
                     this.position.x -= Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
                     this.position.x -= 8;
                     if(map.searchColision(position.x, position.y)) {
@@ -142,7 +141,7 @@ public class Jugador extends Actor {
                     }
                 }
                 if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D) || this.bntRightIsPressed) {
-                    this.pressed = PRESSED_D;
+                    this.pressed = Settings.PRESSED_RIGHT;
                     this.position.x += Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
                     this.position.x += 8;
                     if(map.searchColision(position.x, position.y)) {
@@ -153,7 +152,7 @@ public class Jugador extends Actor {
                     }
                 }
                 if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W) || this.bntUpIsPressed) {
-                    this.pressed = PRESSED_W;
+                    this.pressed = Settings.PRESSED_UP;
                     this.position.y += Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
                     if(map.searchColision(position.x, position.y)) {
                         this.position.x = oldx;
@@ -161,7 +160,7 @@ public class Jugador extends Actor {
                     }
                 }
                 if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S) || this.bntDownIsPressed) {
-                    this.pressed = PRESSED_S;
+                    this.pressed = Settings.PRESSED_DOWN;
                     this.position.y -= Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
                     this.position.y -= 12;
                     if(map.searchColision(position.x, position.y)) {
@@ -214,16 +213,16 @@ public class Jugador extends Actor {
         //Posicio per si no es mou
         if(!isBot){
             switch (pressed){
-                case PRESSED_W:
+                case Settings.PRESSED_UP:
                     playerDir = animacionUp[0];
                     break;
-                case PRESSED_A:
+                case Settings.PRESSED_LEFT:
                     playerDir = animacionLeft[0];
                     break;
-                case PRESSED_S:
+                case Settings.PRESSED_DOWN:
                     playerDir = animacionDown[0];
                     break;
-                case PRESSED_D:
+                case Settings.PRESSED_RIGHT:
                     playerDir = animacionRight[0];
                     break;
             }
