@@ -168,29 +168,27 @@ app.post("/getStats", (req, res) => {
 
 //Actualiza las stats de un tipo de personaje segun el tipo -> req.body.values[0]
 app.post("/updateStats", (req, res) => {
-    if (session.user.isAuth == true){
-        const tipo = req.body.values[0];
-        let newStats = {}
-        if (tipo <= 3) {
-            newStats = {
-                velocidad: req.body.values[1],
-                fuerza: req.body.values[2],
-                vida: req.body.values[3],
-                armadura: req.body.values[4]
-            }
-        } else {
-            newStats = {
-                cantidad: req.body.values[1],
-                fuerza: req.body.values[2],
-                vida: req.body.values[3],
-                velocidad: req.body.values[4]
-            }
+    const tipo = req.body.values[0];
+    let newStats = {}
+    if (tipo <= 3) {
+        newStats = {
+            velocidad: req.body.values[1],
+            fuerza: req.body.values[2],
+            vida: req.body.values[3],
+            armadura: req.body.values[4]
         }
-        
-        updateDB.updateStats(tipo, newStats, function () {
-            res.send(newStats)
-        })
+    } else {
+        newStats = {
+            cantidad: req.body.values[1],
+            fuerza: req.body.values[2],
+            vida: req.body.values[3],
+            velocidad: req.body.values[4]
+        }
     }
+    
+    updateDB.updateStats(tipo, newStats, function () {
+        res.send(newStats)
+    })
 })
 
 
@@ -227,4 +225,13 @@ app.post("/getPartidas", (req, res) => {
     readDB.getPartidas(function (partidas) {
         res.send(partidas)
     })
+})
+
+
+//Obtener las stats del tipo de personaje que nos indican
+app.get("/getStatsPlayer/:id_tipus", (req, res) => {
+    var id = req.params.id_tipus;
+    readDB.getStatsSelected(function (id, dades) {
+        res.send(dades)
+    })    
 })
