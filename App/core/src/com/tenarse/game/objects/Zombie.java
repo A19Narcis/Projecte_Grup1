@@ -35,9 +35,9 @@ public class Zombie extends Actor{
         this.height = height;
         this.map = map;
         position = new Vector2();
-        //createSpawnPosition();
-        position.x = map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2); //SPAWN EN EL CENTRO PARA PRUEBAS
-        position.y = map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2);
+        createSpawnPosition();
+        //position.x = map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2); //SPAWN EN EL CENTRO PARA PRUEBAS
+        //position.y = map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2);
 
         System.out.println(this.position.x+ ", " +this.position.y);
 
@@ -65,10 +65,20 @@ public class Zombie extends Actor{
 
     public void calculateMovement(float playerPositionX, float playerPositionY, float delta){
         if(spawned) {
+            float oldX = position.x;
+            float oldY = position.y;
             Vector2 direction = new Vector2(playerPositionX - position.x, playerPositionY - position.y);
             direction.nor();
             position.x += direction.x * Settings.ZOMBIE_VELOCITY * delta;
+            position.x += 8;//Esto no furula
+            if(map.searchColision(position.x, position.y)){
+                position.x = oldX;
+            }
             position.y += direction.y * Settings.ZOMBIE_VELOCITY * delta;
+            position.y += 8;//Esto no furula
+            if(map.searchColision(position.x, position.y)){
+                position.y = oldY;
+            }
         }
     }
 
