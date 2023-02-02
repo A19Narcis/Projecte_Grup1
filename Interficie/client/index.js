@@ -72,6 +72,7 @@ var vue_app = new Vue({
                     this.postData = data;
                     if (data.isAuth == true) {
                         this.auth = data.isAuth;
+                        this.userAuth = data.username;
                         console.log(data.isAuth);
 
                         setTimeout(() => {
@@ -112,7 +113,8 @@ var vue_app = new Vue({
                     this.postData = data;
                     this.auth = data.isAuth;
                     this.userAuth = data.username;
-                    console.log(this.ready);
+                
+                    console.log(this.userAuth);
                     console.log(this.zomb);
                     if (this.auth == true && this.ready == 0) {
                         this.ready = 1;
