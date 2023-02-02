@@ -96,10 +96,10 @@ public class GameScreen implements Screen {
             btnL_img = new ImageButton(new TextureRegionDrawable(new TextureRegion(btnLeftTexture)));
             btnR_img = new ImageButton(new TextureRegionDrawable(new TextureRegion(btnRightTexture)));
 
-            btnU_img.setSize(20, 20);
-            btnL_img.setSize(20, 20);
-            btnD_img.setSize(20, 20);
-            btnR_img.setSize(20, 20);
+            btnU_img.setSize(30, 30);
+            btnL_img.setSize(30, 30);
+            btnD_img.setSize(30, 30);
+            btnR_img.setSize(30, 30);
 
             stage.addActor(btnU_img);
             stage.addActor(btnD_img);
@@ -197,10 +197,10 @@ public class GameScreen implements Screen {
 
         camera.update();
         if (Gdx.app.getType() == Application.ApplicationType.Android) {
-            btnU_img.setPosition(camera.position.x - camera.viewportWidth / 2 + 20, camera.position.y - camera.viewportHeight / 2 + 40);
-            btnD_img.setPosition(camera.position.x - camera.viewportWidth / 2 + 20, camera.position.y - camera.viewportHeight / 2);
-            btnL_img.setPosition(camera.position.x - camera.viewportWidth / 2, camera.position.y - camera.viewportHeight / 2 + 20);
-            btnR_img.setPosition(camera.position.x - camera.viewportWidth / 2 + 40, camera.position.y - camera.viewportHeight / 2 + 20);
+            btnU_img.setPosition(camera.position.x - camera.viewportWidth / 2 + 30, camera.position.y - camera.viewportHeight / 2 + 60);
+            btnD_img.setPosition(camera.position.x - camera.viewportWidth / 2 + 30, camera.position.y - camera.viewportHeight / 2);
+            btnL_img.setPosition(camera.position.x - camera.viewportWidth / 2, camera.position.y - camera.viewportHeight / 2 + 30);
+            btnR_img.setPosition(camera.position.x - camera.viewportWidth / 2 + 60, camera.position.y - camera.viewportHeight / 2 + 30);
         }
 
         if (buttonUpPressed) {

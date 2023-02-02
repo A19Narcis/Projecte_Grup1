@@ -1,5 +1,6 @@
 package com.tenarse.game.objects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapProperties;
@@ -11,6 +12,7 @@ import com.tenarse.game.utils.Settings;
 
 public class Zombie extends Actor{
     private Vector2 position;
+    private float oldX, oldY;
     private int width, height;
 
     private TextureRegion[] animacionRight;
@@ -32,7 +34,9 @@ public class Zombie extends Actor{
         this.height = height;
         this.map = map;
         position = new Vector2();
-        createSpawnPosition();
+        //createSpawnPosition();
+        position.x = map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2);
+        position.y = map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2);
 
         System.out.println(this.position.x+ ", " +this.position.y);
 
@@ -59,23 +63,46 @@ public class Zombie extends Actor{
     }
 
     private TextureRegion getZombieDirection() {
+        TextureRegion result = null;
         if(!spawned){
-            return AssetManager.zombieSpawn_Animation[currentFrame];
+            result = AssetManager.zombieSpawn_Animation[currentFrame];
         }
         else{
-            return AssetManager.zombieDown;
+            this.position.x -= Settings.ZOMBIE_VELOCITY * Gdx.graphics.getDeltaTime();
+            if(oldX < this.position.x){
+                result = AssetManager.zombieRight_Animation[currentFrame];
+            }else if(oldX > this.position.x){
+                result = AssetManager.zombieLeft_Animation[currentFrame];
+            }else if(oldY < this.position.y){
+                result = AssetManager.zombieLeft_Animation[currentFrame];
+            }else if(oldY > this.position.y){
+                result = AssetManager.zombieLeft_Animation[currentFrame];
+            }
+
         }
+        return result;
     }
 
     public void act(float delta){
-        stateTime += delta;
-        if (stateTime >= frameTime){
-            currentFrame++;
-            if (currentFrame >= animacionSpawn.length){
-                spawned = true;
-                currentFrame = 0;
+        if(!spawned){
+            stateTime += delta;
+            if (stateTime >= frameTime){
+                currentFrame++;
+                if (currentFrame >= animacionSpawn.length){
+                    spawned = true;
+                    currentFrame = 0;
+                }
+                stateTime = 0;
             }
-            stateTime = 0;
+        }else{
+            stateTime += delta;
+            if (stateTime >= frameTime){
+                currentFrame++;
+                if (currentFrame >= animacionRight.length){
+                    currentFrame = 0;
+                }
+                stateTime = 0;
+            }
         }
     }
 

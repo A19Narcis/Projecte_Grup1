@@ -161,19 +161,19 @@ public class AssetManager {
 
         //Derecha Zombie
         zombieRight_Animation = new TextureRegion[9];
-        for (int i = 0; i < playerRightA_Animation.length; i++) {
+        for (int i = 0; i < zombieRight_Animation.length; i++) {
             zombieRight_Animation[i] = new TextureRegion(sheetZombie, i * 64, 64 * 11, 64, 64);
         }
 
         //Izquierda Zombie
         zombieLeft_Animation = new TextureRegion[9];
-        for (int i = 0; i < playerLeftA_Animation.length; i++) {
+        for (int i = 0; i < zombieLeft_Animation.length; i++) {
             zombieLeft_Animation[i] = new TextureRegion(sheetZombie, i * 64, 64 * 9, 64, 64);
         }
 
         //Arriba Zombie
         zombieUp_Animation = new TextureRegion[9];
-        for (int i = 0; i < playerUpA_Animation.length; i++) {
+        for (int i = 0; i < zombieUp_Animation.length; i++) {
             zombieUp_Animation[i] = new TextureRegion(sheetZombie, i * 64, 64 * 8, 64, 64);
         }
 
