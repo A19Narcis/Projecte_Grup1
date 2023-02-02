@@ -35,9 +35,9 @@ public class Zombie extends Actor{
         this.height = height;
         this.map = map;
         position = new Vector2();
-        createSpawnPosition();
-        //position.x = map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2); //SPAWN EN EL CENTRO PARA PRUEBAS
-        //position.y = map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2);
+        //createSpawnPosition();
+        position.x = map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2); //SPAWN EN EL CENTRO PARA PRUEBAS
+        position.y = map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2);
 
         System.out.println(this.position.x+ ", " +this.position.y);
 
@@ -64,10 +64,12 @@ public class Zombie extends Actor{
     }
 
     public void calculateMovement(float playerPositionX, float playerPositionY, float delta){
-        Vector2 direction = new Vector2(playerPositionX - position.x, playerPositionY - position.y);
-        direction.nor();
-        position.x += direction.x * Settings.ZOMBIE_VELOCITY * delta;
-        position.y += direction.y * Settings.ZOMBIE_VELOCITY * delta;
+        if(spawned) {
+            Vector2 direction = new Vector2(playerPositionX - position.x, playerPositionY - position.y);
+            direction.nor();
+            position.x += direction.x * Settings.ZOMBIE_VELOCITY * delta;
+            position.y += direction.y * Settings.ZOMBIE_VELOCITY * delta;
+        }
     }
 
     private TextureRegion getZombieDirection() {
