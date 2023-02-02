@@ -66,17 +66,20 @@ public class Zombie extends Actor{
         TextureRegion result = null;
         if(!spawned){
             result = AssetManager.zombieSpawn_Animation[currentFrame];
+            oldX = this.position.x;
+            oldY = this.position.y;
         }
         else{
-            this.position.x -= Settings.ZOMBIE_VELOCITY * Gdx.graphics.getDeltaTime();
+            this.position.x += Settings.ZOMBIE_VELOCITY * Gdx.graphics.getDeltaTime();
+            this.position.y += Settings.ZOMBIE_VELOCITY * Gdx.graphics.getDeltaTime();
             if(oldX < this.position.x){
                 result = AssetManager.zombieRight_Animation[currentFrame];
             }else if(oldX > this.position.x){
                 result = AssetManager.zombieLeft_Animation[currentFrame];
             }else if(oldY < this.position.y){
-                result = AssetManager.zombieLeft_Animation[currentFrame];
+                result = AssetManager.zombieUp_Animation[currentFrame];
             }else if(oldY > this.position.y){
-                result = AssetManager.zombieLeft_Animation[currentFrame];
+                result = AssetManager.zombieDown_Animation[currentFrame];
             }
 
         }
