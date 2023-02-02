@@ -64,10 +64,22 @@ public class Zombie extends Actor{
     }
 
     public void calculateMovement(float playerPositionX, float playerPositionY, float delta){
-        Vector2 direction = new Vector2(playerPositionX - position.x, playerPositionY - position.y);
-        direction.nor();
-        position.x += direction.x * Settings.ZOMBIE_VELOCITY * delta;
-        position.y += direction.y * Settings.ZOMBIE_VELOCITY * delta;
+        if(spawned) {
+            float oldX = position.x;
+            float oldY = position.y;
+            Vector2 direction = new Vector2(playerPositionX - position.x, playerPositionY - position.y);
+            direction.nor();
+            position.x += direction.x * Settings.ZOMBIE_VELOCITY * delta;
+            position.x += 8;//Esto no furula
+            if(map.searchColision(position.x, position.y)){
+                position.x = oldX;
+            }
+            position.y += direction.y * Settings.ZOMBIE_VELOCITY * delta;
+            position.y += 8;//Esto no furula
+            if(map.searchColision(position.x, position.y)){
+                position.y = oldY;
+            }
+        }
     }
 
     private TextureRegion getZombieDirection() {
