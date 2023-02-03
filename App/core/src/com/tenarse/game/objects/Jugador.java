@@ -56,6 +56,8 @@ public class Jugador extends Actor {
         this.isBot = isBot;
 
         collisionRectPlayer = new Rectangle();
+        collisionRectPlayer.width = this.width;
+        collisionRectPlayer.height = this.height;
 
         this.tipusJugador = tipusJugador;
 
@@ -90,6 +92,8 @@ public class Jugador extends Actor {
         this.isBot = isBot;
 
         collisionRectPlayer = new Rectangle();
+        collisionRectPlayer.width = this.width;
+        collisionRectPlayer.height = this.height;
 
         this.tipusJugador = tipusJugador;
 
@@ -179,14 +183,11 @@ public class Jugador extends Actor {
                 this.position.x = 3840 - this.width - 5;
             }
             if (this.position.y >= 2160 - this.height - 2){
-                this.position.y = 2160 - this.height- 2;
+                this.position.y = 2160 - this.height - 2;
             }
 
             collisionRectPlayer.x = this.position.x;
             collisionRectPlayer.y = this.position.y;
-            collisionRectPlayer.width = this.width;
-            collisionRectPlayer.height = this.height;
-
 
         }
         stateTime += delta;

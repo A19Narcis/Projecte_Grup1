@@ -133,6 +133,7 @@ public class MainMenuScreen implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 game.setScreen(new GameScreen(stage.getBatch(), stage.getViewport()));
+
                 return true;
             }
         });
@@ -141,6 +142,7 @@ public class MainMenuScreen implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 game.setScreen(new GameScreen(stage.getBatch(), stage.getViewport()));
+
                 return true;
             }
         });
@@ -193,6 +195,5 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void dispose() {
-
     }
 }

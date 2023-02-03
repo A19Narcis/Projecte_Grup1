@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.tenarse.game.screens.MainMenuScreen;
 import com.tenarse.game.utils.Settings;
 
 public class AssetManager {
@@ -62,7 +63,7 @@ public class AssetManager {
         sheetPlayerShield.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
         //Jugador Shield
-        sheetZombie = new Texture(Gdx.files.internal("Zombie.png"));
+        sheetZombie = new Texture(Gdx.files.internal("Boss.png"));
         sheetZombie.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
         //Sheet PJ AXE
@@ -207,5 +208,14 @@ public class AssetManager {
         sheetPlayerAxe.dispose();
         sheetPlayerWar.dispose();
         sheetPlayerShield.dispose();
+        imgMainMenu.dispose();
+        imgMultiBtn.dispose();
+        imgSingleBtn.dispose();
+        imgMultiBtn.dispose();
+        imgReturnBtn.dispose();
+        btnMovUp.dispose();
+        btnMovDown.dispose();
+        btnMovLeft.dispose();
+        btnMovRight.dispose();
     }
 }

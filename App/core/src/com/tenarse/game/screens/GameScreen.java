@@ -224,9 +224,6 @@ public class GameScreen implements Screen {
         if (buttonRightPressed) {
             jugador.goingRight();
         }
-        for (int i = 0; i < enemies.size(); i++) {
-            enemies.get(i).calculateMovement(jugador.getCollisionRectPlayer().x, jugador.getCollisionRectPlayer().y, delta);
-        }
 
         spawnZombie();
 
@@ -234,11 +231,12 @@ public class GameScreen implements Screen {
         renderer.render();
         stage.draw();
         stage.act(delta);
+        System.out.println(Gdx.graphics.getFramesPerSecond());
     }
 
     private void spawnZombie() {
         if (TimeUtils.nanoTime() - lastDropTime > Settings.SPAWN_INTERVAL) {
-            Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
+            Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map, jugador);
             enemies.add(zombie);
             stage.addActor(zombie);
             lastDropTime = TimeUtils.nanoTime();

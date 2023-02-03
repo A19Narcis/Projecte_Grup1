@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.tenarse.game.helpers.AssetManager;
@@ -15,6 +16,8 @@ public class Zombie extends Actor{
     private float oldX, oldY;
     private int width, height;
     private int direction = 3;
+
+    private Jugador jugador;
 
     private TextureRegion[] animacionRight;
     private TextureRegion[] animacionUp;
@@ -28,18 +31,23 @@ public class Zombie extends Actor{
 
     private Map map;
 
+    private Rectangle collisionRectZombie;
+
     boolean spawned;
 
-    public Zombie(int width, int height, Map map) {
+    public Zombie(int width, int height, Map map, Jugador jugador) {
         this.width = width;
         this.height = height;
         this.map = map;
+        this.jugador = jugador;
         position = new Vector2();
         createSpawnPosition();
-        //position.x = map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2); //SPAWN EN EL CENTRO PARA PRUEBAS
+        //position.x = map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2) - 20; //SPAWN EN EL CENTRO PARA PRUEBAS
         //position.y = map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2);
 
-        System.out.println(this.position.x+ ", " +this.position.y);
+        collisionRectZombie = new Rectangle();
+        collisionRectZombie.width = Settings.ZOMBIE_WIDTH;
+        collisionRectZombie.height = Settings.ZOMBIE_HEIGHT;
 
         animacionRight = AssetManager.zombieRight_Animation;
         animacionLeft = AssetManager.zombieLeft_Animation;
@@ -63,23 +71,58 @@ public class Zombie extends Actor{
         } while (map.searchColision(this.position.x, this.position.y));
     }
 
-    public void calculateMovement(float playerPositionX, float playerPositionY, float delta){
+    public void calculateMovement(float delta){
         if(spawned) {
             float oldX = position.x;
             float oldY = position.y;
-            Vector2 direction = new Vector2(playerPositionX - position.x, playerPositionY - position.y);
+            int colisionMov;
+            Vector2 direction = new Vector2(jugador.getCollisionRectPlayer().x - position.x, jugador.getCollisionRectPlayer().y - position.y);
             direction.nor();
             position.x += direction.x * Settings.ZOMBIE_VELOCITY * delta;
-            position.x += 8;//Esto no furula
-            if(map.searchColision(position.x, position.y)){
-                position.x = oldX;
+            if(oldX < position.x){
+                colisionMov = 8;
+            }else{
+                colisionMov = -8;
             }
+            position.x += colisionMov;
+            if(map.searchColision(position.x, position.y) || colisionWithPlayer()){
+                position.x = oldX;
+            }else{
+                position.x -= colisionMov;
+            }
+
+
             position.y += direction.y * Settings.ZOMBIE_VELOCITY * delta;
-            position.y += 8;//Esto no furula
-            if(map.searchColision(position.x, position.y)){
+            if(oldY < position.y){
+                colisionMov = 8;
+            }else{
+                colisionMov = -8;
+            }
+            position.y += colisionMov;
+            if(map.searchColision(position.x, position.y) || colisionWithPlayer()){
                 position.y = oldY;
+            }else{
+                position.y -= colisionMov;
             }
         }
+        collisionRectZombie.x = this.position.x;
+        collisionRectZombie.y = this.position.y;
+    }
+
+    private boolean colisionWithPlayer(){
+        boolean result;
+        float calculoX = jugador.getCollisionRectPlayer().x - collisionRectZombie.x;
+        float calculoY = jugador.getCollisionRectPlayer().y - collisionRectZombie.y;
+        if(calculoX < 8 && calculoX > -8){
+            if(calculoY < 16 && calculoY > -24) {
+                result = true;
+            }else{
+                result = false;
+            }
+        }else{
+            result = false;
+        }
+        return result;
     }
 
     private TextureRegion getZombieDirection() {
@@ -147,6 +190,7 @@ public class Zombie extends Actor{
                 stateTime = 0;
             }
         }
+        calculateMovement(delta);
     }
 
     public void draw(Batch batch, float parentAlpha){
