@@ -158,8 +158,8 @@ public class AssetManager {
 
         //Derecha Axe Ataque
         playerRightA_Atack = new TextureRegion[6];
-        for (int i = playerRightA_Atack.length; i >= 1; i--) {
-            playerRightA_Atack[(playerRightA_Atack.length) - i] = new TextureRegion(sheetPlayerAxe, i * 64, 64 * 15, 64, 64);
+        for (int i = 0; i < playerRightA_Atack.length; i++) {
+            playerRightA_Atack[i] = new TextureRegion(sheetPlayerAxe, i * 64, 64 * 15, 64, 64);
         }
 
         //Izquierda Axe Ataque

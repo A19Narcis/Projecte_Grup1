@@ -19,7 +19,7 @@ public class Jugador extends Actor {
 
     private int direction = 3;
     private boolean atack;
-
+    private boolean firstAnimationAtack;
     private Vector2 position;
     private int width, height;
     private boolean isBot;
@@ -54,7 +54,8 @@ public class Jugador extends Actor {
         this.width = width;
         this.height = height;
         position = new Vector2(x, y);
-        this.atack = true;
+        this.atack = false;
+        firstAnimationAtack = false;
         this.map = map;
 
         this.isBot = isBot;
@@ -140,8 +141,10 @@ public class Jugador extends Actor {
                         this.position.y += 12;
                     }
                 }
-                if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
-                    atack = true;
+                if(!atack) {
+                    if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+                        atack = true;
+                    }
                 }
 
             //Colision personaje con los bordes del mapa
@@ -162,12 +165,14 @@ public class Jugador extends Actor {
             collisionRectPlayer.y = this.position.y;
 
         }
-        if(atack){
+        if(atack && currentFrame == currentFrameAtack){
             stateTime += delta;
             if (stateTime >= frameTime){
                 currentFrame++;
+                currentFrameAtack++;
                 if (currentFrame >= animacionAtaqueRight.length){
                     currentFrame = 0;
+                    currentFrameAtack = 0;
                     atack = false;
                 }
                 System.out.println(atack);
@@ -217,7 +222,7 @@ public class Jugador extends Actor {
             } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S) || this.bntDownIsPressed){
                 playerDir = animacionDown[currentFrame];
             }
-            if(atack) {
+            if(atack && currentFrame == currentFrameAtack) {
                 playerDir = animacionAtaqueRight[currentFrame];
             }
         }
