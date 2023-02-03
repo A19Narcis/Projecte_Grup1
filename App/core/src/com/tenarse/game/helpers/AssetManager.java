@@ -28,7 +28,7 @@ public class AssetManager {
     public static TextureRegion playerUpS, playerDownS, playerLeftS, playerRightS;
     public static TextureRegion zombieUp, zombieDown, zombieLeft, zombieRight, zombieSpawn;
 
-    public static TextureRegion[] playerRightA_Animation, playerLeftA_Animation, playerUpA_Animation, playerDownA_Animation;
+    public static TextureRegion[] playerRightA_Animation, playerLeftA_Animation, playerUpA_Animation, playerDownA_Animation, playerRightA_Atack, playerLeftA_Atack, playerUpA_Atack, playerDownA_Atack;
     public static TextureRegion[] playerRightW_Animation, playerLeftW_Animation, playerUpW_Animation, playerDownW_Animation;
     public static TextureRegion[] playerRightS_Animation, playerLeftS_Animation, playerUpS_Animation, playerDownS_Animation;
     public static TextureRegion[] zombieRight_Animation, zombieLeft_Animation, zombieUp_Animation, zombieDown_Animation, zombieSpawn_Animation;
@@ -147,6 +147,47 @@ public class AssetManager {
         for (int i = 0; i < playerDownA_Animation.length; i++) {
             playerDownA_Animation[i] = new TextureRegion(sheetPlayerAxe, i * 64, 64 * 10, 64, 64);
         }
+
+
+
+
+
+
+
+
+
+        //Derecha Axe Ataque
+        playerRightA_Atack = new TextureRegion[6];
+        for (int i = playerRightA_Atack.length; i >= 1; i--) {
+            playerRightA_Atack[(playerRightA_Atack.length) - i] = new TextureRegion(sheetPlayerAxe, i * 64, 64 * 15, 64, 64);
+        }
+
+        //Izquierda Axe Ataque
+        playerLeftA_Atack = new TextureRegion[6];
+        for (int i = 0; i < playerLeftA_Atack.length; i++) {
+            playerLeftA_Atack[i] = new TextureRegion(sheetPlayerAxe, i * 64, 64 * 13, 64, 64);
+        }
+
+        //Arriba Axe Ataque
+        playerUpA_Atack = new TextureRegion[6];
+        for (int i = 0; i < playerUpA_Atack.length; i++) {
+            playerUpA_Atack[i] = new TextureRegion(sheetPlayerAxe, i * 64, 64 * 12, 64, 64);
+        }
+
+        //Abajo Axe Ataque
+        playerDownA_Atack = new TextureRegion[6];
+        for (int i = 0; i < playerDownA_Atack.length; i++) {
+            playerDownA_Atack[i] = new TextureRegion(sheetPlayerAxe, i * 64, 64 * 14, 64, 64);
+        }
+
+
+
+
+
+
+
+
+
 
         //Derecha Warhammer
         playerRightW_Animation = new TextureRegion[9];

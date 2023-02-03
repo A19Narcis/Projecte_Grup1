@@ -16,11 +16,13 @@ public class Settings {
     public static final float PLAYER_VELOCITY = 100;
     public static final int PLAYER_WIDTH = 32;
     public static final int PLAYER_HEIGHT = 32;
+    public static final int PLAYER_STRENGTH = 1;
 
     //Propietats Zombie
     public static final int ZOMBIE_WIDTH = 32;
     public static final int ZOMBIE_HEIGHT = 32;
     public static final int ZOMBIE_VELOCITY = 50;
+    public static final int ZOMBIE_LIFE = 3;
 
     //Propietats Boss
     public static final int BOSS_WIDTH = 45;

@@ -231,7 +231,6 @@ public class GameScreen implements Screen {
         renderer.render();
         stage.draw();
         stage.act(delta);
-        System.out.println(Gdx.graphics.getFramesPerSecond());
     }
 
     private void spawnZombie() {

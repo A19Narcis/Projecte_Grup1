@@ -14,6 +14,8 @@ public class Map {
             mapWidthInPixels, mapHeightInPixels;
     private TiledMapTileLayer mapLayer;
 
+    public Map() {
+    }
 
     public Map(TiledMap map) {
         this.map = map;

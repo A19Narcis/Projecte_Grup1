@@ -18,6 +18,7 @@ public class Jugador extends Actor {
     private final int SHI_PLAYER = 3;
 
     private int direction = 3;
+    private boolean atack;
 
     private Vector2 position;
     private int width, height;
@@ -35,7 +36,9 @@ public class Jugador extends Actor {
     private TextureRegion[] animacionUp;
     private TextureRegion[] animacionDown;
     private TextureRegion[] animacionLeft;
+    private TextureRegion[] animacionAtaqueRight;
     private int currentFrame = 0;
+    private int currentFrameAtack = 0;
     private float frameTime = 0.1f;
     private float stateTime = 0;
 
@@ -46,47 +49,12 @@ public class Jugador extends Actor {
 
     private Rectangle collisionRectPlayer;
 
-    public Jugador(float x, float y, int width, int height, boolean isBot, int tipusJugador){
-        this.width = width;
-        this.height = height;
-        position = new Vector2(x, y);
-
-        this.map = map;
-
-        this.isBot = isBot;
-
-        collisionRectPlayer = new Rectangle();
-        collisionRectPlayer.width = this.width;
-        collisionRectPlayer.height = this.height;
-
-        this.tipusJugador = tipusJugador;
-
-        if (tipusJugador == AXE_PLAYER){
-            animacionRight = AssetManager.playerRightA_Animation;
-            animacionLeft = AssetManager.playerLeftA_Animation;
-            animacionUp = AssetManager.playerUpA_Animation;
-            animacionDown = AssetManager.playerDownA_Animation;
-        } else if (tipusJugador == WAR_PLAYER){
-            animacionRight = AssetManager.playerRightW_Animation;
-            animacionLeft = AssetManager.playerLeftW_Animation;
-            animacionUp = AssetManager.playerUpW_Animation;
-            animacionDown = AssetManager.playerDownW_Animation;
-        } else if (tipusJugador == SHI_PLAYER){
-            animacionRight = AssetManager.playerRightS_Animation;
-            animacionLeft = AssetManager.playerLeftS_Animation;
-            animacionUp = AssetManager.playerUpS_Animation;
-            animacionDown = AssetManager.playerDownS_Animation;
-        }
-
-        setBounds(position.x, position.y, width, height);
-        setTouchable(Touchable.enabled);
-    }
 
     public Jugador(float x, float y, int width, int height, boolean isBot, int tipusJugador, Map map){
         this.width = width;
         this.height = height;
         position = new Vector2(x, y);
-
+        this.atack = true;
         this.map = map;
 
         this.isBot = isBot;
@@ -102,16 +70,19 @@ public class Jugador extends Actor {
             animacionLeft = AssetManager.playerLeftA_Animation;
             animacionUp = AssetManager.playerUpA_Animation;
             animacionDown = AssetManager.playerDownA_Animation;
+            animacionAtaqueRight = AssetManager.playerRightA_Atack;
         } else if (tipusJugador == WAR_PLAYER){
             animacionRight = AssetManager.playerRightW_Animation;
             animacionLeft = AssetManager.playerLeftW_Animation;
             animacionUp = AssetManager.playerUpW_Animation;
             animacionDown = AssetManager.playerDownW_Animation;
+            animacionAtaqueRight = AssetManager.playerRightA_Atack;
         } else if (tipusJugador == SHI_PLAYER){
             animacionRight = AssetManager.playerRightS_Animation;
             animacionLeft = AssetManager.playerLeftS_Animation;
             animacionUp = AssetManager.playerUpS_Animation;
             animacionDown = AssetManager.playerDownS_Animation;
+            animacionAtaqueRight = AssetManager.playerRightA_Atack;
         }
 
         setBounds(position.x, position.y, width, height);
@@ -169,8 +140,9 @@ public class Jugador extends Actor {
                         this.position.y += 12;
                     }
                 }
-
-
+                if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
+                    atack = true;
+                }
 
             //Colision personaje con los bordes del mapa
             if (this.position.y <= 5){
@@ -190,13 +162,26 @@ public class Jugador extends Actor {
             collisionRectPlayer.y = this.position.y;
 
         }
-        stateTime += delta;
-        if (stateTime >= frameTime){
-            currentFrame++;
-            if (currentFrame >= animacionRight.length){
-                currentFrame = 0;
+        if(atack){
+            stateTime += delta;
+            if (stateTime >= frameTime){
+                currentFrame++;
+                if (currentFrame >= animacionAtaqueRight.length){
+                    currentFrame = 0;
+                    atack = false;
+                }
+                System.out.println(atack);
+                stateTime = 0;
             }
-            stateTime = 0;
+        }else{
+            stateTime += delta;
+            if (stateTime >= frameTime){
+                currentFrame++;
+                if (currentFrame >= animacionRight.length){
+                    currentFrame = 0;
+                }
+                stateTime = 0;
+            }
         }
     }
 
@@ -222,17 +207,19 @@ public class Jugador extends Actor {
                     playerDir = animacionRight[0];
                     break;
             }
-        }
-
-        //ANIMACIONES POR DIRECCIONES
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A) || this.bntLeftIsPressed){
-            playerDir = animacionLeft[currentFrame];
-        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D) || this.bntRightIsPressed){
-            playerDir = animacionRight[currentFrame];
-        } else if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W) || this.bntUpIsPressed){
-            playerDir = animacionUp[currentFrame];
-        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S) || this.bntDownIsPressed){
-            playerDir = animacionDown[currentFrame];
+            //ANIMACIONES POR DIRECCIONES
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A) || this.bntLeftIsPressed){
+                playerDir = animacionLeft[currentFrame];
+            } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D) || this.bntRightIsPressed){
+                playerDir = animacionRight[currentFrame];
+            } else if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W) || this.bntUpIsPressed){
+                playerDir = animacionUp[currentFrame];
+            } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S) || this.bntDownIsPressed){
+                playerDir = animacionDown[currentFrame];
+            }
+            if(atack) {
+                playerDir = animacionAtaqueRight[currentFrame];
+            }
         }
 
         if (this.isBot){
