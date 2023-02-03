@@ -1,11 +1,7 @@
 const mongoose = require("mongoose")
 
 const { Partida } = require('./connection');
-const { AxeStats } = require('./connection');
-const { WarStats } = require('./connection');
-const { ShieldStats } = require('./connection');
-const { ZombieStats } = require('./connection');
-const { BossStats } = require('./connection');
+const { Stats } = require('./connection');
 
 const readDB = require('./read')
 
@@ -72,49 +68,66 @@ const insertPartida = function (partida, callback) {
 }
 
 const insertStats = function (callback) {
-    AxeStats.find().then((result) => {
-        if (result.length == 0) {
-            const axeStats = new AxeStats();
-            axeStats.save(function (err) {
-                if (err) return console.log(err);
-            })
-        }
+    //Afegir 5 docuemnts per Axe, War, Shield, Zombie, Boss els que venen ja fets amb el joc
+
+    const statsAxe = new Stats({
+        nombreTipo: "Axe",
+        velocidad: 3,
+        fuerza: 2,
+        vida: 2,
+        armadura: 0
+    })
+    statsAxe.save(function (err) {
+        if (err) return console.log("Ya existen las stats de AXE");
+        console.log("¡Stats de AXE insertadas!");
     })
 
-    WarStats.find().then((result) => {
-        if (result.length == 0) {
-            const warStats = new WarStats();
-            warStats.save(function (err) {
-                if (err) return console.log(err);
-            })
-        }
+    const statsWar = new Stats({
+        nombreTipo: "Warhammer",
+        velocidad: 3,
+        fuerza: 2,
+        vida: 2,
+        armadura: 0
+    })
+    statsWar.save(function (err) {
+        if (err) return console.log("Ya existen las stats de WARHAMMER");
+        console.log("¡Stats de WARHAMMER insertadas!");
     })
 
-    ShieldStats.find().then((result) => {
-        if (result.length == 0) {
-            const shiStats = new ShieldStats();
-            shiStats.save(function (err) {
-                if (err) return console.log(err);
-            })
-        }
+    const statsShield = new Stats({
+        nombreTipo: "Shield",
+        velocidad: 3,
+        fuerza: 1,
+        vida: 3,
+        armadura: 2
+    })
+    statsShield.save(function (err) {
+        if (err) return console.log("Ya existen las stats de SHIELD");
+        console.log("¡Stats de SHIELD insertadas!");
     })
 
-    ZombieStats.find().then((result) => {
-        if (result.length == 0) {
-            const zombieStats = new ZombieStats();
-            zombieStats.save(function (err) {
-                if (err) return console.log(err);
-            })
-        }
+    const statsZombie = new Stats({
+        nombreTipo: "Zombie",
+        canidadMinuto: 10,
+        velocidad: 3,
+        fuerza: 2,
+        vida: 2
+    })
+    statsZombie.save(function (err) {
+        if (err) return console.log("Ya existen las stats de ZOMBIE");
+        console.log("¡Stats de ZOMBIE insertadas!");
     })
 
-    BossStats.find().then((result) => {
-        if (result.length == 0) {
-            const bossStats = new BossStats();
-            bossStats.save(function (err) {
-                if (err) return console.log(err);
-            })
-        }
+    const statsBoss = new Stats({
+        nombreTipo: "Boss",
+        canidadMinuto: 10,
+        velocidad: 3,
+        fuerza: 2,
+        vida: 2
+    })
+    statsBoss.save(function (err) {
+        if (err) return console.log("Ya existen las stats de BOSS");
+        console.log("¡Stats de BOSS insertadas!");
     })
 
     callback();

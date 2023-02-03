@@ -10,90 +10,22 @@ const options = {
 };
 
 
-mongoose.set('strictQuery', true);
+mongoose.set('strictQuery', false);
 
 main().catch(err => console.log(err));
 
-const statsAxeSchema = new mongoose.Schema({
-    velocidad: {
-        type: Number,
-        default: 50
+const statsPersonatges = new mongoose.Schema({
+    nombreTipo: {
+        type: String,
+        required: true,
+        unique: true
     },
-    fuerza: {
-        type: Number,
-        default: 2
-    },
-    vida: {
-        type: Number,
-        default: 3
-    },
-    armadura: {
-        type: Number,
-        default: 0
-    }
-})
-
-const statsShiSchema = new mongoose.Schema({
-    velocidad: {
-        type: Number,
-        default: 50
-    },
-    fuerza: {
-        type: Number,
-        default: 1
-    },
-    vida: {
-        type: Number,
-        default: 3
-    },
-    armadura: {
-        type: Number,
-        default: 3
-    }
-})
-
-const statsWarSchema = new mongoose.Schema({
-    velocidad: {
-        type: Number,
-        default: 50
-    },
-    fuerza: {
-        type: Number,
-        default: 2
-    },
-    vida: {
-        type: Number,
-        default: 3
-    },
-    armadura: {
-        type: Number,
-        default: 0
-    }
-})
-
-const statsZombieScema = new mongoose.Schema({
     cantidadMinuto: {
         type: Number,
-        default: 15
-    },
-    fuerza: {
-        type: Number,
-        default: 1
-    },
-    vida: {
-        type: Number,
-        default: 1
     },
     velocidad: {
         type: Number,
-        default: 20
-    }
-})
-
-const statsZombieBossScema = new mongoose.Schema({
-    cantidadMinuto: {
-        type: Number,
-        default: 1
+        default: 50
     },
     fuerza: {
         type: Number,
@@ -101,15 +33,12 @@ const statsZombieBossScema = new mongoose.Schema({
     },
     vida: {
         type: Number,
-        default: 2
+        default: 3
     },
-    velocidad: {
+    armadura: {
         type: Number,
-        default: 15
     }
 })
-
-
 
 const jugadorSchema = new mongoose.Schema({
     username: {
@@ -149,12 +78,8 @@ const partidaSchema = new mongoose.Schema({
 partidaSchema.plugin(autoIncrement.plugin, { model: 'Partida', field: 'idP'})
 const Partida = mongoose.model('Partida', partidaSchema);
 
-const AxeStats = mongoose.model('AxeStats', statsAxeSchema);
-const WarStats = mongoose.model('WarStats', statsWarSchema);
-const ShieldStats = mongoose.model('ShieldStats', statsShiSchema);
+const Stats = mongoose.model('Stats', statsPersonatges);
 
-const ZombieStats = mongoose.model('ZombieStats', statsZombieScema);
-const BossStats = mongoose.model('BossStats', statsZombieBossScema);
 
 async function main() {
     try{
@@ -173,17 +98,8 @@ async function main() {
 }
 
 
-const getCollections = async (callback) => {
-    const collections = Object.keys(mongoose.connection.collections);
-    callback(collections)
-}
 
 module.exports = { 
     Partida,
-    AxeStats,
-    WarStats,
-    ShieldStats,
-    ZombieStats,
-    BossStats,
-    getCollections
+    Stats
 }
