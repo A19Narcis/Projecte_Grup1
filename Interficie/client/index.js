@@ -41,6 +41,12 @@ var vue_app = new Vue({
         shield_fuerza: 0,
         shield_vida: 0,
         shield_arm: 0,
+        new_cantidad: 0,
+        new_velocidad: 0,
+        new_vida: 0,
+        new_fuerza: 0,
+        new_type: 0,
+        newReady: 0
     },
     methods: {
         getAuth: function () {
@@ -73,7 +79,9 @@ var vue_app = new Vue({
                     if (data.isAuth == true) {
                         this.auth = data.isAuth;
                         this.userAuth = data.username;
-                        console.log(data.isAuth);
+                        console.log("isAuth peti" + data.isAuth);
+                        console.log("userPeticion" + data.username);
+                        console.log("mine-" + this.username);
 
                         setTimeout(() => {
                             this.ready = 1;
@@ -113,16 +121,15 @@ var vue_app = new Vue({
                     this.postData = data;
                     this.auth = data.isAuth;
                     this.userAuth = data.username;
-                
-                    console.log(this.userAuth);
-                    console.log(this.zomb);
-                    if (this.auth == true && this.ready == 0) {
+                    this.username = this.userAuth;
+                    console.log("sesion user" + this.userAuth);
+                    console.log("session mine" + this.username);
+                    console.log("sesion auth" + this.auth);
+                    
+                    if (this.auth == true && this.userAuth == this.username) {
                         this.ready = 1;
                     }
-
-                    console.log(data.isAuth);
-                    console.log(this.ready);
-                    console.log(this.zomb);
+                    console.log("ready  " + this.ready);
 
                 }
             ).catch(
@@ -257,8 +264,49 @@ var vue_app = new Vue({
             );
         },
 
+        createNewZombie: function (type, cantidad, fuerza, vida, velocidad){
+            this.info.values.push(type);
+            this.info.values.push(cantidad);
+            this.info.values.push(fuerza);
+            this.info.values.push(vida);
+            this.info.values.push(velocidad);
+            fetch("http://admin.alumnes.inspedralbes.cat:7073/createNewZombie/",
+                {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                    credentials: "include",
+                    body: JSON.stringify(this.info),
+                    mode: "cors",
+                    cache: "default"
+                }
+            ).then(
+                (response) => {
+                    return (response.json());
+                }
+            ).then(
+                (data) => {
+                    this.newReady = 1;
+                    console.log(this.newReady);
+                    
+                }
+            ).catch(
+                (error) => {
+                    console.log(error);
+                }
+            );
+
+        },
+        check: function(type){
+            console.log("fumo skeletons" + type);
+            this.new_type = type;
+        },
 
     },
+
+
 
 
 

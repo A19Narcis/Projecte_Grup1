@@ -60,6 +60,23 @@ h2 {
 	line-height: 5.9rem;
 }
 
+.selIm1:hover{
+	opacity: 0.5;
+	transition-duration: 0.7;
+}
+.selIm1:checked{
+	opacity: 0.5;
+	transition-duration: 0.7;
+
+
+}
+
+.selIm2:hover{
+	opacity: 0.5;
+	transition-duration: 0.7;
+}
+
+
 .Character{
 	transform: translate(-50%, -50%);
 	width: calc(778px / 9);
@@ -130,6 +147,38 @@ h2 {
 }
 
 
+.new_zom1{
+	transform: translate(-50%, -50%);
+	overflow: hidden;
+	width: calc(1273px / 8);
+	height: 150px;
+	left: 50%;
+	top: 50%;
+	position: absolute;
+	background: url(./sprites/skeletoAnim.png);
+}
+
+.new_zom2{
+	transform: translate(-50%, -50%);
+	overflow: hidden;
+	width: calc(1275px / 8);
+	height: 150px;
+	left: 50%;
+	top: 50%;
+	position: absolute;
+	background: url(./sprites/animacionCaba.png);
+}
+
+
+.new_zom1:hover{
+	position: absolute;
+	animation: moveNewZom 1.3s steps(8) infinite;
+}
+.new_zom2:hover{
+	position: absolute;
+	animation: moveNewZom2 1.3s steps(8) infinite;
+}
+
 .jug1:hover{
 	position: absolute;
 	animation: moveJu 1.3s steps(8) infinite;
@@ -198,6 +247,25 @@ h2 {
 		background-position: 1050px;
 	}
 }
+
+@keyframes moveNewZom{
+	from{
+		background-position: 0;
+	}
+	to{
+		background-position: 1273px;
+	}
+}
+
+@keyframes moveNewZom2{
+	from{
+		background-position: 0;
+	}
+	to{
+		background-position: 1275px;
+	}
+}
+
 
 
 @keyframes moveSp {

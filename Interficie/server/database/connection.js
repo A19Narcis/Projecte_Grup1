@@ -6,8 +6,9 @@ autoIncrement.initialize(mongoose.connection)
 const URL = 'mongodb://a19nargomcar2:paco1234@labs.inspedralbes.cat:7010/?tls=false&authMechanism=DEFAULT&authSource=DAMA_Grup1'
 //const URL = 'mongodb://localhost:27017/projecte'
 const options = {
-    dbName: 'DAMA_Grup1'
+    dbName: 'DAMA_Grup1',
 };
+
 
 mongoose.set('strictQuery', true);
 
@@ -143,6 +144,8 @@ const partidaSchema = new mongoose.Schema({
     }
 });
 
+
+
 partidaSchema.plugin(autoIncrement.plugin, { model: 'Partida', field: 'idP'})
 const Partida = mongoose.model('Partida', partidaSchema);
 
@@ -170,11 +173,17 @@ async function main() {
 }
 
 
+const getCollections = async (callback) => {
+    const collections = Object.keys(mongoose.connection.collections);
+    callback(collections)
+}
+
 module.exports = { 
     Partida,
     AxeStats,
     WarStats,
     ShieldStats,
     ZombieStats,
-    BossStats
+    BossStats,
+    getCollections
 }
