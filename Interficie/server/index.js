@@ -4,10 +4,11 @@ const fs = require('fs');
 const path = require('path');
 const sessions = require('express-session');
 var cookieParser = require('cookie-parser');
-const database = require("./database/connection")
+//const database = require("./database/connection")
 const readDB = require('./database/read')
 const insertDB = require('./database/create')
 const updateDB = require('./database/update')
+const deleteDB = require('./database/delete')
 const app = express();
 
 const PORT = 3000;
@@ -168,26 +169,27 @@ app.post("/getStats", (req, res) => {
 
 //Actualiza las stats de un tipo de personaje segun el tipo -> req.body.values[0]
 app.post("/updateStats", (req, res) => {
-    const tipo = req.body.values[0];
     let newStats = {}
-    if (tipo <= 3) {
+    let tipo = 1
+    if(tipo <= 2) {
         newStats = {
-            velocidad: req.body.values[1],
-            fuerza: req.body.values[2],
-            vida: req.body.values[3],
-            armadura: req.body.values[4]
+            nombreTipo: "Axe",
+            velocidad: 1,
+            fuerza: 1,
+            vida: 1,
+            armadura: 1
         }
     } else {
         newStats = {
-            cantidad: req.body.values[1],
-            fuerza: req.body.values[2],
-            vida: req.body.values[3],
-            velocidad: req.body.values[4]
+            nombreTipo: "ZombieEsqueleto",
+            cantidadMinuto: 10,
+            velocidad: 1,
+            fuerza: 1,
+            vida: 1
         }
     }
-    
-    updateDB.updateStats(tipo, newStats, function () {
-        res.send(newStats)
+    updateDB.updateStats(newStats, function (updatedStats) {
+        res.send(updatedStats)
     })
 })
 
@@ -234,4 +236,29 @@ app.get("/getStatsPlayer/:nombreTipo", (req, res) => {
     readDB.getStatsSelected(tipo, function (dades) {
         res.send(dades)
     })    
+})
+
+
+//Delete
+app.post("/delete", (req, res) => {
+    var deletedType = "ZombieEsqueleto"
+    deleteDB.removeStatsFrom(deletedType, (callback) =>{
+        res.send(callback)
+    })
+})
+
+
+//Insert new Zombie
+app.post("/addNewZombie", (req, res) => {
+    var statsNewZombie = {
+        nombreTipo: "ZombieEsqueleto",
+        cantidadMinuto: 10,
+        velocidad: 3,
+        fuerza: 3,
+        vida: 1,
+    }
+
+    insertDB.addNewZombie(statsNewZombie, (callback) => {
+        res.send(callback)
+    })
 })

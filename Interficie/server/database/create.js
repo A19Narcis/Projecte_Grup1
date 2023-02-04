@@ -6,54 +6,18 @@ const { Stats } = require('./connection');
 const readDB = require('./read')
 
 
-const addNewZombie = function (tipo, statsZombie, callback) {
-    console.log(statsZombie);
-    if (tipo == 1) {
-        const statsZombieEsqueletoSchema = new mongoose.Schema({
-            cantidadMinuto: {
-                type: Number,
-                default: 15
-            },
-            fuerza: {
-                type: Number,
-                default: 1
-            },
-            vida: {
-                type: Number,
-                default: 1
-            },
-            velocidad: {
-                type: Number,
-                default: 50
-            }
-        })
-        const ZombieEsqueleto = mongoose.model('ZombieEsqueleto', statsZombieEsqueletoSchema);
-        const zombieEsq = new ZombieEsqueleto(statsZombie)
+const addNewZombie = function (statsZombie, callback) {
+    if (statsZombie.nombreTipo == "ZombieEsqueleto") {
+        const zombieEsq = new Stats(statsZombie)
         zombieEsq.save(function (err) {
-            if (err) return console.log(err);
-            console.log("¡Zombie esqueleto insertado!");
-            //readDB.getStats()
-            callback();
+            if (err){
+                callback("Zombie esqueleto ya existe...");
+            } else {
+                callback("¡Zombie esqueleto insertado!");
+            }
         })
     } else if (statsZombie[2] == 2) {
-        const statsZombieCaballero = new mongoose.Schema({
-            cantidadMinuto: {
-                type: Number,
-                default: 15
-            },
-            fuerza: {
-                type: Number,
-                default: 1
-            },
-            vida: {
-                type: Number,
-                default: 1
-            },
-            velocidad: {
-                type: Number,
-                default: 20
-            }
-        })
+        
     }
 }
 
@@ -108,7 +72,7 @@ const insertStats = function (callback) {
 
     const statsZombie = new Stats({
         nombreTipo: "Zombie",
-        canidadMinuto: 10,
+        cantidadMinuto: 10,
         velocidad: 3,
         fuerza: 2,
         vida: 2
@@ -120,7 +84,7 @@ const insertStats = function (callback) {
 
     const statsBoss = new Stats({
         nombreTipo: "Boss",
-        canidadMinuto: 10,
+        cantidadMinuto: 1,
         velocidad: 3,
         fuerza: 2,
         vida: 2

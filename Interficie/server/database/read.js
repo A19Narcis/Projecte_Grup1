@@ -13,7 +13,6 @@ const getStatsSelected = async (tipo, callback) => {
 //Select de les Stats dels Zombies / Charactes
 const getStats = async (callback) => {
     const fullStats = await Stats.find({});
-
     console.log("Cogiendo datos de los personajes i de los zombies...");
     callback(fullStats)
 }
