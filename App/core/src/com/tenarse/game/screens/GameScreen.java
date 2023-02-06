@@ -2,7 +2,6 @@ package com.tenarse.game.screens;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
@@ -12,11 +11,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.maps.MapProperties;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
 import com.badlogic.gdx.math.Vector2;
@@ -25,7 +19,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -62,7 +55,7 @@ public class GameScreen implements Screen {
 
     private OrthogonalTiledMapRenderer renderer;
 
-    long lastDropTime = 0;
+    long lastZombieTime = 0;
 
     ArrayList<Zombie> enemies = new ArrayList<>();
 
@@ -229,16 +222,16 @@ public class GameScreen implements Screen {
 
         renderer.setView(camera);
         renderer.render();
-        stage.draw();
         stage.act(delta);
+        stage.draw();
     }
 
     private void spawnZombie() {
-        if (TimeUtils.nanoTime() - lastDropTime > Settings.SPAWN_INTERVAL) {
+        if (TimeUtils.nanoTime() - lastZombieTime > Settings.SPAWN_INTERVAL) {
             Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map, jugador);
             enemies.add(zombie);
             stage.addActor(zombie);
-            lastDropTime = TimeUtils.nanoTime();
+            lastZombieTime = TimeUtils.nanoTime();
         }
     }
 

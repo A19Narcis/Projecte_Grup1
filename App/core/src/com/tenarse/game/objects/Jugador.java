@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.tenarse.game.helpers.AssetManager;
 import com.tenarse.game.utils.Settings;
 
@@ -38,6 +39,8 @@ public class Jugador extends Actor {
     private TextureRegion[] animacionAtaqueLeft;
     private TextureRegion[] animacionAtaqueUp;
     private TextureRegion[] animacionAtaqueDown;
+    private long atackDelay;
+
     private int currentFrame = 0;
     private float frameTime = 0.1f;
     private float stateTime = 0;
@@ -56,6 +59,7 @@ public class Jugador extends Actor {
         position = new Vector2(x, y);
         this.atack = false;
         firstAnimationAtack = false;
+        atackDelay = Settings.PLAYER_ATACK_DELAY;
         this.map = map;
 
         this.isBot = isBot;
@@ -150,7 +154,7 @@ public class Jugador extends Actor {
                         this.position.y += 12;
                     }
                 }
-                if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && !atack) {
+                if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && !atack && TimeUtils.nanoTime() - atackDelay >= Settings.PLAYER_ATACK_DELAY) {
                     atack = true;
                     firstAnimationAtack = true;
                 }
@@ -184,8 +188,8 @@ public class Jugador extends Actor {
                 if (currentFrame >= animacionAtaqueRight.length){
                     currentFrame = 0;
                     atack = false;
+                    atackDelay = TimeUtils.nanoTime();
                 }
-                System.out.println(atack);
                 stateTime = 0;
             }
         }else{
