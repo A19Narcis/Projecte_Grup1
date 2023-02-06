@@ -11,13 +11,13 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.tenarse.game.helpers.AssetManager;
 import com.tenarse.game.utils.Settings;
 
+import java.util.ArrayList;
+
 public class Zombie extends Actor{
     private Vector2 position;
     private float oldX, oldY;
     private int width, height;
     private int direction = 3;
-
-    private Jugador jugador;
 
     private TextureRegion[] animacionRight;
     private TextureRegion[] animacionUp;
@@ -33,13 +33,13 @@ public class Zombie extends Actor{
 
     private Rectangle collisionRectZombie;
 
-    boolean spawned;
+    private boolean spawned;
+    private boolean colisionWithPlayer;
 
-    public Zombie(int width, int height, Map map, Jugador jugador) {
+    public Zombie(int width, int height, Map map) {
         this.width = width;
         this.height = height;
         this.map = map;
-        this.jugador = jugador;
         position = new Vector2();
         createSpawnPosition();
         //position.x = map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2) - 20; //SPAWN EN EL CENTRO PARA PRUEBAS
@@ -56,6 +56,7 @@ public class Zombie extends Actor{
         animacionSpawn = AssetManager.zombieSpawn_Animation;
 
         spawned = false;
+        colisionWithPlayer = false;
     }
 
     private int getRandomIntInclusive(int min, int max) {
@@ -71,12 +72,12 @@ public class Zombie extends Actor{
         } while (map.searchColision(this.position.x, this.position.y));
     }
 
-    public void calculateMovement(float delta){
+    public void calculateMovement(Rectangle jugador ,float delta){
         if(spawned) {
             float oldX = position.x;
             float oldY = position.y;
             int colisionMov;
-            Vector2 direction = new Vector2(jugador.getCollisionRectPlayer().x - position.x, jugador.getCollisionRectPlayer().y - position.y);
+            Vector2 direction = new Vector2(jugador.x - position.x, jugador.y - position.y);
             direction.nor();
             position.x += direction.x * Settings.ZOMBIE_VELOCITY * delta;
             if(oldX < position.x){
@@ -85,7 +86,7 @@ public class Zombie extends Actor{
                 colisionMov = -8;
             }
             position.x += colisionMov;
-            if(map.searchColision(position.x, position.y) || colisionWithPlayer()){
+            if(map.searchColision(position.x, position.y) || colisionWithPlayer){
                 position.x = oldX;
             }else{
                 position.x -= colisionMov;
@@ -99,7 +100,7 @@ public class Zombie extends Actor{
                 colisionMov = -8;
             }
             position.y += colisionMov;
-            if(map.searchColision(position.x, position.y) || colisionWithPlayer()){
+            if(map.searchColision(position.x, position.y) || colisionWithPlayer){
                 position.y = oldY;
             }else{
                 position.y -= colisionMov;
@@ -109,7 +110,7 @@ public class Zombie extends Actor{
         collisionRectZombie.y = this.position.y;
     }
 
-    private boolean colisionWithPlayer(){
+    public void colisionWithPlayer(Jugador jugador){
         boolean result;
         float calculoX = jugador.getCollisionRectPlayer().x - collisionRectZombie.x;
         float calculoY = jugador.getCollisionRectPlayer().y - collisionRectZombie.y;
@@ -122,7 +123,7 @@ public class Zombie extends Actor{
         }else{
             result = false;
         }
-        return result;
+        colisionWithPlayer = result;
     }
 
     private TextureRegion getZombieDirection() {
@@ -190,7 +191,6 @@ public class Zombie extends Actor{
                 stateTime = 0;
             }
         }
-        calculateMovement(delta);
     }
 
     public void draw(Batch batch, float parentAlpha){

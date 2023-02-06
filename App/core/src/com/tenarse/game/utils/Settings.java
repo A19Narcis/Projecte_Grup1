@@ -17,7 +17,7 @@ public class Settings {
     public static final int PLAYER_WIDTH = 32;
     public static final int PLAYER_HEIGHT = 32;
     public static final int PLAYER_STRENGTH = 1;
-    public static final long PLAYER_ATACK_DELAY= 1000000000l;
+    public static final long PLAYER_ATTACK_DELAY = 1000000000l;
 
     //Propietats Zombie
     public static final int ZOMBIE_WIDTH = 32;

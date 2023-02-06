@@ -58,6 +58,7 @@ public class GameScreen implements Screen {
     long lastZombieTime = 0;
 
     ArrayList<Zombie> enemies = new ArrayList<>();
+    ArrayList<Jugador> players = new ArrayList<>();
 
     public GameScreen(Batch prevBatch, Viewport prevViewport) {
 
@@ -110,6 +111,10 @@ public class GameScreen implements Screen {
         //Añadir Actores
         jugador.setName("jugador");
         stage.addActor(jugador);
+
+        Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
+        enemies.add(zombie);
+        stage.addActor(zombie);
 
 
         //Gestor d'entrada la classe InputHandler
@@ -218,7 +223,18 @@ public class GameScreen implements Screen {
             jugador.goingRight();
         }
 
-        spawnZombie();
+        for (Zombie zombie: enemies) {
+            zombie.calculateMovement(jugador.getCollisionRectPlayer(), delta);
+            zombie.colisionWithPlayer(jugador);
+        }
+
+        for (Jugador player: players){
+            for (Zombie zombie: enemies) {
+                player.attacking(zombie);
+            }
+        }
+
+        //spawnZombie();
 
         renderer.setView(camera);
         renderer.render();
@@ -228,7 +244,7 @@ public class GameScreen implements Screen {
 
     private void spawnZombie() {
         if (TimeUtils.nanoTime() - lastZombieTime > Settings.SPAWN_INTERVAL) {
-            Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map, jugador);
+            Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
             enemies.add(zombie);
             stage.addActor(zombie);
             lastZombieTime = TimeUtils.nanoTime();
