@@ -30,15 +30,15 @@ public class Jugador extends Actor {
     private Boolean bntLeftIsPressed = false;
     private Boolean bntRightIsPressed = false;
 
-
-
     private TextureRegion[] animacionRight;
     private TextureRegion[] animacionUp;
     private TextureRegion[] animacionDown;
     private TextureRegion[] animacionLeft;
     private TextureRegion[] animacionAtaqueRight;
+    private TextureRegion[] animacionAtaqueLeft;
+    private TextureRegion[] animacionAtaqueUp;
+    private TextureRegion[] animacionAtaqueDown;
     private int currentFrame = 0;
-    private int currentFrameAtack = 0;
     private float frameTime = 0.1f;
     private float stateTime = 0;
 
@@ -72,18 +72,27 @@ public class Jugador extends Actor {
             animacionUp = AssetManager.playerUpA_Animation;
             animacionDown = AssetManager.playerDownA_Animation;
             animacionAtaqueRight = AssetManager.playerRightA_Atack;
-        } else if (tipusJugador == WAR_PLAYER){
+            animacionAtaqueLeft = AssetManager.playerLeftA_Atack;
+            animacionAtaqueUp = AssetManager.playerUpA_Atack;
+            animacionAtaqueDown = AssetManager.playerDownA_Atack;
+        } else if (tipusJugador == WAR_PLAYER){/*SUSTITUIR ANIMAIONES DE PEGAR WARHAMER Y SHIELD*/
             animacionRight = AssetManager.playerRightW_Animation;
             animacionLeft = AssetManager.playerLeftW_Animation;
             animacionUp = AssetManager.playerUpW_Animation;
             animacionDown = AssetManager.playerDownW_Animation;
             animacionAtaqueRight = AssetManager.playerRightA_Atack;
+            animacionAtaqueLeft = AssetManager.playerLeftA_Atack;
+            animacionAtaqueUp = AssetManager.playerUpA_Atack;
+            animacionAtaqueDown = AssetManager.playerDownA_Atack;
         } else if (tipusJugador == SHI_PLAYER){
             animacionRight = AssetManager.playerRightS_Animation;
             animacionLeft = AssetManager.playerLeftS_Animation;
             animacionUp = AssetManager.playerUpS_Animation;
             animacionDown = AssetManager.playerDownS_Animation;
             animacionAtaqueRight = AssetManager.playerRightA_Atack;
+            animacionAtaqueLeft = AssetManager.playerLeftA_Atack;
+            animacionAtaqueUp = AssetManager.playerUpA_Atack;
+            animacionAtaqueDown = AssetManager.playerDownA_Atack;
         }
 
         setBounds(position.x, position.y, width, height);
@@ -100,7 +109,7 @@ public class Jugador extends Actor {
         } else {
             oldx = this.position.x;
             oldy = this.position.y;
-                if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A) || this.bntLeftIsPressed) {
+                if ((Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A) || this.bntLeftIsPressed) && !atack ) {
                     this.direction = Settings.PRESSED_LEFT;
                     this.position.x -= Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
                     this.position.x -= 8;
@@ -111,7 +120,7 @@ public class Jugador extends Actor {
                         this.position.x += 8;
                     }
                 }
-                if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D) || this.bntRightIsPressed) {
+                if ((Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D) || this.bntRightIsPressed) && !atack) {
                     this.direction = Settings.PRESSED_RIGHT;
                     this.position.x += Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
                     this.position.x += 8;
@@ -122,7 +131,7 @@ public class Jugador extends Actor {
                         this.position.x -= 8;
                     }
                 }
-                if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W) || this.bntUpIsPressed) {
+                if ((Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W) || this.bntUpIsPressed) && !atack) {
                     this.direction = Settings.PRESSED_UP;
                     this.position.y += Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
                     if(map.searchColision(position.x, position.y)) {
@@ -130,7 +139,7 @@ public class Jugador extends Actor {
                         this.position.y = oldy;
                     }
                 }
-                if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S) || this.bntDownIsPressed) {
+                if ((Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S) || this.bntDownIsPressed) && !atack) {
                     this.direction = Settings.PRESSED_DOWN;
                     this.position.y -= Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
                     this.position.y -= 12;
@@ -141,10 +150,9 @@ public class Jugador extends Actor {
                         this.position.y += 12;
                     }
                 }
-                if(!atack) {
-                    if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-                        atack = true;
-                    }
+                if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && !atack) {
+                    atack = true;
+                    firstAnimationAtack = true;
                 }
 
             //Colision personaje con los bordes del mapa
@@ -165,14 +173,16 @@ public class Jugador extends Actor {
             collisionRectPlayer.y = this.position.y;
 
         }
-        if(atack && currentFrame == currentFrameAtack){
+        if(atack){
+            if(firstAnimationAtack){
+                currentFrame = 0;
+                firstAnimationAtack = false;
+            }
             stateTime += delta;
             if (stateTime >= frameTime){
                 currentFrame++;
-                currentFrameAtack++;
                 if (currentFrame >= animacionAtaqueRight.length){
                     currentFrame = 0;
-                    currentFrameAtack = 0;
                     atack = false;
                 }
                 System.out.println(atack);
@@ -191,10 +201,10 @@ public class Jugador extends Actor {
     }
 
     public void draw(Batch batch, float parentAlpha){
-        batch.draw(getPLayerDirection(), this.position.x, this.position.y, width, height);
+        batch.draw(getPlayerAnimation(), this.position.x, this.position.y, width, height);
     }
 
-    private TextureRegion getPLayerDirection() {
+    private TextureRegion getPlayerAnimation() {
         TextureRegion playerDir = null;
         //Posicio per si no es mou
         if(!isBot){
@@ -222,8 +232,14 @@ public class Jugador extends Actor {
             } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S) || this.bntDownIsPressed){
                 playerDir = animacionDown[currentFrame];
             }
-            if(atack && currentFrame == currentFrameAtack) {
+            if(atack && direction == Settings.PRESSED_RIGHT) {
                 playerDir = animacionAtaqueRight[currentFrame];
+            }else if(atack && direction == Settings.PRESSED_LEFT) {
+                playerDir = animacionAtaqueLeft[currentFrame];
+            }else if(atack && direction == Settings.PRESSED_UP) {
+                playerDir = animacionAtaqueUp[currentFrame];
+            }else if(atack && direction == Settings.PRESSED_DOWN) {
+                playerDir = animacionAtaqueDown[currentFrame];
             }
         }
 
