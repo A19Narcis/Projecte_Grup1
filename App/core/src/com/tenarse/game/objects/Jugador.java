@@ -36,6 +36,7 @@ public class Jugador extends Actor {
     private TextureRegion[] animacionUp;
     private TextureRegion[] animacionDown;
     private TextureRegion[] animacionLeft;
+
     private TextureRegion[] animacionAtaqueRight;
     private TextureRegion[] animacionAtaqueLeft;
     private TextureRegion[] animacionAtaqueUp;
@@ -85,19 +86,20 @@ public class Jugador extends Actor {
             animacionLeft = AssetManager.playerLeftW_Animation;
             animacionUp = AssetManager.playerUpW_Animation;
             animacionDown = AssetManager.playerDownW_Animation;
-            animacionAtaqueRight = AssetManager.playerRightA_Attack;
-            animacionAtaqueLeft = AssetManager.playerLeftA_Attack;
-            animacionAtaqueUp = AssetManager.playerUpA_Attack;
-            animacionAtaqueDown = AssetManager.playerDownA_Attack;
+            animacionAtaqueRight = AssetManager.playerRightW_Atack;
+            animacionAtaqueLeft = AssetManager.playerLeftW_Atack;
+            animacionAtaqueUp = AssetManager.playerUpW_Atack;
+            animacionAtaqueDown = AssetManager.playerDownW_Atack;
         } else if (tipusJugador == SHI_PLAYER){
             animacionRight = AssetManager.playerRightS_Animation;
             animacionLeft = AssetManager.playerLeftS_Animation;
             animacionUp = AssetManager.playerUpS_Animation;
             animacionDown = AssetManager.playerDownS_Animation;
-            animacionAtaqueRight = AssetManager.playerRightA_Attack;
-            animacionAtaqueLeft = AssetManager.playerLeftA_Attack;
-            animacionAtaqueUp = AssetManager.playerUpA_Attack;
-            animacionAtaqueDown = AssetManager.playerDownA_Attack;
+            animacionAtaqueRight = AssetManager.playerRightS_Atack;
+            animacionAtaqueLeft = AssetManager.playerLeftS_Atack;
+            animacionAtaqueUp = AssetManager.playerUpS_Atack;
+            animacionAtaqueDown = AssetManager.playerDownS_Atack;
+
         }
 
         setBounds(position.x, position.y, width, height);
