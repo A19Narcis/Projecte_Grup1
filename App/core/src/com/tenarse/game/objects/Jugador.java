@@ -30,6 +30,7 @@ public class Jugador extends Actor {
     private Boolean bntDownIsPressed = false;
     private Boolean bntLeftIsPressed = false;
     private Boolean bntRightIsPressed = false;
+    private Boolean bntAttackPressed = false;
 
     private TextureRegion[] animacionRight;
     private TextureRegion[] animacionUp;
@@ -154,7 +155,7 @@ public class Jugador extends Actor {
                         this.position.y += 12;
                     }
                 }
-                if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && !atack && TimeUtils.nanoTime() - atackDelay >= Settings.PLAYER_ATACK_DELAY) {
+                if ((Gdx.input.isKeyPressed(Input.Keys.SPACE) || bntAttackPressed) && !atack && TimeUtils.nanoTime() - atackDelay >= Settings.PLAYER_ATACK_DELAY) {
                     atack = true;
                     firstAnimationAtack = true;
                 }
@@ -262,6 +263,14 @@ public class Jugador extends Actor {
 
     public Rectangle getCollisionRectPlayer() {
         return collisionRectPlayer;
+    }
+
+    public void startAttack(){
+        this.bntAttackPressed = true;
+    }
+
+    public void stopAttack(){
+        this.bntAttackPressed = false;
     }
 
     public void goingUp() {
