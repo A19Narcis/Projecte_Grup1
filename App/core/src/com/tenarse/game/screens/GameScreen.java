@@ -131,9 +131,12 @@ public class GameScreen implements Screen {
         stage.addActor(zombie);
         corazonesTexture = AssetManager.hp_player;
 
-        hp_player = new ImageButton(new TextureRegionDrawable(new TextureRegion(corazonesTexture)));
-
-        stage.addActor(hp_player);
+        for (int i = 1; i <= 5/*NumeroVidasJugador*/; i++) {
+            hp_player = new ImageButton(new TextureRegionDrawable(new TextureRegion(corazonesTexture)));
+            hp_player.setSize(12,12);
+            corazonesArray.add(hp_player);
+            stage.addActor(hp_player);
+        }
 
 
 
@@ -232,7 +235,11 @@ public class GameScreen implements Screen {
 
         camera.update();
 
-        hp_player.setPosition(camera.position.x - camera.viewportWidth / 2 + 5, camera.position.y + camera.viewportHeight / 2 - 20);
+        for (int i = 1; i <= corazonesArray.size(); i++) {
+            corazonesArray.get(i-1).setPosition(camera.position.x - (camera.viewportWidth / 2 + 10) + 15 * i, camera.position.y + camera.viewportHeight / 2 - 20);
+        }
+
+
 
         if (Gdx.app.getType() == Application.ApplicationType.Android) {
             btnU_img.setPosition(camera.position.x - camera.viewportWidth / 2 + 20, camera.position.y - camera.viewportHeight / 2 + 40);
@@ -240,7 +247,7 @@ public class GameScreen implements Screen {
             btnL_img.setPosition(camera.position.x - camera.viewportWidth / 2, camera.position.y - camera.viewportHeight / 2 + 20);
             btnR_img.setPosition(camera.position.x - camera.viewportWidth / 2 + 40, camera.position.y - camera.viewportHeight / 2 + 20);
 
-            btn_atacar.setPosition(camera.position.x + camera.viewportWidth / 2 - 50, camera.position.y - camera.viewportHeight / 2 + 20);
+            btn_atacar.setPosition(camera.position.x + camera.viewportWidth / 2 - 50, camera.position.y - camera.viewportHeight / 2 + 10);
         }
 
         if (buttonUpPressed) {
