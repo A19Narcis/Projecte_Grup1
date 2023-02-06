@@ -183,7 +183,6 @@ public class Jugador extends Actor {
         if(attack){
             if(firstAnimationAttack){
                 currentFrame = 0;
-                firstAnimationAttack = false;
             }
             stateTime += delta;
             if (stateTime >= frameTime){
@@ -303,8 +302,9 @@ public class Jugador extends Actor {
             boolean result;
             float calculoX = zombie.getCollisionRectZombie().x - collisionRectPlayer.x;
             float calculoY = zombie.getCollisionRectZombie().y - collisionRectPlayer.y;
-            if (calculoX < 8 && calculoX > -8) {
+            if ((calculoX < 8 && calculoX > -8) && firstAnimationAttack) {
                 zombie.setDamage(Settings.PLAYER_STRENGTH);
+                firstAnimationAttack = false;
             }else if (calculoY < 16 && calculoY > -24) {
                 result = true;
             } else {
