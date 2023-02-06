@@ -33,6 +33,7 @@ public class AssetManager {
     //Skins Buttons
     public static Texture imgPlayBtn, imgSingleBtn, imgMultiBtn, imgReturnBtn;
     public static Texture btnMovUp, btnMovDown, btnMovLeft, btnMovRight;
+    public static Texture btnAtacar;
 
 
     //Sounds
@@ -240,6 +241,7 @@ public class AssetManager {
         btnMovDown = new Texture(Gdx.files.internal("down_arr.png"));
         btnMovLeft = new Texture(Gdx.files.internal("left_arr.png"));
         btnMovRight = new Texture(Gdx.files.internal("right_arr.png"));
+        btnAtacar = new Texture(Gdx.files.internal("attack.png"));
     }
 
     public static void dispose() {
@@ -255,5 +257,6 @@ public class AssetManager {
         btnMovDown.dispose();
         btnMovLeft.dispose();
         btnMovRight.dispose();
+        btnAtacar.dispose();
     }
 }

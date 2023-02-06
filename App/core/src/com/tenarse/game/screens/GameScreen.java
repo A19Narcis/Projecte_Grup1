@@ -38,6 +38,8 @@ public class GameScreen implements Screen {
     private Boolean buttonLeftPressed = false;
     private Boolean buttonRightPressed = false;
 
+    private Boolean buttonAttackPressed = false;
+
     private Stage stage;
     private Jugador jugador;
 
@@ -46,8 +48,8 @@ public class GameScreen implements Screen {
 
     public Map map;
 
-    private Texture btnUpTexture, btnDownTexture, btnLeftTexture, btnRightTexture;
-    private ImageButton btnU_img, btnD_img, btnL_img, btnR_img;
+    private Texture btnUpTexture, btnDownTexture, btnLeftTexture, btnRightTexture, btnAtacarTexture;
+    private ImageButton btnU_img, btnD_img, btnL_img, btnR_img, btn_atacar;
 
     private ShapeRenderer shapeRenderer;
 
@@ -76,6 +78,7 @@ public class GameScreen implements Screen {
         renderer = new OrthogonalTiledMapRenderer(map.getMap());
 
         jugador = new Jugador(map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT, false, 1, map);
+        players.add(jugador);
 
         //Crear stage
         stage = new Stage(prevViewport, prevBatch);
@@ -89,20 +92,28 @@ public class GameScreen implements Screen {
             btnRightTexture = AssetManager.btnMovRight;
             btnLeftTexture = AssetManager.btnMovLeft;
 
+            btnAtacarTexture = AssetManager.btnAtacar;
+
             btnU_img = new ImageButton(new TextureRegionDrawable(new TextureRegion(btnUpTexture)));
             btnD_img = new ImageButton(new TextureRegionDrawable(new TextureRegion(btnDownTexture)));
             btnL_img = new ImageButton(new TextureRegionDrawable(new TextureRegion(btnLeftTexture)));
             btnR_img = new ImageButton(new TextureRegionDrawable(new TextureRegion(btnRightTexture)));
+
+            btn_atacar = new ImageButton(new TextureRegionDrawable(new TextureRegion(btnAtacarTexture)));
 
             btnU_img.setSize(25, 25);
             btnL_img.setSize(25, 25);
             btnD_img.setSize(25, 25);
             btnR_img.setSize(25, 25);
 
+            btn_atacar.setSize(35, 35);
+
             stage.addActor(btnU_img);
             stage.addActor(btnD_img);
             stage.addActor(btnL_img);
             stage.addActor(btnR_img);
+
+            stage.addActor(btn_atacar);
         } else {
             stage.getViewport().setWorldSize(stage.getViewport().getWorldWidth() / zoomPc, stage.getViewport().getWorldHeight() / zoomPc);
             stage.getViewport().apply();
@@ -133,6 +144,19 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         if (Gdx.app.getType() == Application.ApplicationType.Android) {
+            btn_atacar.addListener(new InputListener(){
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    buttonAttackPressed = true;
+                    return true;
+                }
+
+                @Override
+                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                    buttonAttackPressed = false;
+                }
+            });
+
             btnU_img.addListener(new InputListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -203,6 +227,8 @@ public class GameScreen implements Screen {
             btnD_img.setPosition(camera.position.x - camera.viewportWidth / 2 + 20, camera.position.y - camera.viewportHeight / 2);
             btnL_img.setPosition(camera.position.x - camera.viewportWidth / 2, camera.position.y - camera.viewportHeight / 2 + 20);
             btnR_img.setPosition(camera.position.x - camera.viewportWidth / 2 + 40, camera.position.y - camera.viewportHeight / 2 + 20);
+
+            btn_atacar.setPosition(camera.position.x + camera.viewportWidth / 2 - 50, camera.position.y - camera.viewportHeight / 2 + 20);
         }
 
         if (buttonUpPressed) {
@@ -232,6 +258,14 @@ public class GameScreen implements Screen {
             for (Zombie zombie: enemies) {
                 player.attacking(zombie);
             }
+        }
+
+        //spawnZombie();
+
+        if (buttonAttackPressed) {
+            jugador.startAttack();
+        } else {
+            jugador.stopAttack();
         }
 
         //spawnZombie();

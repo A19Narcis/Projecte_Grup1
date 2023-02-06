@@ -19,6 +19,8 @@ public class Zombie extends Actor{
     private int width, height;
     private int direction = 3;
 
+    private int vida;
+
     private TextureRegion[] animacionRight;
     private TextureRegion[] animacionUp;
     private TextureRegion[] animacionDown;
@@ -41,9 +43,10 @@ public class Zombie extends Actor{
         this.height = height;
         this.map = map;
         position = new Vector2();
-        createSpawnPosition();
-        //position.x = map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2) - 20; //SPAWN EN EL CENTRO PARA PRUEBAS
-        //position.y = map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2);
+        vida = Settings.ZOMBIE_LIFE;
+        //createSpawnPosition();
+        position.x = map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2) - 20; //SPAWN EN EL CENTRO PARA PRUEBAS
+        position.y = map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2);
 
         collisionRectZombie = new Rectangle();
         collisionRectZombie.width = Settings.ZOMBIE_WIDTH;
@@ -170,6 +173,10 @@ public class Zombie extends Actor{
         return result;
     }
 
+    public Rectangle getCollisionRectZombie() {
+        return collisionRectZombie;
+    }
+
     public void act(float delta){
         if(!spawned){
             stateTime += delta;
@@ -191,9 +198,14 @@ public class Zombie extends Actor{
                 stateTime = 0;
             }
         }
+        System.out.println(vida);
     }
 
     public void draw(Batch batch, float parentAlpha){
         batch.draw(getZombieDirection(), this.position.x, this.position.y, width, height);
+    }
+
+    public void setDamage(int damage) {
+        this.vida -= damage;
     }
 }

@@ -30,6 +30,7 @@ public class Jugador extends Actor {
     private Boolean bntDownIsPressed = false;
     private Boolean bntLeftIsPressed = false;
     private Boolean bntRightIsPressed = false;
+    private Boolean bntAttackPressed = false;
 
     private TextureRegion[] animacionRight;
     private TextureRegion[] animacionUp;
@@ -154,7 +155,7 @@ public class Jugador extends Actor {
                         this.position.y += 12;
                     }
                 }
-                if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && !attack && TimeUtils.nanoTime() - attackDelay >= Settings.PLAYER_ATTACK_DELAY) {
+                if ((Gdx.input.isKeyPressed(Input.Keys.SPACE) || bntAttackPressed) && !attack && TimeUtils.nanoTime() - attackDelay >= Settings.PLAYER_ATTACK_DELAY) {
                     attack = true;
                     firstAnimationAttack = true;
                 }
@@ -264,6 +265,14 @@ public class Jugador extends Actor {
         return collisionRectPlayer;
     }
 
+    public void startAttack(){
+        this.bntAttackPressed = true;
+    }
+
+    public void stopAttack(){
+        this.bntAttackPressed = false;
+    }
+
     public void goingUp() {
         this.bntUpIsPressed = true;
     }
@@ -289,8 +298,16 @@ public class Jugador extends Actor {
 
     public void attacking(Zombie zombie) {
         if (attack) {
-
-        }else{
+            boolean result;
+            float calculoX = zombie.getCollisionRectZombie().x - collisionRectPlayer.x;
+            float calculoY = zombie.getCollisionRectZombie().y - collisionRectPlayer.y;
+            if (calculoX < 8 && calculoX > -8) {
+                zombie.setDamage(Settings.PLAYER_STRENGTH);
+            }else if (calculoY < 16 && calculoY > -24) {
+                result = true;
+            } else {
+                result = false;
+            }
 
         }
     }
