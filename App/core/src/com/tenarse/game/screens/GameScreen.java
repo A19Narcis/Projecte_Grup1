@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.tenarse.game.helpers.AssetManager;
@@ -48,8 +49,9 @@ public class GameScreen implements Screen {
 
     public Map map;
 
-    private Texture btnUpTexture, btnDownTexture, btnLeftTexture, btnRightTexture, btnAtacarTexture;
-    private ImageButton btnU_img, btnD_img, btnL_img, btnR_img, btn_atacar;
+    private Texture btnUpTexture, btnDownTexture, btnLeftTexture, btnRightTexture, btnAtacarTexture, corazonesTexture;
+    private ImageButton btnU_img, btnD_img, btnL_img, btnR_img, btn_atacar, hp_player;
+    private ArrayList<ImageButton> corazonesArray = new ArrayList<>();
 
     private ShapeRenderer shapeRenderer;
 
@@ -76,7 +78,7 @@ public class GameScreen implements Screen {
 
         renderer = new OrthogonalTiledMapRenderer(map.getMap());
 
-        jugador = new Jugador(map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT, false, 1, map);
+        jugador = new Jugador(map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT, false, 3, map);
 
         //Crear stage
         stage = new Stage(prevViewport, prevBatch);
@@ -120,6 +122,14 @@ public class GameScreen implements Screen {
         //Añadir Actores
         jugador.setName("jugador");
         stage.addActor(jugador);
+
+        corazonesTexture = AssetManager.hp_player;
+
+        hp_player = new ImageButton(new TextureRegionDrawable(new TextureRegion(corazonesTexture)));
+
+
+
+        stage.addActor(hp_player);
 
 
         //Gestor d'entrada la classe InputHandler
@@ -216,6 +226,9 @@ public class GameScreen implements Screen {
         cameraMapPosition();
 
         camera.update();
+
+        hp_player.setPosition(camera.position.x - camera.viewportWidth / 2 + 5, camera.position.y + camera.viewportHeight / 2 - 20);
+
         if (Gdx.app.getType() == Application.ApplicationType.Android) {
             btnU_img.setPosition(camera.position.x - camera.viewportWidth / 2 + 20, camera.position.y - camera.viewportHeight / 2 + 40);
             btnD_img.setPosition(camera.position.x - camera.viewportWidth / 2 + 20, camera.position.y - camera.viewportHeight / 2);
