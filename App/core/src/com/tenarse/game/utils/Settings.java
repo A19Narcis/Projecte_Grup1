@@ -5,7 +5,7 @@ public class Settings {
     //Propietats joc
     public static final int GAME_WIDTH = 1080;
     public static final int GAME_HEIGHT = 620;
-    public static final long SPAWN_INTERVAL = 1l;// X nanosegundos * 1000000000 = X Zombies * Segundos
+    public static final long SPAWN_INTERVAL = 3000000000l;// X nanosegundos * 1000000000 = X Zombies * Segundos
 
     public static final int PRESSED_UP = 1;
     public static final int PRESSED_LEFT = 2;
