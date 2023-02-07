@@ -254,6 +254,11 @@ public class GameScreen implements Screen {
             jugador.goingRight();
         }
 
+
+
+        renderer.setView(camera);
+        renderer.render();
+        stage.act(delta);
         for (Zombie zombie: enemies) {
             zombie.calculateMovement(jugador.getCollisionRectPlayer(), delta);
             zombie.colisionWithPlayer(jugador);
@@ -273,8 +278,6 @@ public class GameScreen implements Screen {
             jugador.stopAttack();
         }
 
-        //spawnZombie();
-
         for (int i = 1; i <= corazonesArray.size(); i++) {
             corazonesArray.get(i-1).setPosition(camera.position.x - (camera.viewportWidth / 2 + 10) + 15 * i, camera.position.y + camera.viewportHeight / 2 - 20);
         }
@@ -288,10 +291,6 @@ public class GameScreen implements Screen {
 
             btn_atacar.setPosition(camera.position.x + camera.viewportWidth / 2 - 50, camera.position.y - camera.viewportHeight / 2 + 10);
         }
-
-        renderer.setView(camera);
-        renderer.render();
-        stage.act(delta);
         stage.draw();
     }
 
