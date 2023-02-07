@@ -21,6 +21,7 @@ public class Jugador extends Actor {
     private int direction = 3;
     private boolean attack;
     private boolean firstAnimationAttack;
+    private boolean doDamage;
     private Vector2 position;
     private int width, height;
     private boolean isBot;
@@ -61,6 +62,7 @@ public class Jugador extends Actor {
         position = new Vector2(x, y);
         this.attack = false;
         firstAnimationAttack = false;
+        doDamage = false;
         attackDelay = Settings.PLAYER_ATTACK_DELAY;
         this.map = map;
 
@@ -160,6 +162,7 @@ public class Jugador extends Actor {
                 if ((Gdx.input.isKeyPressed(Input.Keys.SPACE) || bntAttackPressed) && !attack && TimeUtils.nanoTime() - attackDelay >= Settings.PLAYER_ATTACK_DELAY) {
                     attack = true;
                     firstAnimationAttack = true;
+                    doDamage = true;
                 }
 
             //Colision personaje con los bordes del mapa
@@ -183,6 +186,7 @@ public class Jugador extends Actor {
         if(attack){
             if(firstAnimationAttack){
                 currentFrame = 0;
+                firstAnimationAttack = false;
             }
             stateTime += delta;
             if (stateTime >= frameTime){
@@ -208,6 +212,7 @@ public class Jugador extends Actor {
 
     public void draw(Batch batch, float parentAlpha){
         batch.draw(getPlayerAnimation(), this.position.x, this.position.y, width, height);
+        doDamage = false;
     }
 
     private TextureRegion getPlayerAnimation() {
@@ -299,18 +304,38 @@ public class Jugador extends Actor {
 
     public void attacking(Zombie zombie) {
         if (attack) {
-            boolean result;
             float calculoX = zombie.getCollisionRectZombie().x - collisionRectPlayer.x;
             float calculoY = zombie.getCollisionRectZombie().y - collisionRectPlayer.y;
-            if ((calculoX < 8 && calculoX > -8) && firstAnimationAttack) {
-                zombie.setDamage(Settings.PLAYER_STRENGTH);
-                firstAnimationAttack = false;
-            }else if (calculoY < 16 && calculoY > -24) {
-                result = true;
-            } else {
-                result = false;
-            }
+            switch (direction){
+                case Settings.PRESSED_UP:
+                    if ((calculoY > 0 && calculoY < 24) && (calculoX > -24 && calculoX < 24) && doDamage) {
+                        zombie.setDamage(Settings.PLAYER_STRENGTH);
+                        zombie.die();
 
+                    }
+                    break;
+                case Settings.PRESSED_LEFT:
+                    if ((calculoY > -24 && calculoY < 24) && (calculoX > -24 && calculoX < 0) && doDamage) {
+                        zombie.setDamage(Settings.PLAYER_STRENGTH);
+                        zombie.die();
+
+                    }
+                    break;
+                case Settings.PRESSED_DOWN:
+                    if ((calculoY > -24 && calculoY < 0) && (calculoX > -24 && calculoX < 24) && doDamage) {
+                        zombie.setDamage(Settings.PLAYER_STRENGTH);
+                        zombie.die();
+
+                    }
+                    break;
+                case Settings.PRESSED_RIGHT:
+                    if ((calculoY > -24 && calculoY < 24) && (calculoX > 0 && calculoX < 24) && doDamage) {
+                        zombie.setDamage(Settings.PLAYER_STRENGTH);
+                        zombie.die();
+
+                    }
+                    break;
+            }
         }
     }
 }

@@ -99,8 +99,11 @@ public class GameScreen implements Screen {
 
 
         Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
+        Zombie zombie2 = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
         enemies.add(zombie);
+        enemies.add(zombie2);
         stage.addActor(zombie);
+        stage.addActor(zombie2);
         corazonesTexture = AssetManager.hp_player;
 
         for (int i = 1; i <= 5/*NumeroVidasJugador*/; i++) {
@@ -262,14 +265,21 @@ public class GameScreen implements Screen {
             jugador.goingRight();
         }
 
-        for (Zombie zombie: enemies) {
-            zombie.calculateMovement(jugador.getCollisionRectPlayer(), delta);
-            zombie.colisionWithPlayer(jugador);
-        }
+
+
+        renderer.setView(camera);
+        renderer.render();
+        stage.act(delta);
 
         for (Jugador player: players){
             for (Zombie zombie: enemies) {
-                player.attacking(zombie);
+                if(zombie.isDead()){
+                    zombie.remove();
+                }else {
+                    zombie.calculateMovement(jugador.getCollisionRectPlayer(), delta);
+                    zombie.colisionWithPlayer(jugador);
+                    player.attacking(zombie);
+                }
             }
         }
 
@@ -280,8 +290,6 @@ public class GameScreen implements Screen {
         } else {
             jugador.stopAttack();
         }
-
-        //spawnZombie();
 
         for (int i = 1; i <= corazonesArray.size(); i++) {
             corazonesArray.get(i-1).setPosition(camera.position.x - (camera.viewportWidth / 2 + 10) + 15 * i, camera.position.y + camera.viewportHeight / 2 - 20);
@@ -296,10 +304,6 @@ public class GameScreen implements Screen {
 
             btn_atacar.setPosition(camera.position.x + camera.viewportWidth / 2 - 50, camera.position.y - camera.viewportHeight / 2 + 10);
         }
-
-        renderer.setView(camera);
-        renderer.render();
-        stage.act(delta);
         stage.draw();
     }
 
