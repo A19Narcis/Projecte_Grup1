@@ -259,14 +259,13 @@ public class GameScreen implements Screen {
         renderer.setView(camera);
         renderer.render();
         stage.act(delta);
-        for (Zombie zombie: enemies) {
-            zombie.calculateMovement(jugador.getCollisionRectPlayer(), delta);
-            zombie.colisionWithPlayer(jugador);
-        }
 
         for (Jugador player: players){
             for (Zombie zombie: enemies) {
+                zombie.calculateMovement(jugador.getCollisionRectPlayer(), delta);
+                zombie.colisionWithPlayer(jugador);
                 player.attacking(zombie);
+                zombie.die(delta);
             }
         }
 

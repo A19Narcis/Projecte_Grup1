@@ -30,11 +30,10 @@ public class AssetManager {
     public static TextureRegion[] playerRightW_Animation, playerLeftW_Animation, playerUpW_Animation, playerDownW_Animation;
     public static TextureRegion[] playerRightS_Animation, playerLeftS_Animation, playerUpS_Animation, playerDownS_Animation;
 
-    public static TextureRegion[] playerRightA_Atack, playerLeftA_Atack, playerUpA_Atack, playerDownA_Atack;
     public static TextureRegion[] playerRightW_Atack, playerLeftW_Atack, playerUpW_Atack, playerDownW_Atack;
     public static TextureRegion[] playerRightS_Atack, playerLeftS_Atack, playerUpS_Atack, playerDownS_Atack;
 
-    public static TextureRegion[] zombieRight_Animation, zombieLeft_Animation, zombieUp_Animation, zombieDown_Animation, zombieSpawn_Animation;
+    public static TextureRegion[] zombieRight_Animation, zombieLeft_Animation, zombieUp_Animation, zombieDown_Animation, zombieSpawn_Animation, zombieDead_Animation;
 
     //Skins Buttons
     public static Texture imgPlayBtn, imgSingleBtn, imgMultiBtn, imgReturnBtn;
@@ -328,6 +327,11 @@ public class AssetManager {
         zombieSpawn_Animation = new TextureRegion[5];
         for (int i = zombieSpawn_Animation.length - 1; i >= 0 ; i--) {
             zombieSpawn_Animation[(zombieSpawn_Animation.length - 1) - i] = new TextureRegion(sheetZombie, i * 64, 64 * 20, 64, 64);
+        }
+
+        zombieDead_Animation = new TextureRegion[6];
+        for (int i = 0; i < zombieDead_Animation.length; i++) {
+            zombieDead_Animation[i] = new TextureRegion(sheetZombie, i * 64, 64 * 20, 64, 64);
         }
 
         //Imatge fons menu

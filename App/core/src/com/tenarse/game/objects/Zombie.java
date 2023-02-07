@@ -1,17 +1,12 @@
 package com.tenarse.game.objects;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.MapProperties;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.tenarse.game.helpers.AssetManager;
 import com.tenarse.game.utils.Settings;
-
-import java.util.ArrayList;
 
 public class Zombie extends Actor{
     private Vector2 position;
@@ -20,12 +15,14 @@ public class Zombie extends Actor{
     private int direction = 3;
 
     private int vida;
+    private boolean firstDeadAnimationDead;
 
     private TextureRegion[] animacionRight;
     private TextureRegion[] animacionUp;
     private TextureRegion[] animacionDown;
     private TextureRegion[] animacionLeft;
     private TextureRegion[] animacionSpawn;
+    private TextureRegion[] animacionDead;
 
     private int currentFrame = 0;
     private float frameTime = 0.1f;
@@ -44,6 +41,7 @@ public class Zombie extends Actor{
         this.map = map;
         position = new Vector2();
         vida = Settings.ZOMBIE_LIFE;
+        firstDeadAnimationDead = true;
         //createSpawnPosition();
         position.x = map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2) - 20; //SPAWN EN EL CENTRO PARA PRUEBAS
         position.y = map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2);
@@ -57,6 +55,7 @@ public class Zombie extends Actor{
         animacionUp = AssetManager.zombieUp_Animation;
         animacionDown = AssetManager.zombieDown_Animation;
         animacionSpawn = AssetManager.zombieSpawn_Animation;
+        animacionDead = AssetManager.zombieDead_Animation;
 
         spawned = false;
         colisionWithPlayer = false;
@@ -129,46 +128,49 @@ public class Zombie extends Actor{
         colisionWithPlayer = result;
     }
 
-    private TextureRegion getZombieDirection() {
+    private TextureRegion getZombieAnimation() {
         TextureRegion result = null;
-        if(!spawned){
-            result = AssetManager.zombieSpawn_Animation[currentFrame];
-            oldX = this.position.x;
-            oldY = this.position.y;
-        }
-        else{
-            switch (direction){
-                case Settings.PRESSED_UP:
-                    result = animacionUp[0];
-                    break;
-                case Settings.PRESSED_LEFT:
-                    result = animacionLeft[0];
-                    break;
-                case Settings.PRESSED_DOWN:
-                    result = animacionDown[0];
-                    break;
-                case Settings.PRESSED_RIGHT:
-                    result = animacionRight[0];
-                    break;
+        if(vida > 0) {
+            if (!spawned) {
+                result = animacionSpawn[currentFrame];
+                oldX = this.position.x;
+                oldY = this.position.y;
+            } else {
+                switch (direction) {
+                    case Settings.PRESSED_UP:
+                        result = animacionUp[0];
+                        break;
+                    case Settings.PRESSED_LEFT:
+                        result = animacionLeft[0];
+                        break;
+                    case Settings.PRESSED_DOWN:
+                        result = animacionDown[0];
+                        break;
+                    case Settings.PRESSED_RIGHT:
+                        result = animacionRight[0];
+                        break;
+                }
+
+
+                if (oldX < this.position.x) {
+                    result = animacionRight[currentFrame];
+                    direction = Settings.PRESSED_RIGHT;
+                } else if (oldX > this.position.x) {
+                    result = animacionLeft[currentFrame];
+                    direction = Settings.PRESSED_LEFT;
+                } else if (oldY < this.position.y) {
+                    result = animacionUp[currentFrame];
+                    direction = Settings.PRESSED_UP;
+                } else if (oldY > this.position.y) {
+                    result = animacionDown[currentFrame];
+                    direction = Settings.PRESSED_DOWN;
+                }
+                oldX = this.position.x;
+                oldY = this.position.y;
+
             }
-
-
-            if(oldX < this.position.x){
-                result = AssetManager.zombieRight_Animation[currentFrame];
-                direction = Settings.PRESSED_RIGHT;
-            }else if(oldX > this.position.x){
-                result = AssetManager.zombieLeft_Animation[currentFrame];
-                direction = Settings.PRESSED_LEFT;
-            }else if(oldY < this.position.y){
-                result = AssetManager.zombieUp_Animation[currentFrame];
-                direction = Settings.PRESSED_UP;
-            }else if(oldY > this.position.y) {
-                result = AssetManager.zombieDown_Animation[currentFrame];
-                direction = Settings.PRESSED_DOWN;
-            }
-            oldX = this.position.x;
-            oldY = this.position.y;
-
+        }else{
+            result = animacionDead[currentFrame];
         }
         return result;
     }
@@ -178,34 +180,52 @@ public class Zombie extends Actor{
     }
 
     public void act(float delta){
-        if(!spawned){
-            stateTime += delta;
-            if (stateTime >= frameTime){
-                currentFrame++;
-                if (currentFrame >= animacionSpawn.length){
-                    spawned = true;
-                    currentFrame = 0;
+        if(vida > 0) {
+            if (!spawned) {
+                stateTime += delta;
+                if (stateTime >= frameTime) {
+                    currentFrame++;
+                    if (currentFrame >= animacionSpawn.length) {
+                        spawned = true;
+                        currentFrame = 0;
+                    }
+                    stateTime = 0;
                 }
-                stateTime = 0;
+            } else {
+                stateTime += delta;
+                if (stateTime >= frameTime) {
+                    currentFrame++;
+                    if (currentFrame >= animacionRight.length) {
+                        currentFrame = 0;
+                    }
+                    stateTime = 0;
+                }
             }
-        }else{
+        }
+    }
+
+    public void draw(Batch batch, float parentAlpha){
+        batch.draw(getZombieAnimation(), this.position.x, this.position.y, width, height);
+    }
+
+    public void setDamage(int damage) {
+        this.vida -= damage;
+    }
+
+    public void die(float delta) {
+        if (vida <= 0) {
+            if (firstDeadAnimationDead) {
+                currentFrame = 0;
+                firstDeadAnimationDead = false;
+            }
             stateTime += delta;
-            if (stateTime >= frameTime){
+            if (stateTime >= frameTime) {
                 currentFrame++;
-                if (currentFrame >= animacionRight.length){
+                if (currentFrame >= animacionDead.length) {
                     currentFrame = 0;
                 }
                 stateTime = 0;
             }
         }
-        System.out.println(vida);
-    }
-
-    public void draw(Batch batch, float parentAlpha){
-        batch.draw(getZombieDirection(), this.position.x, this.position.y, width, height);
-    }
-
-    public void setDamage(int damage) {
-        this.vida -= damage;
     }
 }
