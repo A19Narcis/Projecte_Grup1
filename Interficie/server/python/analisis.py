@@ -8,35 +8,33 @@ current_directory = os.path.dirname(os.path.abspath(__file__))
 
 PATH_STATS = os.path.join(current_directory, "stats.json")
 PATH_PARTIDA = os.path.join(current_directory, "partidas.json")
-PATH_IMG1 = os.path.join(current_directory, "myGraphic.png")
+PATH_IMG1 = os.path.join(current_directory, "characters.png")
+PATH_IMG2 = os.path.join(current_directory, "enemies.png")
 
 client = MongoClient()
 
-client = MongoClient('mongodb://a19nargomcar2:paco1234@labs.inspedralbes.cat:7010/?tls=false&authMechanism=DEFAULT&authSource=DAMA_Grup1')
+#client = MongoClient('mongodb://a19nargomcar2:paco1234@labs.inspedralbes.cat:7010/?tls=false&authMechanism=DEFAULT&authSource=DAMA_Grup1')
+
+client = MongoClient('mongodb://localhost:27017/DAMA_Grup1')
 
 db = client['DAMA_Grup1']
 
 partidas = db["partidas"]
 
-statsAxe = db["axestats"]
-statsWar = db["warstats"]
-statsShield = db["shieldstats"]
+stats = db["stats"]
 
-#dataAxe = pd.DataFrame(list(statsAxe.find()))
-#dataWar = pd.DataFrame(list(statsWar.find()))
-#dataShield = pd.DataFrame(list(statsShield.find()))
+dataStats = pd.DataFrame(list(stats.find()))
 
-#dataAxe.drop(dataAxe.columns[0], axis = 1, inplace = True)
-#dataWar.drop(dataWar.columns[0], axis = 1, inplace = True)
-#dataShield.drop(dataShield.columns[0], axis = 1, inplace = True)
+dataStats.drop(dataStats.columns[0], axis = 1, inplace = True)
+dataStats.drop(dataStats.columns[5], axis = 1, inplace = True)
 
-#data_allStats = pd.concat([dataAxe, dataWar, dataShield])
+dataStats.to_json(PATH_STATS, orient = "records", indent = 4)
 
-#data_allStats.to_json(PATH_STATS, orient = "records", indent = 4)
 
 dataP = pd.DataFrame(list(partidas.find()))
 
 dataP.drop(dataP.columns[0], axis = 1, inplace = True)
+dataP.drop(dataP.columns[4], axis = 1, inplace = True)
 
 for i, row in dataP.iterrows():
     for j in range(len(row["jugadores"])):
@@ -46,12 +44,25 @@ dataP.to_json(PATH_PARTIDA, orient="records", indent = 4)
 
 df = pd.read_json(PATH_STATS)
 
+df_characters = df.iloc[0:3, :]
+df_enemies = df.iloc[3:, :]
+
 print(df)
 
-y = range(0, 5)
-
-for i in range(df.shape[0]):
-    x = df.iloc[i, :]
-    plt.plot(x, y)
-
+#Grafico de los personajes
+df_characters.plot(kind = 'bar', x = 'nombreTipo', y=['velocidad', 'fuerza', 'vida', 'armadura'])
+plt.ylim(0, 5)
+plt.xticks(rotation=0)
+plt.xlabel('\nTipo Jugador')
 plt.savefig(PATH_IMG1)
+
+
+#Grafico de los enemigos
+df_enemies.plot(kind = 'bar', x = 'nombreTipo', y=['velocidad', 'fuerza', 'vida'])
+plt.ylim(0, 5)
+plt.xticks(rotation=0)
+plt.xlabel('\nTipo Enemigo')
+plt.savefig(PATH_IMG2)
+
+
+#Grafico de las partidas (duracionPartidas, killsJugadores)

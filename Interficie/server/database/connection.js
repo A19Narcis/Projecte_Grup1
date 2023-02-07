@@ -22,7 +22,6 @@ const statsPersonatges = new mongoose.Schema({
     },
     cantidadMinuto: {
         type: Number,
-        default: 1
     },
     velocidad: {
         type: Number,
@@ -37,8 +36,7 @@ const statsPersonatges = new mongoose.Schema({
         default: 1
     },
     armadura: {
-        type: Number,
-        default: 1
+        type: Number
     }
 })
 
