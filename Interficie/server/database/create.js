@@ -7,18 +7,14 @@ const readDB = require('./read')
 
 
 const addNewZombie = function (statsZombie, callback) {
-    if (statsZombie.nombreTipo == "ZombieEsqueleto") {
-        const zombieEsq = new Stats(statsZombie)
-        zombieEsq.save(function (err) {
-            if (err){
-                callback("Zombie esqueleto ya existe...");
-            } else {
-                callback("¡Zombie esqueleto insertado!");
-            }
-        })
-    } else if (statsZombie[2] == 2) {
-        
-    }
+    const statsNew = new Stats(statsZombie)
+    statsNew.save(function (err) {
+        if(err){
+            callback(statsZombie.nombreTipo + " ya existe...")
+        } else {
+            callback()
+        }
+    })
 }
 
 

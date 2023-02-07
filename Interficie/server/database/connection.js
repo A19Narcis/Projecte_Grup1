@@ -22,21 +22,23 @@ const statsPersonatges = new mongoose.Schema({
     },
     cantidadMinuto: {
         type: Number,
+        default: 1
     },
     velocidad: {
         type: Number,
-        default: 50
+        default: 1
     },
     fuerza: {
         type: Number,
-        default: 2
+        default: 1
     },
     vida: {
         type: Number,
-        default: 3
+        default: 1
     },
     armadura: {
         type: Number,
+        default: 1
     }
 })
 
@@ -69,7 +71,7 @@ const partidaSchema = new mongoose.Schema({
     },
     puntos: {
         type: Number,
-
+        default: 0
     }
 });
 

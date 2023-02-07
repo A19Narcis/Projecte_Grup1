@@ -11,10 +11,10 @@ const updateDB = require('./database/update')
 const deleteDB = require('./database/delete')
 const app = express();
 
-const PORT = 3000;
+const PORT = 7073;
 
 app.use(cookieParser());
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, authorization");
     res.header("Access-Control-Allow-Methods", "GET,POST,DELETE,PUT,OPTIONS");
@@ -25,8 +25,8 @@ app.use(sessions({
     resave: false,
     saveUninitialized: false,
     cookie: { maxAge: 100000 },
-    user:{ isAuth: false}
-    
+    user: { isAuth: false }
+
 }));
 
 //Middleware necessari per parsejar el body i colocar-ho dintre del req.body.
@@ -37,9 +37,9 @@ app.use(express.json());
 //Per cada petició es crida aquest middleware (app.use)
 //rep dos parametres el mòdul cors. El primer és l'origen, i el segon és una funció
 //de callback que ens permet controlar si acceptem la petició o no.
-app.use(cors({ 
+app.use(cors({
     credentials: true,
-    origin: function(origin, callback){
+    origin: function (origin, callback) {
         return callback(null, true)
     }
 }));
@@ -52,7 +52,7 @@ app.post("/authPost", async (req, res) => {
 
     let username = req.body.values[0];
     let passwd = req.body.values[1];
-  
+
     ret = await checkUserFromJson(username, passwd);
 
     req.session.user = ret;
@@ -60,7 +60,7 @@ app.post("/authPost", async (req, res) => {
     console.log(req.session);
 
     res.send(JSON.stringify(ret));
-      
+
 });
 
 //Ruta a /statusPost amb dos parametres que s'envien per "param"
@@ -72,55 +72,55 @@ app.post("/statusPost", async (req, res) => {
 
     var ret = {
         text: "No hi ha cap sessió activa"
-    };  
+    };
     //console.log(session);
 
     console.log(session);
-    if(session.user && session.user.isAuth){
+    if (session.user && session.user.isAuth) {
         var ret = {
-            text: "Sessió Activa => amb usuari "+session.user.username
+            text: "Sessió Activa => amb usuari " + session.user.username
         };
     }
 
     console.log(ret)
     res.send(JSON.stringify(ret));
-      
+
 });
 
 //Ruta a /logOutPost amb dos parametres que s'envien per "param"
 
-app.listen (PORT, ()=>{
-    console.log("Server Running ["+PORT+"]");
+app.listen(PORT, () => {
+    console.log("Server Running [" + PORT + "]");
 });
 
-function checkUserFromJson(username, passwd){
+function checkUserFromJson(username, passwd) {
     let ret = {
         isAuth: false
     };
-    console.log("username => "+username);
-    console.log("password => "+passwd);
+    console.log("username => " + username);
+    console.log("password => " + passwd);
     var prom = new Promise((resolve, reject) => {
         //llegim l'array de admins
-         fs.readFile(path.join(__dirname, "admins.json"), (err, data) =>{
-             if(err){
-                 console.log(err);
-             }
-             var dades = JSON.parse(data);
-             console.log(data);
-             //fins es una funció d'arrays en javascript.
-             user = dades.admins.find(user => {      
-                 if(user.username == username && user.password == passwd){
-                     return true;
-                 }
-             });
-             if(user){
-                 console.log("user found");
-                 ret.isAuth = user.isAuth;
-                 ret.username = user.username;
-             }
-             console.log(ret);
-             resolve(ret);
-        }); 
+        fs.readFile(path.join(__dirname, "admins.json"), (err, data) => {
+            if (err) {
+                console.log(err);
+            }
+            var dades = JSON.parse(data);
+            console.log(data);
+            //fins es una funció d'arrays en javascript.
+            user = dades.admins.find(user => {
+                if (user.username == username && user.password == passwd) {
+                    return true;
+                }
+            });
+            if (user) {
+                console.log("user found");
+                ret.isAuth = user.isAuth;
+                ret.username = user.username;
+            }
+            console.log(ret);
+            resolve(ret);
+        });
     });
     return prom;
 }
@@ -133,20 +133,20 @@ app.post("/getSession", async (req, res) => {
 
     var ret = {
         text: "No hi ha cap sessió activa"
-    };  
+    };
     //console.log(session);
 
     console.log(session);
-    if(session.user && session.user.isAuth){
+    if (session.user && session.user.isAuth) {
         var ret = {
             isAuth: session.user.isAuth,
-            username: session.user
+            username: session.user.username
         };
     }
 
-    console.log(ret)
+    console.log("RET GET " + JSON.stringify(ret))
     res.send(JSON.stringify(ret));
-      
+
 });
 
 
@@ -156,7 +156,7 @@ app.post("/getSession", async (req, res) => {
 //Insertat los primeros datos del juego (Stats Jugadores, Zombies)
 app.post("/", (req, res) => {
     insertDB.insertStats(function () {
-        res.send({ success : true })
+        res.send({ success: true })
     });
 })
 
@@ -169,23 +169,37 @@ app.post("/getStats", (req, res) => {
 
 //Actualiza las stats de un tipo de personaje segun el tipo -> req.body.values[0]
 app.post("/updateStats", (req, res) => {
+    console.log(req.body.values);
+    var type = '';
+    if (!isNaN(req.body.values[0]))
+        return;
+    if (req.body.values[2] == 0)
+        type = 'Axe';
+    if (req.body.values[2] == 1)
+        type = 'Warhammer';
+    if (req.body.values[2] == 2)
+        type = 'Shield';
+    if (req.body.values[2] == 3)
+        type = 'Zombie';
+    if (req.body.values[2] == 4)
+        type = 'Boss';
+    
     let newStats = {}
-    let tipo = 1
-    if(tipo <= 2) {
+    if (req.body.values[2] <= 2) {
         newStats = {
-            nombreTipo: "Axe",
-            velocidad: 1,
-            fuerza: 1,
-            vida: 1,
-            armadura: 1
+            nombreTipo: type,
+            velocidad: req.body.values[3],
+            fuerza: req.body.values[4],
+            vida: req.body.values[5],
+            armadura: req.body.values[6]
         }
     } else {
         newStats = {
-            nombreTipo: "ZombieEsqueleto",
-            cantidadMinuto: 10,
-            velocidad: 1,
-            fuerza: 1,
-            vida: 1
+            nombreTipo: type,
+            cantidadMinuto: req.body.values[6],
+            velocidad: req.body.values[3],
+            fuerza: req.body.values[4],
+            vida: req.body.values[5]
         }
     }
     updateDB.updateStats(newStats, function (updatedStats) {
@@ -235,14 +249,14 @@ app.get("/getStatsPlayer/:nombreTipo", (req, res) => {
     var tipo = req.params.nombreTipo;
     readDB.getStatsSelected(tipo, function (dades) {
         res.send(dades)
-    })    
+    })
 })
 
 
 //Delete
 app.post("/delete", (req, res) => {
-    var deletedType = "ZombieEsqueleto"
-    deleteDB.removeStatsFrom(deletedType, (callback) =>{
+    var deletedType = "ZombieEsqueleto6"
+    deleteDB.removeStatsFrom(deletedType, (callback) => {
         res.send(callback)
     })
 })
@@ -250,15 +264,21 @@ app.post("/delete", (req, res) => {
 
 //Insert new Zombie
 app.post("/addNewZombie", (req, res) => {
+    console.log(req.body.values);
+    var type = '';
+    if (!isNaN(req.body.values[0]))
+        return;
+
     var statsNewZombie = {
-        nombreTipo: "ZombieEsqueleto",
-        cantidadMinuto: 10,
-        velocidad: 3,
-        fuerza: 3,
-        vida: 1,
+        nombreTipo: req.body.values[2],
+        cantidadMinuto: req.body.values[3],
+        velocidad: req.body.values[4],
+        fuerza: req.body.values[5],
+        vida: req.body.values[6],
     }
 
     insertDB.addNewZombie(statsNewZombie, (callback) => {
-        res.send(callback)
+        console.log("Nuevo enemigo añadido: " + statsNewZombie.nombreTipo)
+        res.send({ success: true })
     })
 })

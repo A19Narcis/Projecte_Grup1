@@ -14,6 +14,7 @@ var vue_app = new Vue({
         dialog_3: false,
         dialog_zomb1: false,
         dialog_zomb2: false,
+        dialog_zomb3: false,
         num_zomb: 0,
         num_boss: 0,
         fuerza_zomb: 0,
@@ -46,10 +47,14 @@ var vue_app = new Vue({
         new_vida: 0,
         new_fuerza: 0,
         new_type: 0,
-        newReady: 0
+        newReady: 0,
+        typeIf: 0
     },
     methods: {
         getAuth: function () {
+            console.log("Entro")
+            console.log(this.username)
+            console.log(this.pass)
             this.info.values.push(this.username);
             this.info.values.push(this.pass);
             if (this.username == '' || this.pass == '') {
@@ -88,6 +93,7 @@ var vue_app = new Vue({
                         }, 4000);
                     }
                     else {
+                        console.log("entro aqui")
                         this.info.values = [];
                         this.username = '';
                         this.pass = '';
@@ -100,7 +106,7 @@ var vue_app = new Vue({
             );
         },
         getSession: function () {
-
+            console.log("SSSS" + this.info.values[0])
             fetch("http://admin.alumnes.inspedralbes.cat:7073/getSession/",
                 {
                     method: "POST",
@@ -125,12 +131,12 @@ var vue_app = new Vue({
                     console.log("sesion user" + this.userAuth);
                     console.log("session mine" + this.username);
                     console.log("sesion auth" + this.auth);
-                    
+
                     if (this.auth == true && this.userAuth == this.username) {
                         this.ready = 1;
+                        this.info.values.push(this.username);
+                        this.info.values.push(this.username);
                     }
-                    console.log("ready  " + this.ready);
-
                 }
             ).catch(
                 (error) => {
@@ -187,33 +193,47 @@ var vue_app = new Vue({
                 (data) => {
                     console.log(data)
                     //axe
-                    this.axe_vel = data[0][0].velocidad;
-                    this.axe_fuerza = data[0][0].fuerza;
-                    this.axe_vida = data[0][0].vida;
-                    this.axe_arm = data[0][0].armadura;
+                    this.axe_vel = data[0].velocidad;
+                    this.axe_fuerza = data[0].fuerza;
+                    this.axe_vida = data[0].vida;
+                    this.axe_arm = data[0].armadura;
                     //warm
-                    this.warm_vel = data[1][0].velocidad;
-                    this.warm_fuerza = data[1][0].fuerza;
-                    this.warm_vida = data[1][0].vida;
-                    this.warm_arm = data[1][0].armadura;
+                    this.warm_vel = data[1].velocidad;
+                    this.warm_fuerza = data[1].fuerza;
+                    this.warm_vida = data[1].vida;
+                    this.warm_arm = data[1].armadura;
                     //shield
-                    this.shield_vel = data[2][0].velocidad;
-                    this.shield_fuerza = data[2][0].fuerza;
+                    this.shield_vel = data[2].velocidad;
+                    this.shield_fuerza = data[2].fuerza;
                     console.log(this.shield_fuerza);
 
-                    this.shield_vida = data[2][0].vida;
-                    this.shield_arm = data[2][0].armadura;
+                    this.shield_vida = data[2].vida;
+                    this.shield_arm = data[2].armadura;
 
                     //zombie
-                    this.num_zomb = data[3][0].cantidadMinuto;
-                    this.fuerza_zomb = data[3][0].fuerza;
-                    this.vida_zombie = data[3][0].vida;
-                    this.vel_zomb = data[3][0].velocidad;
+                    this.num_zomb = data[3].cantidadMinuto;
+                    this.fuerza_zomb = data[3].fuerza;
+                    this.vida_zombie = data[3].vida;
+                    this.vel_zomb = data[3].velocidad;
                     //boss
-                    this.num_boss = data[4][0].cantidadMinuto;
-                    this.fuerza_zomb_boss = data[4][0].fuerza;
-                    this.vida_zombie_boss = data[4][0].vida;
-                    this.vel_zomb_boss = data[4][0].velocidad;
+                    this.num_boss = data[4].cantidadMinuto;
+                    this.fuerza_zomb_boss = data[4].fuerza;
+                    this.vida_zombie_boss = data[4].vida;
+                    this.vel_zomb_boss = data[4].velocidad;
+                    if (data[5] != null) {
+                        this.new_cantidad = data[5].cantidadMinuto;
+                        this.new_fuerza = data[5].fuerza;
+                        this.new_vida = data[5].vida;
+                        this.new_velocidad = data[5].velocidad;                        
+                        if(data[5].nombreTipo == "ZombieCaballero")
+                            this.typeIf = 2;
+                        if(data[5].nombreTipo == "ZombieEsqueleto")
+                            this.typeIf = 1;
+                        this.newReady = 1;
+                    }
+                    console.log(this.typeIf);
+
+
                 }
             ).catch(
                 (error) => {
@@ -222,15 +242,29 @@ var vue_app = new Vue({
             );
         },
 
-        updateStats: function (type, vel, fuerza, vida, armadura) {
-            if(type == 4 || type == 5)
-            {
+        updateStats: function (type, vel, fuerza, vida, armadura, new_type) {
+            console.log(type);
+            console.log(vel);
+            console.log(fuerza);
+            console.log(vida);
+            console.log(armadura);
+            console.log(new_type);
+            if (type == 6) {
+                console.log("ENNNNN");
                 this.info.values.push(type);
                 this.info.values.push(vel);
                 this.info.values.push(fuerza);
                 this.info.values.push(vida);
-                
-            }else{
+                this.info.values.push(new_type);
+            }
+            else if (type == 4 || type == 5) {
+                this.info.values.push(type);
+                this.info.values.push(vel);
+                this.info.values.push(fuerza);
+                this.info.values.push(vida);
+
+            } else {
+                console.log("else")
                 this.info.values.push(type);
                 this.info.values.push(vel);
                 this.info.values.push(fuerza);
@@ -255,7 +289,8 @@ var vue_app = new Vue({
                 }
             ).then(
                 (data) => {
-                    this.getStats(); 
+                    this.info.values = this.info.values.slice(0, 2);
+                    this.getStats();
                 }
             ).catch(
                 (error) => {
@@ -264,13 +299,14 @@ var vue_app = new Vue({
             );
         },
 
-        createNewZombie: function (type, cantidad, fuerza, vida, velocidad){
+        addNewZombie: function (type, cantidad, fuerza, vida, velocidad) {
+            console.log("add" + this.info.values)
             this.info.values.push(type);
             this.info.values.push(cantidad);
             this.info.values.push(fuerza);
             this.info.values.push(vida);
             this.info.values.push(velocidad);
-            fetch("http://admin.alumnes.inspedralbes.cat:7073/createNewZombie/",
+            fetch("http://admin.alumnes.inspedralbes.cat:7073/addNewZombie/",
                 {
                     method: "POST",
                     headers: {
@@ -290,27 +326,22 @@ var vue_app = new Vue({
                 (data) => {
                     this.newReady = 1;
                     console.log(this.newReady);
-                    
+                    this.info.values = this.info.values.slice(0, 2);
                 }
             ).catch(
                 (error) => {
+                    this.info.values = this.info.values.slice(0, 2);
                     console.log(error);
                 }
             );
 
         },
-        check: function(type){
+        check: function (type) {
             console.log("fumo skeletons" + type);
             this.new_type = type;
         },
 
     },
-
-
-
-
-
-
 
     created() {
         const myText = new SplitType('#title')
@@ -336,7 +367,7 @@ var vue_app = new Vue({
         });
         setTimeout(() => {
             window.scroll({
-                top: window.innerHeight,
+                top: window.innerHeight + 200,
                 behavior: 'smooth'
             });
         }, 3900)
