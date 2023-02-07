@@ -24,8 +24,6 @@ import com.tenarse.game.objects.Jugador;
 import com.tenarse.game.objects.Map;
 import com.tenarse.game.utils.Settings;
 
-import java.util.ArrayList;
-
 public class ChooseCharacterScreen implements Screen {
 
     private Tenarse game;
@@ -43,7 +41,7 @@ public class ChooseCharacterScreen implements Screen {
 
     private int selectedCharacter = 4;
 
-    private BitmapFont font = new BitmapFont();
+    private BitmapFont fontBold, fontNormal, fontSub;
 
     public ChooseCharacterScreen(Tenarse game) {
         this.game = game;
@@ -88,19 +86,31 @@ public class ChooseCharacterScreen implements Screen {
         }
 
         //Texto de los personajes
-        font = AssetManager.fontText.generateFont(new FreeTypeFontGenerator.FreeTypeFontParameter());
-        font.getData().setScale(2);
+        FreeTypeFontGenerator.FreeTypeFontParameter parametros = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
-        Label.LabelStyle labelStyle = new Label.LabelStyle();
-        labelStyle.font = font;
-        labelStyle.fontColor = Color.BLACK;
+        if (Gdx.app.getType() == Application.ApplicationType.Android){
+            parametros.size = 30;
+        }
 
-        Label titolAxe = new Label("Axe", labelStyle);
-        Label titolWarhammer = new Label("Warhammer", labelStyle);
-        Label titolShield = new Label("Shield", labelStyle);
+        fontBold = AssetManager.fontTextBold.generateFont(parametros);
+        fontBold.getData().setScale(2);
 
+        fontNormal = AssetManager.fontTextNormal.generateFont(parametros);
+        fontNormal.getData().setScale(2);
 
+        Label.LabelStyle labelStyleBold = new Label.LabelStyle();
+        labelStyleBold.font = fontBold;
+        labelStyleBold.fontColor = Color.BLACK;
 
+        Label.LabelStyle labelStyleNormal = new Label.LabelStyle();
+        labelStyleNormal.font = fontNormal;
+        labelStyleBold.fontColor = Color.BLACK;
+
+        Label titolAxe = new Label("Axe", labelStyleBold);
+        Label titolWarhammer = new Label("Warhammer", labelStyleBold);
+        Label titolShield = new Label("Shield", labelStyleBold);
+        Label textoInicio = new Label("¡Elige tu personaje!", labelStyleNormal);
+        Label textStatsTitol = new Label("Estadísticas", labelStyleNormal);
 
 
 
@@ -116,6 +126,8 @@ public class ChooseCharacterScreen implements Screen {
         stage.addActor(titolAxe);
         stage.addActor(titolWarhammer);
         stage.addActor(titolShield);
+        stage.addActor(textoInicio);
+        stage.addActor(textStatsTitol);
 
         //Start Character && Start text
         stage.getActors().get(4).setVisible(false);
@@ -142,9 +154,9 @@ public class ChooseCharacterScreen implements Screen {
             imgBtnRight.getImage().setScale(1.5f);
             imgBtnLeft.setPosition(0 + btn_left.getWidth() * 2, Gdx.graphics.getHeight() / 2 - btn_left.getHeight() / 2);
             imgBtnRight.setPosition(0 + btn_right.getWidth() * 11.75f, Gdx.graphics.getHeight() / 2 - btn_right.getHeight() / 2);
-            titolAxe.setPosition(0 + chooseBox.getWidth(), Gdx.graphics.getHeight() / 2 + chooseBox.getHeight() * 1.1f);
-            titolWarhammer.setPosition(0 + chooseBox.getWidth(), Gdx.graphics.getHeight() / 2 + chooseBox.getHeight() * 1.1f);
-            titolShield.setPosition(0 + chooseBox.getWidth(), Gdx.graphics.getHeight() / 2 + chooseBox.getHeight() * 1.1f);
+            titolAxe.setPosition(0 + chooseBox.getWidth() * 2, Gdx.graphics.getHeight() / 2 + chooseBox.getHeight() * 1.5f);
+            titolWarhammer.setPosition(0 + chooseBox.getWidth() * 2, Gdx.graphics.getHeight() / 2 + chooseBox.getHeight() * 1.5f);
+            titolShield.setPosition(0 + chooseBox.getWidth() * 2, Gdx.graphics.getHeight() / 2 + chooseBox.getHeight() * 1.5f);
         } else {
             imgBtnPlay.setPosition(Gdx.graphics.getWidth() / 2 + imgBtnPlay.getWidth(), 0 + imgBtnPlay.getHeight());
             imgChooseBox.setScale(2f);

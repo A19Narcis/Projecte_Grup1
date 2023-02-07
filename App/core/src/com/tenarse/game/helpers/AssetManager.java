@@ -50,7 +50,8 @@ public class AssetManager {
 
 
     //Font
-    public static FreeTypeFontGenerator fontText;
+    public static FreeTypeFontGenerator fontTextBold;
+    public static FreeTypeFontGenerator fontTextNormal;
 
 
     public static void load(){
@@ -358,7 +359,8 @@ public class AssetManager {
         imgRight_char = new Texture(Gdx.files.internal("Icon_Right.png"));
 
         //Fonts
-        fontText = new FreeTypeFontGenerator(Gdx.files.internal("Fonts/boldType.ttf"));
+        fontTextBold = new FreeTypeFontGenerator(Gdx.files.internal("Fonts/boldType.ttf"));
+        fontTextNormal = new FreeTypeFontGenerator(Gdx.files.internal("Fonts/normalType.ttf"));
     }
 
     public static void dispose() {
