@@ -64,7 +64,7 @@ public class GameScreen implements Screen {
     ArrayList<Zombie> enemies = new ArrayList<>();
     ArrayList<Jugador> players = new ArrayList<>();
 
-    public GameScreen(Batch prevBatch, Viewport prevViewport) {
+    public GameScreen(Batch prevBatch, Viewport prevViewport, int tipus) {
 
         shapeRenderer = new ShapeRenderer();
 
@@ -79,8 +79,16 @@ public class GameScreen implements Screen {
 
         renderer = new OrthogonalTiledMapRenderer(map.getMap());
 
-        jugador = new Jugador(map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT, false, 1, map);
-        players.add(jugador);
+        if (tipus == 4){
+            jugador = new Jugador(map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT, false, 1, map);
+            players.add(jugador);
+        } else if (tipus == 5){
+            jugador = new Jugador(map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT, false, 2, map);
+            players.add(jugador);
+        } else if (tipus == 6){
+            jugador = new Jugador(map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT, false, 3, map);
+            players.add(jugador);
+        }
 
         //Crear stage
         stage = new Stage(prevViewport, prevBatch);

@@ -97,8 +97,6 @@ public class MainMenuScreen implements Screen {
             jugarBTN.setPosition(Gdx.graphics.getWidth() / 2 - jugarBTN.getWidth() / 2, Gdx.graphics.getHeight()/ 2 - jugarBTN.getHeight() / 2);
         }
 
-        System.out.println(stage.getActors().get(1));
-
         Gdx.input.setInputProcessor(stage);
     }
 
@@ -134,7 +132,6 @@ public class MainMenuScreen implements Screen {
         multiBTN.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new GameScreen(stage.getBatch(), stage.getViewport()));
 
                 return true;
             }
@@ -143,8 +140,8 @@ public class MainMenuScreen implements Screen {
         singleBTN.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new GameScreen(stage.getBatch(), stage.getViewport()));
-
+                //game.setScreen(new GameScreen(stage.getBatch(), stage.getViewport()));
+                game.setScreen(new ChooseCharacterScreen(game));
                 return true;
             }
         });
@@ -197,5 +194,12 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void dispose() {
+        game.dispose();
+        stage.dispose();
+        btnReturn.dispose();
+        background.dispose();
+        btnMenu.dispose();
+        btnSingle.dispose();
+        btnMulti.dispose();
     }
 }

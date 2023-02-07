@@ -18,6 +18,9 @@ public class AssetManager {
     public static Texture sheetPlayerShield;
     public static Texture sheetZombie;
     public static Texture imgMainMenu;
+    public static Texture imgChooseBox;
+    public static Texture imgLeft_char;
+    public static Texture imgRight_char;
 
     //Images
     public static TextureRegion playerUpA, playerDownA, playerLeftA, playerRightA;
@@ -344,6 +347,9 @@ public class AssetManager {
         btnMovRight = new Texture(Gdx.files.internal("right_arr.png"));
         btnAtacar = new Texture(Gdx.files.internal("attack.png"));
         hp_player = new Texture(Gdx.files.internal("heart.png"));
+        imgChooseBox = new Texture(Gdx.files.internal("menuPicker.png"));
+        imgLeft_char = new Texture(Gdx.files.internal("Icon_Left.png"));
+        imgRight_char = new Texture(Gdx.files.internal("Icon_Right.png"));
     }
 
     public static void dispose() {
