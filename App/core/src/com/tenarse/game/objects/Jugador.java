@@ -311,7 +311,6 @@ public class Jugador extends Actor {
                     if ((calculoY > 0 && calculoY < 24) && (calculoX > -24 && calculoX < 24) && doDamage) {
                         zombie.setDamage(Settings.PLAYER_STRENGTH);
                         zombie.die();
-
                     }
                     break;
                 case Settings.PRESSED_LEFT:

@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.tenarse.game.effects.HitEffect;
 import com.tenarse.game.helpers.AssetManager;
 import com.tenarse.game.utils.Settings;
 
@@ -42,9 +43,9 @@ public class Zombie extends Actor{
         position = new Vector2();
         vida = Settings.ZOMBIE_LIFE;
         dead = false;
-        createSpawnPosition();
-        //position.x = map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2) - 20; //SPAWN EN EL CENTRO PARA PRUEBAS
-        //position.y = map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2);
+        //createSpawnPosition();
+        position.x = map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2) - 20; //SPAWN EN EL CENTRO PARA PRUEBAS
+        position.y = map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2);
 
         collisionRectZombie = new Rectangle();
         collisionRectZombie.width = Settings.ZOMBIE_WIDTH;
@@ -220,6 +221,7 @@ public class Zombie extends Actor{
 
     public void setDamage(int damage) {
         this.vida -= damage;
+        getStage().addActor(new HitEffect(this.position));
     }
 
     public void die() {

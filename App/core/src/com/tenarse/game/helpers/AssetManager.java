@@ -18,6 +18,7 @@ public class AssetManager {
     public static Texture sheetPlayerWar;
     public static Texture sheetPlayerShield;
     public static Texture sheetZombie;
+    public static Texture sheetHit;
     public static Texture imgMainMenu;
     public static Texture imgChooseBox;
     public static Texture imgLeft_char;
@@ -38,6 +39,8 @@ public class AssetManager {
     public static TextureRegion[] playerRightS_Atack, playerLeftS_Atack, playerUpS_Atack, playerDownS_Atack;
 
     public static TextureRegion[] zombieRight_Animation, zombieLeft_Animation, zombieUp_Animation, zombieDown_Animation, zombieSpawn_Animation, zombieDead_Animation;
+
+    public static TextureRegion[] hit_Animation;
 
     //Skins Buttons
     public static Texture imgPlayBtn, imgSingleBtn, imgMultiBtn, imgReturnBtn;
@@ -72,9 +75,13 @@ public class AssetManager {
         sheetPlayerShield = new Texture(Gdx.files.internal("animate_kite_shield.png"));
         sheetPlayerShield.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
-        //Jugador Shield
-        sheetZombie = new Texture(Gdx.files.internal("Boss.png"));
+        //Zombie
+        sheetZombie = new Texture(Gdx.files.internal("Zombie.png"));
         sheetZombie.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+
+        //Hit Sangre
+        sheetHit = new Texture(Gdx.files.internal("hit.png"));
+        sheetHit.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
         //Sheet PJ AXE
         playerDownA = new TextureRegion(sheetPlayerAxe, 0, 64*10, 64, 64);
@@ -335,9 +342,18 @@ public class AssetManager {
             zombieSpawn_Animation[(zombieSpawn_Animation.length - 1) - i] = new TextureRegion(sheetZombie, i * 64, 64 * 20, 64, 64);
         }
 
+        //Muerte zombie
         zombieDead_Animation = new TextureRegion[6];
         for (int i = 0; i < zombieDead_Animation.length; i++) {
             zombieDead_Animation[i] = new TextureRegion(sheetZombie, i * 64, 64 * 20, 64, 64);
+        }
+
+        //Animacion golpe (sangre)
+        hit_Animation = new TextureRegion[18];
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 3 ; j++) {
+                hit_Animation[i] = new TextureRegion(sheetHit, i * 100, j * 100, 100, 100);
+            }
         }
 
         //Imatge fons menu
