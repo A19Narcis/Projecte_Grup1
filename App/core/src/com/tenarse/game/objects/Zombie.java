@@ -1,10 +1,7 @@
 package com.tenarse.game.objects;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.MapProperties;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -17,13 +14,15 @@ public class Zombie extends Actor{
     private int width, height;
     private int direction = 3;
 
-    private Jugador jugador;
+    private int vida;
+    private boolean dead;
 
     private TextureRegion[] animacionRight;
     private TextureRegion[] animacionUp;
     private TextureRegion[] animacionDown;
     private TextureRegion[] animacionLeft;
     private TextureRegion[] animacionSpawn;
+    private TextureRegion[] animacionDead;
 
     private int currentFrame = 0;
     private float frameTime = 0.1f;
@@ -33,14 +32,16 @@ public class Zombie extends Actor{
 
     private Rectangle collisionRectZombie;
 
-    boolean spawned;
+    private boolean spawned;
+    private boolean colisionWithPlayer;
 
-    public Zombie(int width, int height, Map map, Jugador jugador) {
+    public Zombie(int width, int height, Map map) {
         this.width = width;
         this.height = height;
         this.map = map;
-        this.jugador = jugador;
         position = new Vector2();
+        vida = Settings.ZOMBIE_LIFE;
+        dead = false;
         createSpawnPosition();
         //position.x = map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2) - 20; //SPAWN EN EL CENTRO PARA PRUEBAS
         //position.y = map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2);
@@ -54,8 +55,10 @@ public class Zombie extends Actor{
         animacionUp = AssetManager.zombieUp_Animation;
         animacionDown = AssetManager.zombieDown_Animation;
         animacionSpawn = AssetManager.zombieSpawn_Animation;
+        animacionDead = AssetManager.zombieDead_Animation;
 
         spawned = false;
+        colisionWithPlayer = false;
     }
 
     private int getRandomIntInclusive(int min, int max) {
@@ -71,12 +74,12 @@ public class Zombie extends Actor{
         } while (map.searchColision(this.position.x, this.position.y));
     }
 
-    public void calculateMovement(float delta){
+    public void calculateMovement(Rectangle jugador ,float delta){
         if(spawned) {
             float oldX = position.x;
             float oldY = position.y;
             int colisionMov;
-            Vector2 direction = new Vector2(jugador.getCollisionRectPlayer().x - position.x, jugador.getCollisionRectPlayer().y - position.y);
+            Vector2 direction = new Vector2(jugador.x - position.x, jugador.y - position.y);
             direction.nor();
             position.x += direction.x * Settings.ZOMBIE_VELOCITY * delta;
             if(oldX < position.x){
@@ -85,7 +88,7 @@ public class Zombie extends Actor{
                 colisionMov = -8;
             }
             position.x += colisionMov;
-            if(map.searchColision(position.x, position.y) || colisionWithPlayer()){
+            if(map.searchColision(position.x, position.y) || colisionWithPlayer){
                 position.x = oldX;
             }else{
                 position.x -= colisionMov;
@@ -99,7 +102,7 @@ public class Zombie extends Actor{
                 colisionMov = -8;
             }
             position.y += colisionMov;
-            if(map.searchColision(position.x, position.y) || colisionWithPlayer()){
+            if(map.searchColision(position.x, position.y) || colisionWithPlayer){
                 position.y = oldY;
             }else{
                 position.y -= colisionMov;
@@ -109,7 +112,7 @@ public class Zombie extends Actor{
         collisionRectZombie.y = this.position.y;
     }
 
-    private boolean colisionWithPlayer(){
+    public void colisionWithPlayer(Jugador jugador){
         boolean result;
         float calculoX = jugador.getCollisionRectPlayer().x - collisionRectZombie.x;
         float calculoY = jugador.getCollisionRectPlayer().y - collisionRectZombie.y;
@@ -122,78 +125,108 @@ public class Zombie extends Actor{
         }else{
             result = false;
         }
+        colisionWithPlayer = result;
+    }
+
+    private TextureRegion getZombieAnimation() {
+        TextureRegion result = null;
+        if(vida > 0) {
+            if (!spawned) {
+                result = animacionSpawn[currentFrame];
+                oldX = this.position.x;
+                oldY = this.position.y;
+            } else {
+                switch (direction) {
+                    case Settings.PRESSED_UP:
+                        result = animacionUp[0];
+                        break;
+                    case Settings.PRESSED_LEFT:
+                        result = animacionLeft[0];
+                        break;
+                    case Settings.PRESSED_DOWN:
+                        result = animacionDown[0];
+                        break;
+                    case Settings.PRESSED_RIGHT:
+                        result = animacionRight[0];
+                        break;
+                }
+
+
+                if (oldX < this.position.x) {
+                    result = animacionRight[currentFrame];
+                    direction = Settings.PRESSED_RIGHT;
+                } else if (oldX > this.position.x) {
+                    result = animacionLeft[currentFrame];
+                    direction = Settings.PRESSED_LEFT;
+                } else if (oldY < this.position.y) {
+                    result = animacionUp[currentFrame];
+                    direction = Settings.PRESSED_UP;
+                } else if (oldY > this.position.y) {
+                    result = animacionDown[currentFrame];
+                    direction = Settings.PRESSED_DOWN;
+                }
+                oldX = this.position.x;
+                oldY = this.position.y;
+
+            }
+        }else{
+            result = animacionDead[currentFrame];
+        }
         return result;
     }
 
-    private TextureRegion getZombieDirection() {
-        TextureRegion result = null;
-        if(!spawned){
-            result = AssetManager.zombieSpawn_Animation[currentFrame];
-            oldX = this.position.x;
-            oldY = this.position.y;
-        }
-        else{
-            switch (direction){
-                case Settings.PRESSED_UP:
-                    result = animacionUp[0];
-                    break;
-                case Settings.PRESSED_LEFT:
-                    result = animacionLeft[0];
-                    break;
-                case Settings.PRESSED_DOWN:
-                    result = animacionDown[0];
-                    break;
-                case Settings.PRESSED_RIGHT:
-                    result = animacionRight[0];
-                    break;
-            }
-
-
-            if(oldX < this.position.x){
-                result = AssetManager.zombieRight_Animation[currentFrame];
-                direction = Settings.PRESSED_RIGHT;
-            }else if(oldX > this.position.x){
-                result = AssetManager.zombieLeft_Animation[currentFrame];
-                direction = Settings.PRESSED_LEFT;
-            }else if(oldY < this.position.y){
-                result = AssetManager.zombieUp_Animation[currentFrame];
-                direction = Settings.PRESSED_UP;
-            }else if(oldY > this.position.y) {
-                result = AssetManager.zombieDown_Animation[currentFrame];
-                direction = Settings.PRESSED_DOWN;
-            }
-            oldX = this.position.x;
-            oldY = this.position.y;
-
-        }
-        return result;
+    public Rectangle getCollisionRectZombie() {
+        return collisionRectZombie;
     }
 
     public void act(float delta){
-        if(!spawned){
-            stateTime += delta;
-            if (stateTime >= frameTime){
-                currentFrame++;
-                if (currentFrame >= animacionSpawn.length){
-                    spawned = true;
-                    currentFrame = 0;
+        if(vida > 0) {
+            if (!spawned) {
+                stateTime += delta;
+                if (stateTime >= frameTime) {
+                    currentFrame++;
+                    if (currentFrame >= animacionSpawn.length) {
+                        spawned = true;
+                        currentFrame = 0;
+                    }
+                    stateTime = 0;
                 }
-                stateTime = 0;
+            } else {
+                stateTime += delta;
+                if (stateTime >= frameTime) {
+                    currentFrame++;
+                    if (currentFrame >= animacionRight.length) {
+                        currentFrame = 0;
+                    }
+                    stateTime = 0;
+                }
             }
         }else{
             stateTime += delta;
-            if (stateTime >= frameTime){
+            if (stateTime >= frameTime) {
                 currentFrame++;
-                if (currentFrame >= animacionRight.length){
+                if (currentFrame >= animacionDead.length) {
                     currentFrame = 0;
+                    dead = true;
                 }
                 stateTime = 0;
             }
         }
-        calculateMovement(delta);
     }
 
     public void draw(Batch batch, float parentAlpha){
-        batch.draw(getZombieDirection(), this.position.x, this.position.y, width, height);
+        batch.draw(getZombieAnimation(), this.position.x, this.position.y, width, height);
+    }
+
+    public void setDamage(int damage) {
+        this.vida -= damage;
+    }
+
+    public void die() {
+        currentFrame = 0;
+    }
+
+    public boolean isDead() {
+        return dead;
     }
 }
