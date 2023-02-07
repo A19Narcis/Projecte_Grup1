@@ -91,8 +91,11 @@ public class GameScreen implements Screen {
 
 
         Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
+        Zombie zombie2 = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
         enemies.add(zombie);
+        enemies.add(zombie2);
         stage.addActor(zombie);
+        stage.addActor(zombie2);
         corazonesTexture = AssetManager.hp_player;
 
         for (int i = 1; i <= 5/*NumeroVidasJugador*/; i++) {
@@ -262,10 +265,13 @@ public class GameScreen implements Screen {
 
         for (Jugador player: players){
             for (Zombie zombie: enemies) {
-                zombie.calculateMovement(jugador.getCollisionRectPlayer(), delta);
-                zombie.colisionWithPlayer(jugador);
-                player.attacking(zombie);
-                zombie.die(delta);
+                if(zombie.isDead()){
+                    zombie.remove();
+                }else {
+                    zombie.calculateMovement(jugador.getCollisionRectPlayer(), delta);
+                    zombie.colisionWithPlayer(jugador);
+                    player.attacking(zombie);
+                }
             }
         }
 

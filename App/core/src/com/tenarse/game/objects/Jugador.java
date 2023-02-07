@@ -212,6 +212,7 @@ public class Jugador extends Actor {
 
     public void draw(Batch batch, float parentAlpha){
         batch.draw(getPlayerAnimation(), this.position.x, this.position.y, width, height);
+        doDamage = false;
     }
 
     private TextureRegion getPlayerAnimation() {
@@ -303,32 +304,35 @@ public class Jugador extends Actor {
 
     public void attacking(Zombie zombie) {
         if (attack) {
-            boolean result;
             float calculoX = zombie.getCollisionRectZombie().x - collisionRectPlayer.x;
             float calculoY = zombie.getCollisionRectZombie().y - collisionRectPlayer.y;
             switch (direction){
                 case Settings.PRESSED_UP:
                     if ((calculoY > 0 && calculoY < 24) && (calculoX > -24 && calculoX < 24) && doDamage) {
                         zombie.setDamage(Settings.PLAYER_STRENGTH);
-                        doDamage = false;
+                        zombie.die();
+
                     }
                     break;
                 case Settings.PRESSED_LEFT:
                     if ((calculoY > -24 && calculoY < 24) && (calculoX > -24 && calculoX < 0) && doDamage) {
                         zombie.setDamage(Settings.PLAYER_STRENGTH);
-                        doDamage = false;
+                        zombie.die();
+
                     }
                     break;
                 case Settings.PRESSED_DOWN:
                     if ((calculoY > -24 && calculoY < 0) && (calculoX > -24 && calculoX < 24) && doDamage) {
                         zombie.setDamage(Settings.PLAYER_STRENGTH);
-                        doDamage = false;
+                        zombie.die();
+
                     }
                     break;
                 case Settings.PRESSED_RIGHT:
                     if ((calculoY > -24 && calculoY < 24) && (calculoX > 0 && calculoX < 24) && doDamage) {
                         zombie.setDamage(Settings.PLAYER_STRENGTH);
-                        doDamage = false;
+                        zombie.die();
+
                     }
                     break;
             }

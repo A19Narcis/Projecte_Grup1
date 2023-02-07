@@ -15,7 +15,7 @@ public class Zombie extends Actor{
     private int direction = 3;
 
     private int vida;
-    private boolean firstDeadAnimationDead;
+    private boolean dead;
 
     private TextureRegion[] animacionRight;
     private TextureRegion[] animacionUp;
@@ -41,10 +41,10 @@ public class Zombie extends Actor{
         this.map = map;
         position = new Vector2();
         vida = Settings.ZOMBIE_LIFE;
-        firstDeadAnimationDead = true;
-        //createSpawnPosition();
-        position.x = map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2) - 20; //SPAWN EN EL CENTRO PARA PRUEBAS
-        position.y = map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2);
+        dead = false;
+        createSpawnPosition();
+        //position.x = map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2) - 20; //SPAWN EN EL CENTRO PARA PRUEBAS
+        //position.y = map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2);
 
         collisionRectZombie = new Rectangle();
         collisionRectZombie.width = Settings.ZOMBIE_WIDTH;
@@ -201,6 +201,16 @@ public class Zombie extends Actor{
                     stateTime = 0;
                 }
             }
+        }else{
+            stateTime += delta;
+            if (stateTime >= frameTime) {
+                currentFrame++;
+                if (currentFrame >= animacionDead.length) {
+                    currentFrame = 0;
+                    dead = true;
+                }
+                stateTime = 0;
+            }
         }
     }
 
@@ -212,20 +222,11 @@ public class Zombie extends Actor{
         this.vida -= damage;
     }
 
-    public void die(float delta) {
-        if (vida <= 0) {
-            if (firstDeadAnimationDead) {
-                currentFrame = 0;
-                firstDeadAnimationDead = false;
-            }
-            stateTime += delta;
-            if (stateTime >= frameTime) {
-                currentFrame++;
-                if (currentFrame >= animacionDead.length) {
-                    currentFrame = 0;
-                }
-                stateTime = 0;
-            }
-        }
+    public void die() {
+        currentFrame = 0;
+    }
+
+    public boolean isDead() {
+        return dead;
     }
 }
