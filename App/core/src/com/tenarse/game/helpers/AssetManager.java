@@ -3,6 +3,7 @@ package com.tenarse.game.helpers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 
@@ -50,6 +51,7 @@ public class AssetManager {
 
 
     //Font
+    public static FreeTypeFontGenerator fontText;
 
 
     public static void load(){
@@ -350,6 +352,9 @@ public class AssetManager {
         imgChooseBox = new Texture(Gdx.files.internal("menuPicker.png"));
         imgLeft_char = new Texture(Gdx.files.internal("Icon_Left.png"));
         imgRight_char = new Texture(Gdx.files.internal("Icon_Right.png"));
+
+        //Fonts
+        fontText = new FreeTypeFontGenerator(Gdx.files.internal("Fonts/boldType.ttf"));
     }
 
     public static void dispose() {

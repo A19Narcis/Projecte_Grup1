@@ -3,14 +3,18 @@ package com.tenarse.game.screens;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -38,7 +42,8 @@ public class ChooseCharacterScreen implements Screen {
     private ImageButton imgBtnPlay, imgBtnLeft, imgBtnRight;
 
     private int selectedCharacter = 4;
-    private ArrayList<Jugador> jugadores = new ArrayList<>();
+
+    private BitmapFont font = new BitmapFont();
 
     public ChooseCharacterScreen(Tenarse game) {
         this.game = game;
@@ -72,9 +77,9 @@ public class ChooseCharacterScreen implements Screen {
 
         //Characters
         if (Gdx.app.getType() == Application.ApplicationType.Android){
-            botChooseAxe = new Jugador(-100, 0, Settings.PLAYER_WIDTH * 7, Settings.PLAYER_HEIGHT * 7, true, 1, map);
-            botChooseWarhammer = new Jugador(-200, 0, Settings.PLAYER_WIDTH * 7, Settings.PLAYER_HEIGHT * 7, true, 2, map);
-            botChooseShield = new Jugador(-300, 0, Settings.PLAYER_WIDTH * 7, Settings.PLAYER_HEIGHT * 7, true, 3, map);
+            botChooseAxe = new Jugador(0 + chooseBox.getWidth() * 1.90f, Gdx.graphics.getHeight() - chooseBox.getHeight() * 4.1f, Settings.PLAYER_WIDTH * 12, Settings.PLAYER_HEIGHT * 12, false, 1, map);
+            botChooseWarhammer = new Jugador(0 + chooseBox.getWidth() * 1.90f, Gdx.graphics.getHeight() - chooseBox.getHeight() * 4.1f, Settings.PLAYER_WIDTH * 12, Settings.PLAYER_HEIGHT * 12, false, 2, map);
+            botChooseShield = new Jugador(0 + chooseBox.getWidth() * 1.90f, Gdx.graphics.getHeight() - chooseBox.getHeight() * 4.1f, Settings.PLAYER_WIDTH * 12, Settings.PLAYER_HEIGHT * 12, false, 3, map);
 
         } else {
             botChooseAxe = new Jugador(0 + chooseBox.getWidth() - 15, Gdx.graphics.getHeight() - chooseBox.getHeight() * 2 - 70, Settings.PLAYER_WIDTH * 8, Settings.PLAYER_HEIGHT * 8, false, 1, map);
@@ -82,9 +87,21 @@ public class ChooseCharacterScreen implements Screen {
             botChooseShield = new Jugador(0 + chooseBox.getWidth() - 15, Gdx.graphics.getHeight() - chooseBox.getHeight() * 2 - 70, Settings.PLAYER_WIDTH * 8, Settings.PLAYER_HEIGHT * 8, false, 3, map);
         }
 
-        jugadores.add(botChooseAxe);
-        jugadores.add(botChooseWarhammer);
-        jugadores.add(botChooseShield);
+        //Texto de los personajes
+        font = AssetManager.fontText.generateFont(new FreeTypeFontGenerator.FreeTypeFontParameter());
+        font.getData().setScale(2);
+
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        labelStyle.font = font;
+        labelStyle.fontColor = Color.BLACK;
+
+        Label titolAxe = new Label("Axe", labelStyle);
+        Label titolWarhammer = new Label("Warhammer", labelStyle);
+        Label titolShield = new Label("Shield", labelStyle);
+
+
+
+
 
 
         //Add actors
@@ -96,29 +113,47 @@ public class ChooseCharacterScreen implements Screen {
         stage.addActor(botChooseAxe);
         stage.addActor(botChooseWarhammer);
         stage.addActor(botChooseShield);
+        stage.addActor(titolAxe);
+        stage.addActor(titolWarhammer);
+        stage.addActor(titolShield);
 
-        //Start Character
+        //Start Character && Start text
         stage.getActors().get(4).setVisible(false);
         stage.getActors().get(5).setVisible(false);
         stage.getActors().get(6).setVisible(false);
 
+        stage.getActors().get(7).setVisible(false);
+        stage.getActors().get(8).setVisible(false);
+        stage.getActors().get(9).setVisible(false);
+
 
         if (selectedCharacter == 4){
             stage.getActors().get(4).setVisible(true);
+            stage.getActors().get(7).setVisible(true);
         }
 
 
         if (Gdx.app.getType() == Application.ApplicationType.Android){
-            imgBtnPlay.setPosition(Gdx.graphics.getWidth() / 2 + imgBtnPlay.getWidth(), 0 + imgBtnPlay.getHeight());
+            imgBtnPlay.setPosition(Gdx.graphics.getWidth() - imgBtnPlay.getWidth() * 2.5f, 0 + imgBtnPlay.getHeight());
             imgBtnPlay.getImage().setScale(2f);
-            imgChooseBox.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
-
+            imgChooseBox.setScale(3f);
+            imgChooseBox.setPosition(0 + chooseBox.getWidth() * 2, Gdx.graphics.getHeight() / 2.5f - chooseBox.getHeight());
+            imgBtnLeft.getImage().setScale(1.5f);
+            imgBtnRight.getImage().setScale(1.5f);
+            imgBtnLeft.setPosition(0 + btn_left.getWidth() * 2, Gdx.graphics.getHeight() / 2 - btn_left.getHeight() / 2);
+            imgBtnRight.setPosition(0 + btn_right.getWidth() * 11.75f, Gdx.graphics.getHeight() / 2 - btn_right.getHeight() / 2);
+            titolAxe.setPosition(0 + chooseBox.getWidth(), Gdx.graphics.getHeight() / 2 + chooseBox.getHeight() * 1.1f);
+            titolWarhammer.setPosition(0 + chooseBox.getWidth(), Gdx.graphics.getHeight() / 2 + chooseBox.getHeight() * 1.1f);
+            titolShield.setPosition(0 + chooseBox.getWidth(), Gdx.graphics.getHeight() / 2 + chooseBox.getHeight() * 1.1f);
         } else {
             imgBtnPlay.setPosition(Gdx.graphics.getWidth() / 2 + imgBtnPlay.getWidth(), 0 + imgBtnPlay.getHeight());
             imgChooseBox.setScale(2f);
             imgChooseBox.setPosition(0 + chooseBox.getWidth(), Gdx.graphics.getHeight() / 2 - chooseBox.getHeight());
             imgBtnLeft.setPosition(0 + btn_left.getWidth() / 2, Gdx.graphics.getHeight() / 2 - btn_left.getHeight() / 2);
             imgBtnRight.setPosition(0 + btn_right.getWidth() * 7, Gdx.graphics.getHeight() / 2 - btn_right.getHeight() / 2);
+            titolAxe.setPosition(0 + chooseBox.getWidth(), Gdx.graphics.getHeight() / 2 + chooseBox.getHeight() * 1.1f);
+            titolWarhammer.setPosition(0 + chooseBox.getWidth(), Gdx.graphics.getHeight() / 2 + chooseBox.getHeight() * 1.1f);
+            titolShield.setPosition(0 + chooseBox.getWidth(), Gdx.graphics.getHeight() / 2 + chooseBox.getHeight() * 1.1f);
         }
 
         Gdx.input.setInputProcessor(stage);
@@ -145,19 +180,27 @@ public class ChooseCharacterScreen implements Screen {
 
                 if (selectedCharacter == 4){
                     stage.getActors().get(4).setVisible(true);
+                    stage.getActors().get(7).setVisible(true);
                     stage.getActors().get(5).setVisible(false);
+                    stage.getActors().get(8).setVisible(false);
                     stage.getActors().get(6).setVisible(false);
+                    stage.getActors().get(9).setVisible(false);
                 } else if (selectedCharacter == 5){
                     stage.getActors().get(5).setVisible(true);
+                    stage.getActors().get(8).setVisible(true);
                     stage.getActors().get(4).setVisible(false);
+                    stage.getActors().get(7).setVisible(false);
                     stage.getActors().get(6).setVisible(false);
+                    stage.getActors().get(9).setVisible(false);
                 } else if (selectedCharacter == 6){
                     stage.getActors().get(6).setVisible(true);
+                    stage.getActors().get(9).setVisible(true);
                     stage.getActors().get(4).setVisible(false);
+                    stage.getActors().get(7).setVisible(false);
                     stage.getActors().get(5).setVisible(false);
+                    stage.getActors().get(8).setVisible(false);
                 }
 
-                System.out.println(selectedCharacter);
                 return true;
             }
         });
@@ -172,19 +215,27 @@ public class ChooseCharacterScreen implements Screen {
 
                 if (selectedCharacter == 4){
                     stage.getActors().get(4).setVisible(true);
+                    stage.getActors().get(7).setVisible(true);
                     stage.getActors().get(5).setVisible(false);
+                    stage.getActors().get(8).setVisible(false);
                     stage.getActors().get(6).setVisible(false);
+                    stage.getActors().get(9).setVisible(false);
                 } else if (selectedCharacter == 5){
                     stage.getActors().get(5).setVisible(true);
+                    stage.getActors().get(8).setVisible(true);
                     stage.getActors().get(4).setVisible(false);
+                    stage.getActors().get(7).setVisible(false);
                     stage.getActors().get(6).setVisible(false);
+                    stage.getActors().get(9).setVisible(false);
                 } else if (selectedCharacter == 6){
                     stage.getActors().get(6).setVisible(true);
+                    stage.getActors().get(9).setVisible(true);
                     stage.getActors().get(4).setVisible(false);
+                    stage.getActors().get(7).setVisible(false);
                     stage.getActors().get(5).setVisible(false);
+                    stage.getActors().get(8).setVisible(false);
                 }
 
-                System.out.println(selectedCharacter);
                 return true;
             }
         });
