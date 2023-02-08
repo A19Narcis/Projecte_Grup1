@@ -349,11 +349,9 @@ public class AssetManager {
         }
 
         //Animacion golpe (sangre)
-        hit_Animation = new TextureRegion[18];
+        hit_Animation = new TextureRegion[6];
         for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 3 ; j++) {
-                hit_Animation[i] = new TextureRegion(sheetHit, i * 100, j * 100, 100, 100);
-            }
+            hit_Animation[i] = new TextureRegion(sheetHit, i * 100, 100, 100, 100);
         }
 
         //Imatge fons menu

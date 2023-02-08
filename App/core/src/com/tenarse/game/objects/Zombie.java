@@ -34,7 +34,7 @@ public class Zombie extends Actor{
     private Rectangle collisionRectZombie;
 
     private boolean spawned;
-    private boolean colisionWithPlayer;
+    private boolean colision;
 
     public Zombie(int width, int height, Map map) {
         this.width = width;
@@ -43,9 +43,9 @@ public class Zombie extends Actor{
         position = new Vector2();
         vida = Settings.ZOMBIE_LIFE;
         dead = false;
-        //createSpawnPosition();
-        position.x = map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2) - 20; //SPAWN EN EL CENTRO PARA PRUEBAS
-        position.y = map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2);
+        createSpawnPosition();
+        //position.x = map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2) - 20; //SPAWN EN EL CENTRO PARA PRUEBAS
+        //position.y = map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2);
 
         collisionRectZombie = new Rectangle();
         collisionRectZombie.width = Settings.ZOMBIE_WIDTH;
@@ -59,7 +59,7 @@ public class Zombie extends Actor{
         animacionDead = AssetManager.zombieDead_Animation;
 
         spawned = false;
-        colisionWithPlayer = false;
+        colision = false;
     }
 
     private int getRandomIntInclusive(int min, int max) {
@@ -89,7 +89,7 @@ public class Zombie extends Actor{
                 colisionMov = -8;
             }
             position.x += colisionMov;
-            if(map.searchColision(position.x, position.y) || colisionWithPlayer){
+            if(map.searchColision(position.x, position.y) || colision){
                 position.x = oldX;
             }else{
                 position.x -= colisionMov;
@@ -103,7 +103,7 @@ public class Zombie extends Actor{
                 colisionMov = -8;
             }
             position.y += colisionMov;
-            if(map.searchColision(position.x, position.y) || colisionWithPlayer){
+            if(map.searchColision(position.x, position.y) || colision){
                 position.y = oldY;
             }else{
                 position.y -= colisionMov;
@@ -113,20 +113,51 @@ public class Zombie extends Actor{
         collisionRectZombie.y = this.position.y;
     }
 
-    public void colisionWithPlayer(Jugador jugador){
-        boolean result;
-        float calculoX = jugador.getCollisionRectPlayer().x - collisionRectZombie.x;
-        float calculoY = jugador.getCollisionRectPlayer().y - collisionRectZombie.y;
-        if(calculoX < 8 && calculoX > -8){
-            if(calculoY < 16 && calculoY > -24) {
-                result = true;
-            }else{
+    public void colisionWithZombie(Zombie zombie){
+        if (!colision) {
+            float calculoX = zombie.getCollisionRectZombie().x - collisionRectZombie.x;
+            float calculoY = zombie.getCollisionRectZombie().y - collisionRectZombie.y;
+            switch (direction){
+                case Settings.PRESSED_UP:
+                    if ((calculoY > 0 && calculoY < 16) && (calculoX > -12 && calculoX < 12)) {
+                        colision = true;
+                    }
+                    break;
+                case Settings.PRESSED_LEFT:
+                    if ((calculoY > -12 && calculoY < 12) && (calculoX > -16 && calculoX < 0)) {
+                        colision = true;
+                    }
+                    break;
+                case Settings.PRESSED_DOWN:
+                    if ((calculoY > -16 && calculoY < 0) && (calculoX > -12 && calculoX < 12)) {
+                        colision = true;
+                    }
+                    break;
+                case Settings.PRESSED_RIGHT:
+                    if ((calculoY > -12 && calculoY < 12) && (calculoX > 0 && calculoX < 16)) {
+                        colision = true;
+                    }
+                    break;
+            }
+        }
+    }
+
+    public void colisionWithPlayer(Jugador jugador) {
+        if (!colision) {
+            boolean result;
+            float calculoX = jugador.getCollisionRectPlayer().x - collisionRectZombie.x;
+            float calculoY = jugador.getCollisionRectPlayer().y - collisionRectZombie.y;
+            if (calculoX < 8 && calculoX > -8) {
+                if (calculoY < 16 && calculoY > -24) {
+                    result = true;
+                } else {
+                    result = false;
+                }
+            } else {
                 result = false;
             }
-        }else{
-            result = false;
+            colision = result;
         }
-        colisionWithPlayer = result;
     }
 
     private TextureRegion getZombieAnimation() {
@@ -181,36 +212,41 @@ public class Zombie extends Actor{
     }
 
     public void act(float delta){
-        if(vida > 0) {
-            if (!spawned) {
-                stateTime += delta;
-                if (stateTime >= frameTime) {
-                    currentFrame++;
-                    if (currentFrame >= animacionSpawn.length) {
-                        spawned = true;
-                        currentFrame = 0;
+        colision = false;
+        if(isDead()) {
+            remove();
+        }else{
+            if (vida > 0) {
+                if (!spawned) {
+                    stateTime += delta;
+                    if (stateTime >= frameTime) {
+                        currentFrame++;
+                        if (currentFrame >= animacionSpawn.length) {
+                            spawned = true;
+                            currentFrame = 0;
+                        }
+                        stateTime = 0;
                     }
-                    stateTime = 0;
+                } else {
+                    stateTime += delta;
+                    if (stateTime >= frameTime) {
+                        currentFrame++;
+                        if (currentFrame >= animacionRight.length) {
+                            currentFrame = 0;
+                        }
+                        stateTime = 0;
+                    }
                 }
             } else {
                 stateTime += delta;
                 if (stateTime >= frameTime) {
                     currentFrame++;
-                    if (currentFrame >= animacionRight.length) {
+                    if (currentFrame >= animacionDead.length) {
                         currentFrame = 0;
+                        dead = true;
                     }
                     stateTime = 0;
                 }
-            }
-        }else{
-            stateTime += delta;
-            if (stateTime >= frameTime) {
-                currentFrame++;
-                if (currentFrame >= animacionDead.length) {
-                    currentFrame = 0;
-                    dead = true;
-                }
-                stateTime = 0;
             }
         }
     }
@@ -230,5 +266,15 @@ public class Zombie extends Actor{
 
     public boolean isDead() {
         return dead;
+    }
+
+    public Vector2 getPosition() {
+        return position;
+    }
+
+    public void setPosition(Vector2 position) {
+        this.position = position;
+        collisionRectZombie.x = this.position.x;
+        collisionRectZombie.y = this.position.y;
     }
 }
