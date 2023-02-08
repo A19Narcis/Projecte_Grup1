@@ -98,12 +98,16 @@ public class GameScreen implements Screen {
         stage.addActor(jugador);
 
 
-        Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
+        /*Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
         enemies.add(zombie);
         stage.addActor(zombie);
         Zombie zombie2 = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
         enemies.add(zombie2);
         stage.addActor(zombie2);
+        Zombie zombie3 = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
+        enemies.add(zombie3);
+        stage.addActor(zombie3);*/
+
         corazonesTexture = AssetManager.hp_player;
 
         for (int i = 1; i <= 5/*NumeroVidasJugador*/; i++) {
@@ -260,9 +264,18 @@ public class GameScreen implements Screen {
         renderer.render();
         stage.act(delta);
 
+        int size = enemies.size();
+        for (int i = 0; i < size; i++) {
+            if(enemies.get(i).isDead()){
+                enemies.remove(enemies.get(i));
+                i--;
+                size--;
+            }
+        }
+
         for (Zombie zombie1: enemies){
             for (Zombie zombie2: enemies) {
-                if(zombie1 != zombie2) {
+                if(zombie1 != zombie2 && (!zombie2.isDetected() || !zombie1.isDetected())) {
                     zombie1.colisionWithZombie(zombie2);
                 }
             }
@@ -270,17 +283,13 @@ public class GameScreen implements Screen {
 
         for (Jugador player: players){
             for (Zombie zombie: enemies) {
-                if(zombie.isDead()){
-                    enemies.remove(zombie);
-                }else {
-                    zombie.colisionWithPlayer(jugador);
-                    zombie.calculateMovement(jugador.getCollisionRectPlayer(), delta);
-                    player.attacking(zombie);
-                }
+                zombie.colisionWithPlayer(jugador);
+                zombie.calculateMovement(jugador.getCollisionRectPlayer(), delta);
+                player.attacking(zombie);
             }
         }
 
-        //spawnZombie();
+        spawnZombie();
 
         if (buttonAttackPressed) {
             jugador.startAttack();

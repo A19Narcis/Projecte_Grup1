@@ -35,6 +35,7 @@ public class Zombie extends Actor{
 
     private boolean spawned;
     private boolean colision;
+    private boolean detected;
 
     public Zombie(int width, int height, Map map) {
         this.width = width;
@@ -114,7 +115,6 @@ public class Zombie extends Actor{
     }
 
     public void colisionWithZombie(Zombie zombie){
-        if (!colision) {
             float calculoX = zombie.getCollisionRectZombie().x - collisionRectZombie.x;
             float calculoY = zombie.getCollisionRectZombie().y - collisionRectZombie.y;
             switch (direction){
@@ -139,7 +139,7 @@ public class Zombie extends Actor{
                     }
                     break;
             }
-        }
+            zombie.setDetected(colision);
     }
 
     public void colisionWithPlayer(Jugador jugador) {
@@ -213,6 +213,7 @@ public class Zombie extends Actor{
 
     public void act(float delta){
         colision = false;
+        detected = false;
         if(isDead()) {
             remove();
         }else{
@@ -276,5 +277,13 @@ public class Zombie extends Actor{
         this.position = position;
         collisionRectZombie.x = this.position.x;
         collisionRectZombie.y = this.position.y;
+    }
+
+    public boolean isDetected() {
+        return detected;
+    }
+
+    public void setDetected(boolean detected) {
+        this.detected = detected;
     }
 }
