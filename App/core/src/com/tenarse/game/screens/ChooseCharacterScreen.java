@@ -43,6 +43,17 @@ public class ChooseCharacterScreen implements Screen {
 
     private BitmapFont fontBold, fontNormal, fontSub;
 
+    private int velocidad;
+    private int fuerza;
+    private int vidas;
+    private int armadura;
+
+    private Label textStatVel;
+    private Label textStatFuerza;
+    private Label textStatVida;
+    private Label textStatArmadura;
+    private Label titolCharacter;
+
     public ChooseCharacterScreen(Tenarse game) {
         this.game = game;
 
@@ -104,13 +115,17 @@ public class ChooseCharacterScreen implements Screen {
 
         Label.LabelStyle labelStyleNormal = new Label.LabelStyle();
         labelStyleNormal.font = fontNormal;
-        labelStyleBold.fontColor = Color.BLACK;
+        labelStyleNormal.fontColor = Color.BLACK;
 
-        Label titolAxe = new Label("Axe", labelStyleBold);
-        Label titolWarhammer = new Label("Warhammer", labelStyleBold);
-        Label titolShield = new Label("Shield", labelStyleBold);
+        titolCharacter = new Label("Axe", labelStyleBold);
         Label textoInicio = new Label("¡Elige tu personaje!", labelStyleNormal);
         Label textStatsTitol = new Label("Estadísticas", labelStyleNormal);
+        textStatVel = new Label("Velocidad: " + velocidad, labelStyleNormal);
+        textStatFuerza = new Label("Fuerza: " + fuerza, labelStyleNormal);
+        textStatVida = new Label("Vidas: " + vidas, labelStyleNormal);
+        textStatArmadura = new Label("Armadura: " + armadura, labelStyleNormal);
+
+
 
 
 
@@ -123,26 +138,40 @@ public class ChooseCharacterScreen implements Screen {
         stage.addActor(botChooseAxe);
         stage.addActor(botChooseWarhammer);
         stage.addActor(botChooseShield);
-        stage.addActor(titolAxe);
-        stage.addActor(titolWarhammer);
-        stage.addActor(titolShield);
+        stage.addActor(titolCharacter);
         stage.addActor(textoInicio);
         stage.addActor(textStatsTitol);
+        stage.addActor(textStatVel);
+        stage.addActor(textStatFuerza);
+        stage.addActor(textStatVida);
+        stage.addActor(textStatArmadura);
 
         //Start Character && Start text
         stage.getActors().get(4).setVisible(false);
         stage.getActors().get(5).setVisible(false);
         stage.getActors().get(6).setVisible(false);
 
-        stage.getActors().get(7).setVisible(false);
-        stage.getActors().get(8).setVisible(false);
-        stage.getActors().get(9).setVisible(false);
-
-
         if (selectedCharacter == 4){
+            titolCharacter.setText("Axe");
             stage.getActors().get(4).setVisible(true);
-            stage.getActors().get(7).setVisible(true);
+            velocidad = 3;
+            fuerza = 2;
+            vidas = 2;
+            armadura = 0;
+            textStatVel.setText("Velocidad: " + velocidad);
+            textStatFuerza.setText("Fuerza: " + fuerza);
+            textStatVida.setText("Vidas: " + vidas);
+            textStatArmadura.setText("Armadura: " + armadura);
         }
+
+
+        //Posicionamiento de los actores en la pantalla (Android / Desktop)
+        textoInicio.setPosition(Gdx.graphics.getWidth() / 2 - textoInicio.getMinWidth() / 2, Gdx.graphics.getHeight() - textoInicio.getMinHeight());
+        textStatsTitol.setPosition(Gdx.graphics.getWidth() / 1.75f, Gdx.graphics.getHeight() - textStatsTitol.getMinHeight() * 3.5f);
+        textStatVel.setPosition(Gdx.graphics.getWidth() / 1.75f, Gdx.graphics.getHeight() - textStatVel.getMinHeight() * 5f);
+        textStatFuerza.setPosition(Gdx.graphics.getWidth() / 1.75f, Gdx.graphics.getHeight() - textStatFuerza.getMinHeight() * 6f);
+        textStatVida.setPosition(Gdx.graphics.getWidth() / 1.75f, Gdx.graphics.getHeight() - textStatVida.getMinHeight() * 7f);
+        textStatArmadura.setPosition(Gdx.graphics.getWidth() / 1.75f, Gdx.graphics.getHeight() - textStatArmadura.getMinHeight() * 8f);
 
 
         if (Gdx.app.getType() == Application.ApplicationType.Android){
@@ -154,18 +183,15 @@ public class ChooseCharacterScreen implements Screen {
             imgBtnRight.getImage().setScale(1.5f);
             imgBtnLeft.setPosition(0 + btn_left.getWidth() * 2, Gdx.graphics.getHeight() / 2 - btn_left.getHeight() / 2);
             imgBtnRight.setPosition(0 + btn_right.getWidth() * 11.75f, Gdx.graphics.getHeight() / 2 - btn_right.getHeight() / 2);
-            titolAxe.setPosition(0 + chooseBox.getWidth() * 2, Gdx.graphics.getHeight() / 2 + chooseBox.getHeight() * 1.5f);
-            titolWarhammer.setPosition(0 + chooseBox.getWidth() * 2, Gdx.graphics.getHeight() / 2 + chooseBox.getHeight() * 1.5f);
-            titolShield.setPosition(0 + chooseBox.getWidth() * 2, Gdx.graphics.getHeight() / 2 + chooseBox.getHeight() * 1.5f);
+            titolCharacter.setPosition(0 + chooseBox.getWidth() * 2, Gdx.graphics.getHeight() / 2 + chooseBox.getHeight() * 1.5f);
+            textoInicio.setPosition(Gdx.graphics.getWidth() / 2 - textoInicio.getMinWidth() / 2, Gdx.graphics.getHeight() - textoInicio.getMinHeight());
         } else {
             imgBtnPlay.setPosition(Gdx.graphics.getWidth() / 2 + imgBtnPlay.getWidth(), 0 + imgBtnPlay.getHeight());
             imgChooseBox.setScale(2f);
             imgChooseBox.setPosition(0 + chooseBox.getWidth(), Gdx.graphics.getHeight() / 2 - chooseBox.getHeight());
             imgBtnLeft.setPosition(0 + btn_left.getWidth() / 2, Gdx.graphics.getHeight() / 2 - btn_left.getHeight() / 2);
             imgBtnRight.setPosition(0 + btn_right.getWidth() * 7, Gdx.graphics.getHeight() / 2 - btn_right.getHeight() / 2);
-            titolAxe.setPosition(0 + chooseBox.getWidth(), Gdx.graphics.getHeight() / 2 + chooseBox.getHeight() * 1.1f);
-            titolWarhammer.setPosition(0 + chooseBox.getWidth(), Gdx.graphics.getHeight() / 2 + chooseBox.getHeight() * 1.1f);
-            titolShield.setPosition(0 + chooseBox.getWidth(), Gdx.graphics.getHeight() / 2 + chooseBox.getHeight() * 1.1f);
+            titolCharacter.setPosition(0 + chooseBox.getWidth(), Gdx.graphics.getHeight() / 2 + chooseBox.getHeight() * 1.1f);
         }
 
         Gdx.input.setInputProcessor(stage);
@@ -177,7 +203,6 @@ public class ChooseCharacterScreen implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 game.setScreen(new GameScreen(stage.getBatch(), stage.getViewport(), selectedCharacter));
-
                 return true;
             }
         });
@@ -191,26 +216,47 @@ public class ChooseCharacterScreen implements Screen {
                 }
 
                 if (selectedCharacter == 4){
+                    titolCharacter.setText("Axe");
                     stage.getActors().get(4).setVisible(true);
-                    stage.getActors().get(7).setVisible(true);
                     stage.getActors().get(5).setVisible(false);
-                    stage.getActors().get(8).setVisible(false);
                     stage.getActors().get(6).setVisible(false);
-                    stage.getActors().get(9).setVisible(false);
+                    //Stats
+                    velocidad = 3;
+                    fuerza = 2;
+                    vidas = 2;
+                    armadura = 0;
+                    textStatVel.setText("Velocidad: " + velocidad);
+                    textStatFuerza.setText("Fuerza: " + fuerza);
+                    textStatVida.setText("Vidas: " + vidas);
+                    textStatArmadura.setText("Armadura: " + armadura);
                 } else if (selectedCharacter == 5){
+                    titolCharacter.setText("Warhammer");
                     stage.getActors().get(5).setVisible(true);
-                    stage.getActors().get(8).setVisible(true);
                     stage.getActors().get(4).setVisible(false);
-                    stage.getActors().get(7).setVisible(false);
                     stage.getActors().get(6).setVisible(false);
-                    stage.getActors().get(9).setVisible(false);
+                    //Stats
+                    velocidad = 3;
+                    fuerza = 2;
+                    vidas = 2;
+                    armadura = 0;
+                    textStatVel.setText("Velocidad: " + velocidad);
+                    textStatFuerza.setText("Fuerza: " + fuerza);
+                    textStatVida.setText("Vidas: " + vidas);
+                    textStatArmadura.setText("Armadura: " + armadura);
                 } else if (selectedCharacter == 6){
+                    titolCharacter.setText("Shield");
                     stage.getActors().get(6).setVisible(true);
-                    stage.getActors().get(9).setVisible(true);
                     stage.getActors().get(4).setVisible(false);
-                    stage.getActors().get(7).setVisible(false);
                     stage.getActors().get(5).setVisible(false);
-                    stage.getActors().get(8).setVisible(false);
+                    //Stats
+                    velocidad = 3;
+                    fuerza = 1;
+                    vidas = 3;
+                    armadura = 1;
+                    textStatVel.setText("Velocidad: " + velocidad);
+                    textStatFuerza.setText("Fuerza: " + fuerza);
+                    textStatVida.setText("Vidas: " + vidas);
+                    textStatArmadura.setText("Armadura: " + armadura);
                 }
 
                 return true;
@@ -226,26 +272,47 @@ public class ChooseCharacterScreen implements Screen {
                 }
 
                 if (selectedCharacter == 4){
+                    titolCharacter.setText("Axe");
                     stage.getActors().get(4).setVisible(true);
-                    stage.getActors().get(7).setVisible(true);
                     stage.getActors().get(5).setVisible(false);
-                    stage.getActors().get(8).setVisible(false);
                     stage.getActors().get(6).setVisible(false);
-                    stage.getActors().get(9).setVisible(false);
+                    //Stats
+                    velocidad = 3;
+                    fuerza = 2;
+                    vidas = 2;
+                    armadura = 0;
+                    textStatVel.setText("Velocidad: " + velocidad);
+                    textStatFuerza.setText("Fuerza: " + fuerza);
+                    textStatVida.setText("Vidas: " + vidas);
+                    textStatArmadura.setText("Armadura: " + armadura);
                 } else if (selectedCharacter == 5){
+                    titolCharacter.setText("Warhammer");
                     stage.getActors().get(5).setVisible(true);
-                    stage.getActors().get(8).setVisible(true);
                     stage.getActors().get(4).setVisible(false);
-                    stage.getActors().get(7).setVisible(false);
                     stage.getActors().get(6).setVisible(false);
-                    stage.getActors().get(9).setVisible(false);
+                    //Stats
+                    velocidad = 3;
+                    fuerza = 2;
+                    vidas = 2;
+                    armadura = 0;
+                    textStatVel.setText("Velocidad: " + velocidad);
+                    textStatFuerza.setText("Fuerza: " + fuerza);
+                    textStatVida.setText("Vidas: " + vidas);
+                    textStatArmadura.setText("Armadura: " + armadura);
                 } else if (selectedCharacter == 6){
+                    titolCharacter.setText("Shield");
                     stage.getActors().get(6).setVisible(true);
-                    stage.getActors().get(9).setVisible(true);
                     stage.getActors().get(4).setVisible(false);
-                    stage.getActors().get(7).setVisible(false);
                     stage.getActors().get(5).setVisible(false);
-                    stage.getActors().get(8).setVisible(false);
+                    //Stats
+                    velocidad = 3;
+                    fuerza = 1;
+                    vidas = 3;
+                    armadura = 1;
+                    textStatVel.setText("Velocidad: " + velocidad);
+                    textStatFuerza.setText("Fuerza: " + fuerza);
+                    textStatVida.setText("Vidas: " + vidas);
+                    textStatArmadura.setText("Armadura: " + armadura);
                 }
 
                 return true;
@@ -283,6 +350,6 @@ public class ChooseCharacterScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        stage.dispose();
     }
 }
