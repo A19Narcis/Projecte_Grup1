@@ -99,10 +99,10 @@ public class GameScreen implements Screen {
 
 
         Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
-        Zombie zombie2 = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
         enemies.add(zombie);
-        enemies.add(zombie2);
         stage.addActor(zombie);
+        Zombie zombie2 = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
+        enemies.add(zombie2);
         stage.addActor(zombie2);
         corazonesTexture = AssetManager.hp_player;
 
@@ -150,18 +150,7 @@ public class GameScreen implements Screen {
             stage.getViewport().apply();
         }
 
-
-
-        //Gestor d'entrada la classe InputHandler
-        Gdx.input.setInputProcessor(new InputMultiplexer(stage, new InputAdapter() {
-            @Override
-            public boolean touchDragged(int screenX, int screenY, int pointer) {
-                // Acción a realizar cuando el dedo se mueve fuera del área del botón
-                Vector2 posDedo = new Vector2(screenX, screenY);
-                btnU_img.screenToLocalCoordinates(posDedo);
-                return true;
-            }
-        }));
+        Gdx.input.setInputProcessor(stage);
     }
 
 
@@ -271,13 +260,21 @@ public class GameScreen implements Screen {
         renderer.render();
         stage.act(delta);
 
+        for (Zombie zombie1: enemies){
+            for (Zombie zombie2: enemies) {
+                if(zombie1 != zombie2) {
+                    zombie1.colisionWithZombie(zombie2);
+                }
+            }
+        }
+
         for (Jugador player: players){
             for (Zombie zombie: enemies) {
                 if(zombie.isDead()){
-                    zombie.remove();
+                    enemies.remove(zombie);
                 }else {
-                    zombie.calculateMovement(jugador.getCollisionRectPlayer(), delta);
                     zombie.colisionWithPlayer(jugador);
+                    zombie.calculateMovement(jugador.getCollisionRectPlayer(), delta);
                     player.attacking(zombie);
                 }
             }
@@ -365,8 +362,11 @@ public class GameScreen implements Screen {
         return stage;
     }
 
-    public Jugador getJugador() {
-        return jugador;
+    public ArrayList<Zombie> getEnemies() {
+        return enemies;
     }
 
+    public ArrayList<Jugador> getPlayers() {
+        return players;
+    }
 }

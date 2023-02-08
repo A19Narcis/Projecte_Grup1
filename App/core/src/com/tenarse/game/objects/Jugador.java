@@ -309,33 +309,32 @@ public class Jugador extends Actor {
             switch (direction){
                 case Settings.PRESSED_UP:
                     if ((calculoY > 0 && calculoY < 24) && (calculoX > -24 && calculoX < 24) && doDamage) {
-                        zombie.setDamage(Settings.PLAYER_STRENGTH);
-                        zombie.die();
-
+                        setDamageZombie(zombie);
                     }
                     break;
                 case Settings.PRESSED_LEFT:
                     if ((calculoY > -24 && calculoY < 24) && (calculoX > -24 && calculoX < 0) && doDamage) {
-                        zombie.setDamage(Settings.PLAYER_STRENGTH);
-                        zombie.die();
-
+                        setDamageZombie(zombie);
                     }
                     break;
                 case Settings.PRESSED_DOWN:
                     if ((calculoY > -24 && calculoY < 0) && (calculoX > -24 && calculoX < 24) && doDamage) {
-                        zombie.setDamage(Settings.PLAYER_STRENGTH);
-                        zombie.die();
+                        setDamageZombie(zombie);
 
                     }
                     break;
                 case Settings.PRESSED_RIGHT:
                     if ((calculoY > -24 && calculoY < 24) && (calculoX > 0 && calculoX < 24) && doDamage) {
-                        zombie.setDamage(Settings.PLAYER_STRENGTH);
-                        zombie.die();
+                        setDamageZombie(zombie);
 
                     }
                     break;
             }
         }
+    }
+
+    private void setDamageZombie(Zombie zombie) {
+        zombie.setDamage(Settings.PLAYER_STRENGTH);
+        zombie.die();
     }
 }

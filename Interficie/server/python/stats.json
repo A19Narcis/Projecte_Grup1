@@ -1,23 +1,42 @@
 [
     {
-        "velocidad":3,
-        "fuerza":3,
-        "vida":3,
-        "armadura":0,
-        "__v":0
-    },
-    {
+        "nombreTipo":"Axe",
         "velocidad":3,
         "fuerza":2,
-        "vida":3,
-        "armadura":0,
-        "__v":0
+        "vida":2,
+        "armadura":0.0,
+        "cantidadMinuto":null
     },
     {
-        "velocidad":2,
+        "nombreTipo":"Warhammer",
+        "velocidad":3,
+        "fuerza":2,
+        "vida":2,
+        "armadura":0.0,
+        "cantidadMinuto":null
+    },
+    {
+        "nombreTipo":"Shield",
+        "velocidad":3,
         "fuerza":1,
-        "vida":1,
-        "armadura":1,
-        "__v":0
+        "vida":3,
+        "armadura":2.0,
+        "cantidadMinuto":null
+    },
+    {
+        "nombreTipo":"Zombie",
+        "velocidad":3,
+        "fuerza":2,
+        "vida":2,
+        "armadura":null,
+        "cantidadMinuto":10.0
+    },
+    {
+        "nombreTipo":"Boss",
+        "velocidad":3,
+        "fuerza":2,
+        "vida":2,
+        "armadura":null,
+        "cantidadMinuto":1.0
     }
 ]

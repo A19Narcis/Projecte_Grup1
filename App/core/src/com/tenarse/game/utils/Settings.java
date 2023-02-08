@@ -23,7 +23,7 @@ public class Settings {
     public static final int ZOMBIE_WIDTH = 32;
     public static final int ZOMBIE_HEIGHT = 32;
     public static final int ZOMBIE_VELOCITY = 50;
-    public static final int ZOMBIE_LIFE = 1;
+    public static final int ZOMBIE_LIFE = 2;
 
     //Propietats Boss
     public static final int BOSS_WIDTH = 45;
