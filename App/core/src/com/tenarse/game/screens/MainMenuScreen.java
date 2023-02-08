@@ -44,6 +44,24 @@ public class MainMenuScreen implements Screen {
         this.game = game;
 
         //Connexió NodeJS
+        HttpRequestBuilder requestBuilder = new HttpRequestBuilder();
+        final Net.HttpRequest httpRequest = requestBuilder.newRequest().method(Net.HttpMethods.GET).url("http://admin.alumnes.inspedralbes.cat:7073/getStats").build();
+        Gdx.net.sendHttpRequest(httpRequest, new Net.HttpResponseListener() {
+                @Override
+                public void handleHttpResponse(Net.HttpResponse httpResponse) {
+                    System.out.println(httpResponse.toString());
+                }
+
+                @Override
+                public void failed(Throwable t) {
+
+                }
+
+                @Override
+                public void cancelled() {
+
+                }
+        });
 
         stage = new Stage(new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         background = AssetManager.imgMainMenu;

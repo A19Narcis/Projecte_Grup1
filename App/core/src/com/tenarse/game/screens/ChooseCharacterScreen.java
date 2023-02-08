@@ -18,22 +18,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
-import com.mongodb.client.MongoDatabase;
 import com.tenarse.game.Tenarse;
 import com.tenarse.game.helpers.AssetManager;
 import com.tenarse.game.objects.Jugador;
 import com.tenarse.game.objects.Map;
 import com.tenarse.game.utils.Settings;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
-import org.bson.Document;
 
 public class ChooseCharacterScreen implements Screen {
 
