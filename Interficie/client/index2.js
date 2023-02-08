@@ -179,7 +179,7 @@ var vue_app = new Vue({
             );
         },
 
-        updateStats: function (id, vel, fuerza, vida, armadura) {
+        updateStats: function (id, vel, fuerza, vida, armadura, nombreTipo) {
             console.log(id);
             console.log(vel);
             console.log(fuerza);
@@ -190,6 +190,7 @@ var vue_app = new Vue({
             this.info.values.push(fuerza);
             this.info.values.push(vida);
             this.info.values.push(armadura);
+            this.info.values.push(nombreTipo);
 
             fetch("http://admin.alumnes.inspedralbes.cat:7073/updateStats/",
                 {
@@ -266,7 +267,7 @@ var vue_app = new Vue({
             console.log("fumo skeletons" + type);
             this.new_type = type;
         },
-        handleDrop(event) {
+/*         handleDrop(event) {
             event.preventDefault();
             let file = event.dataTransfer.files[0];
             let reader = new FileReader();
@@ -283,7 +284,17 @@ var vue_app = new Vue({
           },
           handleDragLeave(event) {
             event.target.classList.remove('drop-zone-active');
-          }
+          } */
+
+          openFileDialog() {
+            this.$refs.fileInput.click();
+            this.dialog_2 = true; 
+          },
+          addImage(event) {
+            this.image = event.target.files[0];
+            this.dialog_2 = true;
+            // Do something with the file, such as previewing it or uploading it to a server
+          },
 
     },
 
@@ -317,6 +328,7 @@ var vue_app = new Vue({
             });
         }, 3900)
 
+        
     }
 });
 

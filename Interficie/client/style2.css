@@ -60,22 +60,6 @@ h2 {
 	line-height: 5.9rem;
 }
 
-.selIm1:hover{
-	opacity: 0.5;
-	transition-duration: 0.7;
-}
-.selIm1:checked{
-	opacity: 0.5;
-	transition-duration: 0.7;
-
-
-}
-
-.selIm2:hover{
-	opacity: 0.5;
-	transition-duration: 0.7;
-}
-
 
 .Character{
 	transform: translate(-50%, -50%);
@@ -87,14 +71,33 @@ h2 {
 }
 
 .conta{
+	min-height: 100%;
 	background: linear-gradient( rgba(0,0,0,1) 0%, rgba(0,0,0,1) 65%, rgb(185, 49, 49) 100%);
 	animation: colors 5s ease-in-out infinite;
-	background-size: 150% 150%;
-
+	background-size: 200% 200%;
 }
 
 
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+	height: 100vh;
+	width: 100%;
+  }
+
   
+.card-container {
+    display: flex;
+	flex-wrap: wrap;
+	margin: 0;
+	width: 80%;
+  }
+
+  .card {
+    width: calc(300px - 16px);
+    margin: 12px;
+  }
   .drop-zone-active {
 	background-color: white;
   }

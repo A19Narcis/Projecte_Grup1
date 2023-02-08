@@ -170,20 +170,11 @@ app.post("/getStats", (req, res) => {
 //Actualiza las stats de un tipo de personaje segun el tipo -> req.body.values[0]
 app.post("/updateStats", (req, res) => {
     console.log(req.body.values);
-    var type = '';
+   
     if (!isNaN(req.body.values[0]))
         return;
-    if (req.body.values[2] == 0)
-        type = 'Axe';
-    if (req.body.values[2] == 1)
-        type = 'Warhammer';
-    if (req.body.values[2] == 2)
-        type = 'Shield';
-    if (req.body.values[2] == 3)
-        type = 'Zombie';
-    if (req.body.values[2] == 4)
-        type = 'Boss';
-    
+    var type = req.body.values[7];
+
     let newStats = {}
     if (req.body.values[2] <= 2) {
         newStats = {
@@ -255,7 +246,7 @@ app.get("/getStatsPlayer/:nombreTipo", (req, res) => {
 
 //Delete
 app.post("/delete", (req, res) => {
-    var deletedType = "ZombieEsqueleto6"
+    var deletedType = "ZombieEsqueleto8"
     deleteDB.removeStatsFrom(deletedType, (callback) => {
         res.send(callback)
     })
