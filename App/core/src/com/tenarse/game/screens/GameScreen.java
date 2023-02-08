@@ -98,9 +98,9 @@ public class GameScreen implements Screen {
         stage.addActor(jugador);
 
 
-        Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
-        enemies.add(zombie);
-        stage.addActor(zombie);
+        //Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
+        //enemies.add(zombie);
+        //stage.addActor(zombie);
         corazonesTexture = AssetManager.hp_player;
 
         for (int i = 1; i <= 5/*NumeroVidasJugador*/; i++) {
@@ -147,18 +147,7 @@ public class GameScreen implements Screen {
             stage.getViewport().apply();
         }
 
-
-
-        //Gestor d'entrada la classe InputHandler
-        Gdx.input.setInputProcessor(new InputMultiplexer(stage, new InputAdapter() {
-            @Override
-            public boolean touchDragged(int screenX, int screenY, int pointer) {
-                // Acción a realizar cuando el dedo se mueve fuera del área del botón
-                Vector2 posDedo = new Vector2(screenX, screenY);
-                btnU_img.screenToLocalCoordinates(posDedo);
-                return true;
-            }
-        }));
+        Gdx.input.setInputProcessor(stage);
     }
 
 
@@ -270,17 +259,17 @@ public class GameScreen implements Screen {
 
         for (Jugador player: players){
             for (Zombie zombie: enemies) {
-                if(zombie.isDead()){
-                    zombie.remove();
-                }else {
+                try {
                     zombie.calculateMovement(jugador.getCollisionRectPlayer(), delta);
                     zombie.colisionWithPlayer(jugador);
                     player.attacking(zombie);
+                }catch (Exception e){//Elimina zombies muertos de la lista
+                    zombie.remove();
                 }
             }
         }
 
-        //spawnZombie();
+        spawnZombie();
 
         if (buttonAttackPressed) {
             jugador.startAttack();

@@ -181,36 +181,40 @@ public class Zombie extends Actor{
     }
 
     public void act(float delta){
-        if(vida > 0) {
-            if (!spawned) {
-                stateTime += delta;
-                if (stateTime >= frameTime) {
-                    currentFrame++;
-                    if (currentFrame >= animacionSpawn.length) {
-                        spawned = true;
-                        currentFrame = 0;
+        if(isDead()) {
+            remove();
+        }else{
+            if (vida > 0) {
+                if (!spawned) {
+                    stateTime += delta;
+                    if (stateTime >= frameTime) {
+                        currentFrame++;
+                        if (currentFrame >= animacionSpawn.length) {
+                            spawned = true;
+                            currentFrame = 0;
+                        }
+                        stateTime = 0;
                     }
-                    stateTime = 0;
+                } else {
+                    stateTime += delta;
+                    if (stateTime >= frameTime) {
+                        currentFrame++;
+                        if (currentFrame >= animacionRight.length) {
+                            currentFrame = 0;
+                        }
+                        stateTime = 0;
+                    }
                 }
             } else {
                 stateTime += delta;
                 if (stateTime >= frameTime) {
                     currentFrame++;
-                    if (currentFrame >= animacionRight.length) {
+                    if (currentFrame >= animacionDead.length) {
                         currentFrame = 0;
+                        dead = true;
                     }
                     stateTime = 0;
                 }
-            }
-        }else{
-            stateTime += delta;
-            if (stateTime >= frameTime) {
-                currentFrame++;
-                if (currentFrame >= animacionDead.length) {
-                    currentFrame = 0;
-                    dead = true;
-                }
-                stateTime = 0;
             }
         }
     }
@@ -230,5 +234,15 @@ public class Zombie extends Actor{
 
     public boolean isDead() {
         return dead;
+    }
+
+    public Vector2 getPosition() {
+        return position;
+    }
+
+    public void setPosition(Vector2 position) {
+        this.position = position;
+        collisionRectZombie.x = this.position.x;
+        collisionRectZombie.y = this.position.y;
     }
 }
