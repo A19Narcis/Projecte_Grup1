@@ -161,7 +161,7 @@ app.post("/", (req, res) => {
 })
 
 //Ver las estadisticas de todos los personajes
-app.post("/getStats", (req, res) => {
+app.get("/getStats", (req, res) => {
     readDB.getStats(function (dades) {
         res.send(dades)
     })
@@ -228,7 +228,7 @@ app.post("/newPartida", (req, res) => {
 
 
 //Obtener todas las partidas que hay registradas
-app.post("/getPartidas", (req, res) => {
+app.get("/getPartidas", (req, res) => {
     readDB.getPartidas(function (partidas) {
         res.send(partidas)
     })
