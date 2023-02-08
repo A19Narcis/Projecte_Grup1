@@ -98,9 +98,12 @@ public class GameScreen implements Screen {
         stage.addActor(jugador);
 
 
-        //Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
-        //enemies.add(zombie);
-        //stage.addActor(zombie);
+        Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
+        enemies.add(zombie);
+        stage.addActor(zombie);
+        Zombie zombie2 = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
+        enemies.add(zombie2);
+        stage.addActor(zombie2);
         corazonesTexture = AssetManager.hp_player;
 
         for (int i = 1; i <= 5/*NumeroVidasJugador*/; i++) {
@@ -257,19 +260,27 @@ public class GameScreen implements Screen {
         renderer.render();
         stage.act(delta);
 
-        for (Jugador player: players){
-            for (Zombie zombie: enemies) {
-                try {
-                    zombie.calculateMovement(jugador.getCollisionRectPlayer(), delta);
-                    zombie.colisionWithPlayer(jugador);
-                    player.attacking(zombie);
-                }catch (Exception e){//Elimina zombies muertos de la lista
-                    zombie.remove();
+        for (Zombie zombie1: enemies){
+            for (Zombie zombie2: enemies) {
+                if(zombie1 != zombie2) {
+                    zombie1.colisionWithZombie(zombie2);
                 }
             }
         }
 
-        spawnZombie();
+        for (Jugador player: players){
+            for (Zombie zombie: enemies) {
+                if(zombie.isDead()){
+                    enemies.remove(zombie);
+                }else {
+                    zombie.colisionWithPlayer(jugador);
+                    zombie.calculateMovement(jugador.getCollisionRectPlayer(), delta);
+                    player.attacking(zombie);
+                }
+            }
+        }
+
+        //spawnZombie();
 
         if (buttonAttackPressed) {
             jugador.startAttack();
@@ -351,8 +362,11 @@ public class GameScreen implements Screen {
         return stage;
     }
 
-    public Jugador getJugador() {
-        return jugador;
+    public ArrayList<Zombie> getEnemies() {
+        return enemies;
     }
 
+    public ArrayList<Jugador> getPlayers() {
+        return players;
+    }
 }
