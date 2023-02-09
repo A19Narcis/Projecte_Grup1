@@ -13,10 +13,13 @@ public class Settings {
     public static final int PRESSED_RIGHT = 4;
 
     //Propietats jugador
-    public static final float PLAYER_VELOCITY = 100;
+    public static int PLAYER_VELOCITY = 1;
+    public static int PLAYER_FUERZA = 1;
+    public static int PLAYER_VIDAS = 0;
+    public static int PLAYER_ARMADURA = 0;
+
     public static final int PLAYER_WIDTH = 32;
     public static final int PLAYER_HEIGHT = 32;
-    public static final int PLAYER_STRENGTH = 1;
     public static final long PLAYER_ATTACK_DELAY = 1000000000l;
 
     //Propietats Zombie

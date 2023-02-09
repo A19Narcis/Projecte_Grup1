@@ -20,9 +20,13 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.tenarse.game.Tenarse;
 import com.tenarse.game.helpers.AssetManager;
+import com.tenarse.game.objects.ConnectionNode;
 import com.tenarse.game.objects.Jugador;
 import com.tenarse.game.objects.Map;
 import com.tenarse.game.utils.Settings;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class ChooseCharacterScreen implements Screen {
 
@@ -54,8 +58,31 @@ public class ChooseCharacterScreen implements Screen {
     private Label textStatArmadura;
     private Label titolCharacter;
 
+    private JSONArray fullStats;
+    private JSONObject statsAxe;
+    private JSONObject statsWarhammer;
+    private JSONObject statsShield;
+
     public ChooseCharacterScreen(Tenarse game) {
         this.game = game;
+
+        //NodeJS Connection
+        ConnectionNode nodeJs = new ConnectionNode();
+        synchronized (nodeJs.lock) {
+            try {
+                nodeJs.lock.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        fullStats = nodeJs.getStatsArray();
+
+        //Darle las stats a cada tipo (Axe, Warhammer, Shield)
+        statsAxe = fullStats.getJSONObject(0);
+        statsWarhammer = fullStats.getJSONObject(1);
+        statsShield = fullStats.getJSONObject(2);
+
 
         stage = new Stage(new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 
@@ -154,10 +181,10 @@ public class ChooseCharacterScreen implements Screen {
         if (selectedCharacter == 4){
             titolCharacter.setText("Axe");
             stage.getActors().get(4).setVisible(true);
-            velocidad = 3;
-            fuerza = 2;
-            vidas = 2;
-            armadura = 0;
+            velocidad = (int) statsAxe.get("velocidad");
+            fuerza = (int) statsAxe.get("fuerza");
+            vidas = (int) statsAxe.get("vida");
+            armadura = (int) statsAxe.get("armadura");
             textStatVel.setText("Velocidad: " + velocidad);
             textStatFuerza.setText("Fuerza: " + fuerza);
             textStatVida.setText("Vidas: " + vidas);
@@ -202,7 +229,7 @@ public class ChooseCharacterScreen implements Screen {
         imgBtnPlay.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new GameScreen(stage.getBatch(), stage.getViewport(), selectedCharacter));
+                game.setScreen(new GameScreen(stage.getBatch(), stage.getViewport(), selectedCharacter, velocidad, fuerza, vidas, armadura));
                 return true;
             }
         });
@@ -221,10 +248,10 @@ public class ChooseCharacterScreen implements Screen {
                     stage.getActors().get(5).setVisible(false);
                     stage.getActors().get(6).setVisible(false);
                     //Stats
-                    velocidad = 3;
-                    fuerza = 2;
-                    vidas = 2;
-                    armadura = 0;
+                    velocidad = (int) statsAxe.get("velocidad");
+                    fuerza = (int) statsAxe.get("fuerza");
+                    vidas = (int) statsAxe.get("vida");
+                    armadura = (int) statsAxe.get("armadura");
                     textStatVel.setText("Velocidad: " + velocidad);
                     textStatFuerza.setText("Fuerza: " + fuerza);
                     textStatVida.setText("Vidas: " + vidas);
@@ -235,10 +262,10 @@ public class ChooseCharacterScreen implements Screen {
                     stage.getActors().get(4).setVisible(false);
                     stage.getActors().get(6).setVisible(false);
                     //Stats
-                    velocidad = 3;
-                    fuerza = 2;
-                    vidas = 2;
-                    armadura = 0;
+                    velocidad = (int) statsWarhammer.get("velocidad");
+                    fuerza = (int) statsWarhammer.get("fuerza");
+                    vidas = (int) statsWarhammer.get("vida");
+                    armadura = (int) statsWarhammer.get("armadura");
                     textStatVel.setText("Velocidad: " + velocidad);
                     textStatFuerza.setText("Fuerza: " + fuerza);
                     textStatVida.setText("Vidas: " + vidas);
@@ -249,10 +276,10 @@ public class ChooseCharacterScreen implements Screen {
                     stage.getActors().get(4).setVisible(false);
                     stage.getActors().get(5).setVisible(false);
                     //Stats
-                    velocidad = 3;
-                    fuerza = 1;
-                    vidas = 3;
-                    armadura = 1;
+                    velocidad = (int) statsShield.get("velocidad");
+                    fuerza = (int) statsShield.get("fuerza");
+                    vidas = (int) statsShield.get("vida");
+                    armadura = (int) statsShield.get("armadura");
                     textStatVel.setText("Velocidad: " + velocidad);
                     textStatFuerza.setText("Fuerza: " + fuerza);
                     textStatVida.setText("Vidas: " + vidas);
@@ -277,10 +304,10 @@ public class ChooseCharacterScreen implements Screen {
                     stage.getActors().get(5).setVisible(false);
                     stage.getActors().get(6).setVisible(false);
                     //Stats
-                    velocidad = 3;
-                    fuerza = 2;
-                    vidas = 2;
-                    armadura = 0;
+                    velocidad = (int) statsAxe.get("velocidad");
+                    fuerza = (int) statsAxe.get("fuerza");
+                    vidas = (int) statsAxe.get("vida");
+                    armadura = (int) statsAxe.get("armadura");
                     textStatVel.setText("Velocidad: " + velocidad);
                     textStatFuerza.setText("Fuerza: " + fuerza);
                     textStatVida.setText("Vidas: " + vidas);
@@ -291,10 +318,10 @@ public class ChooseCharacterScreen implements Screen {
                     stage.getActors().get(4).setVisible(false);
                     stage.getActors().get(6).setVisible(false);
                     //Stats
-                    velocidad = 3;
-                    fuerza = 2;
-                    vidas = 2;
-                    armadura = 0;
+                    velocidad = (int) statsWarhammer.get("velocidad");
+                    fuerza = (int) statsWarhammer.get("fuerza");
+                    vidas = (int) statsWarhammer.get("vida");
+                    armadura = (int) statsWarhammer.get("armadura");
                     textStatVel.setText("Velocidad: " + velocidad);
                     textStatFuerza.setText("Fuerza: " + fuerza);
                     textStatVida.setText("Vidas: " + vidas);
@@ -305,10 +332,10 @@ public class ChooseCharacterScreen implements Screen {
                     stage.getActors().get(4).setVisible(false);
                     stage.getActors().get(5).setVisible(false);
                     //Stats
-                    velocidad = 3;
-                    fuerza = 1;
-                    vidas = 3;
-                    armadura = 1;
+                    velocidad = (int) statsShield.get("velocidad");
+                    fuerza = (int) statsShield.get("fuerza");
+                    vidas = (int) statsShield.get("vida");
+                    armadura = (int) statsShield.get("armadura");
                     textStatVel.setText("Velocidad: " + velocidad);
                     textStatFuerza.setText("Fuerza: " + fuerza);
                     textStatVida.setText("Vidas: " + vidas);

@@ -2,27 +2,24 @@ package com.tenarse.game.screens;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Net;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.net.HttpRequestBuilder;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextTooltip;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.tenarse.game.Tenarse;
 import com.tenarse.game.helpers.AssetManager;
+import com.tenarse.game.objects.ConnectionNode;
 import com.tenarse.game.objects.Jugador;
 import com.tenarse.game.objects.Map;
 import com.tenarse.game.utils.Settings;
+
 
 public class MainMenuScreen implements Screen {
 
@@ -42,26 +39,6 @@ public class MainMenuScreen implements Screen {
 
     public MainMenuScreen(Tenarse game){
         this.game = game;
-
-        //Connexió NodeJS
-        HttpRequestBuilder requestBuilder = new HttpRequestBuilder();
-        final Net.HttpRequest httpRequest = requestBuilder.newRequest().method(Net.HttpMethods.GET).url("http://admin.alumnes.inspedralbes.cat:7073/getStats").build();
-        Gdx.net.sendHttpRequest(httpRequest, new Net.HttpResponseListener() {
-                @Override
-                public void handleHttpResponse(Net.HttpResponse httpResponse) {
-                    System.out.println(httpResponse.toString());
-                }
-
-                @Override
-                public void failed(Throwable t) {
-
-                }
-
-                @Override
-                public void cancelled() {
-
-                }
-        });
 
         stage = new Stage(new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         background = AssetManager.imgMainMenu;

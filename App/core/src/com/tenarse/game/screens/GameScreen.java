@@ -64,9 +64,14 @@ public class GameScreen implements Screen {
     ArrayList<Zombie> enemies = new ArrayList<>();
     ArrayList<Jugador> players = new ArrayList<>();
 
-    public GameScreen(Batch prevBatch, Viewport prevViewport, int tipus) {
+    public GameScreen(Batch prevBatch, Viewport prevViewport, int tipus, int velocidad, int fuerza, int vidas, int armaduras) {
 
         shapeRenderer = new ShapeRenderer();
+
+        Settings.PLAYER_VELOCITY = velocidad * 25;
+        Settings.PLAYER_FUERZA = fuerza;
+        Settings.PLAYER_VIDAS = vidas;
+        Settings.PLAYER_ARMADURA = armaduras;
 
         zoomAndroid = 6;
         zoomPc = 3;
@@ -110,13 +115,6 @@ public class GameScreen implements Screen {
 
         corazonesTexture = AssetManager.hp_player;
 
-        for (int i = 1; i <= 5/*NumeroVidasJugador*/; i++) {
-            hp_player = new ImageButton(new TextureRegionDrawable(new TextureRegion(corazonesTexture)));
-            hp_player.setSize(12,12);
-            corazonesArray.add(hp_player);
-            stage.addActor(hp_player);
-        }
-
         if (Gdx.app.getType() == Application.ApplicationType.Android) {//Zoom para Android
             stage.getViewport().setWorldSize(stage.getViewport().getWorldWidth() / zoomAndroid, stage.getViewport().getWorldHeight() / zoomAndroid);
             stage.getViewport().apply();
@@ -152,6 +150,13 @@ public class GameScreen implements Screen {
         } else {
             stage.getViewport().setWorldSize(stage.getViewport().getWorldWidth() / zoomPc, stage.getViewport().getWorldHeight() / zoomPc);
             stage.getViewport().apply();
+        }
+
+        for (int i = 1; i <= Settings.PLAYER_VIDAS; i++) {
+            hp_player = new ImageButton(new TextureRegionDrawable(new TextureRegion(corazonesTexture)));
+            hp_player.setSize(12,12);
+            corazonesArray.add(hp_player);
+            stage.addActor(hp_player);
         }
 
         Gdx.input.setInputProcessor(stage);
@@ -297,9 +302,7 @@ public class GameScreen implements Screen {
             jugador.stopAttack();
         }
 
-        for (int i = 1; i <= corazonesArray.size(); i++) {
-            corazonesArray.get(i-1).setPosition(camera.position.x - (camera.viewportWidth / 2 + 10) + 15 * i, camera.position.y + camera.viewportHeight / 2 - 20);
-        }
+
 
 
         if (Gdx.app.getType() == Application.ApplicationType.Android) {
@@ -309,6 +312,9 @@ public class GameScreen implements Screen {
             btnR_img.setPosition(camera.position.x - camera.viewportWidth / 2 + 40, camera.position.y - camera.viewportHeight / 2 + 20);
 
             btn_atacar.setPosition(camera.position.x + camera.viewportWidth / 2 - 50, camera.position.y - camera.viewportHeight / 2 + 10);
+        }
+        for (int i = 1; i <= corazonesArray.size(); i++) {
+            corazonesArray.get(i-1).setPosition(camera.position.x - (camera.viewportWidth / 2 + 10) + 15 * i, camera.position.y + camera.viewportHeight / 2 - 20);
         }
         stage.draw();
     }
