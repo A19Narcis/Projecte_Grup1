@@ -98,7 +98,7 @@ public class GameScreen implements Screen {
         stage.addActor(jugador);
 
 
-        /*Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
+        Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
         enemies.add(zombie);
         stage.addActor(zombie);
         Zombie zombie2 = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
@@ -106,7 +106,7 @@ public class GameScreen implements Screen {
         stage.addActor(zombie2);
         Zombie zombie3 = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
         enemies.add(zombie3);
-        stage.addActor(zombie3);*/
+        stage.addActor(zombie3);
 
         corazonesTexture = AssetManager.hp_player;
 
@@ -275,7 +275,7 @@ public class GameScreen implements Screen {
 
         for (Zombie zombie1: enemies){
             for (Zombie zombie2: enemies) {
-                if(zombie1 != zombie2 && (!zombie2.isDetected() || !zombie1.isDetected())) {
+                if(zombie1 != zombie2 && !zombie1.isDetected()) {
                     zombie1.colisionWithZombie(zombie2);
                 }
             }
@@ -289,7 +289,7 @@ public class GameScreen implements Screen {
             }
         }
 
-        spawnZombie();
+        //spawnZombie();
 
         if (buttonAttackPressed) {
             jugador.startAttack();
