@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class AssetManager {
 
@@ -47,6 +48,7 @@ public class AssetManager {
     public static Texture btnMovUp, btnMovDown, btnMovLeft, btnMovRight;
     public static Texture btnAtacar;
     public static Texture hp_player;
+    public static Texture armor_player;
 
 
     //Sounds
@@ -55,6 +57,9 @@ public class AssetManager {
     //Font
     public static FreeTypeFontGenerator fontTextBold;
     public static FreeTypeFontGenerator fontTextNormal;
+
+    //Cajas de texto
+    public static Skin skinTextBox;
 
 
     public static void load(){
@@ -368,6 +373,7 @@ public class AssetManager {
         btnMovRight = new Texture(Gdx.files.internal("right_arr.png"));
         btnAtacar = new Texture(Gdx.files.internal("attack.png"));
         hp_player = new Texture(Gdx.files.internal("heart.png"));
+        armor_player = new Texture(Gdx.files.internal("armor.png"));
         imgChooseBox = new Texture(Gdx.files.internal("menuPicker.png"));
         imgLeft_char = new Texture(Gdx.files.internal("Icon_Left.png"));
         imgRight_char = new Texture(Gdx.files.internal("Icon_Right.png"));
@@ -375,6 +381,7 @@ public class AssetManager {
         //Fonts
         fontTextBold = new FreeTypeFontGenerator(Gdx.files.internal("Fonts/boldType.ttf"));
         fontTextNormal = new FreeTypeFontGenerator(Gdx.files.internal("Fonts/normalType.ttf"));
+
     }
 
     public static void dispose() {

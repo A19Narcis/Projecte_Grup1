@@ -12,7 +12,7 @@ public class DesktopLauncher {
 		config.setForegroundFPS(60);
 		config.setWindowedMode(Settings.GAME_WIDTH, Settings.GAME_HEIGHT);
 		config.setTitle("Project Game");
-		config.setResizable(true);
+		config.setResizable(false);
 		new Lwjgl3Application(new Tenarse(), config);
 	}
 }
