@@ -308,23 +308,23 @@ public class Jugador extends Actor {
             float calculoY = zombie.getCollisionRectZombie().y - collisionRectPlayer.y;
             switch (direction){
                 case Settings.PRESSED_UP:
-                    if ((calculoY > 0 && calculoY < 24) && (calculoX > -24 && calculoX < 24) && doDamage) {
+                    if ((calculoY > 0 && calculoY < 32) && (calculoX > -24 && calculoX < 24) && doDamage) {
                         setDamageZombie(zombie);
                     }
                     break;
                 case Settings.PRESSED_LEFT:
-                    if ((calculoY > -24 && calculoY < 24) && (calculoX > -24 && calculoX < 0) && doDamage) {
+                    if ((calculoY > -24 && calculoY < 24) && (calculoX > -32 && calculoX < 0) && doDamage) {
                         setDamageZombie(zombie);
                     }
                     break;
                 case Settings.PRESSED_DOWN:
-                    if ((calculoY > -24 && calculoY < 0) && (calculoX > -24 && calculoX < 24) && doDamage) {
+                    if ((calculoY > -32 && calculoY < 0) && (calculoX > -24 && calculoX < 24) && doDamage) {
                         setDamageZombie(zombie);
 
                     }
                     break;
                 case Settings.PRESSED_RIGHT:
-                    if ((calculoY > -24 && calculoY < 24) && (calculoX > 0 && calculoX < 24) && doDamage) {
+                    if ((calculoY > -24 && calculoY < 24) && (calculoX > 0 && calculoX < 32) && doDamage) {
                         setDamageZombie(zombie);
 
                     }

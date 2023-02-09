@@ -279,9 +279,14 @@ public class GameScreen implements Screen {
         }
 
         for (Zombie zombie1: enemies){
-            for (Zombie zombie2: enemies) {
-                if(zombie1 != zombie2 && (!zombie2.isDetected() || !zombie1.isDetected())) {
-                    zombie1.colisionWithZombie(zombie2);
+            if(!zombie1.isDetected()) {
+                for (Zombie zombie2 : enemies) {
+                    if (!zombie2.isDetected()) {
+                        if (zombie1 != zombie2) {
+                            boolean comprobar = zombie1.colisionWithZombie(zombie2);
+                            System.out.println(comprobar);
+                        }
+                    }
                 }
             }
         }
