@@ -114,7 +114,7 @@ public class Zombie extends Actor{
         collisionRectZombie.y = this.position.y;
     }
 
-    public void colisionWithZombie(Zombie zombie){
+    public boolean colisionWithZombie(Zombie zombie){
             float calculoX = zombie.getCollisionRectZombie().x - collisionRectZombie.x;
             float calculoY = zombie.getCollisionRectZombie().y - collisionRectZombie.y;
             switch (direction){
@@ -140,6 +140,7 @@ public class Zombie extends Actor{
                     break;
             }
             zombie.setDetected(colision);
+            return colision;
     }
 
     public void colisionWithPlayer(Jugador jugador) {
@@ -273,7 +274,7 @@ public class Zombie extends Actor{
         return position;
     }
 
-    public void setPosition(Vector2 position) {
+    public void setPositionZ(Vector2 position) {
         this.position = position;
         collisionRectZombie.x = this.position.x;
         collisionRectZombie.y = this.position.y;
