@@ -2,19 +2,28 @@ package com.tenarse.game.screens;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.loaders.AssetLoader;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -24,7 +33,9 @@ import com.tenarse.game.objects.ConnectionNode;
 import com.tenarse.game.objects.Jugador;
 import com.tenarse.game.objects.Map;
 import com.tenarse.game.utils.Settings;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 
+import org.json.Cookie;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -70,11 +81,13 @@ public class ChooseCharacterScreen implements Screen {
         ConnectionNode nodeJs = new ConnectionNode();
         synchronized (nodeJs.lock) {
             try {
+                nodeJs.getStats();
                 nodeJs.lock.wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+
 
         fullStats = nodeJs.getStatsArray();
 
@@ -152,10 +165,6 @@ public class ChooseCharacterScreen implements Screen {
         textStatVida = new Label("Vidas: " + vidas, labelStyleNormal);
         textStatArmadura = new Label("Armadura: " + armadura, labelStyleNormal);
 
-
-
-
-
         //Add actors
         //stage.addActor(imgBackground);
         stage.addActor(imgBtnPlay);
@@ -213,7 +222,7 @@ public class ChooseCharacterScreen implements Screen {
             titolCharacter.setPosition(0 + chooseBox.getWidth() * 2, Gdx.graphics.getHeight() / 2 + chooseBox.getHeight() * 1.5f);
             textoInicio.setPosition(Gdx.graphics.getWidth() / 2 - textoInicio.getMinWidth() / 2, Gdx.graphics.getHeight() - textoInicio.getMinHeight());
         } else {
-            imgBtnPlay.setPosition(Gdx.graphics.getWidth() / 2 + imgBtnPlay.getWidth(), 0 + imgBtnPlay.getHeight());
+            imgBtnPlay.setPosition(Gdx.graphics.getWidth() / 2 + imgBtnPlay.getWidth() * 1.5f, 0 + imgBtnPlay.getHeight());
             imgChooseBox.setScale(2f);
             imgChooseBox.setPosition(0 + chooseBox.getWidth(), Gdx.graphics.getHeight() / 2 - chooseBox.getHeight());
             imgBtnLeft.setPosition(0 + btn_left.getWidth() / 2, Gdx.graphics.getHeight() / 2 - btn_left.getHeight() / 2);

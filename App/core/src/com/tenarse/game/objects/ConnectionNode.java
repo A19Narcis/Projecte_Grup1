@@ -12,6 +12,9 @@ public class ConnectionNode {
     public final Object lock = new Object();
 
     public ConnectionNode() {
+    }
+
+    public void getStats(){
         //Connexió NodeJS
         HttpRequestBuilder requestBuilder = new HttpRequestBuilder();
         final Net.HttpRequest httpRequest = requestBuilder.newRequest().method(Net.HttpMethods.GET).url("http://admin.alumnes.inspedralbes.cat:7073/getStats").build();
@@ -36,6 +39,10 @@ public class ConnectionNode {
 
             }
         });
+    }
+
+    public void addNewPartida(){
+
     }
 
     public JSONArray getStatsArray() {

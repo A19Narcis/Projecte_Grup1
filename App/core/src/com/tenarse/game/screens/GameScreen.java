@@ -49,9 +49,10 @@ public class GameScreen implements Screen {
 
     public Map map;
 
-    private Texture btnUpTexture, btnDownTexture, btnLeftTexture, btnRightTexture, btnAtacarTexture, corazonesTexture;
-    private ImageButton btnU_img, btnD_img, btnL_img, btnR_img, btn_atacar, hp_player;
+    private Texture btnUpTexture, btnDownTexture, btnLeftTexture, btnRightTexture, btnAtacarTexture, corazonesTexture, armaduraTexture;
+    private ImageButton btnU_img, btnD_img, btnL_img, btnR_img, btn_atacar, hp_player, armor_player;
     private ArrayList<ImageButton> corazonesArray = new ArrayList<>();
+    private ArrayList<ImageButton> armorArray = new ArrayList<>();
 
     private ShapeRenderer shapeRenderer;
 
@@ -114,6 +115,7 @@ public class GameScreen implements Screen {
         stage.addActor(zombie3);*/
 
         corazonesTexture = AssetManager.hp_player;
+        armaduraTexture = AssetManager.armor_player;
 
         if (Gdx.app.getType() == Application.ApplicationType.Android) {//Zoom para Android
             stage.getViewport().setWorldSize(stage.getViewport().getWorldWidth() / zoomAndroid, stage.getViewport().getWorldHeight() / zoomAndroid);
@@ -157,6 +159,13 @@ public class GameScreen implements Screen {
             hp_player.setSize(12,12);
             corazonesArray.add(hp_player);
             stage.addActor(hp_player);
+        }
+
+        for (int i = 0; i < Settings.PLAYER_ARMADURA; i++) {
+            armor_player = new ImageButton(new TextureRegionDrawable(new TextureRegion(armaduraTexture)));
+            armor_player.setSize(12, 12);
+            armorArray.add(armor_player);
+            stage.addActor(armor_player);
         }
 
         Gdx.input.setInputProcessor(stage);
@@ -317,6 +326,9 @@ public class GameScreen implements Screen {
         for (int i = 1; i <= corazonesArray.size(); i++) {
             corazonesArray.get(i-1).setPosition(camera.position.x - (camera.viewportWidth / 2 + 10) + 15 * i, camera.position.y + camera.viewportHeight / 2 - 20);
             corazonesArray.get(i-1).setZIndex(100);
+        }
+        for (int i = 1; i <= armorArray.size(); i++) {
+            armorArray.get(i-1).setPosition(camera.position.x - (camera.viewportWidth / 2 + 10) + 15 * i, camera.position.y + camera.viewportHeight / 2 - 33);
         }
         stage.draw();
     }
