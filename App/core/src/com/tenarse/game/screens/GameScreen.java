@@ -315,7 +315,6 @@ public class GameScreen implements Screen {
 
             btn_atacar.setPosition(camera.position.x + camera.viewportWidth / 2 - 50, camera.position.y - camera.viewportHeight / 2 + 10);
         }
-        //enemies.get(1).setPositionZ(new Vector2(20, 20));
         stage.draw();
     }
 

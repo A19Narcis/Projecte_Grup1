@@ -119,22 +119,22 @@ public class Zombie extends Actor{
             float calculoY = zombie.getCollisionRectZombie().y - collisionRectZombie.y;
             switch (direction){
                 case Settings.PRESSED_UP:
-                    if ((calculoY > 0 && calculoY < 16) && (calculoX > -12 && calculoX < 12)) {
+                    if ((calculoY > 0 && calculoY < 20) && (calculoX > -12 && calculoX < 12)) {
                         colision = true;
                     }
                     break;
                 case Settings.PRESSED_LEFT:
-                    if ((calculoY > -12 && calculoY < 12) && (calculoX > -16 && calculoX < 0)) {
+                    if ((calculoY > -12 && calculoY < 12) && (calculoX > -20 && calculoX < 0)) {
                         colision = true;
                     }
                     break;
                 case Settings.PRESSED_DOWN:
-                    if ((calculoY > -16 && calculoY < 0) && (calculoX > -12 && calculoX < 12)) {
+                    if ((calculoY > -20 && calculoY < 0) && (calculoX > -12 && calculoX < 12)) {
                         colision = true;
                     }
                     break;
                 case Settings.PRESSED_RIGHT:
-                    if ((calculoY > -12 && calculoY < 12) && (calculoX > 0 && calculoX < 16)) {
+                    if ((calculoY > -12 && calculoY < 12) && (calculoX > 0 && calculoX < 20)) {
                         colision = true;
                     }
                     break;
