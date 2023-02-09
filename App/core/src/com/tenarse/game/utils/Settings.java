@@ -5,7 +5,7 @@ public class Settings {
     //Propietats joc
     public static final int GAME_WIDTH = 1080;
     public static final int GAME_HEIGHT = 620;
-    public static final long SPAWN_INTERVAL = 3000000000l;// X nanosegundos * 1000000000 = X Zombies * Segundos
+    public static final long SPAWN_INTERVAL = 3 * 1000000000l;
 
     public static final int PRESSED_UP = 1;
     public static final int PRESSED_LEFT = 2;
@@ -27,9 +27,13 @@ public class Settings {
     public static final int ZOMBIE_HEIGHT = 32;
     public static final int ZOMBIE_VELOCITY = 50;
     public static final int ZOMBIE_LIFE = 2;
+    public static final long ZOMBIE_HIT_DELAY = 1000000000l;
 
     //Propietats Boss
     public static final int BOSS_WIDTH = 45;
     public static final int BOSS_HEIGHT = 45;
     public static final int BOSS_VELOCITY = 500;
+
+    //Efectos
+    public static final long POOL_TIME_DESPAWN = 2000000000l;
 }

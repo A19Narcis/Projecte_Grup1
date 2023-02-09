@@ -23,12 +23,14 @@ public class AssetManager {
     public static Texture imgChooseBox;
     public static Texture imgLeft_char;
     public static Texture imgRight_char;
+    public static Texture sheetPoolBlood;
 
     //Images
     public static TextureRegion playerUpA, playerDownA, playerLeftA, playerRightA;
     public static TextureRegion playerUpW, playerDownW, playerLeftW, playerRightW;
     public static TextureRegion playerUpS, playerDownS, playerLeftS, playerRightS;
     public static TextureRegion zombieUp, zombieDown, zombieLeft, zombieRight, zombieSpawn;
+
 
 
     public static TextureRegion[] playerRightA_Animation, playerLeftA_Animation, playerUpA_Animation, playerDownA_Animation, playerRightA_Attack, playerLeftA_Attack, playerUpA_Attack, playerDownA_Attack;
@@ -41,6 +43,7 @@ public class AssetManager {
     public static TextureRegion[] zombieRight_Animation, zombieLeft_Animation, zombieUp_Animation, zombieDown_Animation, zombieSpawn_Animation, zombieDead_Animation;
 
     public static TextureRegion[] hit_Animation;
+    public static TextureRegion poolBloodImg;
 
     //Skins Buttons
     public static Texture imgPlayBtn, imgSingleBtn, imgMultiBtn, imgReturnBtn;
@@ -82,6 +85,10 @@ public class AssetManager {
         //Hit Sangre
         sheetHit = new Texture(Gdx.files.internal("hit.png"));
         sheetHit.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+
+        //Charco Sangre
+        sheetPoolBlood = new Texture(Gdx.files.internal("poolBlood.png"));
+        sheetPoolBlood.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
         //Sheet PJ AXE
         playerDownA = new TextureRegion(sheetPlayerAxe, 0, 64*10, 64, 64);
@@ -138,6 +145,10 @@ public class AssetManager {
         //Sheet Zombie spawn
         zombieSpawn = new TextureRegion(sheetZombie, 0, 64*20, 64, 64);
         zombieSpawn.flip(false, false);
+
+        //Charco Sangre
+        poolBloodImg = new TextureRegion(sheetPoolBlood, 0, 0, 512, 512);
+        poolBloodImg.flip(false, false);
 
 
         //Animaciones en Arrays[]

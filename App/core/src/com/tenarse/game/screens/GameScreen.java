@@ -269,22 +269,12 @@ public class GameScreen implements Screen {
         renderer.render();
         stage.act(delta);
 
-        int size = enemies.size();
-        for (int i = 0; i < size; i++) {
-            if(enemies.get(i).isDead()){
-                enemies.remove(enemies.get(i));
-                i--;
-                size--;
-            }
-        }
-
         for (Zombie zombie1: enemies){
             if(!zombie1.isDetected()) {
                 for (Zombie zombie2 : enemies) {
                     if (!zombie2.isDetected()) {
                         if (zombie1 != zombie2) {
-                            boolean comprobar = zombie1.colisionWithZombie(zombie2);
-                            System.out.println(comprobar);
+                            zombie1.colisionWithZombie(zombie2);
                         }
                     }
                 }
@@ -299,6 +289,15 @@ public class GameScreen implements Screen {
             }
         }
 
+        int size = enemies.size();
+        for (int i = 0; i < size; i++) {
+            if(enemies.get(i).isDead()){
+                enemies.remove(enemies.get(i));
+                i--;
+                size--;
+            }
+        }
+
         spawnZombie();
 
         if (buttonAttackPressed) {
@@ -306,9 +305,6 @@ public class GameScreen implements Screen {
         } else {
             jugador.stopAttack();
         }
-
-
-
 
         if (Gdx.app.getType() == Application.ApplicationType.Android) {
             btnU_img.setPosition(camera.position.x - camera.viewportWidth / 2 + 20, camera.position.y - camera.viewportHeight / 2 + 40);
@@ -320,6 +316,7 @@ public class GameScreen implements Screen {
         }
         for (int i = 1; i <= corazonesArray.size(); i++) {
             corazonesArray.get(i-1).setPosition(camera.position.x - (camera.viewportWidth / 2 + 10) + 15 * i, camera.position.y + camera.viewportHeight / 2 - 20);
+            corazonesArray.get(i-1).setZIndex(100);
         }
         stage.draw();
     }

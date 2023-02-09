@@ -5,7 +5,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.tenarse.game.effects.HitEffect;
+import com.tenarse.game.effects.PoolBlood;
 import com.tenarse.game.helpers.AssetManager;
 import com.tenarse.game.utils.Settings;
 
@@ -17,6 +19,8 @@ public class Zombie extends Actor{
 
     private int vida;
     private boolean dead;
+    private long timeHited;
+    private boolean hited = false;
 
     private TextureRegion[] animacionRight;
     private TextureRegion[] animacionUp;
@@ -77,7 +81,7 @@ public class Zombie extends Actor{
     }
 
     public void calculateMovement(Rectangle jugador ,float delta){
-        if(spawned) {
+        if(spawned && !hited) {
             float oldX = position.x;
             float oldY = position.y;
             int colisionMov;
@@ -114,7 +118,7 @@ public class Zombie extends Actor{
         collisionRectZombie.y = this.position.y;
     }
 
-    public boolean colisionWithZombie(Zombie zombie){
+    public void colisionWithZombie(Zombie zombie){
             float calculoX = zombie.getCollisionRectZombie().x - collisionRectZombie.x;
             float calculoY = zombie.getCollisionRectZombie().y - collisionRectZombie.y;
             switch (direction){
@@ -140,7 +144,6 @@ public class Zombie extends Actor{
                     break;
             }
             zombie.setDetected(colision);
-            return colision;
     }
 
     public void colisionWithPlayer(Jugador jugador) {
@@ -251,6 +254,9 @@ public class Zombie extends Actor{
                 }
             }
         }
+        if(hited && TimeUtils.nanoTime() - timeHited > Settings.ZOMBIE_HIT_DELAY){
+            hited = false;
+        }
     }
 
     public void draw(Batch batch, float parentAlpha){
@@ -259,11 +265,18 @@ public class Zombie extends Actor{
 
     public void setDamage(int damage) {
         this.vida -= damage;
+        this.position.x = oldX;
+        this.position.y = oldY;
         getStage().addActor(new HitEffect(this.position));
     }
 
     public void die() {
-        currentFrame = 0;
+        if(vida <= 0) {
+            currentFrame = 0;
+            hited = true;
+            timeHited = TimeUtils.nanoTime();
+            getStage().addActor(new PoolBlood(this.position));
+        }
     }
 
     public boolean isDead() {
