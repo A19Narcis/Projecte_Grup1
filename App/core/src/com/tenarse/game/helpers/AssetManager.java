@@ -380,9 +380,9 @@ public class AssetManager {
         }
 
         poolBloodAnimationL2 = new TextureRegion[8];
-        for (int i = 0; i < 2; i++) {
-            for (int j = (poolBloodAnimationL2.length / 2) - 1; j >= 0; j--) {
-                poolBloodAnimationL2[i + (j * 2)] = new TextureRegion(sheetPoolBloodL2, j * 512, i * 512, 512, 512);
+        for (int i = 0; i < poolBloodAnimationL2.length / 2; i++) {
+            for (int j = 0; j < 2; j++) {
+                poolBloodAnimationL2[i + (j * 4)] = new TextureRegion(sheetPoolBloodL2, i * 512, j * 512, 512, 512);
             }
         }
 
