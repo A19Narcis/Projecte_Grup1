@@ -270,12 +270,12 @@ public class Zombie extends Actor{
         getStage().addActor(new HitEffect(this.position));
     }
 
-    public void die() {
+    public void die(int direction) {
         if(vida <= 0) {
             currentFrame = 0;
             hited = true;
             timeHited = TimeUtils.nanoTime();
-            getStage().addActor(new PoolBlood(this.position));
+            getStage().addActor(new PoolBlood(this.position, direction));
         }
     }
 

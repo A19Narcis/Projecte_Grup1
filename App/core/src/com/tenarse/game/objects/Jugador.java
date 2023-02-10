@@ -339,6 +339,6 @@ public class Jugador extends Actor {
 
     private void setDamageZombie(Zombie zombie) {
         zombie.setDamage(Settings.PLAYER_FUERZA);
-        zombie.die();
+        zombie.die(this.direction);
     }
 }
