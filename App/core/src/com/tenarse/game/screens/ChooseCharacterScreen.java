@@ -25,6 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.tenarse.game.Tenarse;
@@ -232,12 +233,12 @@ public class ChooseCharacterScreen implements Screen {
         textStatFuerza.setPosition(Gdx.graphics.getWidth() / 1.75f, Gdx.graphics.getHeight() - textStatFuerza.getMinHeight() * 6f);
         textStatVida.setPosition(Gdx.graphics.getWidth() / 1.75f, Gdx.graphics.getHeight() - textStatVida.getMinHeight() * 7f);
         textStatArmadura.setPosition(Gdx.graphics.getWidth() / 1.75f, Gdx.graphics.getHeight() - textStatArmadura.getMinHeight() * 8f);
-        textErrorNombre.setPosition(Gdx.graphics.getWidth() / 2 - textErrorNombre.getMinWidth() / 2, textErrorNombre.getMinHeight());
-        textUsername.setPosition(Gdx.graphics.getWidth() / 2 - textUsername.getWidth() / 2, textUsername.getMinHeight() + textErrorNombre.getHeight());
-        textNombre.setPosition(Gdx.graphics.getWidth() / 2 - textNombre.getWidth() / 2, textNombre.getMinHeight() + textUsername.getMinHeight() + textErrorNombre.getHeight());
 
 
         if (Gdx.app.getType() == Application.ApplicationType.Android){
+            textUsername.setSize(500, 75);
+            textUsername.getStyle().font.getData().setScale(1.5f);
+            textUsername.setAlignment(Align.center);
             imgBtnPlay.setPosition(Gdx.graphics.getWidth() - imgBtnPlay.getWidth() * 2.5f, 0 + imgBtnPlay.getHeight());
             imgBtnPlay.getImage().setScale(2f);
             imgChooseBox.setScale(3f);
@@ -248,6 +249,9 @@ public class ChooseCharacterScreen implements Screen {
             imgBtnRight.setPosition(0 + btn_right.getWidth() * 11.75f, Gdx.graphics.getHeight() / 2 - btn_right.getHeight() / 2);
             titolCharacter.setPosition(0 + chooseBox.getWidth() * 2, Gdx.graphics.getHeight() / 2 + chooseBox.getHeight() * 1.5f);
             textoInicio.setPosition(Gdx.graphics.getWidth() / 2 - textoInicio.getMinWidth() / 2, Gdx.graphics.getHeight() - textoInicio.getMinHeight());
+            textErrorNombre.setPosition(Gdx.graphics.getWidth() / 2 - textErrorNombre.getMinWidth() / 2, textErrorNombre.getMinHeight());
+            textUsername.setPosition(Gdx.graphics.getWidth() / 2 - textUsername.getWidth() / 2, textUsername.getMinHeight() + textErrorNombre.getHeight() * 1.5f);
+            textNombre.setPosition(Gdx.graphics.getWidth() / 2 - textNombre.getWidth() / 2, textNombre.getMinHeight() + textUsername.getMinHeight() + textErrorNombre.getHeight() * 1.5f);
         } else {
             imgBtnPlay.setPosition(Gdx.graphics.getWidth() / 2 + imgBtnPlay.getWidth() * 1.5f, 0 + imgBtnPlay.getHeight());
             imgChooseBox.setScale(2f);
@@ -255,6 +259,9 @@ public class ChooseCharacterScreen implements Screen {
             imgBtnLeft.setPosition(0 + btn_left.getWidth() / 2, Gdx.graphics.getHeight() / 2 - btn_left.getHeight() / 2);
             imgBtnRight.setPosition(0 + btn_right.getWidth() * 7, Gdx.graphics.getHeight() / 2 - btn_right.getHeight() / 2);
             titolCharacter.setPosition(0 + chooseBox.getWidth(), Gdx.graphics.getHeight() / 2 + chooseBox.getHeight() * 1.1f);
+            textErrorNombre.setPosition(Gdx.graphics.getWidth() / 2 - textErrorNombre.getMinWidth() / 2, textErrorNombre.getMinHeight());
+            textUsername.setPosition(Gdx.graphics.getWidth() / 2 - textUsername.getWidth() / 2, textUsername.getMinHeight() + textErrorNombre.getHeight());
+            textNombre.setPosition(Gdx.graphics.getWidth() / 2 - textNombre.getWidth() / 2, textNombre.getMinHeight() + textUsername.getMinHeight() + textErrorNombre.getHeight());
         }
 
         Gdx.input.setInputProcessor(stage);

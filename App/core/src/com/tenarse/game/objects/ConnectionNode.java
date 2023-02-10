@@ -71,7 +71,7 @@ public class ConnectionNode {
 
 
         Net.HttpRequest httpRequest = new Net.HttpRequest(Net.HttpMethods.POST);
-        httpRequest.setUrl("http://192.168.207.52:7073/newPartida");
+        httpRequest.setUrl("http://192.168.171.178:7073/newPartida");
         String data = partidaJSON.toString();
         httpRequest.setContent(data);
         httpRequest.setHeader("Content-Type", "application/json");

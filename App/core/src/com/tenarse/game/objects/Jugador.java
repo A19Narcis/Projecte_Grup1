@@ -30,6 +30,7 @@ public class Jugador extends Actor {
     private int width, height;
     private boolean isBot;
     private int tipusJugador;
+    private int killsJugador;
 
     private Boolean bntUpIsPressed = false;
     private Boolean bntDownIsPressed = false;
@@ -340,5 +341,25 @@ public class Jugador extends Actor {
     private void setDamageZombie(Zombie zombie) {
         zombie.setDamage(Settings.PLAYER_FUERZA);
         zombie.die(this.direction);
+    }
+
+    public String getTypePlayer(){
+        String tipus = "";
+        if (this.tipusJugador == 1){
+            tipus = "Axe";
+        } else if (this.tipusJugador == 2){
+            tipus = "Warhammer";
+        } else if (this.tipusJugador == 3){
+            tipus = "Shield";
+        }
+        return tipus;
+    }
+
+    public void unaKillMas(){
+        this.killsJugador++;
+    }
+
+    public int getKillsJugador() {
+        return this.killsJugador;
     }
 }
