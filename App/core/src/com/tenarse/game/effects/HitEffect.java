@@ -9,7 +9,6 @@ import com.tenarse.game.helpers.AssetManager;
 public class HitEffect extends Actor {
     private Vector2 position;
 
-    private boolean finished = false;
     private float stateTime = 0;
 
     private int currentFrame = 0;

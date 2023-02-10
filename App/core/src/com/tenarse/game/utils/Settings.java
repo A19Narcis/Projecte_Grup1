@@ -35,5 +35,6 @@ public class Settings {
     public static final int BOSS_VELOCITY = 500;
 
     //Efectos
-    public static final long POOL_TIME_DESPAWN = 2000000000l;
+    public static final long POOL_TIME_DESPAWN = 5000000000l;
+    public static final long POOL_INTERVAL_ANIMATION = 1000000000l;
 }
