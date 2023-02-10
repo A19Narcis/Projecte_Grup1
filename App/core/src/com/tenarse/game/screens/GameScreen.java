@@ -5,11 +5,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
@@ -20,11 +23,14 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.tenarse.game.helpers.AssetManager;
+import com.tenarse.game.objects.ConnectionNode;
 import com.tenarse.game.objects.Jugador;
 import com.tenarse.game.objects.Map;
 import com.tenarse.game.objects.Zombie;
@@ -40,6 +46,8 @@ public class GameScreen implements Screen {
     private Boolean buttonRightPressed = false;
 
     private Boolean buttonAttackPressed = false;
+
+    private String username;
 
     private Stage stage;
     private Jugador jugador;
@@ -60,12 +68,18 @@ public class GameScreen implements Screen {
 
     private OrthogonalTiledMapRenderer renderer;
 
+    private Label puntosText;
+    private int puntosParida;
+    private BitmapFont fontBold;
+
     long lastZombieTime = 0;
 
     ArrayList<Zombie> enemies = new ArrayList<>();
     ArrayList<Jugador> players = new ArrayList<>();
 
-    public GameScreen(Batch prevBatch, Viewport prevViewport, int tipus, int velocidad, int fuerza, int vidas, int armaduras) {
+    public GameScreen(Batch prevBatch, Viewport prevViewport, String username, int tipus, int velocidad, int fuerza, int vidas, int armaduras) {
+
+        this.username = username;
 
         shapeRenderer = new ShapeRenderer();
 
@@ -85,6 +99,7 @@ public class GameScreen implements Screen {
 
         renderer = new OrthogonalTiledMapRenderer(map.getMap());
 
+        tipus = 4;
         if (tipus == 4){
             jugador = new Jugador(map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT, false, 1, map);
             players.add(jugador);
@@ -167,6 +182,26 @@ public class GameScreen implements Screen {
             armorArray.add(armor_player);
             stage.addActor(armor_player);
         }
+
+        //Texto de los personajes
+        FreeTypeFontGenerator.FreeTypeFontParameter parametros = new FreeTypeFontGenerator.FreeTypeFontParameter();
+
+        if (Gdx.app.getType() == Application.ApplicationType.Android){
+            parametros.size = 30;
+        }
+
+        fontBold = AssetManager.fontTextBold.generateFont(parametros);
+
+
+        Label.LabelStyle labelStyleBold = new Label.LabelStyle();
+        labelStyleBold.font = fontBold;
+        labelStyleBold.fontColor = Color.BLACK;
+
+        puntosText = new Label("" + puntosParida, labelStyleBold);
+        puntosText.setAlignment(Align.left);
+
+        stage.addActor(puntosText);
+        puntosText.setZIndex(100);
 
         Gdx.input.setInputProcessor(stage);
     }
@@ -302,6 +337,16 @@ public class GameScreen implements Screen {
         for (int i = 0; i < size; i++) {
             if(enemies.get(i).isDead()){
                 enemies.remove(enemies.get(i));
+                puntosParida = puntosParida + 1;
+                if (puntosParida == 0){
+                    puntosParida = 1;
+                }
+                if (puntosParida == 5){
+                    //Enviar POST de addNewPartida
+                    ConnectionNode nodeJS = new ConnectionNode();
+                    nodeJS.addNewPartida(this.username, "Axe", 35, "43:01", 7342);
+                }
+                puntosText.setText(puntosParida);
                 i--;
                 size--;
             }
@@ -314,6 +359,10 @@ public class GameScreen implements Screen {
         } else {
             jugador.stopAttack();
         }
+
+
+        //1 - 345 ; 2 - 335 ; 3 - 325
+        puntosText.setPosition(camera.position.x - (camera.viewportWidth / 2 - (355 - (10 * Integer.toString(puntosParida).length()))), camera.position.y + camera.viewportHeight / 2 - 20);
 
         if (Gdx.app.getType() == Application.ApplicationType.Android) {
             btnU_img.setPosition(camera.position.x - camera.viewportWidth / 2 + 20, camera.position.y - camera.viewportHeight / 2 + 40);

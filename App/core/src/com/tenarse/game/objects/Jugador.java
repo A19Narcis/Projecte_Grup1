@@ -18,6 +18,10 @@ public class Jugador extends Actor {
     private final int WAR_PLAYER = 2;
     private final int SHI_PLAYER = 3;
 
+    private final int AXE_PLAYER_STAND = 4;
+    private final int WAR_PLAYER_STAND = 5;
+    private final int SHI_PLAYER_STAND = 6;
+
     private int direction = 3;
     private boolean attack;
     private boolean firstAnimationAttack;
@@ -83,7 +87,7 @@ public class Jugador extends Actor {
             animacionAtaqueLeft = AssetManager.playerLeftA_Attack;
             animacionAtaqueUp = AssetManager.playerUpA_Attack;
             animacionAtaqueDown = AssetManager.playerDownA_Attack;
-        } else if (tipusJugador == WAR_PLAYER){/*SUSTITUIR ANIMAIONES DE PEGAR WARHAMER Y SHIELD*/
+        } else if (tipusJugador == WAR_PLAYER){
             animacionRight = AssetManager.playerRightW_Animation;
             animacionLeft = AssetManager.playerLeftW_Animation;
             animacionUp = AssetManager.playerUpW_Animation;
