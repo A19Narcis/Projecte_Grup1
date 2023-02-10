@@ -25,7 +25,7 @@ public class PoolBlood extends Actor {
     private int currentFrame = 0;
     private float frameTime = 0.1f;
 
-    private TextureRegion[] blood_animation = AssetManager.poolBloodAnimationL1;
+    private TextureRegion[] blood_animation = AssetManager.poolBloodAnimationL2;
 
     public PoolBlood(Vector2 position) {
         this.position = position;
@@ -61,5 +61,6 @@ public class PoolBlood extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha){
         batch.draw(blood_animation[currentFrame], this.position.x, this.position.y, width, height);
+        System.out.println(currentFrame);
     }
 }

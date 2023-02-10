@@ -24,7 +24,8 @@ public class AssetManager {
     public static Texture imgChooseBox;
     public static Texture imgLeft_char;
     public static Texture imgRight_char;
-    public static Texture sheetPoolBlood;
+    public static Texture sheetPoolBloodL1;
+    public static Texture sheetPoolBloodL2;
 
     //Images
     public static TextureRegion playerUpA, playerDownA, playerLeftA, playerRightA;
@@ -45,6 +46,7 @@ public class AssetManager {
 
     public static TextureRegion[] hit_Animation;
     public static TextureRegion[] poolBloodAnimationL1;
+    public static TextureRegion[] poolBloodAnimationL2;
 
     //Skins Buttons
     public static Texture imgPlayBtn, imgSingleBtn, imgMultiBtn, imgReturnBtn;
@@ -92,8 +94,10 @@ public class AssetManager {
         sheetHit.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
         //Charco Sangre
-        sheetPoolBlood = new Texture(Gdx.files.internal("bloodLeft1.png"));
-        sheetPoolBlood.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        sheetPoolBloodL1 = new Texture(Gdx.files.internal("bloodLeft1.png"));
+        sheetPoolBloodL1.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        sheetPoolBloodL2 = new Texture(Gdx.files.internal("bloodLeft2.png"));
+        sheetPoolBloodL2.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
         //Sheet PJ AXE
         playerDownA = new TextureRegion(sheetPlayerAxe, 0, 64*10, 64, 64);
@@ -371,13 +375,16 @@ public class AssetManager {
         poolBloodAnimationL1 = new TextureRegion[8];
         for (int j = 1; j >= 0; j--) {
             for (int i = (poolBloodAnimationL1.length / 2) - 1; i >= 0; i--) {
-                if(j == 0) {
-                    poolBloodAnimationL1[(((poolBloodAnimationL1.length - 1) - i) + (j / 2))] = new TextureRegion(sheetPoolBlood, (i / 2) * 512, j * 512, 512, 512);
-                }else{
-                    poolBloodAnimationL1[(((poolBloodAnimationL1.length / 2 - 1) - i) + (j / 2))] = new TextureRegion(sheetPoolBlood, i * 512, j * 512, 512, 512);
-                }
+                poolBloodAnimationL1[(((poolBloodAnimationL1.length / (j + 1)) - 1) - i) + (j / 2)] = new TextureRegion(sheetPoolBloodL1, (i / (j + 1)) * 512, j * 512, 512, 512);
             }
-        }//
+        }
+
+        poolBloodAnimationL2 = new TextureRegion[8];
+        for (int i = 0; i < 2; i++) {
+            for (int j = (poolBloodAnimationL2.length / 2) - 1; j >= 0; j--) {
+                poolBloodAnimationL2[i + (j * 2)] = new TextureRegion(sheetPoolBloodL2, j * 512, i * 512, 512, 512);
+            }
+        }
 
         //Imatge fons menu
         imgMainMenu = new Texture(Gdx.files.internal("mainScreen.png"));
