@@ -31,6 +31,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.tenarse.game.helpers.AssetManager;
 import com.tenarse.game.objects.ConnectionNode;
+import com.tenarse.game.objects.ContadorTiempo;
 import com.tenarse.game.objects.Jugador;
 import com.tenarse.game.objects.Map;
 import com.tenarse.game.objects.Zombie;
@@ -39,6 +40,8 @@ import com.tenarse.game.utils.Settings;
 import java.util.ArrayList;
 
 public class GameScreen implements Screen {
+
+    private ContadorTiempo contadorTiempo;
 
     private Boolean buttonUpPressed = false;
     private Boolean buttonDownPressed = false;
@@ -78,6 +81,8 @@ public class GameScreen implements Screen {
     ArrayList<Jugador> players = new ArrayList<>();
 
     public GameScreen(Batch prevBatch, Viewport prevViewport, String username, int tipus, int velocidad, int fuerza, int vidas, int armaduras) {
+
+        contadorTiempo = new ContadorTiempo();
 
         this.username = username;
 
@@ -201,7 +206,7 @@ public class GameScreen implements Screen {
         puntosText.setAlignment(Align.left);
 
         stage.addActor(puntosText);
-        puntosText.setZIndex(100);
+
 
         Gdx.input.setInputProcessor(stage);
     }
@@ -338,13 +343,18 @@ public class GameScreen implements Screen {
             if(enemies.get(i).isDead()){
                 enemies.remove(enemies.get(i));
                 puntosParida = puntosParida + 1;
+                jugador.unaKillMas();
+                System.out.println(jugador.getKillsJugador());
                 if (puntosParida == 0){
                     puntosParida = 1;
                 }
                 if (puntosParida == 5){
                     //Enviar POST de addNewPartida
+                    contadorTiempo.detener();
+                    String tiempo = contadorTiempo.getTiempo();
+                    System.out.println(tiempo);
                     ConnectionNode nodeJS = new ConnectionNode();
-                    nodeJS.addNewPartida(this.username, "Axe", 35, "43:01", 7342);
+                    nodeJS.addNewPartida(this.username, jugador.getTypePlayer(), jugador.getKillsJugador(), tiempo, puntosParida);
                 }
                 puntosText.setText(puntosParida);
                 i--;
@@ -362,7 +372,6 @@ public class GameScreen implements Screen {
 
 
         //1 - 345 ; 2 - 335 ; 3 - 325
-        puntosText.setPosition(camera.position.x - (camera.viewportWidth / 2 - (355 - (10 * Integer.toString(puntosParida).length()))), camera.position.y + camera.viewportHeight / 2 - 20);
 
         if (Gdx.app.getType() == Application.ApplicationType.Android) {
             btnU_img.setPosition(camera.position.x - camera.viewportWidth / 2 + 20, camera.position.y - camera.viewportHeight / 2 + 40);
@@ -371,7 +380,14 @@ public class GameScreen implements Screen {
             btnR_img.setPosition(camera.position.x - camera.viewportWidth / 2 + 40, camera.position.y - camera.viewportHeight / 2 + 20);
 
             btn_atacar.setPosition(camera.position.x + camera.viewportWidth / 2 - 50, camera.position.y - camera.viewportHeight / 2 + 10);
+            puntosText.setPosition(camera.position.x - (camera.viewportWidth / 2 - (375 - (10 * Integer.toString(puntosParida).length()))), camera.position.y + camera.viewportHeight / 2 - 30);
+            puntosText.setFontScale(0.5f);
+        } else {
+            puntosText.setPosition(camera.position.x - (camera.viewportWidth / 2 - (355 - (10 * Integer.toString(puntosParida).length()))), camera.position.y + camera.viewportHeight / 2 - 20);
         }
+
+        puntosText.setZIndex(100);
+
         for (int i = 1; i <= corazonesArray.size(); i++) {
             corazonesArray.get(i-1).setPosition(camera.position.x - (camera.viewportWidth / 2 + 10) + 15 * i, camera.position.y + camera.viewportHeight / 2 - 20);
             corazonesArray.get(i-1).setZIndex(100);

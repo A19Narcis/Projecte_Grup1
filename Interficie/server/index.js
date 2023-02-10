@@ -167,6 +167,13 @@ app.get("/getStats", (req, res) => {
     })
 })
 
+
+app.post("/getStats", (req, res) => {
+    readDB.getStats(function (dades) {
+        res.send(dades)
+    })
+})
+
 //Actualiza las stats de un tipo de personaje segun el tipo -> req.body.values[0]
 app.post("/updateStats", (req, res) => {
     console.log(req.body.values);
@@ -202,24 +209,9 @@ app.post("/updateStats", (req, res) => {
 //Insertar una nueva partida cuando acaba en la APP
 app.post("/newPartida", (req, res) => {
     const partida = {
-        jugadores: [
-            {
-                username: "Narcis",
-                tipo: "Axe",
-                kills: 12
-            },
-            {
-                username: "Sergi",
-                tipo: "Warhammer",
-                kills: 32
-            },
-            {
-                username: "Teo",
-                tipo: "Shield",
-                kills: 28
-            },
-        ],
-        tiempo: "32:11"
+        jugadores: req.body.jugadores,
+        tiempo: req.body.tiempo,
+        puntos: req.body.puntos
     }
     insertDB.insertPartida(partida, function () {
         res.send({ success: true })
