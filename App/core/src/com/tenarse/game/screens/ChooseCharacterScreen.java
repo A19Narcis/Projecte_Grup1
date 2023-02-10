@@ -54,7 +54,7 @@ public class ChooseCharacterScreen implements Screen {
     private Image imgBackground, imgChooseBox;
     private ImageButton imgBtnPlay, imgBtnLeft, imgBtnRight;
 
-    private int selectedCharacter = 4;
+    private int selectedCharacter = 4; //Para que salga AXE cuando entra
 
     private BitmapFont fontBold, fontNormal, fontSub;
 
@@ -68,11 +68,16 @@ public class ChooseCharacterScreen implements Screen {
     private Label textStatVida;
     private Label textStatArmadura;
     private Label titolCharacter;
+    private Label textNombre;
+    private Label textErrorNombre;
 
     private JSONArray fullStats;
     private JSONObject statsAxe;
     private JSONObject statsWarhammer;
     private JSONObject statsShield;
+
+    private TextField textUsername;
+    private Skin skin;
 
     public ChooseCharacterScreen(Tenarse game) {
         this.game = game;
@@ -164,6 +169,18 @@ public class ChooseCharacterScreen implements Screen {
         textStatFuerza = new Label("Fuerza: " + fuerza, labelStyleNormal);
         textStatVida = new Label("Vidas: " + vidas, labelStyleNormal);
         textStatArmadura = new Label("Armadura: " + armadura, labelStyleNormal);
+        textNombre = new Label("Usuario", labelStyleBold);
+        textErrorNombre = new Label("Necesitas `Usuario` para jugar...", labelStyleNormal);
+        textErrorNombre.setFontScale(1.5f);
+
+        //Caja de texto
+        skin = AssetManager.skinTextBox;
+
+        textUsername = new TextField("", skin);
+        textUsername.setWidth(textUsername.getMinWidth() * 1.5f);
+
+
+
 
         //Add actors
         //stage.addActor(imgBackground);
@@ -181,11 +198,18 @@ public class ChooseCharacterScreen implements Screen {
         stage.addActor(textStatFuerza);
         stage.addActor(textStatVida);
         stage.addActor(textStatArmadura);
+        stage.addActor(textUsername);
+        stage.addActor(textNombre);
+        stage.addActor(textErrorNombre);
 
         //Start Character && Start text
         stage.getActors().get(4).setVisible(false);
         stage.getActors().get(5).setVisible(false);
         stage.getActors().get(6).setVisible(false);
+
+
+        //Amagar el text d'error al principi
+        stage.getActors().get(16).setVisible(false);
 
         if (selectedCharacter == 4){
             titolCharacter.setText("Axe");
@@ -208,6 +232,9 @@ public class ChooseCharacterScreen implements Screen {
         textStatFuerza.setPosition(Gdx.graphics.getWidth() / 1.75f, Gdx.graphics.getHeight() - textStatFuerza.getMinHeight() * 6f);
         textStatVida.setPosition(Gdx.graphics.getWidth() / 1.75f, Gdx.graphics.getHeight() - textStatVida.getMinHeight() * 7f);
         textStatArmadura.setPosition(Gdx.graphics.getWidth() / 1.75f, Gdx.graphics.getHeight() - textStatArmadura.getMinHeight() * 8f);
+        textErrorNombre.setPosition(Gdx.graphics.getWidth() / 2 - textErrorNombre.getMinWidth() / 2, textErrorNombre.getMinHeight());
+        textUsername.setPosition(Gdx.graphics.getWidth() / 2 - textUsername.getWidth() / 2, textUsername.getMinHeight() + textErrorNombre.getHeight());
+        textNombre.setPosition(Gdx.graphics.getWidth() / 2 - textNombre.getWidth() / 2, textNombre.getMinHeight() + textUsername.getMinHeight() + textErrorNombre.getHeight());
 
 
         if (Gdx.app.getType() == Application.ApplicationType.Android){
@@ -238,7 +265,13 @@ public class ChooseCharacterScreen implements Screen {
         imgBtnPlay.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new GameScreen(stage.getBatch(), stage.getViewport(), selectedCharacter, velocidad, fuerza, vidas, armadura));
+                String username = textUsername.getText().replace(" ", "");
+                System.out.println(username.length());
+                if (username.length() > 0){
+                    game.setScreen(new GameScreen(stage.getBatch(), stage.getViewport(), username, selectedCharacter, velocidad, fuerza, vidas, armadura));
+                } else {
+                    stage.getActors().get(16).setVisible(true);
+                }
                 return true;
             }
         });

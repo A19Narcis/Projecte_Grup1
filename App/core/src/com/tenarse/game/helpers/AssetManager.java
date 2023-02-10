@@ -393,6 +393,8 @@ public class AssetManager {
         fontTextBold = new FreeTypeFontGenerator(Gdx.files.internal("Fonts/boldType.ttf"));
         fontTextNormal = new FreeTypeFontGenerator(Gdx.files.internal("Fonts/normalType.ttf"));
 
+        //Skin
+        skinTextBox = new Skin(Gdx.files.internal("skin/uiskin.json"));
     }
 
     public static void dispose() {

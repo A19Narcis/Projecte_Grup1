@@ -36,6 +36,5 @@ public class PoolBlood extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha){
         batch.draw(blood_img, this.position.x, this.position.y, width, height);
-        System.out.println(width + ", " + height);
     }
 }
