@@ -44,7 +44,7 @@ public class AssetManager {
     public static TextureRegion[] zombieRight_Animation, zombieLeft_Animation, zombieUp_Animation, zombieDown_Animation, zombieSpawn_Animation, zombieDead_Animation;
 
     public static TextureRegion[] hit_Animation;
-    public static TextureRegion poolBloodImg;
+    public static TextureRegion[] poolBloodAnimationL1;
 
     //Skins Buttons
     public static Texture imgPlayBtn, imgSingleBtn, imgMultiBtn, imgReturnBtn;
@@ -92,7 +92,7 @@ public class AssetManager {
         sheetHit.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
         //Charco Sangre
-        sheetPoolBlood = new Texture(Gdx.files.internal("poolBlood.png"));
+        sheetPoolBlood = new Texture(Gdx.files.internal("bloodLeft1.png"));
         sheetPoolBlood.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
         //Sheet PJ AXE
@@ -151,9 +151,6 @@ public class AssetManager {
         zombieSpawn = new TextureRegion(sheetZombie, 0, 64*20, 64, 64);
         zombieSpawn.flip(false, false);
 
-        //Charco Sangre
-        poolBloodImg = new TextureRegion(sheetPoolBlood, 0, 0, 512, 512);
-        poolBloodImg.flip(false, false);
 
 
         //Animaciones en Arrays[]
@@ -366,9 +363,21 @@ public class AssetManager {
 
         //Animacion golpe (sangre)
         hit_Animation = new TextureRegion[6];
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < hit_Animation.length; i++) {
             hit_Animation[i] = new TextureRegion(sheetHit, i * 100, 100, 100, 100);
         }
+
+        //Charco Sangre
+        poolBloodAnimationL1 = new TextureRegion[8];
+        for (int j = 1; j >= 0; j--) {
+            for (int i = (poolBloodAnimationL1.length / 2) - 1; i >= 0; i--) {
+                if(j == 0) {
+                    poolBloodAnimationL1[(((poolBloodAnimationL1.length - 1) - i) + (j / 2))] = new TextureRegion(sheetPoolBlood, (i / 2) * 512, j * 512, 512, 512);
+                }else{
+                    poolBloodAnimationL1[(((poolBloodAnimationL1.length / 2 - 1) - i) + (j / 2))] = new TextureRegion(sheetPoolBlood, i * 512, j * 512, 512, 512);
+                }
+            }
+        }//
 
         //Imatge fons menu
         imgMainMenu = new Texture(Gdx.files.internal("mainScreen.png"));
