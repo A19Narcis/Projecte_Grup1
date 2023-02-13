@@ -17,11 +17,14 @@ public class Arrow extends Actor {
     private TextureRegion textureArrow;
     private Rectangle arrowColison;
 
-    public Arrow(int direction, Vector2 position) {
+    private Jugador jugador;
+
+    public Arrow(int direction, Vector2 position, Jugador jugador) {
         this.direction = direction;
         this.position = new Vector2(position.x, position.y - 4);
         arrowColison = new Rectangle(position.x, position.y, 64, 64);
         this.spawnPosition = new Vector2(position.x, position.y  - 4);
+        this.jugador = jugador;
         switch (direction){
             case Settings.PRESSED_UP:
                 textureArrow = AssetManager.arrowUp;
@@ -60,6 +63,7 @@ public class Arrow extends Actor {
         if(arrowColison.overlaps(zombie.getCollisionRectZombie())) {
             zombie.setDamage(Settings.PLAYER_FUERZA);
             zombie.die(this.direction);
+            jugador.removeArrow(this);
             remove();
         }
     }

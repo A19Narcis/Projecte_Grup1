@@ -202,7 +202,7 @@ public class Jugador extends Actor {
             if (stateTime >= frameTime){
                 currentFrame++;
                 if(tipusJugador == 1 && currentFrame == 6){
-                    Arrow arrow= new Arrow(direction, position);
+                    Arrow arrow= new Arrow(direction, position, this);
                     arrowList.add(arrow);
                     getStage().addActor(arrow);
                 }
@@ -369,6 +369,10 @@ public class Jugador extends Actor {
             tipus = "Shield";
         }
         return tipus;
+    }
+
+    public void removeArrow(Arrow arrow){
+        arrowList.remove(arrow);
     }
 
     public void unaKillMas(){
