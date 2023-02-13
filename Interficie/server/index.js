@@ -10,8 +10,15 @@ const insertDB = require('./database/create')
 const updateDB = require('./database/update')
 const deleteDB = require('./database/delete')
 const app = express();
+const http = require('http');
+const { Server } = require("socket.io"); 
+const server = http.createServer(app);
 
-const PORT = 7073;
+const io = new Server(server);
+
+
+const PORT = 7073
+const SOCKET_PORT = 7074
 
 app.use(cookieParser());
 app.use(function (req, res, next) {
@@ -150,6 +157,20 @@ app.post("/getSession", async (req, res) => {
 });
 
 
+/* =========== SOCKETS MULTIJUGADOR =========== */
+//Controlar les connexions i desconnexions
+io.on('connection', (socket) =>{
+    console.log("Player connected");
+    socket.emit('socketID', { id: socket.id })
+    socket.broadcast.emit('newPlayer', { id: socket.id });
+    socket.on('disconnect', () => {
+        console.log('user disconnected');
+    });
+});
+
+server.listen(SOCKET_PORT, () => {
+    console.log("Sockets Running [" + SOCKET_PORT + "]");
+});
 
 /* =========== FUNCIONS RELACIONADES MONGODB =========== */
 
@@ -167,8 +188,7 @@ app.get("/getStats", (req, res) => {
     })
 })
 
-
-app.post("/getStats", (req, res) => {
+app.post("/getStats2", (req, res) => {
     readDB.getStats(function (dades) {
         res.send(dades)
     })
@@ -221,6 +241,11 @@ app.post("/newPartida", (req, res) => {
 
 //Obtener todas las partidas que hay registradas
 app.get("/getPartidas", (req, res) => {
+    readDB.getPartidas(function (partidas) {
+        res.send(partidas)
+    })
+})
+app.post("/getPartidas2", (req, res) => {
     readDB.getPartidas(function (partidas) {
         res.send(partidas)
     })
