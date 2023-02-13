@@ -34,8 +34,8 @@ public class PoolBlood extends Actor {
 
     public PoolBlood(Vector2 position, int direction) {
         this.position = new Vector2(position.x - (Settings.PLAYER_WIDTH/ 2), position.y - (Settings.PLAYER_HEIGHT - 8));
-        this.height = 48;
-        this.width = 48;
+        this.height = 64;
+        this.width = 64;
         aleatorySprite = getRandomIntInclusive(0, 1);
         timeSpawned = TimeUtils.nanoTime();
         intervalAnimation = TimeUtils.nanoTime();
@@ -80,9 +80,10 @@ public class PoolBlood extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha){
+        this.setZIndex(0);
         Sprite bloodSprite = new Sprite(blood_animation[currentFrame]);
         if(direction == Settings.PRESSED_DOWN || direction == Settings.PRESSED_UP){
-            bloodSprite.rotate90(true);
+            bloodSprite.rotate(90);
         }
         batch.draw(bloodSprite, this.position.x, this.position.y, width, height);
     }

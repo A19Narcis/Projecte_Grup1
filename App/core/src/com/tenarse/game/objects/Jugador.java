@@ -12,13 +12,15 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.tenarse.game.helpers.AssetManager;
 import com.tenarse.game.utils.Settings;
 
+import java.util.ArrayList;
+
 public class Jugador extends Actor {
 
-    private final int AXE_PLAYER = 1;
+    private final int Crossbow_PLAYER = 1;
     private final int WAR_PLAYER = 2;
     private final int SHI_PLAYER = 3;
 
-    private final int AXE_PLAYER_STAND = 4;
+    private final int Crossbow_PLAYER_STAND = 4;
     private final int WAR_PLAYER_STAND = 5;
     private final int SHI_PLAYER_STAND = 6;
 
@@ -60,6 +62,8 @@ public class Jugador extends Actor {
 
     private Rectangle collisionRectPlayer;
 
+    private ArrayList<Arrow> arrowList = new ArrayList<>();
+
 
     public Jugador(float x, float y, int width, int height, boolean isBot, int tipusJugador, Map map){
         this.width = width;
@@ -79,7 +83,7 @@ public class Jugador extends Actor {
 
         this.tipusJugador = tipusJugador;
 
-        if (tipusJugador == AXE_PLAYER){
+        if (tipusJugador == Crossbow_PLAYER){
             animacionRight = AssetManager.playerRightA_Animation;
             animacionLeft = AssetManager.playerLeftA_Animation;
             animacionUp = AssetManager.playerUpA_Animation;
@@ -165,9 +169,10 @@ public class Jugador extends Actor {
                     }
                 }
                 if ((Gdx.input.isKeyPressed(Input.Keys.SPACE) || bntAttackPressed) && !attack && TimeUtils.nanoTime() - attackDelay >= Settings.PLAYER_ATTACK_DELAY) {
-                    attack = true;
-                    firstAnimationAttack = true;
-                    doDamage = true;
+                        attack = true;
+                        firstAnimationAttack = true;
+                        doDamage = true;
+
                 }
 
             //Colision personaje con los bordes del mapa
@@ -196,6 +201,11 @@ public class Jugador extends Actor {
             stateTime += delta;
             if (stateTime >= frameTime){
                 currentFrame++;
+                if(tipusJugador == 1 && currentFrame == 6){
+                    Arrow arrow= new Arrow(direction, position);
+                    arrowList.add(arrow);
+                    getStage().addActor(arrow);
+                }
                 if (currentFrame >= animacionAtaqueRight.length){
                     currentFrame = 0;
                     attack = false;
@@ -309,31 +319,37 @@ public class Jugador extends Actor {
 
     public void attacking(Zombie zombie) {
         if (attack) {
-            float calculoX = zombie.getCollisionRectZombie().x - collisionRectPlayer.x;
-            float calculoY = zombie.getCollisionRectZombie().y - collisionRectPlayer.y;
-            switch (direction){
-                case Settings.PRESSED_UP:
-                    if ((calculoY > 0 && calculoY < 32) && (calculoX > -24 && calculoX < 24) && doDamage) {
-                        setDamageZombie(zombie);
-                    }
-                    break;
-                case Settings.PRESSED_LEFT:
-                    if ((calculoY > -24 && calculoY < 24) && (calculoX > -32 && calculoX < 0) && doDamage) {
-                        setDamageZombie(zombie);
-                    }
-                    break;
-                case Settings.PRESSED_DOWN:
-                    if ((calculoY > -32 && calculoY < 0) && (calculoX > -24 && calculoX < 24) && doDamage) {
-                        setDamageZombie(zombie);
+            if (tipusJugador != 1) {
+                float calculoX = zombie.getCollisionRectZombie().x - collisionRectPlayer.x;
+                float calculoY = zombie.getCollisionRectZombie().y - collisionRectPlayer.y;
+                switch (direction) {
+                    case Settings.PRESSED_UP:
+                        if ((calculoY > 0 && calculoY < 32) && (calculoX > -24 && calculoX < 24) && doDamage) {
+                            setDamageZombie(zombie);
+                        }
+                        break;
+                    case Settings.PRESSED_LEFT:
+                        if ((calculoY > -24 && calculoY < 24) && (calculoX > -32 && calculoX < 0) && doDamage) {
+                            setDamageZombie(zombie);
+                        }
+                        break;
+                    case Settings.PRESSED_DOWN:
+                        if ((calculoY > -32 && calculoY < 0) && (calculoX > -24 && calculoX < 24) && doDamage) {
+                            setDamageZombie(zombie);
 
-                    }
-                    break;
-                case Settings.PRESSED_RIGHT:
-                    if ((calculoY > -24 && calculoY < 24) && (calculoX > 0 && calculoX < 32) && doDamage) {
-                        setDamageZombie(zombie);
+                        }
+                        break;
+                    case Settings.PRESSED_RIGHT:
+                        if ((calculoY > -24 && calculoY < 24) && (calculoX > 0 && calculoX < 32) && doDamage) {
+                            setDamageZombie(zombie);
 
-                    }
-                    break;
+                        }
+                        break;
+                }
+            }
+        }else{
+            for (Arrow item: arrowList) {
+                item.setZombie(zombie);
             }
         }
     }
@@ -346,7 +362,7 @@ public class Jugador extends Actor {
     public String getTypePlayer(){
         String tipus = "";
         if (this.tipusJugador == 1){
-            tipus = "Axe";
+            tipus = "Crossbow";
         } else if (this.tipusJugador == 2){
             tipus = "Warhammer";
         } else if (this.tipusJugador == 3){

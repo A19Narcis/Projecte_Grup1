@@ -48,14 +48,14 @@ public class ChooseCharacterScreen implements Screen {
     private Texture background, chooseBox;
     private Texture btnPlay, btn_left, btn_right;
 
-    private Jugador botChooseAxe;
+    private Jugador botChooseCrossbow;
     private Jugador botChooseWarhammer;
     private Jugador botChooseShield;
 
     private Image imgBackground, imgChooseBox;
     private ImageButton imgBtnPlay, imgBtnLeft, imgBtnRight;
 
-    private int selectedCharacter = 4; //Para que salga AXE cuando entra
+    private int selectedCharacter = 4; //Para que salga Crossbow cuando entra
 
     private BitmapFont fontBold, fontNormal, fontSub;
 
@@ -73,7 +73,7 @@ public class ChooseCharacterScreen implements Screen {
     private Label textErrorNombre;
 
     private JSONArray fullStats;
-    private JSONObject statsAxe;
+    private JSONObject statsCrossbow;
     private JSONObject statsWarhammer;
     private JSONObject statsShield;
 
@@ -97,8 +97,8 @@ public class ChooseCharacterScreen implements Screen {
 
         fullStats = nodeJs.getStatsArray();
 
-        //Darle las stats a cada tipo (Axe, Warhammer, Shield)
-        statsAxe = fullStats.getJSONObject(0);
+        //Darle las stats a cada tipo (Crossbow, Warhammer, Shield)
+        statsCrossbow = fullStats.getJSONObject(0);
         statsWarhammer = fullStats.getJSONObject(1);
         statsShield = fullStats.getJSONObject(2);
 
@@ -132,12 +132,12 @@ public class ChooseCharacterScreen implements Screen {
 
         //Characters
         if (Gdx.app.getType() == Application.ApplicationType.Android){
-            botChooseAxe = new Jugador(0 + chooseBox.getWidth() * 1.90f, Gdx.graphics.getHeight() - chooseBox.getHeight() * 4.1f, Settings.PLAYER_WIDTH * 12, Settings.PLAYER_HEIGHT * 12, false, 1, map);
+            botChooseCrossbow = new Jugador(0 + chooseBox.getWidth() * 1.90f, Gdx.graphics.getHeight() - chooseBox.getHeight() * 4.1f, Settings.PLAYER_WIDTH * 12, Settings.PLAYER_HEIGHT * 12, false, 1, map);
             botChooseWarhammer = new Jugador(0 + chooseBox.getWidth() * 1.90f, Gdx.graphics.getHeight() - chooseBox.getHeight() * 4.1f, Settings.PLAYER_WIDTH * 12, Settings.PLAYER_HEIGHT * 12, false, 2, map);
             botChooseShield = new Jugador(0 + chooseBox.getWidth() * 1.90f, Gdx.graphics.getHeight() - chooseBox.getHeight() * 4.1f, Settings.PLAYER_WIDTH * 12, Settings.PLAYER_HEIGHT * 12, false, 3, map);
 
         } else {
-            botChooseAxe = new Jugador(0 + chooseBox.getWidth() - 15, Gdx.graphics.getHeight() - chooseBox.getHeight() * 2 - 70, Settings.PLAYER_WIDTH * 8, Settings.PLAYER_HEIGHT * 8, false, 1, map);
+            botChooseCrossbow = new Jugador(0 + chooseBox.getWidth() - 15, Gdx.graphics.getHeight() - chooseBox.getHeight() * 2 - 70, Settings.PLAYER_WIDTH * 8, Settings.PLAYER_HEIGHT * 8, false, 1, map);
             botChooseWarhammer = new Jugador(0 + chooseBox.getWidth() - 15, Gdx.graphics.getHeight() - chooseBox.getHeight() * 2 - 70, Settings.PLAYER_WIDTH * 8, Settings.PLAYER_HEIGHT * 8, false, 2, map);
             botChooseShield = new Jugador(0 + chooseBox.getWidth() - 15, Gdx.graphics.getHeight() - chooseBox.getHeight() * 2 - 70, Settings.PLAYER_WIDTH * 8, Settings.PLAYER_HEIGHT * 8, false, 3, map);
         }
@@ -163,7 +163,7 @@ public class ChooseCharacterScreen implements Screen {
         labelStyleNormal.font = fontNormal;
         labelStyleNormal.fontColor = Color.BLACK;
 
-        titolCharacter = new Label("Axe", labelStyleBold);
+        titolCharacter = new Label("Crossbow", labelStyleBold);
         Label textoInicio = new Label("¡Elige tu personaje!", labelStyleNormal);
         Label textStatsTitol = new Label("Estadísticas", labelStyleNormal);
         textStatVel = new Label("Velocidad: " + velocidad, labelStyleNormal);
@@ -189,7 +189,7 @@ public class ChooseCharacterScreen implements Screen {
         stage.addActor(imgChooseBox);
         stage.addActor(imgBtnLeft);
         stage.addActor(imgBtnRight);
-        stage.addActor(botChooseAxe);
+        stage.addActor(botChooseCrossbow);
         stage.addActor(botChooseWarhammer);
         stage.addActor(botChooseShield);
         stage.addActor(titolCharacter);
@@ -213,12 +213,12 @@ public class ChooseCharacterScreen implements Screen {
         stage.getActors().get(16).setVisible(false);
 
         if (selectedCharacter == 4){
-            titolCharacter.setText("Axe");
+            titolCharacter.setText("Crossbow");
             stage.getActors().get(4).setVisible(true);
-            velocidad = (int) statsAxe.get("velocidad");
-            fuerza = (int) statsAxe.get("fuerza");
-            vidas = (int) statsAxe.get("vida");
-            armadura = (int) statsAxe.get("armadura");
+            velocidad = (int) statsCrossbow.get("velocidad");
+            fuerza = (int) statsCrossbow.get("fuerza");
+            vidas = (int) statsCrossbow.get("vida");
+            armadura = (int) statsCrossbow.get("armadura");
             textStatVel.setText("Velocidad: " + velocidad);
             textStatFuerza.setText("Fuerza: " + fuerza);
             textStatVida.setText("Vidas: " + vidas);
@@ -292,15 +292,15 @@ public class ChooseCharacterScreen implements Screen {
                 }
 
                 if (selectedCharacter == 4){
-                    titolCharacter.setText("Axe");
+                    titolCharacter.setText("Crossbow");
                     stage.getActors().get(4).setVisible(true);
                     stage.getActors().get(5).setVisible(false);
                     stage.getActors().get(6).setVisible(false);
                     //Stats
-                    velocidad = (int) statsAxe.get("velocidad");
-                    fuerza = (int) statsAxe.get("fuerza");
-                    vidas = (int) statsAxe.get("vida");
-                    armadura = (int) statsAxe.get("armadura");
+                    velocidad = (int) statsCrossbow.get("velocidad");
+                    fuerza = (int) statsCrossbow.get("fuerza");
+                    vidas = (int) statsCrossbow.get("vida");
+                    armadura = (int) statsCrossbow.get("armadura");
                     textStatVel.setText("Velocidad: " + velocidad);
                     textStatFuerza.setText("Fuerza: " + fuerza);
                     textStatVida.setText("Vidas: " + vidas);
@@ -348,15 +348,15 @@ public class ChooseCharacterScreen implements Screen {
                 }
 
                 if (selectedCharacter == 4){
-                    titolCharacter.setText("Axe");
+                    titolCharacter.setText("Crossbow");
                     stage.getActors().get(4).setVisible(true);
                     stage.getActors().get(5).setVisible(false);
                     stage.getActors().get(6).setVisible(false);
                     //Stats
-                    velocidad = (int) statsAxe.get("velocidad");
-                    fuerza = (int) statsAxe.get("fuerza");
-                    vidas = (int) statsAxe.get("vida");
-                    armadura = (int) statsAxe.get("armadura");
+                    velocidad = (int) statsCrossbow.get("velocidad");
+                    fuerza = (int) statsCrossbow.get("fuerza");
+                    vidas = (int) statsCrossbow.get("vida");
+                    armadura = (int) statsCrossbow.get("armadura");
                     textStatVel.setText("Velocidad: " + velocidad);
                     textStatFuerza.setText("Fuerza: " + fuerza);
                     textStatVida.setText("Vidas: " + vidas);
