@@ -104,7 +104,6 @@ public class GameScreen implements Screen {
 
         renderer = new OrthogonalTiledMapRenderer(map.getMap());
 
-        tipus = 4;
         if (tipus == 4){
             jugador = new Jugador(map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT, false, 1, map);
             players.add(jugador);
@@ -122,6 +121,7 @@ public class GameScreen implements Screen {
         //Añadir Actores
         jugador.setName("jugador");
         stage.addActor(jugador);
+        jugador.setZIndex(51);
 
 
         /*Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
@@ -167,8 +167,13 @@ public class GameScreen implements Screen {
             stage.addActor(btnD_img);
             stage.addActor(btnL_img);
             stage.addActor(btnR_img);
-
             stage.addActor(btn_atacar);
+
+            btnU_img.setZIndex(100);
+            btnD_img.setZIndex(100);
+            btnL_img.setZIndex(100);
+            btnR_img.setZIndex(100);
+            btn_atacar.setZIndex(100);
         } else {
             stage.getViewport().setWorldSize(stage.getViewport().getWorldWidth() / zoomPc, stage.getViewport().getWorldHeight() / zoomPc);
             stage.getViewport().apply();
@@ -179,6 +184,7 @@ public class GameScreen implements Screen {
             hp_player.setSize(12,12);
             corazonesArray.add(hp_player);
             stage.addActor(hp_player);
+
         }
 
         for (int i = 0; i < Settings.PLAYER_ARMADURA; i++) {
@@ -394,6 +400,7 @@ public class GameScreen implements Screen {
         }
         for (int i = 1; i <= armorArray.size(); i++) {
             armorArray.get(i-1).setPosition(camera.position.x - (camera.viewportWidth / 2 + 10) + 15 * i, camera.position.y + camera.viewportHeight / 2 - 33);
+            armorArray.get(i-1).setZIndex(100);
         }
         stage.draw();
     }
@@ -403,6 +410,7 @@ public class GameScreen implements Screen {
             Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
             enemies.add(zombie);
             stage.addActor(zombie);
+            zombie.setZIndex(50);
             lastZombieTime = TimeUtils.nanoTime();
         }
     }

@@ -22,6 +22,7 @@ public class HitEffect extends Actor {
 
     @Override
     public void act(float delta) {
+        this.setZIndex(62);
         stateTime += delta;
         if (stateTime >= frameTime){
             currentFrame++;

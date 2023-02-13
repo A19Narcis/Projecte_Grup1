@@ -15,7 +15,12 @@ public class AssetManager {
     public static TmxMapLoader mapLoader;
 
     //Textures
-    public static Texture sheetPlayerAxe;
+    public static Texture sheetPlayerCrossbow;
+    public static Texture sheetArrowL;
+    public static Texture sheetArrowR;
+    public static Texture sheetArrowU;
+    public static Texture sheetArrowD;
+
     public static Texture sheetPlayerWar;
     public static Texture sheetPlayerShield;
     public static Texture sheetZombie;
@@ -35,6 +40,10 @@ public class AssetManager {
     public static TextureRegion playerUpW, playerDownW, playerLeftW, playerRightW;
     public static TextureRegion playerUpS, playerDownS, playerLeftS, playerRightS;
     public static TextureRegion zombieUp, zombieDown, zombieLeft, zombieRight, zombieSpawn;
+    public static TextureRegion arrowLeft;
+    public static TextureRegion arrowUp;
+    public static TextureRegion arrowRight;
+    public static TextureRegion arrowDown;
 
 
 
@@ -78,9 +87,19 @@ public class AssetManager {
         map = mapLoader.load("Mapas/developmentMap/developmentMap.tmx");
 
 
-        //Jugador AXE
-        sheetPlayerAxe = new Texture(Gdx.files.internal("animate_axe_0.png"));
-        sheetPlayerAxe.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        //Jugador Crossbow
+        sheetPlayerCrossbow = new Texture(Gdx.files.internal("animate_crossbow_0.png"));
+        sheetPlayerCrossbow.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+
+        //Flecha
+        sheetArrowL = new Texture(Gdx.files.internal("ArrowLeft.png"));
+        sheetArrowL.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        sheetArrowU = new Texture(Gdx.files.internal("ArrowUp.png"));
+        sheetArrowU.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        sheetArrowR = new Texture(Gdx.files.internal("ArrowRight.png"));
+        sheetArrowR.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        sheetArrowD = new Texture(Gdx.files.internal("ArrowDown.png"));
+        sheetArrowD.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
         //Jugador Warhammer
         sheetPlayerWar = new Texture(Gdx.files.internal("animate_warhammer.png"));
@@ -109,18 +128,23 @@ public class AssetManager {
         sheetPoolBloodR2 = new Texture(Gdx.files.internal("bloodRight2.png"));
         sheetPoolBloodR2.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
-        //Sheet PJ AXE
-        playerDownA = new TextureRegion(sheetPlayerAxe, 0, 64*10, 64, 64);
+        //Sheet PJ Crossbow
+        playerDownA = new TextureRegion(sheetPlayerCrossbow, 0, 64*10, 64, 64);
         playerDownA.flip(false, false);
 
-        playerUpA = new TextureRegion(sheetPlayerAxe, 0, 64*8, 64, 64);
+        playerUpA = new TextureRegion(sheetPlayerCrossbow, 0, 64*8, 64, 64);
         playerUpA.flip(false, false);
 
-        playerLeftA = new TextureRegion(sheetPlayerAxe, 0, 64*9, 64, 64);
+        playerLeftA = new TextureRegion(sheetPlayerCrossbow, 0, 64*9, 64, 64);
         playerLeftA.flip(false, false);
 
-        playerRightA = new TextureRegion(sheetPlayerAxe, 0, 64*11, 64, 64);
+        playerRightA = new TextureRegion(sheetPlayerCrossbow, 0, 64*11, 64, 64);
         playerRightA.flip(false, false);
+
+        arrowLeft = new TextureRegion(sheetArrowL, 0, 0, 64, 64);
+        arrowUp = new TextureRegion(sheetArrowU, 0, 0, 64, 64);
+        arrowDown = new TextureRegion(sheetArrowD, 0, 0, 64, 64);
+        arrowRight = new TextureRegion(sheetArrowR, 0, 0, 64, 64);
 
         //Sheet PJ WAR
         playerDownW = new TextureRegion(sheetPlayerWar, 0, 64*10, 64, 64);
@@ -168,28 +192,28 @@ public class AssetManager {
 
 
         //Animaciones en Arrays[]
-        //Derecha Axe
+        //Derecha Crossbow
         playerRightA_Animation = new TextureRegion[9];
         for (int i = 0; i < playerRightA_Animation.length; i++) {
-            playerRightA_Animation[i] = new TextureRegion(sheetPlayerAxe, i * 64, 64 * 11, 64, 64);
+            playerRightA_Animation[i] = new TextureRegion(sheetPlayerCrossbow, i * 64, 64 * 11, 64, 64);
         }
 
-        //Izquierda Axe
+        //Izquierda Crossbow
         playerLeftA_Animation = new TextureRegion[9];
         for (int i = 0; i < playerLeftA_Animation.length; i++) {
-            playerLeftA_Animation[i] = new TextureRegion(sheetPlayerAxe, i * 64, 64 * 9, 64, 64);
+            playerLeftA_Animation[i] = new TextureRegion(sheetPlayerCrossbow, i * 64, 64 * 9, 64, 64);
         }
 
-        //Arriba Axe
+        //Arriba Crossbow
         playerUpA_Animation = new TextureRegion[9];
         for (int i = 0; i < playerUpA_Animation.length; i++) {
-            playerUpA_Animation[i] = new TextureRegion(sheetPlayerAxe, i * 64, 64 * 8, 64, 64);
+            playerUpA_Animation[i] = new TextureRegion(sheetPlayerCrossbow, i * 64, 64 * 8, 64, 64);
         }
 
-        //Abajo Axe
+        //Abajo Crossbow
         playerDownA_Animation = new TextureRegion[9];
         for (int i = 0; i < playerDownA_Animation.length; i++) {
-            playerDownA_Animation[i] = new TextureRegion(sheetPlayerAxe, i * 64, 64 * 10, 64, 64);
+            playerDownA_Animation[i] = new TextureRegion(sheetPlayerCrossbow, i * 64, 64 * 10, 64, 64);
         }
 
 
@@ -246,28 +270,28 @@ public class AssetManager {
 
 
 
-        //Derecha Axe Ataque
-        playerRightA_Attack = new TextureRegion[6];
+        //Derecha Crossbow Ataque
+        playerRightA_Attack = new TextureRegion[8];
         for (int i = 0; i < playerRightA_Attack.length; i++) {
-            playerRightA_Attack[i] = new TextureRegion(sheetPlayerAxe, i * 64, 64 * 15, 64, 64);
+            playerRightA_Attack[i] = new TextureRegion(sheetPlayerCrossbow, i * 64, 64 * 7, 64, 64);
         }
 
-        //Izquierda Axe Ataque
-        playerLeftA_Attack = new TextureRegion[6];
+        //Izquierda Crossbow Ataque
+        playerLeftA_Attack = new TextureRegion[8];
         for (int i = 0; i < playerLeftA_Attack.length; i++) {
-            playerLeftA_Attack[i] = new TextureRegion(sheetPlayerAxe, i * 64, 64 * 13, 64, 64);
+            playerLeftA_Attack[i] = new TextureRegion(sheetPlayerCrossbow, i * 64, 64 * 5, 64, 64);
         }
 
-        //Arriba Axe Ataque
-        playerUpA_Attack = new TextureRegion[6];
+        //Arriba Crossbow Ataque
+        playerUpA_Attack = new TextureRegion[8];
         for (int i = 0; i < playerUpA_Attack.length; i++) {
-            playerUpA_Attack[i] = new TextureRegion(sheetPlayerAxe, i * 64, 64 * 12, 64, 64);
+            playerUpA_Attack[i] = new TextureRegion(sheetPlayerCrossbow, i * 64, 64 * 4, 64, 64);
         }
 
-        //Abajo Axe Ataque
-        playerDownA_Attack = new TextureRegion[6];
+        //Abajo Crossbow Ataque
+        playerDownA_Attack = new TextureRegion[8];
         for (int i = 0; i < playerDownA_Attack.length; i++) {
-            playerDownA_Attack[i] = new TextureRegion(sheetPlayerAxe, i * 64, 64 * 14, 64, 64);
+            playerDownA_Attack[i] = new TextureRegion(sheetPlayerCrossbow, i * 64, 64 * 6, 64, 64);
         }
 
 
@@ -428,7 +452,7 @@ public class AssetManager {
     }
 
     public static void dispose() {
-        sheetPlayerAxe.dispose();
+        sheetPlayerCrossbow.dispose();
         sheetPlayerWar.dispose();
         sheetPlayerShield.dispose();
         imgMainMenu.dispose();

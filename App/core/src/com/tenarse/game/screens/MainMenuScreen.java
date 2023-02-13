@@ -28,7 +28,7 @@ public class MainMenuScreen implements Screen {
     private Texture btnMenu, btnSingle, btnMulti, btnReturn;
 
     //Imatge jugador que es mou sol
-    private Jugador botIniciAxe;
+    private Jugador botIniciCrossbow;
     private Jugador botIniciWarHam;
     private Jugador botIniciShield;
 
@@ -47,12 +47,12 @@ public class MainMenuScreen implements Screen {
         Map map = new Map();
 
         if (Gdx.app.getType() == Application.ApplicationType.Android){
-            botIniciAxe = new Jugador(-100, 0, Settings.PLAYER_WIDTH * 7, Settings.PLAYER_HEIGHT * 7, true, 1, map);
+            botIniciCrossbow = new Jugador(-100, 0, Settings.PLAYER_WIDTH * 7, Settings.PLAYER_HEIGHT * 7, true, 1, map);
             botIniciWarHam = new Jugador(-200, 0, Settings.PLAYER_WIDTH * 7, Settings.PLAYER_HEIGHT * 7, true, 2, map);
             botIniciShield = new Jugador(-300, 0, Settings.PLAYER_WIDTH * 7, Settings.PLAYER_HEIGHT * 7, true, 3, map);
 
         } else {
-            botIniciAxe = new Jugador(-100, 0, Settings.PLAYER_WIDTH * 4, Settings.PLAYER_HEIGHT * 4, true, 1, map);
+            botIniciCrossbow = new Jugador(-100, 0, Settings.PLAYER_WIDTH * 4, Settings.PLAYER_HEIGHT * 4, true, 1, map);
             botIniciWarHam = new Jugador(-200, 0, Settings.PLAYER_WIDTH * 4, Settings.PLAYER_HEIGHT * 4, true, 2, map);
             botIniciShield = new Jugador(-300, 0, Settings.PLAYER_WIDTH * 4, Settings.PLAYER_HEIGHT * 4, true, 3, map);
         }
@@ -72,7 +72,7 @@ public class MainMenuScreen implements Screen {
         returnBTN = new ImageButton(new TextureRegionDrawable(new TextureRegion(btnReturn)));
 
         stage.addActor(jugarBTN);        //1
-        stage.addActor(botIniciAxe);     //2
+        stage.addActor(botIniciCrossbow);     //2
         stage.addActor(botIniciWarHam);  //3
         stage.addActor(botIniciShield);  //4
         stage.addActor(multiBTN);        //5
@@ -84,7 +84,7 @@ public class MainMenuScreen implements Screen {
         stage.getActors().get(6).setVisible(false);
         stage.getActors().get(7).setVisible(false);
 
-        botIniciAxe.desplazarAutomaticamente(0, Gdx.graphics.getHeight() * 0.163f);
+        botIniciCrossbow.desplazarAutomaticamente(0, Gdx.graphics.getHeight() * 0.163f);
         botIniciWarHam.desplazarAutomaticamente(-200, Gdx.graphics.getHeight() * 0.163f);
         botIniciShield.desplazarAutomaticamente(-400, Gdx.graphics.getHeight() * 0.163f);
 
