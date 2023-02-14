@@ -45,6 +45,11 @@ public class ChooseCharacterScreen implements Screen {
     private Tenarse game;
     private Stage stage;
 
+    private final int MULTIP = 1;
+    private final int SINGLE = 0;
+
+    private int modeJoc;
+
     private Texture background, chooseBox;
     private Texture btnPlay, btn_left, btn_right;
 
@@ -80,8 +85,10 @@ public class ChooseCharacterScreen implements Screen {
     private TextField textUsername;
     private Skin skin;
 
-    public ChooseCharacterScreen(Tenarse game) {
+    public ChooseCharacterScreen(Tenarse game, int modeJoc) {
         this.game = game;
+
+        this.modeJoc = modeJoc;
 
         //NodeJS Connection
         ConnectionNode nodeJs = new ConnectionNode();
@@ -275,7 +282,11 @@ public class ChooseCharacterScreen implements Screen {
                 String username = textUsername.getText().replace(" ", "");
                 System.out.println(username.length());
                 if (username.length() > 0){
-                    game.setScreen(new GameScreen(stage.getBatch(), stage.getViewport(), username, selectedCharacter, velocidad, fuerza, vidas, armadura));
+                    if (modeJoc == SINGLE){
+                        game.setScreen(new GameScreen(stage.getBatch(), stage.getViewport(), username, selectedCharacter, velocidad, fuerza, vidas, armadura));
+                    } else {
+                        game.setScreen(new MultiGameScreen(stage.getBatch(), stage.getViewport(), username, selectedCharacter, velocidad, fuerza, vidas, armadura));
+                    }
                 } else {
                     stage.getActors().get(16).setVisible(true);
                 }

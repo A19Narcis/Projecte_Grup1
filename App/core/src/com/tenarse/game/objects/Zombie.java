@@ -49,8 +49,8 @@ public class Zombie extends Actor{
         vida = Settings.ZOMBIE_LIFE;
         dead = false;
         //createSpawnPosition();
-        position.x = map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2) - 20; //SPAWN EN EL CENTRO PARA PRUEBAS
-        position.y = map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2);
+        //position.x = map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2) - 20; //SPAWN EN EL CENTRO PARA PRUEBAS
+        //position.y = map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2);
 
         collisionRectZombie = new Rectangle();
         collisionRectZombie.width = Settings.ZOMBIE_WIDTH;

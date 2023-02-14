@@ -37,12 +37,15 @@ import org.json.JSONObject;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
-public class GameScreen implements Screen {
+public class MultiGameScreen implements Screen {
+
+    private Socket socket;
 
     private ContadorTiempo contadorTiempo;
 
@@ -54,6 +57,9 @@ public class GameScreen implements Screen {
     private Boolean buttonAttackPressed = false;
 
     private String username;
+    private int tipus;
+
+    private JSONObject coor = new JSONObject();
 
     private Stage stage;
     private Jugador jugador;
@@ -82,11 +88,56 @@ public class GameScreen implements Screen {
 
     ArrayList<Zombie> enemies = new ArrayList<>();
     ArrayList<Jugador> players = new ArrayList<>();
-    public GameScreen(Batch prevBatch, Viewport prevViewport, String username, int tipus, int velocidad, int fuerza, int vidas, int armaduras) {
+
+    ArrayList<String> idJugadores = new ArrayList<>();
+
+    private HashMap<String, Jugador> jugadoresOnline;
+
+    public MultiGameScreen(Batch prevBatch, Viewport prevViewport, String username, int tipus, int velocidad, int fuerza, int vidas, int armaduras) {
 
         contadorTiempo = new ContadorTiempo();
 
+        jugadoresOnline = new HashMap<>();
+
         this.username = username;
+        this.tipus = tipus;
+
+        socket = null;
+        try {
+            socket = IO.socket("http://192.168.207.58:7074/");
+            socket.connect();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
+        JSONObject dadesJugador = new JSONObject();
+        dadesJugador.put("username", this.username);
+        dadesJugador.put("tipo", this.tipus);
+        dadesJugador.put("x", 1200);
+        dadesJugador.put("y", 720);
+
+        socket.emit("user_con", dadesJugador);
+
+
+        socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                Gdx.app.log("SocketIO", "Connected");
+            }
+        }).on("socketID", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject data = (JSONObject) args[0];
+                try {
+                    String id = data.getString("id");
+                    Gdx.app.log("SocketIO", "My ID: " + id);
+                    idJugadores.add(id);
+                } catch (JSONException e) {
+                    System.out.println(e);
+                }
+            }
+        });
+
 
         shapeRenderer = new ShapeRenderer();
 
@@ -106,13 +157,13 @@ public class GameScreen implements Screen {
 
         renderer = new OrthogonalTiledMapRenderer(map.getMap());
 
-        if (tipus == 4){
+        if (this.tipus == 4){
             jugador = new Jugador(map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT, false, 1, map);
             players.add(jugador);
-        } else if (tipus == 5){
+        } else if (this.tipus == 5){
             jugador = new Jugador(map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT, false, 2, map);
             players.add(jugador);
-        } else if (tipus == 6){
+        } else if (this.tipus == 6){
             jugador = new Jugador(map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT, false, 3, map);
             players.add(jugador);
         }
@@ -436,6 +487,24 @@ public class GameScreen implements Screen {
                 camera.position.y = jugador.getCollisionRectPlayer().y + (Settings.PLAYER_HEIGHT / 2);
             }
         }
+
+        coor.put("x", jugador.getCollisionRectPlayer().x);
+        coor.put("y", jugador.getCollisionRectPlayer().y);
+        socket.emit("coor", coor);
+
+        socket.on("coorJugador", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject data = (JSONObject) args[0];
+                try {
+                    int x = data.getInt("x");
+                    int y = data.getInt("y");
+                    Gdx.app.log("Coor", "x: " + x + ", y: " + y);
+                } catch (JSONException e) {
+                    System.out.println(e);
+                }
+            }
+        });
 
     }
 

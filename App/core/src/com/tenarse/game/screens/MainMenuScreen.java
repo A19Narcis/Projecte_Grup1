@@ -27,6 +27,11 @@ public class MainMenuScreen implements Screen {
     private Texture background;
     private Texture btnMenu, btnSingle, btnMulti, btnReturn;
 
+    private final int MULTIP = 1;
+    private final int SINGLE = 0;
+
+    private int modeJoc;
+
     //Imatge jugador que es mou sol
     private Jugador botIniciCrossbow;
     private Jugador botIniciWarHam;
@@ -131,7 +136,8 @@ public class MainMenuScreen implements Screen {
         multiBTN.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-
+                modeJoc = MULTIP;
+                game.setScreen(new ChooseCharacterScreen(game, modeJoc));
                 return true;
             }
         });
@@ -139,8 +145,8 @@ public class MainMenuScreen implements Screen {
         singleBTN.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                //game.setScreen(new GameScreen(stage.getBatch(), stage.getViewport()));
-                game.setScreen(new ChooseCharacterScreen(game));
+                modeJoc = SINGLE;
+                game.setScreen(new ChooseCharacterScreen(game, modeJoc));
                 return true;
             }
         });

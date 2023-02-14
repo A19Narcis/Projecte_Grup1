@@ -15,7 +15,7 @@ import com.tenarse.game.utils.Settings;
 
 import java.util.ArrayList;
 
-public class Jugador extends Actor {
+public class JugadorOnline extends Actor {
 
     private final int Crossbow_PLAYER = 1;
     private final int WAR_PLAYER = 2;
@@ -66,7 +66,7 @@ public class Jugador extends Actor {
     private ArrayList<Arrow> arrowList = new ArrayList<>();
 
 
-    public Jugador(float x, float y, int width, int height, boolean isBot, int tipusJugador, Map map){
+    public JugadorOnline(float x, float y, int width, int height, boolean isBot, int tipusJugador, Map map){
         this.width = width;
         this.height = height;
         position = new Vector2(x, y);
@@ -118,8 +118,9 @@ public class Jugador extends Actor {
         setTouchable(Touchable.enabled);
     }
 
-        public void act(float delta){
+    public void act(float delta){
         super.act(delta);
+        /*
         if (this.isBot){
             this.position.x += 5;
             if (this.position.x >= Gdx.graphics.getWidth()){
@@ -128,53 +129,53 @@ public class Jugador extends Actor {
         } else {
             oldx = this.position.x;
             oldy = this.position.y;
-                if ((Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A) || this.bntLeftIsPressed) && !attack) {
-                    this.direction = Settings.PRESSED_LEFT;
-                    this.position.x -= Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
-                    this.position.x -= 8;
-                    if(map.searchColision(position.x, position.y)) {
-                        this.position.x = oldx;
-                        this.position.y = oldy;
-                    }else {
-                        this.position.x += 8;
-                    }
-                }
-                if ((Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D) || this.bntRightIsPressed) && !attack) {
-                    this.direction = Settings.PRESSED_RIGHT;
-                    this.position.x += Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
+            if ((Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A) || this.bntLeftIsPressed) && !attack) {
+                this.direction = Settings.PRESSED_LEFT;
+                this.position.x -= Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
+                this.position.x -= 8;
+                if(map.searchColision(position.x, position.y)) {
+                    this.position.x = oldx;
+                    this.position.y = oldy;
+                }else {
                     this.position.x += 8;
-                    if(map.searchColision(position.x, position.y)) {
-                        this.position.x = oldx;
-                        this.position.y = oldy;
-                    }else {
-                        this.position.x -= 8;
-                    }
                 }
-                if ((Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W) || this.bntUpIsPressed) && !attack) {
-                    this.direction = Settings.PRESSED_UP;
-                    this.position.y += Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
-                    if(map.searchColision(position.x, position.y)) {
-                        this.position.x = oldx;
-                        this.position.y = oldy;
-                    }
+            }
+            if ((Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D) || this.bntRightIsPressed) && !attack) {
+                this.direction = Settings.PRESSED_RIGHT;
+                this.position.x += Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
+                this.position.x += 8;
+                if(map.searchColision(position.x, position.y)) {
+                    this.position.x = oldx;
+                    this.position.y = oldy;
+                }else {
+                    this.position.x -= 8;
                 }
-                if ((Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S) || this.bntDownIsPressed) && !attack) {
-                    this.direction = Settings.PRESSED_DOWN;
-                    this.position.y -= Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
-                    this.position.y -= 12;
-                    if(map.searchColision(position.x, position.y)) {
-                        this.position.x = oldx;
-                        this.position.y = oldy;
-                    }else {
-                        this.position.y += 12;
-                    }
+            }
+            if ((Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W) || this.bntUpIsPressed) && !attack) {
+                this.direction = Settings.PRESSED_UP;
+                this.position.y += Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
+                if(map.searchColision(position.x, position.y)) {
+                    this.position.x = oldx;
+                    this.position.y = oldy;
                 }
-                if ((Gdx.input.isKeyPressed(Input.Keys.SPACE) || bntAttackPressed) && !attack && TimeUtils.nanoTime() - attackDelay >= Settings.PLAYER_ATTACK_DELAY) {
-                        attack = true;
-                        firstAnimationAttack = true;
-                        doDamage = true;
+            }
+            if ((Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S) || this.bntDownIsPressed) && !attack) {
+                this.direction = Settings.PRESSED_DOWN;
+                this.position.y -= Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
+                this.position.y -= 12;
+                if(map.searchColision(position.x, position.y)) {
+                    this.position.x = oldx;
+                    this.position.y = oldy;
+                }else {
+                    this.position.y += 12;
+                }
+            }
+            if ((Gdx.input.isKeyPressed(Input.Keys.SPACE) || bntAttackPressed) && !attack && TimeUtils.nanoTime() - attackDelay >= Settings.PLAYER_ATTACK_DELAY) {
+                attack = true;
+                firstAnimationAttack = true;
+                doDamage = true;
 
-                }
+            }
 
             //Colision personaje con los bordes del mapa
             if (this.position.y <= 5){
@@ -223,7 +224,7 @@ public class Jugador extends Actor {
                 }
                 stateTime = 0;
             }
-        }
+        }*/
     }
 
     public void draw(Batch batch, float parentAlpha){
