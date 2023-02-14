@@ -201,10 +201,11 @@ public class Jugador extends Actor {
             stateTime += delta;
             if (stateTime >= frameTime){
                 currentFrame++;
-                if(tipusJugador == 1 && currentFrame == 6){
+                if(tipusJugador == 1 && currentFrame == 5){
                     Arrow arrow= new Arrow(direction, position, this);
                     arrowList.add(arrow);
                     getStage().addActor(arrow);
+                    arrow.setZIndex(0);
                 }
                 if (currentFrame >= animacionAtaqueRight.length){
                     currentFrame = 0;
@@ -317,11 +318,11 @@ public class Jugador extends Actor {
         this.bntRightIsPressed = false;
     }
 
-    public void attacking(Zombie zombie) {
+    public void attacking(Zombie zombie, float delta) {
         if (attack) {
             if (tipusJugador != 1) {
-                float calculoX = zombie.getCollisionRectZombie().x - collisionRectPlayer.x;
-                float calculoY = zombie.getCollisionRectZombie().y - collisionRectPlayer.y;
+                float calculoX = zombie.getRectanguloDeteccion().x - collisionRectPlayer.x;
+                float calculoY = zombie.getRectanguloDeteccion().y - collisionRectPlayer.y;
                 switch (direction) {
                     case Settings.PRESSED_UP:
                         if ((calculoY > 0 && calculoY < 32) && (calculoX > -24 && calculoX < 24) && doDamage) {
@@ -348,8 +349,12 @@ public class Jugador extends Actor {
                 }
             }
         }else{
-            for (Arrow item: arrowList) {
-                item.setZombie(zombie);
+            for (int i = 0; i < arrowList.size(); i++) {
+                if(arrowList.get(i).setZombie(zombie)){
+                    i--;
+                }else{
+                    arrowList.get(i).move(delta);
+                }
             }
         }
     }
@@ -381,5 +386,9 @@ public class Jugador extends Actor {
 
     public int getKillsJugador() {
         return this.killsJugador;
+    }
+
+    public ArrayList<Arrow> getArrowList() {
+        return arrowList;
     }
 }

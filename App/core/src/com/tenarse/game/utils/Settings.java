@@ -5,7 +5,7 @@ public class Settings {
     //Propietats joc
     public static final int GAME_WIDTH = 1080;
     public static final int GAME_HEIGHT = 620;
-    public static final long SPAWN_INTERVAL = 3 * 1000000000l;
+    public static final long SPAWN_INTERVAL = 20 * 1000000000l;
 
     public static final int PRESSED_UP = 1;
     public static final int PRESSED_LEFT = 2;
@@ -39,5 +39,6 @@ public class Settings {
     public static final long POOL_INTERVAL_ANIMATION = 1000000000l;
 
     //PROPIETATS ARROW
-    public static final float ARROW_VELOCITY = 800;
+    public static final float ARROW_VELOCITY = 400;
+    public static final float ARROW_VLOCITY_MULTIPLIER = 8;
 }

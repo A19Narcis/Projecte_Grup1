@@ -35,7 +35,7 @@ public class Zombie extends Actor{
 
     private Map map;
 
-    private Rectangle collisionRectZombie;
+    private Rectangle rectanguloDeteccion;
 
     private boolean spawned;
     private boolean colision;
@@ -52,9 +52,9 @@ public class Zombie extends Actor{
         position.x = map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2) - 20; //SPAWN EN EL CENTRO PARA PRUEBAS
         position.y = map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2);
 
-        collisionRectZombie = new Rectangle();
-        collisionRectZombie.width = Settings.ZOMBIE_WIDTH;
-        collisionRectZombie.height = Settings.ZOMBIE_HEIGHT;
+        rectanguloDeteccion = new Rectangle();
+        rectanguloDeteccion.width = Settings.ZOMBIE_WIDTH;
+        rectanguloDeteccion.height = Settings.ZOMBIE_HEIGHT;
 
         animacionRight = AssetManager.zombieRight_Animation;
         animacionLeft = AssetManager.zombieLeft_Animation;
@@ -114,13 +114,13 @@ public class Zombie extends Actor{
                 position.y -= colisionMov;
             }
         }
-        collisionRectZombie.x = this.position.x;
-        collisionRectZombie.y = this.position.y;
+        rectanguloDeteccion.x = this.position.x;
+        rectanguloDeteccion.y = this.position.y;
     }
 
     public void colisionWithZombie(Zombie zombie){
-            float calculoX = zombie.getCollisionRectZombie().x - collisionRectZombie.x;
-            float calculoY = zombie.getCollisionRectZombie().y - collisionRectZombie.y;
+            float calculoX = zombie.getRectanguloDeteccion().x - rectanguloDeteccion.x;
+            float calculoY = zombie.getRectanguloDeteccion().y - rectanguloDeteccion.y;
             switch (direction){
                 case Settings.PRESSED_UP:
                     if ((calculoY > 0 && calculoY < 20) && (calculoX > -12 && calculoX < 12)) {
@@ -149,8 +149,8 @@ public class Zombie extends Actor{
     public void colisionWithPlayer(Jugador jugador) {
         if (!colision) {
             boolean result;
-            float calculoX = jugador.getCollisionRectPlayer().x - collisionRectZombie.x;
-            float calculoY = jugador.getCollisionRectPlayer().y - collisionRectZombie.y;
+            float calculoX = jugador.getCollisionRectPlayer().x - rectanguloDeteccion.x;
+            float calculoY = jugador.getCollisionRectPlayer().y - rectanguloDeteccion.y;
             if (calculoX < 8 && calculoX > -8) {
                 if (calculoY < 16 && calculoY > -24) {
                     result = true;
@@ -211,8 +211,8 @@ public class Zombie extends Actor{
         return result;
     }
 
-    public Rectangle getCollisionRectZombie() {
-        return collisionRectZombie;
+    public Rectangle getRectanguloDeteccion() {
+        return rectanguloDeteccion;
     }
 
     public void act(float delta){
@@ -268,6 +268,7 @@ public class Zombie extends Actor{
         this.position.x = oldX;
         this.position.y = oldY;
         getStage().addActor(new HitEffect(this.position));
+        System.out.println("HITTED");
     }
 
     public void die(int direction) {
@@ -289,8 +290,8 @@ public class Zombie extends Actor{
 
     public void setPositionZ(Vector2 position) {
         this.position = position;
-        collisionRectZombie.x = this.position.x;
-        collisionRectZombie.y = this.position.y;
+        rectanguloDeteccion.x = this.position.x;
+        rectanguloDeteccion.y = this.position.y;
     }
 
     public boolean isDetected() {

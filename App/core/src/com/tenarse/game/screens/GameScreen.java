@@ -23,6 +23,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.tenarse.game.helpers.AssetManager;
+import com.tenarse.game.objects.Arrow;
 import com.tenarse.game.objects.ConnectionNode;
 import com.tenarse.game.objects.ContadorTiempo;
 import com.tenarse.game.objects.Jugador;
@@ -378,14 +379,25 @@ public class GameScreen implements Screen {
                 }
             }
         }
+        if(enemies.size() <= 0){
+            for (Jugador player: players){
+                ArrayList <Arrow> arrowList= player.getArrowList();
+                for(Arrow arrow : arrowList){
+                    arrow.remove();
+                }
+                arrowList.clear();
+            }
+        }
+
 
         for (Jugador player: players){
             for (Zombie zombie: enemies) {
                 zombie.colisionWithPlayer(jugador);
                 zombie.calculateMovement(jugador.getCollisionRectPlayer(), delta);
-                player.attacking(zombie);
+                player.attacking(zombie, delta);
             }
         }
+
 
         int size = enemies.size();
         for (int i = 0; i < size; i++) {

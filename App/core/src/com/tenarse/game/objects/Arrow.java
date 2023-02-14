@@ -2,7 +2,6 @@ package com.tenarse.game.objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -18,54 +17,74 @@ public class Arrow extends Actor {
     private Rectangle arrowColison;
 
     private Jugador jugador;
+    private int width;
+    private int height;
+    boolean firstAnimation = true;
 
     public Arrow(int direction, Vector2 position, Jugador jugador) {
         this.direction = direction;
         this.position = new Vector2(position.x, position.y - 4);
-        arrowColison = new Rectangle(position.x, position.y, 64, 64);
         this.spawnPosition = new Vector2(position.x, position.y  - 4);
         this.jugador = jugador;
         switch (direction){
             case Settings.PRESSED_UP:
                 textureArrow = AssetManager.arrowUp;
+                width = 32;
+                height = 16;
                 break;
             case Settings.PRESSED_LEFT:
                 textureArrow = AssetManager.arrowLeft;
+                width = 16;
+                height = 32;
                 break;
             case Settings.PRESSED_DOWN:
                 textureArrow = AssetManager.arrowDown;
+                width = 32;
+                height = 16;
                 break;
             case Settings.PRESSED_RIGHT:
                 textureArrow = AssetManager.arrowRight;
+                width = 16;
+                height = 32;
                 break;
         }
+        arrowColison = new Rectangle(position.x, position.y, width, height);
+        System.out.println("A: " + this.position.x+ ", J: "+ jugador.getCollisionRectPlayer().x);
     }
 
-   @Override
-    public void act(float delta) {
-       switch (direction){
-           case Settings.PRESSED_UP:
-               this.position.y += Settings.ARROW_VELOCITY * Gdx.graphics.getDeltaTime();
-               break;
-           case Settings.PRESSED_LEFT:
-               this.position.x -= Settings.ARROW_VELOCITY * Gdx.graphics.getDeltaTime();
-               break;
-           case Settings.PRESSED_DOWN:
-               this.position.y -= Settings.ARROW_VELOCITY * Gdx.graphics.getDeltaTime();
-               break;
-           case Settings.PRESSED_RIGHT:
-               this.position.x += Settings.ARROW_VELOCITY * Gdx.graphics.getDeltaTime();
-               break;
-       }
+    public void move(float delta) {
+           switch (direction) {
+               case Settings.PRESSED_UP:
+                   this.position.y += Settings.ARROW_VELOCITY * Gdx.graphics.getDeltaTime();
+                   break;
+               case Settings.PRESSED_LEFT:
+                   this.position.x -= Settings.ARROW_VELOCITY * Gdx.graphics.getDeltaTime();
+                   break;
+               case Settings.PRESSED_DOWN:
+                   this.position.y -= Settings.ARROW_VELOCITY * Gdx.graphics.getDeltaTime();
+                   break;
+               case Settings.PRESSED_RIGHT:
+                   this.position.x += Settings.ARROW_VELOCITY * Gdx.graphics.getDeltaTime();
+                   break;
+           }
+           arrowColison.x = position.x;
+           arrowColison.y = position.y;
     }
 
-    public void setZombie(Zombie zombie) {
-        if(arrowColison.overlaps(zombie.getCollisionRectZombie())) {
-            zombie.setDamage(Settings.PLAYER_FUERZA);
-            zombie.die(this.direction);
-            jugador.removeArrow(this);
-            remove();
+    public boolean setZombie(Zombie zombie) {
+        boolean removed = false;
+        System.out.println("Z: "+zombie.getPosition().x + ", A: " + this.position.x+ ", J: "+ jugador.getCollisionRectPlayer().x);
+        //System.out.println("Z: "+zombie.getPosition().y + ", A: " + this.position.y);
+        if(position.x - zombie.getPosition().x < width && position.x - zombie.getPosition().x > -width) {
+            if(position.y - zombie.getPosition().y < height && position.y - zombie.getPosition().y > -height) {
+                zombie.setDamage(Settings.PLAYER_FUERZA);
+                zombie.die(this.direction);
+                jugador.removeArrow(this);
+                remove();
+                removed = true;
+            }
         }
+        return removed;
     }
 
     @Override
