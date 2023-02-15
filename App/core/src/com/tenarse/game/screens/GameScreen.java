@@ -131,12 +131,12 @@ public class GameScreen implements Screen {
         Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
         enemies.add(zombie);
         stage.addActor(zombie);
-        /*Zombie zombie2 = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
+        Zombie zombie2 = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
         enemies.add(zombie2);
         stage.addActor(zombie2);
         Zombie zombie3 = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
         enemies.add(zombie3);
-        stage.addActor(zombie3);*/
+        stage.addActor(zombie3);
 
         corazonesTexture = AssetManager.hp_player;
         armaduraTexture = AssetManager.armor_player;
@@ -359,9 +359,10 @@ public class GameScreen implements Screen {
                         armorArray.get(armorArray.size()-1).remove();
                         armorArray.remove(armorArray.size()-1);
                     }else {
-                        corazonesArray.get(corazonesArray.size() - 1).remove();
-                        corazonesArray.remove(corazonesArray.size() - 1);
-                        if(corazonesArray.size() <= 0){
+                        if (corazonesArray.size() > 0){
+                            corazonesArray.get(corazonesArray.size() - 1).remove();
+                            corazonesArray.remove(corazonesArray.size() - 1);
+                        } else {
                             jugador.die(zombie.getDirection());
                         }
                     }
@@ -369,6 +370,11 @@ public class GameScreen implements Screen {
                 zombie.calculateMovement(jugador.getCollisionRectPlayer(), delta);
                 player.attacking(zombie, delta);
             }
+        }
+
+        if (players.size() == 0){
+            //Pantalla de derrota
+            //Vuelve al principio
         }
 
         for (int i = 0; i < enemies.size(); i++) {
@@ -396,6 +402,7 @@ public class GameScreen implements Screen {
                 i--;
             }
         }
+
         //spawnZombie();
 
         if (buttonAttackPressed) {

@@ -56,16 +56,6 @@ public class ConnectionNode {
         player1.put("tipo", type);
         player1.put("kills", kills);
         jugadores.put(player1);
-        JSONObject player2 = new JSONObject();
-        player2.put("username", username);
-        player2.put("tipo", type);
-        player2.put("kills", kills);
-        jugadores.put(player2);
-        JSONObject player3 = new JSONObject();
-        player3.put("username", username);
-        player3.put("tipo", type);
-        player3.put("kills", kills);
-        jugadores.put(player3);
 
         partidaJSON.put("jugadores", jugadores);
         partidaJSON.put("tiempo", timePlayed);
@@ -73,7 +63,7 @@ public class ConnectionNode {
 
 
         Net.HttpRequest httpRequest = new Net.HttpRequest(Net.HttpMethods.POST);
-        httpRequest.setUrl("http://192.168.171.178:7073/newPartida");
+        httpRequest.setUrl("http://192.168.207.123:7073/newPartida");
         String data = partidaJSON.toString();
         httpRequest.setContent(data);
         httpRequest.setHeader("Content-Type", "application/json");
