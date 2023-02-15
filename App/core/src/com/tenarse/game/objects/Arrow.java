@@ -29,23 +29,23 @@ public class Arrow extends Actor {
         switch (direction){
             case Settings.PRESSED_UP:
                 textureArrow = AssetManager.arrowUp;
-                width = 32;
+                width = 16;
                 height = 16;
                 break;
             case Settings.PRESSED_LEFT:
                 textureArrow = AssetManager.arrowLeft;
                 width = 16;
-                height = 32;
+                height = 16;
                 break;
             case Settings.PRESSED_DOWN:
                 textureArrow = AssetManager.arrowDown;
-                width = 32;
+                width = 16;
                 height = 16;
                 break;
             case Settings.PRESSED_RIGHT:
                 textureArrow = AssetManager.arrowRight;
                 width = 16;
-                height = 32;
+                height = 16;
                 break;
         }
         arrowColison = new Rectangle(position.x, position.y, width, height);
