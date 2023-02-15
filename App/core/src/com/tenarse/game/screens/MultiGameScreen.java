@@ -395,7 +395,7 @@ public class MultiGameScreen implements Screen {
             for (Zombie zombie: enemies) {
                 zombie.colisionWithPlayer(jugador);
                 zombie.calculateMovement(jugador.getCollisionRectPlayer(), delta);
-                player.attacking(zombie);
+                player.attacking(zombie, delta);
             }
         }
 

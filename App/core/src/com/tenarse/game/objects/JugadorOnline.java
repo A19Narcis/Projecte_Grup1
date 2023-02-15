@@ -322,8 +322,8 @@ public class JugadorOnline extends Actor {
     public void attacking(Zombie zombie) {
         if (attack) {
             if (tipusJugador != 1) {
-                float calculoX = zombie.getCollisionRectZombie().x - collisionRectPlayer.x;
-                float calculoY = zombie.getCollisionRectZombie().y - collisionRectPlayer.y;
+                float calculoX = zombie.getRectanguloDeteccion().x - collisionRectPlayer.x;
+                float calculoY = zombie.getRectanguloDeteccion().y - collisionRectPlayer.y;
                 switch (direction) {
                     case Settings.PRESSED_UP:
                         if ((calculoY > 0 && calculoY < 32) && (calculoX > -24 && calculoX < 24) && doDamage) {
