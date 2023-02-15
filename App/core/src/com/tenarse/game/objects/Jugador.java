@@ -31,7 +31,7 @@ public class Jugador extends Actor {
     private boolean doDamage;
     private Vector2 position;
     private int width, height;
-    private boolean isBot;
+    private String categoria;
     private int tipusJugador;
     private int killsJugador;
 
@@ -66,7 +66,7 @@ public class Jugador extends Actor {
     private ArrayList<Arrow> arrowList = new ArrayList<>();
 
 
-    public Jugador(float x, float y, int width, int height, boolean isBot, int tipusJugador, Map map){
+    public Jugador(float x, float y, int width, int height, String categoria, int tipusJugador, Map map){
         this.width = width;
         this.height = height;
         position = new Vector2(x, y);
@@ -76,7 +76,7 @@ public class Jugador extends Actor {
         attackDelay = Settings.PLAYER_ATTACK_DELAY;
         this.map = map;
 
-        this.isBot = isBot;
+        this.categoria = categoria;
 
         collisionRectPlayer = new Rectangle();
         collisionRectPlayer.width = this.width;
@@ -120,12 +120,12 @@ public class Jugador extends Actor {
 
         public void act(float delta){
         super.act(delta);
-        if (this.isBot){
+        if (this.categoria.equals("bot")){
             this.position.x += 5;
             if (this.position.x >= Gdx.graphics.getWidth()){
                 this.position.x = -400;
             }
-        } else {
+        } else if (this.categoria.equals("player")){
             oldx = this.position.x;
             oldy = this.position.y;
                 if ((Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A) || this.bntLeftIsPressed) && !attack) {
@@ -235,7 +235,7 @@ public class Jugador extends Actor {
     private TextureRegion getPlayerAnimation() {
         TextureRegion playerDir = null;
         //Posicio per si no es mou
-        if(!isBot){
+        if(!this.categoria.equals("bot")){
             switch (direction){
                 case Settings.PRESSED_UP:
                     playerDir = animacionUp[0];
@@ -271,8 +271,12 @@ public class Jugador extends Actor {
             }
         }
 
-        if (this.isBot){
+        if (this.categoria.equals("bot")){
             playerDir = animacionRight[currentFrame];
+        }
+
+        if (this.categoria.equals("picker")){
+            playerDir = animacionDown[0];
         }
 
         return playerDir;

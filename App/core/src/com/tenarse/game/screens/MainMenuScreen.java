@@ -52,14 +52,14 @@ public class MainMenuScreen implements Screen {
         Map map = new Map();
 
         if (Gdx.app.getType() == Application.ApplicationType.Android){
-            botIniciCrossbow = new Jugador(-100, 0, Settings.PLAYER_WIDTH * 7, Settings.PLAYER_HEIGHT * 7, true, 1, map);
-            botIniciWarHam = new Jugador(-200, 0, Settings.PLAYER_WIDTH * 7, Settings.PLAYER_HEIGHT * 7, true, 2, map);
-            botIniciShield = new Jugador(-300, 0, Settings.PLAYER_WIDTH * 7, Settings.PLAYER_HEIGHT * 7, true, 3, map);
+            botIniciCrossbow = new Jugador(-100, 0, Settings.PLAYER_WIDTH * 7, Settings.PLAYER_HEIGHT * 7, "bot", 1, map);
+            botIniciWarHam = new Jugador(-200, 0, Settings.PLAYER_WIDTH * 7, Settings.PLAYER_HEIGHT * 7, "bot", 2, map);
+            botIniciShield = new Jugador(-300, 0, Settings.PLAYER_WIDTH * 7, Settings.PLAYER_HEIGHT * 7, "bot", 3, map);
 
         } else {
-            botIniciCrossbow = new Jugador(-100, 0, Settings.PLAYER_WIDTH * 4, Settings.PLAYER_HEIGHT * 4, true, 1, map);
-            botIniciWarHam = new Jugador(-200, 0, Settings.PLAYER_WIDTH * 4, Settings.PLAYER_HEIGHT * 4, true, 2, map);
-            botIniciShield = new Jugador(-300, 0, Settings.PLAYER_WIDTH * 4, Settings.PLAYER_HEIGHT * 4, true, 3, map);
+            botIniciCrossbow = new Jugador(-100, 0, Settings.PLAYER_WIDTH * 4, Settings.PLAYER_HEIGHT * 4, "bot", 1, map);
+            botIniciWarHam = new Jugador(-200, 0, Settings.PLAYER_WIDTH * 4, Settings.PLAYER_HEIGHT * 4, "bot", 2, map);
+            botIniciShield = new Jugador(-300, 0, Settings.PLAYER_WIDTH * 4, Settings.PLAYER_HEIGHT * 4, "bot", 3, map);
         }
 
 

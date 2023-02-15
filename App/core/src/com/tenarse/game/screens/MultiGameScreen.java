@@ -24,6 +24,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.tenarse.game.helpers.AssetManager;
+import com.tenarse.game.objects.Arrow;
 import com.tenarse.game.objects.ConnectionNode;
 import com.tenarse.game.objects.ContadorTiempo;
 import com.tenarse.game.objects.Jugador;
@@ -104,17 +105,47 @@ public class MultiGameScreen implements Screen {
 
         socket = null;
         try {
-            socket = IO.socket("http://192.168.207.58:7074/");
+            socket = IO.socket("http://192.168.207.61:7074/");
             socket.connect();
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
 
+
+        shapeRenderer = new ShapeRenderer();
+
+        Settings.PLAYER_VELOCITY = velocidad * 25;
+        Settings.PLAYER_FUERZA = fuerza;
+        Settings.PLAYER_VIDAS = vidas;
+        Settings.PLAYER_ARMADURA = armaduras;
+
+        zoomAndroid = 6;
+        zoomPc = 3;
+
+        map = new Map(AssetManager.map);
+
+        camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        prevViewport.setCamera(camera);
+
+
+        renderer = new OrthogonalTiledMapRenderer(map.getMap());
+
+        if (this.tipus == 4){
+            jugador = new Jugador(map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT, "player", 1, map);
+            players.add(jugador);
+        } else if (this.tipus == 5){
+            jugador = new Jugador(map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT, "player", 2, map);
+            players.add(jugador);
+        } else if (this.tipus == 6){
+            jugador = new Jugador(map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT, "player", 3, map);
+            players.add(jugador);
+        }
+
         JSONObject dadesJugador = new JSONObject();
         dadesJugador.put("username", this.username);
         dadesJugador.put("tipo", this.tipus);
-        dadesJugador.put("x", 1200);
-        dadesJugador.put("y", 720);
+        dadesJugador.put("x", jugador.getCollisionRectPlayer().x);
+        dadesJugador.put("y", jugador.getCollisionRectPlayer().y);
 
         socket.emit("user_con", dadesJugador);
 
@@ -137,36 +168,6 @@ public class MultiGameScreen implements Screen {
                 }
             }
         });
-
-
-        shapeRenderer = new ShapeRenderer();
-
-        Settings.PLAYER_VELOCITY = velocidad * 25;
-        Settings.PLAYER_FUERZA = fuerza;
-        Settings.PLAYER_VIDAS = vidas;
-        Settings.PLAYER_ARMADURA = armaduras;
-
-        zoomAndroid = 6;
-        zoomPc = 3;
-
-        map = new Map(AssetManager.map);
-
-        camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        prevViewport.setCamera(camera);
-
-
-        renderer = new OrthogonalTiledMapRenderer(map.getMap());
-
-        if (this.tipus == 4){
-            jugador = new Jugador(map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT, false, 1, map);
-            players.add(jugador);
-        } else if (this.tipus == 5){
-            jugador = new Jugador(map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT, false, 2, map);
-            players.add(jugador);
-        } else if (this.tipus == 6){
-            jugador = new Jugador(map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT, false, 3, map);
-            players.add(jugador);
-        }
 
         //Crear stage
         stage = new Stage(prevViewport, prevBatch);
@@ -390,6 +391,16 @@ public class MultiGameScreen implements Screen {
                 }
             }
         }
+        if(enemies.size() <= 0){
+            for (Jugador player: players){
+                ArrayList <Arrow> arrowList= player.getArrowList();
+                for(Arrow arrow : arrowList){
+                    arrow.remove();
+                }
+                arrowList.clear();
+            }
+        }
+
 
         for (Jugador player: players){
             for (Zombie zombie: enemies) {
@@ -398,6 +409,7 @@ public class MultiGameScreen implements Screen {
                 player.attacking(zombie, delta);
             }
         }
+
 
         int size = enemies.size();
         for (int i = 0; i < size; i++) {
