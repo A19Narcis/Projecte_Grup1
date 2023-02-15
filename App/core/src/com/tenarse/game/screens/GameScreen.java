@@ -353,24 +353,39 @@ public class GameScreen implements Screen {
 
         for (Jugador player: players){
             for (Zombie zombie: enemies) {
-                zombie.colisionWithPlayer(jugador);
+                boolean atacado = zombie.colisionWithPlayer(jugador);
+                if(atacado){
+                    if(armorArray.size() > 0){
+                        armorArray.get(armorArray.size()-1).remove();
+                        armorArray.remove(armorArray.size()-1);
+                    }else {
+                        corazonesArray.get(corazonesArray.size() - 1).remove();
+                        corazonesArray.remove(corazonesArray.size() - 1);
+                        if(corazonesArray.size() <= 0){
+                            jugador.die(zombie.getDirection());
+                        }
+                    }
+                }
                 zombie.calculateMovement(jugador.getCollisionRectPlayer(), delta);
                 player.attacking(zombie, delta);
             }
         }
 
-
-        int size = enemies.size();
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < enemies.size(); i++) {
             if(enemies.get(i).isDead()){
                 enemies.remove(enemies.get(i));
                 puntosParida = puntosParida + 1;
                 jugador.unaKillMas();
                 System.out.println(jugador.getKillsJugador());
-                if (puntosParida == 0){
-                    puntosParida = 1;
-                }
-                if (puntosParida == 5){
+                puntosText.setText(puntosParida);
+                i--;
+            }
+        }
+
+        for (int i = 0; i < players.size(); i++) {
+            if(players.get(i).isDead()){
+                players.remove(players.get(i));
+                if (players.size() == 0){
                     //Enviar POST de addNewPartida
                     contadorTiempo.detener();
                     String tiempo = contadorTiempo.getTiempo();
@@ -378,13 +393,10 @@ public class GameScreen implements Screen {
                     ConnectionNode nodeJS = new ConnectionNode();
                     nodeJS.addNewPartida(this.username, jugador.getTypePlayer(), jugador.getKillsJugador(), tiempo, puntosParida);
                 }
-                puntosText.setText(puntosParida);
                 i--;
-                size--;
             }
         }
-
-        spawnZombie();
+        //spawnZombie();
 
         if (buttonAttackPressed) {
             jugador.startAttack();

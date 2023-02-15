@@ -28,6 +28,8 @@ public class Zombie extends Actor{
     private TextureRegion[] animacionLeft;
     private TextureRegion[] animacionSpawn;
     private TextureRegion[] animacionDead;
+    private TextureRegion[] animacionAtackL, animacionAtackR, animacionAtackU, animacionAtackD;
+
 
     private int currentFrame = 0;
     private float frameTime = 0.1f;
@@ -40,6 +42,12 @@ public class Zombie extends Actor{
     private boolean spawned;
     private boolean colision;
     private boolean detected;
+    private boolean oldColisionPlayer;
+    private boolean attack;
+    private boolean firstAnimationAttack;
+    private boolean doDamage;
+
+    private long timeColisoningPlayer;
 
     public Zombie(int width, int height, Map map) {
         this.width = width;
@@ -48,9 +56,12 @@ public class Zombie extends Actor{
         position = new Vector2();
         vida = Settings.ZOMBIE_LIFE;
         dead = false;
-        createSpawnPosition();
-        //position.x = map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2) - 20; //SPAWN EN EL CENTRO PARA PRUEBAS
-        //position.y = map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2);
+        attack = false;
+        firstAnimationAttack = false;
+        doDamage = false;
+        //createSpawnPosition();
+        position.x = map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2) - 20; //SPAWN EN EL CENTRO PARA PRUEBAS
+        position.y = map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2);
 
         rectanguloDeteccion = new Rectangle();
         rectanguloDeteccion.width = Settings.ZOMBIE_WIDTH;
@@ -62,6 +73,10 @@ public class Zombie extends Actor{
         animacionDown = AssetManager.zombieDown_Animation;
         animacionSpawn = AssetManager.zombieSpawn_Animation;
         animacionDead = AssetManager.zombieDead_Animation;
+        animacionAtackL = AssetManager.ZombieLeft_Atack;
+        animacionAtackR = AssetManager.ZombieRight_Atack;
+        animacionAtackU = AssetManager.ZombieUp_Atack;
+        animacionAtackD = AssetManager.ZombieDown_Atack;
 
         spawned = false;
         colision = false;
@@ -146,13 +161,13 @@ public class Zombie extends Actor{
             zombie.setDetected(colision);
     }
 
-    public void colisionWithPlayer(Jugador jugador) {
+    public boolean colisionWithPlayer(Jugador jugador) {
         if (!colision) {
             boolean result;
             float calculoX = jugador.getCollisionRectPlayer().x - rectanguloDeteccion.x;
             float calculoY = jugador.getCollisionRectPlayer().y - rectanguloDeteccion.y;
-            if (calculoX < 8 && calculoX > -8) {
-                if (calculoY < 16 && calculoY > -24) {
+            if (calculoX < 17 && calculoX > -17) {
+                if (calculoY < 24 && calculoY > -24) {
                     result = true;
                 } else {
                     result = false;
@@ -160,8 +175,19 @@ public class Zombie extends Actor{
             } else {
                 result = false;
             }
+            if(!oldColisionPlayer){
+                timeColisoningPlayer = TimeUtils.nanoTime();
+            }
+            oldColisionPlayer = result;
             colision = result;
+            if(oldColisionPlayer && TimeUtils.nanoTime() - timeColisoningPlayer > Settings.ZOMBIE_HIT_DELAY && !doDamage){
+                attack = true;
+                firstAnimationAttack = true;
+                doDamage = true;
+                jugador.setDamage(Settings.ZOMBIE_FUERZA);
+            }
         }
+        return firstAnimationAttack;
     }
 
     private TextureRegion getZombieAnimation() {
@@ -175,15 +201,27 @@ public class Zombie extends Actor{
                 switch (direction) {
                     case Settings.PRESSED_UP:
                         result = animacionUp[0];
+                        if(attack && !firstAnimationAttack){
+                            result = animacionAtackU[currentFrame];
+                        }
                         break;
                     case Settings.PRESSED_LEFT:
                         result = animacionLeft[0];
+                        if(attack && !firstAnimationAttack){
+                            result = animacionAtackL[currentFrame];
+                        }
                         break;
                     case Settings.PRESSED_DOWN:
                         result = animacionDown[0];
+                        if(attack && !firstAnimationAttack){
+                            result = animacionAtackD[currentFrame];
+                        }
                         break;
                     case Settings.PRESSED_RIGHT:
                         result = animacionRight[0];
+                        if(attack && !firstAnimationAttack){
+                            result = animacionAtackR[currentFrame];
+                        }
                         break;
                 }
 
@@ -233,13 +271,32 @@ public class Zombie extends Actor{
                         stateTime = 0;
                     }
                 } else {
-                    stateTime += delta;
-                    if (stateTime >= frameTime) {
-                        currentFrame++;
-                        if (currentFrame >= animacionRight.length) {
+
+                    if(attack){
+                        if(firstAnimationAttack){
                             currentFrame = 0;
+                            firstAnimationAttack = false;
                         }
-                        stateTime = 0;
+                        stateTime += delta;
+                        if (stateTime >= frameTime) {
+                            currentFrame++;
+                            if (currentFrame >= animacionAtackU.length) {
+                                currentFrame = 0;
+                                attack = false;
+                                oldColisionPlayer = false;
+                                doDamage = false;
+                            }
+                            stateTime = 0;
+                        }
+                    }else {
+                        stateTime += delta;
+                        if (stateTime >= frameTime) {
+                            currentFrame++;
+                            if (currentFrame >= animacionRight.length) {
+                                currentFrame = 0;
+                            }
+                            stateTime = 0;
+                        }
                     }
                 }
             } else {
@@ -300,5 +357,9 @@ public class Zombie extends Actor{
 
     public void setDetected(boolean detected) {
         this.detected = detected;
+    }
+
+    public int getDirection() {
+        return direction;
     }
 }

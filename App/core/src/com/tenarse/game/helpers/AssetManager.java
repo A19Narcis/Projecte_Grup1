@@ -55,6 +55,9 @@ public class AssetManager {
     public static TextureRegion[] playerRightS_Atack, playerLeftS_Atack, playerUpS_Atack, playerDownS_Atack;
 
     public static TextureRegion[] zombieRight_Animation, zombieLeft_Animation, zombieUp_Animation, zombieDown_Animation, zombieSpawn_Animation, zombieDead_Animation;
+    public static TextureRegion[] ZombieRight_Atack, ZombieLeft_Atack, ZombieUp_Atack, ZombieDown_Atack;
+
+    public static TextureRegion[] ShieldDeadAnimation, CrossbowlDeadAnimation, WarhamerDeadAnimation;
 
     public static TextureRegion[] hit_Animation;
     public static TextureRegion[] poolBloodAnimationL1;
@@ -79,6 +82,7 @@ public class AssetManager {
 
     //Cajas de texto
     public static Skin skinTextBox;
+
 
 
     public static void load(){
@@ -215,6 +219,12 @@ public class AssetManager {
         for (int i = 0; i < playerDownA_Animation.length; i++) {
             playerDownA_Animation[i] = new TextureRegion(sheetPlayerCrossbow, i * 64, 64 * 10, 64, 64);
         }
+        //Muerte Shield
+        CrossbowlDeadAnimation = new TextureRegion[6];
+        for (int i = 0; i < CrossbowlDeadAnimation.length; i++) {
+            CrossbowlDeadAnimation[i] = new TextureRegion(sheetPlayerCrossbow, i * 64, 64 * 20, 64, 64);
+        }
+
 
 
         //Derecha War
@@ -241,6 +251,12 @@ public class AssetManager {
             playerDownW_Animation[i] = new TextureRegion(sheetPlayerWar, i * 64, 64 * 10, 64, 64);
         }
 
+        //Muerte Shield
+        WarhamerDeadAnimation = new TextureRegion[6];
+        for (int i = 0; i < WarhamerDeadAnimation.length; i++) {
+            WarhamerDeadAnimation[i] = new TextureRegion(sheetPlayerWar, i * 64, 64 * 20, 64, 64);
+        }
+
 
         //Derecha Shield
         playerRightS_Animation = new TextureRegion[9];
@@ -264,6 +280,12 @@ public class AssetManager {
         playerDownS_Animation = new TextureRegion[9];
         for (int i = 0; i < playerDownS_Animation.length; i++) {
             playerDownS_Animation[i] = new TextureRegion(sheetPlayerShield, i * 64, 64 * 10, 64, 64);
+        }
+
+        //Muerte Shield
+        ShieldDeadAnimation = new TextureRegion[6];
+        for (int i = 0; i < ShieldDeadAnimation.length; i++) {
+            ShieldDeadAnimation[i] = new TextureRegion(sheetPlayerShield, i * 64, 64 * 20, 64, 64);
         }
 
 
@@ -398,6 +420,41 @@ public class AssetManager {
         for (int i = 0; i < zombieDead_Animation.length; i++) {
             zombieDead_Animation[i] = new TextureRegion(sheetZombie, i * 64, 64 * 20, 64, 64);
         }
+
+
+
+
+
+
+
+        //Derecha Zombie Ataque
+        ZombieRight_Atack = new TextureRegion[6];
+        for (int i = 0; i < ZombieRight_Atack.length; i++) {
+            ZombieRight_Atack[i] = new TextureRegion(sheetZombie, i * 64, 64 * 15, 64, 64);
+        }
+
+        //Izquierda Zombie Ataque
+        ZombieLeft_Atack = new TextureRegion[6];
+        for (int i = 0; i < ZombieLeft_Atack.length; i++) {
+            ZombieLeft_Atack[i] = new TextureRegion(sheetZombie, i * 64, 64 * 13, 64, 64);
+        }
+
+        //Arriba Zombie Ataque
+        ZombieUp_Atack = new TextureRegion[6];
+        for (int i = 0; i < ZombieUp_Atack.length; i++) {
+            ZombieUp_Atack[i] = new TextureRegion(sheetZombie, i * 64, 64 * 12, 64, 64);
+        }
+
+        //Abajo Zombie Ataque
+        ZombieDown_Atack = new TextureRegion[6];
+        for (int i = 0; i < ZombieDown_Atack.length; i++) {
+            ZombieDown_Atack[i] = new TextureRegion(sheetZombie, i * 64, 64 * 14, 64, 64);
+        }
+
+
+
+
+
 
         //Animacion golpe (sangre)
         hit_Animation = new TextureRegion[6];

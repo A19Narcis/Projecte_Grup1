@@ -15,12 +15,12 @@ public class Settings {
     //Propietats jugador
     public static int PLAYER_VELOCITY = 1;
     public static int PLAYER_FUERZA = 1;
-    public static int PLAYER_VIDAS = 0;
+    public static int PLAYER_VIDAS = 1;
     public static int PLAYER_ARMADURA = 0;
 
     public static final int PLAYER_WIDTH = 32;
     public static final int PLAYER_HEIGHT = 32;
-    public static final long PLAYER_ATTACK_DELAY = 1000000000l;
+    public static final long PLAYER_ATTACK_DELAY = 500000000l;
 
     //Propietats Zombie
     public static final int ZOMBIE_WIDTH = 32;
@@ -28,6 +28,7 @@ public class Settings {
     public static final int ZOMBIE_VELOCITY = 50;
     public static final int ZOMBIE_LIFE = 2;
     public static final long ZOMBIE_HIT_DELAY = 1000000000l;
+    public static final int ZOMBIE_FUERZA = 1;
 
     //Propietats Boss
     public static final int BOSS_WIDTH = 45;
