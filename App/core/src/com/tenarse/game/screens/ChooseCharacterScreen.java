@@ -139,14 +139,14 @@ public class ChooseCharacterScreen implements Screen {
 
         //Characters
         if (Gdx.app.getType() == Application.ApplicationType.Android){
-            botChooseCrossbow = new Jugador(0 + chooseBox.getWidth() * 1.90f, Gdx.graphics.getHeight() - chooseBox.getHeight() * 4.1f, Settings.PLAYER_WIDTH * 12, Settings.PLAYER_HEIGHT * 12, false, 1, map);
-            botChooseWarhammer = new Jugador(0 + chooseBox.getWidth() * 1.90f, Gdx.graphics.getHeight() - chooseBox.getHeight() * 4.1f, Settings.PLAYER_WIDTH * 12, Settings.PLAYER_HEIGHT * 12, false, 2, map);
-            botChooseShield = new Jugador(0 + chooseBox.getWidth() * 1.90f, Gdx.graphics.getHeight() - chooseBox.getHeight() * 4.1f, Settings.PLAYER_WIDTH * 12, Settings.PLAYER_HEIGHT * 12, false, 3, map);
+            botChooseCrossbow = new Jugador(0 + chooseBox.getWidth() * 1.90f, Gdx.graphics.getHeight() - chooseBox.getHeight() * 4.1f, Settings.PLAYER_WIDTH * 12, Settings.PLAYER_HEIGHT * 12, "picker", 1, map);
+            botChooseWarhammer = new Jugador(0 + chooseBox.getWidth() * 1.90f, Gdx.graphics.getHeight() - chooseBox.getHeight() * 4.1f, Settings.PLAYER_WIDTH * 12, Settings.PLAYER_HEIGHT * 12, "picker", 2, map);
+            botChooseShield = new Jugador(0 + chooseBox.getWidth() * 1.90f, Gdx.graphics.getHeight() - chooseBox.getHeight() * 4.1f, Settings.PLAYER_WIDTH * 12, Settings.PLAYER_HEIGHT * 12, "picker", 3, map);
 
         } else {
-            botChooseCrossbow = new Jugador(0 + chooseBox.getWidth() - 15, Gdx.graphics.getHeight() - chooseBox.getHeight() * 2 - 70, Settings.PLAYER_WIDTH * 8, Settings.PLAYER_HEIGHT * 8, false, 1, map);
-            botChooseWarhammer = new Jugador(0 + chooseBox.getWidth() - 15, Gdx.graphics.getHeight() - chooseBox.getHeight() * 2 - 70, Settings.PLAYER_WIDTH * 8, Settings.PLAYER_HEIGHT * 8, false, 2, map);
-            botChooseShield = new Jugador(0 + chooseBox.getWidth() - 15, Gdx.graphics.getHeight() - chooseBox.getHeight() * 2 - 70, Settings.PLAYER_WIDTH * 8, Settings.PLAYER_HEIGHT * 8, false, 3, map);
+            botChooseCrossbow = new Jugador(0 + chooseBox.getWidth() - 15, Gdx.graphics.getHeight() - chooseBox.getHeight() * 2 - 70, Settings.PLAYER_WIDTH * 8, Settings.PLAYER_HEIGHT * 8, "picker", 1, map);
+            botChooseWarhammer = new Jugador(0 + chooseBox.getWidth() - 15, Gdx.graphics.getHeight() - chooseBox.getHeight() * 2 - 70, Settings.PLAYER_WIDTH * 8, Settings.PLAYER_HEIGHT * 8, "picker", 2, map);
+            botChooseShield = new Jugador(0 + chooseBox.getWidth() - 15, Gdx.graphics.getHeight() - chooseBox.getHeight() * 2 - 70, Settings.PLAYER_WIDTH * 8, Settings.PLAYER_HEIGHT * 8, "picker", 3, map);
         }
 
         //Texto de los personajes
