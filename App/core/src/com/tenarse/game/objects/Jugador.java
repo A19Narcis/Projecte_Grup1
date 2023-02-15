@@ -173,7 +173,6 @@ public class Jugador extends Actor {
                         attack = true;
                         firstAnimationAttack = true;
                         doDamage = true;
-
                 }
 
             //Colision personaje con los bordes del mapa
