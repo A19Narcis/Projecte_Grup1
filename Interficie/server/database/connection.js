@@ -2,7 +2,6 @@ const mongoose = require("mongoose")
 const autoIncrement = require("mongoose-auto-increment")
 
 autoIncrement.initialize(mongoose.connection)
-
 const URL = 'mongodb://a19nargomcar2:paco1234@labs.inspedralbes.cat:7010/?tls=false&authMechanism=DEFAULT&authSource=DAMA_Grup1'
 //const URL = 'mongodb://localhost:27017/DAMA_Grup1'
 const options = {

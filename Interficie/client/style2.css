@@ -13,6 +13,13 @@ h3{
 	color: red;
 }
 
+h4{
+	font-size: 4rem;
+	text-transform: uppercase;
+	font-family: 'Bebas Neue';
+	color: red;
+}
+
 .dialog_title{
 	font-size: 3rem;
 	text-transform: uppercase;
@@ -128,7 +135,7 @@ h2 {
 	left: 50%;
 	top: 50%;
 	position: absolute;
-	background: url(./sprites/axe1.png);	
+	background: url(./sprites/cross2.png);	
 }
 
 

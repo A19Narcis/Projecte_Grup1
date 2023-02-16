@@ -27,20 +27,35 @@ const insertPartida = function (partida, callback) {
     })
 }
 
-const insertStats = function (callback) {
+const insertStats = async function (callback) {
     //Afegir 5 docuemnts per Axe, War, Shield, Zombie, Boss els que venen ja fets amb el joc
 
-    const statsAxe = new Stats({
-        nombreTipo: "Axe",
+    const statsCrossbow = new Stats({
+        nombreTipo: "Crossbow",
         velocidad: 3,
-        fuerza: 2,
+        fuerza: 1,
         vida: 2,
         armadura: 0
     })
-    statsAxe.save(function (err) {
-        if (err) return console.log("Ya existen las stats de AXE");
-        console.log("¡Stats de AXE insertadas!");
+
+    await statsCrossbow.save(function (err) {
+        if (err) return console.log("Ya existen las stats de CROSSBOW");
+        console.log("¡Stats de CROSSBOW insertadas!");
     })
+
+    /*await new Promise(( resolve, reject )=> {
+        
+        statsCrossbow.save(function (err) {
+            if (err){
+                console.log("Ya existen las stats de CROSSBOW");
+                reject();
+                return;
+            } 
+            console.log("¡Stats de CROSSBOW insertadas!");
+            resolve();
+        })
+    });*/
+
 
     const statsWar = new Stats({
         nombreTipo: "Warhammer",
@@ -49,7 +64,8 @@ const insertStats = function (callback) {
         vida: 2,
         armadura: 0
     })
-    statsWar.save(function (err) {
+
+    await statsWar.save(function (err) {
         if (err) return console.log("Ya existen las stats de WARHAMMER");
         console.log("¡Stats de WARHAMMER insertadas!");
     })
@@ -61,7 +77,7 @@ const insertStats = function (callback) {
         vida: 3,
         armadura: 2
     })
-    statsShield.save(function (err) {
+    await statsShield.save(function (err) {
         if (err) return console.log("Ya existen las stats de SHIELD");
         console.log("¡Stats de SHIELD insertadas!");
     })
@@ -73,7 +89,7 @@ const insertStats = function (callback) {
         fuerza: 2,
         vida: 2
     })
-    statsZombie.save(function (err) {
+    await statsZombie.save(function (err) {
         if (err) return console.log("Ya existen las stats de ZOMBIE");
         console.log("¡Stats de ZOMBIE insertadas!");
     })
@@ -85,7 +101,7 @@ const insertStats = function (callback) {
         fuerza: 2,
         vida: 2
     })
-    statsBoss.save(function (err) {
+    await statsBoss.save(function (err) {
         if (err) return console.log("Ya existen las stats de BOSS");
         console.log("¡Stats de BOSS insertadas!");
     })

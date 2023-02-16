@@ -407,13 +407,27 @@ public class GameScreen implements Screen {
 
 
         if (players.size() == 0){
-            Skin skin = AssetManager.skinTextBox;
-            dialog = new EndGameDialog("Fin de la partida", skin, puntosParida, jugador.getKillsJugador(), game);
-            dialog.setScale(0.8f);
-            dialog.show(stage);
-            dialog.setWidth(300f);
-            dialog.setPosition(jugador.getCollisionRectPlayer().x , jugador.getCollisionRectPlayer().y);
-            dialog.getButtonTable().setWidth(100f);
+            if (Gdx.app.getType() == Application.ApplicationType.Android) {
+                Skin skin = AssetManager.skinTextBox;
+                dialog = new EndGameDialog("Fin de la partida", skin, puntosParida, jugador.getKillsJugador(), game);
+                dialog.show(stage);
+                dialog.setWidth(150f);
+                dialog.setHeight(150f);
+                dialog.setPosition(jugador.getCollisionRectPlayer().x - dialog.getWidth() / 2.5f , jugador.getCollisionRectPlayer().y - dialog.getHeight() / 2.5f);
+                fontBold.getData().setScale(0.2f);
+                skin.add("default-font", fontBold);
+                dialog.setSkin(skin);
+            } else {
+                Skin skin = AssetManager.skinTextBox;
+                dialog = new EndGameDialog("Fin de la partida", skin, puntosParida, jugador.getKillsJugador(), game);
+                dialog.setScale(0.8f);
+                dialog.show(stage);
+                dialog.setWidth(300f);
+                dialog.setHeight(200f);
+                dialog.setPosition(jugador.getCollisionRectPlayer().x , jugador.getCollisionRectPlayer().y);
+                dialog.getButtonTable().setWidth(100f);
+            }
+
         }
 
 

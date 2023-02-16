@@ -23,9 +23,153 @@ var vue_app = new Vue({
         new_vida: 0,
         new_cantidad: 0,
         done: 0,
-        color: ''
+        color: '',
+        canvas: null,
+        canvas2: null,
+        arrNom: [],
+        arrFuerza: [],
+        arrVida: [],
+        arrArmadura: [],
+        arrVelocidad: [],
+        zomArrNom: [],
+        zomArrFuerza: [],
+        zomArrVida: [],
+        zomArrArmadura: [],
+        zomArrVelocidad: [],
+
+        
     },
+    mounted(){
+        this.getStats();   
+    },
+
     methods: {
+        createCanv: function() {
+            this.createElements();
+            this.canvas = document.getElementById('canvas')
+            console.log(this.canvas);
+            console.log(this.arrNom);
+            var ctx = this.canvas.getContext('2d');
+            //hay que llamar al get stats como sea, usaba dos funciones.
+            canvas.width = 800;
+            canvas.height = 600;
+            console.log(this.arrStats);
+            var chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: this.arrNom,
+                    datasets: [{
+                        label: 'Fuerza',
+                        data: this.arrFuerza,
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1,
+                        yAxisID: 'y-axis-1'
+
+                    },{
+                        label: 'Vida',
+                        data: this.arrVida,
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1,
+                        yAxisID: 'y-axis-1'
+
+                    },{
+                        label: 'Velocidad',
+                        data: this.arrVelocidad,
+                        backgroundColor: 'rgba(54, 262, 135, 0.2)',
+                        borderColor: 'rgba(54, 262, 135, 1)',
+                        borderWidth: 1,
+                        yAxisID: 'y-axis-1'
+
+                    },{
+                        label: 'Armadura',
+                        data: this.arrArmadura,
+                        backgroundColor: 'rgba(54, 262, 135, 0.2)',
+                        borderColor: 'rgba(54, 262, 135, 1)',
+                        borderWidth: 1,
+                        yAxisID: 'y-axis-1'
+
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            id: 'y-axis-1',
+                            type: 'linear',
+                            position: 'left',
+                            ticks: {min: 0, max:10}
+                        }]
+                    }
+                }
+            });
+
+
+            this.canvas2 = document.getElementById('canvas2')
+            var ctx2 = this.canvas2.getContext('2d');
+            //hay que llamar al get stats como sea, usaba dos funciones.
+            canvas.width = 800;
+            canvas.height = 600;
+            var chart = new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: this.zomArrNom,
+                    datasets: [{
+                        label: 'CantidadMin',
+                        data: this.zomArrArmadura,
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1,
+                    },{
+                        label: 'Vida',
+                        data: this.zomArrVida,
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1,
+                    },{
+                        label: 'Velocidad',
+                        data: this.zomArrVelocidad,
+                        backgroundColor: 'rgba(54, 262, 135, 0.2)',
+                        borderColor: 'rgba(54, 262, 135, 1)',
+                        borderWidth: 1,
+                    },{
+                        label: 'Fuerza',
+                        data: this.zomArrFuerza,
+                        backgroundColor: 'rgba(54, 262, 135, 0.2)',
+                        borderColor: 'rgba(54, 262, 135, 1)',
+                        borderWidth: 1,
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            id: 'y-axis-1',
+                            type: 'linear',
+                            position: 'left',
+                            ticks: {min: 0, max:10}
+                        }]                    }
+                }
+            }); 
+        },
+        createElements: function (){
+            var count = 0;
+            this.arrStats.forEach( el =>{
+                if(count < 3){
+                    this.arrNom.push(el.nombreTipo);
+                    this.arrArmadura.push(el.armadura);
+                    this.arrVelocidad.push(el.velocidad);
+                    this.arrFuerza.push(el.fuerza);
+                    this.arrVida.push(el.vida);
+                }else{
+                    this.zomArrNom.push(el.nombreTipo);
+                    this.zomArrArmadura.push(el.cantidadMinuto);
+                    this.zomArrVelocidad.push(el.velocidad);
+                    this.zomArrFuerza.push(el.fuerza);
+                    this.zomArrVida.push(el.vida);
+                }                
+                count++;
+            });
+        },
         getAuth: function () {
             console.log("Entro")
             console.log(this.username)
@@ -149,7 +293,7 @@ var vue_app = new Vue({
         },
 
         getStats: function () {
-            fetch("http://admin.alumnes.inspedralbes.cat:7073/getStats/",
+            fetch("http://admin.alumnes.inspedralbes.cat:7073/getStats2/",
                 {
                     method: "POST",
                     headers: {
@@ -168,9 +312,8 @@ var vue_app = new Vue({
                 (data) => {
                     this.arrStats = data;
                     this.arrLen = data.length;
+                    this.createCanv();
                     console.log(this.arrStats);
-
-
                 }
             ).catch(
                 (error) => {

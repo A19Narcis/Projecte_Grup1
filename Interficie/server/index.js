@@ -158,15 +158,32 @@ app.post("/getSession", async (req, res) => {
 
 
 /* =========== SOCKETS MULTIJUGADOR =========== */
+
+var jugadores = []
+
 //Controlar les connexions i desconnexions
-io.on('connection', (socket) =>{
-    console.log("Player connected");
-    socket.emit('socketID', { id: socket.id })
-    socket.broadcast.emit('newPlayer', { id: socket.id });
-    socket.on('disconnect', () => {
+io.on('connection', (socketJugador) =>{
+    
+    socketJugador.on('user_con', (dadesJug) => {
+        socketJugador.username = dadesJug.username;
+        console.log('Se ha conectado ' + dadesJug.username + ", Tipo: " + dadesJug.tipo);
+        jugadores.push(new jugador(socketJugador.id, dadesJug.tipo, dadesJug.x, dadesJug.y))
+        console.log(jugadores);
+    })
+
+    socketJugador.emit('socketID', { id: socketJugador.id })
+
+    socketJugador.on('disconnect', () => {
         console.log('user disconnected');
     });
 });
+
+function jugador(id, tipo, x, y){
+    this.id = id;
+    this.tipo = tipo;
+    this.x = x;
+    this.y = y;
+}
 
 server.listen(SOCKET_PORT, () => {
     console.log("Sockets Running [" + SOCKET_PORT + "]");
