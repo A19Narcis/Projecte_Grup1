@@ -30,16 +30,16 @@ const insertPartida = function (partida, callback) {
 const insertStats = function (callback) {
     //Afegir 5 docuemnts per Axe, War, Shield, Zombie, Boss els que venen ja fets amb el joc
 
-    const statsAxe = new Stats({
-        nombreTipo: "Axe",
+    const statsCrossbow = new Stats({
+        nombreTipo: "Crossbow",
         velocidad: 3,
-        fuerza: 2,
+        fuerza: 1,
         vida: 2,
         armadura: 0
     })
-    statsAxe.save(function (err) {
-        if (err) return console.log("Ya existen las stats de AXE");
-        console.log("¡Stats de AXE insertadas!");
+    statsCrossbow.save(function (err) {
+        if (err) return console.log("Ya existen las stats de CROSSBOW");
+        console.log("¡Stats de CROSSBOW insertadas!");
     })
 
     const statsWar = new Stats({

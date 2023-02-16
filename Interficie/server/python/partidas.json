@@ -24,45 +24,59 @@
     {
         "jugadores":[
             {
-                "username":"Narcis",
+                "username":"tololol",
                 "tipo":"Axe",
-                "kills":12
+                "kills":35
             },
             {
-                "username":"Sergi",
-                "tipo":"Warhammer",
-                "kills":32
+                "username":"tololol",
+                "tipo":"Axe",
+                "kills":35
             },
             {
-                "username":"Teo",
-                "tipo":"Shield",
-                "kills":28
+                "username":"tololol",
+                "tipo":"Axe",
+                "kills":35
             }
         ],
-        "tiempo":"32:11",
-        "puntos":0,
-        "idP":1
+        "tiempo":"43:01",
+        "puntos":7342,
+        "idP":8
     },
     {
         "jugadores":[
             {
-                "username":"Narcis",
-                "tipo":"Axe",
-                "kills":12
-            },
-            {
                 "username":"Sergi",
                 "tipo":"Warhammer",
-                "kills":32
-            },
-            {
-                "username":"Teo",
-                "tipo":"Shield",
-                "kills":28
+                "kills":0
             }
         ],
-        "tiempo":"32:11",
+        "tiempo":"0:15",
         "puntos":0,
-        "idP":2
+        "idP":9
+    },
+    {
+        "jugadores":[
+            {
+                "username":"Buenas",
+                "tipo":"Crossbow",
+                "kills":1
+            }
+        ],
+        "tiempo":"1:6",
+        "puntos":1,
+        "idP":10
+    },
+    {
+        "jugadores":[
+            {
+                "username":"Champion",
+                "tipo":"Warhammer",
+                "kills":58
+            }
+        ],
+        "tiempo":"1:45",
+        "puntos":58,
+        "idP":11
     }
 ]

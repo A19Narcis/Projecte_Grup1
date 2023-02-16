@@ -283,9 +283,9 @@ public class ChooseCharacterScreen implements Screen {
                 System.out.println(username.length());
                 if (username.length() > 0){
                     if (modeJoc == SINGLE){
-                        game.setScreen(new GameScreen(stage.getBatch(), stage.getViewport(), username, selectedCharacter, velocidad, fuerza, vidas, armadura));
+                        game.setScreen(new GameScreen(game, stage.getBatch(), stage.getViewport(), username, selectedCharacter, velocidad, fuerza, vidas, armadura));
                     } else {
-                        game.setScreen(new MultiGameScreen(stage.getBatch(), stage.getViewport(), username, selectedCharacter, velocidad, fuerza, vidas, armadura));
+                        game.setScreen(new MultiGameScreen(game, stage.getBatch(), stage.getViewport(), username, selectedCharacter, velocidad, fuerza, vidas, armadura));
                     }
                 } else {
                     stage.getActors().get(16).setVisible(true);
