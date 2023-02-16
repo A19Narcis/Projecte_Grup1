@@ -29,6 +29,7 @@ public class Jugador extends Actor {
     private int direction = 3;
     private boolean attack;
     private boolean firstAnimationAttack;
+    private boolean firstAnimationDie;
     private boolean doDamage;
     private Vector2 position;
     private int width, height;
@@ -78,6 +79,7 @@ public class Jugador extends Actor {
         position = new Vector2(x, y);
         this.attack = false;
         firstAnimationAttack = false;
+        firstAnimationDie = true;
         doDamage = false;
         attackDelay = Settings.PLAYER_ATTACK_DELAY;
         this.map = map;
@@ -238,6 +240,10 @@ public class Jugador extends Actor {
                 }
             }
         }else{
+            if(firstAnimationDie){
+                currentFrame = 0;
+                firstAnimationDie = false;
+            }
             stateTime += delta;
             if (stateTime >= frameTime) {
                 currentFrame++;
@@ -303,6 +309,10 @@ public class Jugador extends Actor {
                 playerDir = animacionDown[0];
             }
         }else{
+            if(firstAnimationDie){
+                currentFrame = 0;
+            }
+            System.out.println(currentFrame);
             playerDir = animacionMuerte[currentFrame];
         }
         return playerDir;
@@ -378,13 +388,11 @@ public class Jugador extends Actor {
                         }
                         break;
                 }
-            }
-        }else{
-            for (int i = 0; i < arrowList.size(); i++) {
-                if(arrowList.get(i).setZombie(zombie)){
-                    i--;
-                }else{
-                    arrowList.get(i).move(delta);
+            }else{
+                for (int i = 0; i < arrowList.size(); i++) {
+                    if(arrowList.get(i).setZombie(zombie)){
+                        i--;
+                    }
                 }
             }
         }
@@ -435,9 +443,7 @@ public class Jugador extends Actor {
 
     public void die(int direction) {
         if(vida <= 0) {
-            currentFrame = 1;
             getStage().addActor(new PoolBlood(this.position, direction));
-            System.out.println(currentFrame);
         }
     }
 
