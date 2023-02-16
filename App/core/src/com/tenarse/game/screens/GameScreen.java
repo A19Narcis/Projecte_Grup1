@@ -75,8 +75,11 @@ public class GameScreen implements Screen {
 
     long lastZombieTime = 0;
 
+    float delta;
+
     ArrayList<Zombie> enemies = new ArrayList<>();
     ArrayList<Jugador> players = new ArrayList<>();
+    ArrayList<Arrow> arrowList = new ArrayList<>();
 
     private Tenarse game;
 
@@ -130,7 +133,7 @@ public class GameScreen implements Screen {
         /*Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
         enemies.add(zombie);
         stage.addActor(zombie);
-        Zombie zombie2 = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
+        /*Zombie zombie2 = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
         enemies.add(zombie2);
         stage.addActor(zombie2);
         Zombie zombie3 = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
@@ -298,6 +301,7 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(.5f, .7f, .9f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        this.delta = delta;
 
         cameraMapPosition();
 
@@ -338,20 +342,11 @@ public class GameScreen implements Screen {
                 }
             }
         }
-        if(enemies.size() <= 0){
-            for (Jugador player: players){
-                ArrayList <Arrow> arrowList= player.getArrowList();
-                for(Arrow arrow : arrowList){
-                    arrow.remove();
-                }
-                arrowList.clear();
-            }
-        }
-
 
         for (Jugador player: players){
+            arrowList = player.getArrowList();
             for (Zombie zombie: enemies) {
-                boolean atacado = zombie.colisionWithPlayer(jugador);
+                boolean atacado = zombie.colisionWithPlayer(player);
                 if(atacado){
                     if(armorArray.size() > 0){
                         armorArray.get(armorArray.size()-1).remove();
@@ -360,15 +355,26 @@ public class GameScreen implements Screen {
                         if (corazonesArray.size() > 0){
                             corazonesArray.get(corazonesArray.size() - 1).remove();
                             corazonesArray.remove(corazonesArray.size() - 1);
-                        } else {
-                            jugador.die(zombie.getDirection());
                         }
                     }
                 }
-                zombie.calculateMovement(jugador.getCollisionRectPlayer(), delta);
+                zombie.calculateMovement(player.getCollisionRectPlayer(), delta);
                 player.attacking(zombie, delta);
             }
         }
+
+        for (Jugador player: players){
+            arrowList= player.getArrowList();
+            for(Arrow arrow : arrowList){
+                if(enemies.size() <= 0) {
+                    arrow.remove();
+                    arrowList.clear();
+                }else {
+                    arrow.move(delta);
+                }
+            }
+        }
+
 
         for (int i = 0; i < enemies.size(); i++) {
             if(enemies.get(i).isDead()){
@@ -383,6 +389,9 @@ public class GameScreen implements Screen {
 
         for (int i = 0; i < players.size(); i++) {
             if(players.get(i).isDead()){
+                for (int j = 0; j < enemies.size(); j++) {
+                    players.get(i).die(enemies.get(i).getDirection());
+                }
                 players.remove(players.get(i));
                 if (players.size() == 0){
                     //Enviar POST de addNewPartida
@@ -474,6 +483,7 @@ public class GameScreen implements Screen {
         }
 
     }
+
 
     @Override
     public void resize(int width, int height) {
