@@ -35,7 +35,7 @@ import com.tenarse.game.utils.Settings;
 
 import java.util.ArrayList;
 
-public class GameScreen implements Screen {
+public class  GameScreen implements Screen {
 
     private EndGameDialog dialog;
 
@@ -180,10 +180,22 @@ public class GameScreen implements Screen {
             btnL_img.setZIndex(100);
             btnR_img.setZIndex(100);
             btn_atacar.setZIndex(100);
+
+            Skin skin = AssetManager.skinTextBox;
+            dialog = new EndGameDialog("Fin de la partida", skin, puntosParida, jugador.getKillsJugador(), game);
+
         } else {
             stage.getViewport().setWorldSize(stage.getViewport().getWorldWidth() / zoomPc, stage.getViewport().getWorldHeight() / zoomPc);
             stage.getViewport().apply();
+
+            Skin skin = AssetManager.skinTextBox;
+            dialog = new EndGameDialog("Fin de la partida", skin, puntosParida, jugador.getKillsJugador(), game);
+            dialog.setScale(0.8f);
+
         }
+
+        stage.addActor(dialog);
+        stage.getActors().get(1).setVisible(false);
 
         for (int i = 1; i <= Settings.PLAYER_VIDAS; i++) {
             hp_player = new ImageButton(new TextureRegionDrawable(new TextureRegion(corazonesTexture)));
@@ -381,7 +393,6 @@ public class GameScreen implements Screen {
                 enemies.remove(enemies.get(i));
                 puntosParida = puntosParida + 1;
                 jugador.unaKillMas();
-                System.out.println(jugador.getKillsJugador());
                 puntosText.setText(puntosParida);
                 i--;
             }
@@ -397,7 +408,6 @@ public class GameScreen implements Screen {
                     //Enviar POST de addNewPartida
                     contadorTiempo.detener();
                     String tiempo = contadorTiempo.getTiempo();
-                    System.out.println(tiempo);
                     ConnectionNode nodeJS = new ConnectionNode();
                     nodeJS.addNewPartida(this.username, jugador.getTypePlayer(), jugador.getKillsJugador(), tiempo, puntosParida);
                 }
@@ -406,30 +416,21 @@ public class GameScreen implements Screen {
         }
 
 
-        if (players.size() == 0){
+        if(players.size() == 0){
             if (Gdx.app.getType() == Application.ApplicationType.Android) {
-                Skin skin = AssetManager.skinTextBox;
-                dialog = new EndGameDialog("Fin de la partida", skin, puntosParida, jugador.getKillsJugador(), game);
-                dialog.show(stage);
                 dialog.setWidth(150f);
                 dialog.setHeight(150f);
                 dialog.setPosition(jugador.getCollisionRectPlayer().x - dialog.getWidth() / 2.5f , jugador.getCollisionRectPlayer().y - dialog.getHeight() / 2.5f);
-                fontBold.getData().setScale(0.2f);
-                skin.add("default-font", fontBold);
-                dialog.setSkin(skin);
             } else {
-                Skin skin = AssetManager.skinTextBox;
-                dialog = new EndGameDialog("Fin de la partida", skin, puntosParida, jugador.getKillsJugador(), game);
-                dialog.setScale(0.8f);
-                dialog.show(stage);
+                stage.getActors().get(1).setVisible(true);
+                dialog.setZIndex(300);
                 dialog.setWidth(300f);
                 dialog.setHeight(200f);
                 dialog.setPosition(jugador.getCollisionRectPlayer().x , jugador.getCollisionRectPlayer().y);
                 dialog.getButtonTable().setWidth(100f);
+                dialog.getButtonTable().setPosition(100, 20);
             }
-
         }
-
 
         spawnZombie();
 
