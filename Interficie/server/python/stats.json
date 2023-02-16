@@ -1,8 +1,8 @@
 [
     {
-        "nombreTipo":"Axe",
+        "nombreTipo":"Crossbow",
         "velocidad":3,
-        "fuerza":2,
+        "fuerza":1,
         "vida":2,
         "armadura":0.0,
         "cantidadMinuto":null
