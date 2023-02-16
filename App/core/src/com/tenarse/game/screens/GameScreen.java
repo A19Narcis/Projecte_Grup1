@@ -13,16 +13,17 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.tenarse.game.Tenarse;
 import com.tenarse.game.helpers.AssetManager;
 import com.tenarse.game.objects.Arrow;
 import com.tenarse.game.objects.ConnectionNode;
@@ -32,18 +33,11 @@ import com.tenarse.game.objects.Map;
 import com.tenarse.game.objects.Zombie;
 import com.tenarse.game.utils.Settings;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 
-import io.socket.client.IO;
-import io.socket.client.Socket;
-import io.socket.emitter.Emitter;
-
 public class GameScreen implements Screen {
+
+    private EndGameDialog dialog;
 
     private ContadorTiempo contadorTiempo;
 
@@ -83,7 +77,12 @@ public class GameScreen implements Screen {
 
     ArrayList<Zombie> enemies = new ArrayList<>();
     ArrayList<Jugador> players = new ArrayList<>();
-    public GameScreen(Batch prevBatch, Viewport prevViewport, String username, int tipus, int velocidad, int fuerza, int vidas, int armaduras) {
+
+    private Tenarse game;
+
+    public GameScreen(Tenarse game, Batch prevBatch, Viewport prevViewport, String username, int tipus, int velocidad, int fuerza, int vidas, int armaduras) {
+
+        this.game = game;
 
         contadorTiempo = new ContadorTiempo();
 
@@ -128,7 +127,7 @@ public class GameScreen implements Screen {
         jugador.setZIndex(51);
 
 
-        Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
+        /*Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
         enemies.add(zombie);
         stage.addActor(zombie);
         Zombie zombie2 = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
@@ -136,7 +135,7 @@ public class GameScreen implements Screen {
         stage.addActor(zombie2);
         Zombie zombie3 = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
         enemies.add(zombie3);
-        stage.addActor(zombie3);
+        stage.addActor(zombie3);*/
 
         corazonesTexture = AssetManager.hp_player;
         armaduraTexture = AssetManager.armor_player;
@@ -217,7 +216,6 @@ public class GameScreen implements Screen {
         puntosText.setScale(0.25f);
 
         stage.addActor(puntosText);
-
 
         Gdx.input.setInputProcessor(stage);
     }
@@ -372,11 +370,6 @@ public class GameScreen implements Screen {
             }
         }
 
-        if (players.size() == 0){
-            //Pantalla de derrota
-            //Vuelve al principio
-        }
-
         for (int i = 0; i < enemies.size(); i++) {
             if(enemies.get(i).isDead()){
                 enemies.remove(enemies.get(i));
@@ -403,7 +396,19 @@ public class GameScreen implements Screen {
             }
         }
 
-        //spawnZombie();
+
+        if (players.size() == 0){
+            Skin skin = AssetManager.skinTextBox;
+            dialog = new EndGameDialog("Fin de la partida", skin, puntosParida, jugador.getKillsJugador(), game);
+            dialog.setScale(0.8f);
+            dialog.show(stage);
+            dialog.setWidth(300f);
+            dialog.setPosition(jugador.getCollisionRectPlayer().x , jugador.getCollisionRectPlayer().y);
+            dialog.getButtonTable().setWidth(100f);
+        }
+
+
+        spawnZombie();
 
         if (buttonAttackPressed) {
             jugador.startAttack();

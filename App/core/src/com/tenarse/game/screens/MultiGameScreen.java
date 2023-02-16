@@ -13,7 +13,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -23,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.tenarse.game.Tenarse;
 import com.tenarse.game.helpers.AssetManager;
 import com.tenarse.game.objects.Arrow;
 import com.tenarse.game.objects.ConnectionNode;
@@ -32,7 +32,6 @@ import com.tenarse.game.objects.Map;
 import com.tenarse.game.objects.Zombie;
 import com.tenarse.game.utils.Settings;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -94,7 +93,7 @@ public class MultiGameScreen implements Screen {
 
     private HashMap<String, Jugador> jugadoresOnline;
 
-    public MultiGameScreen(Batch prevBatch, Viewport prevViewport, String username, int tipus, int velocidad, int fuerza, int vidas, int armaduras) {
+    public MultiGameScreen(Tenarse game, Batch prevBatch, Viewport prevViewport, String username, int tipus, int velocidad, int fuerza, int vidas, int armaduras) {
 
         contadorTiempo = new ContadorTiempo();
 
