@@ -312,7 +312,6 @@ public class Jugador extends Actor {
             if(firstAnimationDie){
                 currentFrame = 0;
             }
-            System.out.println(currentFrame);
             playerDir = animacionMuerte[currentFrame];
         }
         return playerDir;
@@ -438,7 +437,6 @@ public class Jugador extends Actor {
             this.vida -= damage;
         }
         getStage().addActor(new HitEffect(this.position));
-        System.out.println("HITTED");
     }
 
     public void die(int direction) {

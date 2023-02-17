@@ -12,6 +12,7 @@ public class Settings {
     public static final int PRESSED_DOWN = 3;
     public static final int PRESSED_RIGHT = 4;
 
+
     //Propietats jugador
     public static int PLAYER_VELOCITY = 1;
     public static int PLAYER_FUERZA = 1;
@@ -42,4 +43,12 @@ public class Settings {
     //PROPIETATS ARROW
     public static final float ARROW_VELOCITY = 400;
     public static final float ARROW_VLOCITY_MULTIPLIER = 8;
+
+    //Propietats bonus
+    public static final float BONUS_POSIBILITY = 0.20f;
+
+    public static final float B_LIVE_POSIBILITY = 0.15f; //15%
+    public static final float B_DAMAGE_POSIBILITY = 0.35f; //35%
+    public static final float B_VELOCITY_POSIBILITY = 0.35f;//35%
+    public static final float B_SHIELD_POSIBILITY = 0.15f;//15%
 }
