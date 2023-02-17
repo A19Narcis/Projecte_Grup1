@@ -312,7 +312,6 @@ public class Jugador extends Actor {
             if(firstAnimationDie){
                 currentFrame = 0;
             }
-            System.out.println(currentFrame);
             playerDir = animacionMuerte[currentFrame];
         }
         return playerDir;
