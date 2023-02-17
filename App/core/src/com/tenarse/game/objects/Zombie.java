@@ -327,7 +327,6 @@ public class Zombie extends Actor{
         this.position.x = oldX;
         this.position.y = oldY;
         getStage().addActor(new HitEffect(this.position));
-        System.out.println("HITTED");
     }
 
     public void die(int direction) {
@@ -336,9 +335,6 @@ public class Zombie extends Actor{
             hited = true;
             timeHited = TimeUtils.nanoTime();
             getStage().addActor(new PoolBlood(this.position, direction));
-            if(MathUtils.random() < Settings.BONUS_POSIBILITY) {
-                getStage().addActor(new Bonus(this.position));
-            }
         }
     }
 

@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -24,6 +25,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.tenarse.game.Tenarse;
+import com.tenarse.game.bonus.Bonus;
 import com.tenarse.game.helpers.AssetManager;
 import com.tenarse.game.objects.Arrow;
 import com.tenarse.game.objects.ConnectionNode;
@@ -80,6 +82,7 @@ public class  GameScreen implements Screen {
     ArrayList<Zombie> enemies = new ArrayList<>();
     ArrayList<Jugador> players = new ArrayList<>();
     ArrayList<Arrow> arrowList = new ArrayList<>();
+    ArrayList<Bonus> bonusList = new ArrayList<>();
 
     private Tenarse game;
 
@@ -385,11 +388,25 @@ public class  GameScreen implements Screen {
                     arrow.move(delta);
                 }
             }
+            for (int i = 0; i < bonusList.size(); i++) {
+                if(bonusList.get(i).getColisionRectangle().overlaps(player.getCollisionRectPlayer())){
+                    player.getBonusMultiplier()[bonusList.get(i).getGemType()] += 1;
+                    System.out.println(player.getBonusMultiplier()[bonusList.get(i).getGemType()]);
+                    bonusList.get(i).remove();
+                    bonusList.remove(bonusList.get(i));
+                    i--;
+                }
+            }
         }
 
 
         for (int i = 0; i < enemies.size(); i++) {
             if(enemies.get(i).isDead()){
+                if(MathUtils.random() < Settings.BONUS_POSIBILITY) {
+                    Bonus bonus = new Bonus(enemies.get(i).getPosition());
+                    bonusList.add(bonus);
+                    getStage().addActor(bonus);
+                }
                 enemies.remove(enemies.get(i));
                 puntosParida = puntosParida + 1;
                 jugador.unaKillMas();

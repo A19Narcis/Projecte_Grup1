@@ -72,6 +72,7 @@ public class Jugador extends Actor {
 
     private ArrayList<Arrow> arrowList = new ArrayList<>();
 
+    private int bonusMultiplier [] = {1, 1, 1, 1};
 
     public Jugador(float x, float y, int width, int height, String categoria, int tipusJugador, Map map){
         this.width = width;
@@ -399,7 +400,8 @@ public class Jugador extends Actor {
     }
 
     private void setDamageZombie(Zombie zombie) {
-        zombie.setDamage(Settings.PLAYER_FUERZA);
+        int damage = Settings.PLAYER_FUERZA * bonusMultiplier[Settings.BONUS_DAMAGE];
+        zombie.setDamage(damage);
         zombie.die(this.direction);
     }
 
@@ -456,5 +458,9 @@ public class Jugador extends Actor {
 
     public boolean isDead() {
         return isDead;
+    }
+
+    public int[] getBonusMultiplier() {
+        return bonusMultiplier;
     }
 }

@@ -46,9 +46,12 @@ public class Settings {
 
     //Propietats bonus
     public static final float BONUS_POSIBILITY = 0.20f;
-
     public static final float B_LIVE_POSIBILITY = 0.15f; //15%
     public static final float B_DAMAGE_POSIBILITY = 0.35f; //35%
     public static final float B_VELOCITY_POSIBILITY = 0.35f;//35%
     public static final float B_SHIELD_POSIBILITY = 0.15f;//15%
+    public static final int BONUS_LIVE = 0;
+    public static final int BONUS_DAMAGE = 1;
+    public static final int BONUS_VELOCITY = 2;
+    public static final int BONUS_SHIELD = 3;
 }
