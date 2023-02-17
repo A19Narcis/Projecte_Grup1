@@ -49,6 +49,10 @@ public class Arrow extends Actor {
                 break;
         }
         arrowColison = new Rectangle(position.x, position.y, width, height);
+<<<<<<< HEAD
+=======
+        //System.out.println("A: " + this.position.x+ ", J: "+ jugador.getCollisionRectPlayer().x);
+>>>>>>> e9b283652dd4eee2f90ebd9a7537872686021f6d
     }
 
     public void move(float delta) {
@@ -72,7 +76,6 @@ public class Arrow extends Actor {
 
     public boolean setZombie(Zombie zombie) {
         boolean removed = false;
-        //System.out.println("Z: "+zombie.getPosition().y + ", A: " + this.position.y);
         if(position.x - zombie.getPosition().x < width && position.x - zombie.getPosition().x > -width) {
             if(position.y - zombie.getPosition().y < height && position.y - zombie.getPosition().y > -height) {
                 zombie.setDamage(Settings.PLAYER_FUERZA);

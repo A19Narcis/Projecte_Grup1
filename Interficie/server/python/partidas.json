@@ -18,65 +18,51 @@
             }
         ],
         "tiempo":"32:11",
-        "puntos":0,
-        "idP":0
+        "idP":0,
+        "puntos":120
     },
     {
         "jugadores":[
             {
-                "username":"tololol",
+                "username":"Narcis",
                 "tipo":"Axe",
-                "kills":35
+                "kills":12
             },
-            {
-                "username":"tololol",
-                "tipo":"Axe",
-                "kills":35
-            },
-            {
-                "username":"tololol",
-                "tipo":"Axe",
-                "kills":35
-            }
-        ],
-        "tiempo":"43:01",
-        "puntos":7342,
-        "idP":8
-    },
-    {
-        "jugadores":[
             {
                 "username":"Sergi",
                 "tipo":"Warhammer",
-                "kills":0
+                "kills":32
+            },
+            {
+                "username":"Teo",
+                "tipo":"Shield",
+                "kills":28
             }
         ],
-        "tiempo":"0:15",
-        "puntos":0,
-        "idP":9
+        "tiempo":"32:11",
+        "idP":1,
+        "puntos":50
     },
     {
         "jugadores":[
             {
-                "username":"Buenas",
-                "tipo":"Crossbow",
-                "kills":1
-            }
-        ],
-        "tiempo":"1:6",
-        "puntos":1,
-        "idP":10
-    },
-    {
-        "jugadores":[
+                "username":"Narcis",
+                "tipo":"Axe",
+                "kills":12
+            },
             {
-                "username":"Champion",
+                "username":"Sergi",
                 "tipo":"Warhammer",
-                "kills":58
+                "kills":32
+            },
+            {
+                "username":"Teo",
+                "tipo":"Shield",
+                "kills":28
             }
         ],
-        "tiempo":"1:45",
-        "puntos":58,
-        "idP":11
+        "tiempo":"32:11",
+        "idP":2,
+        "puntos":1200
     }
 ]

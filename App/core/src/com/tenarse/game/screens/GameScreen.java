@@ -20,6 +20,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -136,7 +138,7 @@ public class  GameScreen implements Screen {
         /*Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
         enemies.add(zombie);
         stage.addActor(zombie);
-        /*Zombie zombie2 = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
+        Zombie zombie2 = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
         enemies.add(zombie2);
         stage.addActor(zombie2);
         Zombie zombie3 = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
@@ -145,6 +147,10 @@ public class  GameScreen implements Screen {
 
         corazonesTexture = AssetManager.hp_player;
         armaduraTexture = AssetManager.armor_player;
+
+        Skin skin = AssetManager.skinTextBox;
+        dialog = new EndGameDialog("Fin de la partida", skin, puntosParida, jugador.getKillsJugador(), game);
+        dialog.setZIndex(1000);
 
         if (Gdx.app.getType() == Application.ApplicationType.Android) {//Zoom para Android
             stage.getViewport().setWorldSize(stage.getViewport().getWorldWidth() / zoomAndroid, stage.getViewport().getWorldHeight() / zoomAndroid);
@@ -183,22 +189,21 @@ public class  GameScreen implements Screen {
             btnL_img.setZIndex(100);
             btnR_img.setZIndex(100);
             btn_atacar.setZIndex(100);
-
-            Skin skin = AssetManager.skinTextBox;
-            dialog = new EndGameDialog("Fin de la partida", skin, puntosParida, jugador.getKillsJugador(), game);
-
         } else {
             stage.getViewport().setWorldSize(stage.getViewport().getWorldWidth() / zoomPc, stage.getViewport().getWorldHeight() / zoomPc);
             stage.getViewport().apply();
 
-            Skin skin = AssetManager.skinTextBox;
-            dialog = new EndGameDialog("Fin de la partida", skin, puntosParida, jugador.getKillsJugador(), game);
             dialog.setScale(0.8f);
-
         }
 
         stage.addActor(dialog);
-        stage.getActors().get(1).setVisible(false);
+        if (Gdx.app.getType() == Application.ApplicationType.Android){
+            System.out.println(stage.getActors());
+            stage.getActors().get(6).setVisible(false);
+        } else {
+            stage.getActors().get(1).setVisible(false);
+        }
+
 
         for (int i = 1; i <= Settings.PLAYER_VIDAS; i++) {
             hp_player = new ImageButton(new TextureRegionDrawable(new TextureRegion(corazonesTexture)));
@@ -435,17 +440,16 @@ public class  GameScreen implements Screen {
 
         if(players.size() == 0){
             if (Gdx.app.getType() == Application.ApplicationType.Android) {
+                stage.getActors().get(6).setVisible(true);
+                dialog.getTitleLabel().setFontScale(0.90f);
                 dialog.setWidth(150f);
                 dialog.setHeight(150f);
                 dialog.setPosition(jugador.getCollisionRectPlayer().x - dialog.getWidth() / 2.5f , jugador.getCollisionRectPlayer().y - dialog.getHeight() / 2.5f);
             } else {
                 stage.getActors().get(1).setVisible(true);
-                dialog.setZIndex(300);
-                dialog.setWidth(300f);
+                dialog.setWidth(225f);
                 dialog.setHeight(200f);
-                dialog.setPosition(jugador.getCollisionRectPlayer().x , jugador.getCollisionRectPlayer().y);
-                dialog.getButtonTable().setWidth(100f);
-                dialog.getButtonTable().setPosition(100, 20);
+                dialog.setPosition(jugador.getCollisionRectPlayer().x - dialog.getWidth() / 3.5f , jugador.getCollisionRectPlayer().y);
             }
         }
 
