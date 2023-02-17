@@ -49,10 +49,6 @@ public class Arrow extends Actor {
                 break;
         }
         arrowColison = new Rectangle(position.x, position.y, width, height);
-<<<<<<< HEAD
-=======
-        //System.out.println("A: " + this.position.x+ ", J: "+ jugador.getCollisionRectPlayer().x);
->>>>>>> e9b283652dd4eee2f90ebd9a7537872686021f6d
     }
 
     public void move(float delta) {
