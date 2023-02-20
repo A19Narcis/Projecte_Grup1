@@ -13,14 +13,42 @@ public class EndGameDialog extends Dialog {
 
     private Tenarse game;
 
+    private int puntosPartida;
+    private int killsJugador;
+    private Label texto;
+
+    public int getPuntosPartida() {
+        return puntosPartida;
+    }
+
+    public void setPuntosPartida(int puntosPartida) {
+        this.puntosPartida = puntosPartida;
+    }
+
+    public int getKillsJugador() {
+        return killsJugador;
+    }
+
+    public void setKillsJugador(int killsJugador) {
+        this.killsJugador = killsJugador;
+    }
+
+    public Label getTexto() {
+        return texto;
+    }
+
     public EndGameDialog(String title, Skin skin, int puntosParida, int killsJugador, final Tenarse game) {
         super(title, skin);
         this.game = game;
-        // Agrega el contenido que deseas mostrar en el diálogo
-        Label texto = new Label("Partida terminada\n\nPuntos: " + puntosParida + "\nKills: " + killsJugador, skin);
-        texto.setScale(0.80f);
 
-        getContentTable().add(texto).pad(5f);
+        this.puntosPartida = puntosParida;
+        this.killsJugador = killsJugador;
+
+        // Agrega el contenido que deseas mostrar en el diálogo
+        this.texto = new Label("", skin);
+        this.texto.setScale(0.80f);
+
+        getContentTable().add(this.texto).pad(5f);
         // Agrega el botón para volver al menú
         TextButton button = new TextButton("Menu Principal", skin, "default");
         if (Gdx.app.getType() == Application.ApplicationType.Android){
