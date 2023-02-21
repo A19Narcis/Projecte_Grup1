@@ -30,6 +30,7 @@ public class AssetManager {
     public static Texture sheetPlayerWar;
     public static Texture sheetPlayerShield;
     public static Texture sheetZombie;
+    public static Texture sheetBoos;
     public static Texture sheetHit;
     public static Texture imgMainMenu;
     public static Texture imgChooseBox;
@@ -67,6 +68,9 @@ public class AssetManager {
 
     public static TextureRegion[] zombieRight_Animation, zombieLeft_Animation, zombieUp_Animation, zombieDown_Animation, zombieSpawn_Animation, zombieDead_Animation;
     public static TextureRegion[] ZombieRight_Atack, ZombieLeft_Atack, ZombieUp_Atack, ZombieDown_Atack;
+
+    public static TextureRegion[] bossRight_Animation, bossLeft_Animation, bossUp_Animation, bossDown_Animation, bossSpawn_Animation, bossDead_Animation;
+    public static TextureRegion[] bossRight_Atack, bossLeft_Atack, bossUp_Atack, bossDown_Atack;
 
     public static TextureRegion[] ShieldDeadAnimation, CrossbowlDeadAnimation, WarhamerDeadAnimation;
 
@@ -127,6 +131,10 @@ public class AssetManager {
         //Zombie
         sheetZombie = new Texture(Gdx.files.internal("Zombie.png"));
         sheetZombie.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+
+        //Boss
+        sheetBoos = new Texture(Gdx.files.internal("Boss.png"));
+        sheetBoos.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
         //Hit Sangre
         sheetHit = new Texture(Gdx.files.internal("hit.png"));
@@ -458,25 +466,98 @@ public class AssetManager {
         //Derecha Zombie Ataque
         ZombieRight_Atack = new TextureRegion[6];
         for (int i = 0; i < ZombieRight_Atack.length; i++) {
-            ZombieRight_Atack[i] = new TextureRegion(sheetZombie, i * 64, 64 * 15, 64, 64);
+            ZombieRight_Atack[i] = new TextureRegion(sheetBoos, i * 64, 64 * 15, 64, 64);
         }
 
         //Izquierda Zombie Ataque
         ZombieLeft_Atack = new TextureRegion[6];
         for (int i = 0; i < ZombieLeft_Atack.length; i++) {
-            ZombieLeft_Atack[i] = new TextureRegion(sheetZombie, i * 64, 64 * 13, 64, 64);
+            ZombieLeft_Atack[i] = new TextureRegion(sheetBoos, i * 64, 64 * 13, 64, 64);
         }
 
         //Arriba Zombie Ataque
         ZombieUp_Atack = new TextureRegion[6];
         for (int i = 0; i < ZombieUp_Atack.length; i++) {
-            ZombieUp_Atack[i] = new TextureRegion(sheetZombie, i * 64, 64 * 12, 64, 64);
+            ZombieUp_Atack[i] = new TextureRegion(sheetBoos, i * 64, 64 * 12, 64, 64);
         }
 
         //Abajo Zombie Ataque
         ZombieDown_Atack = new TextureRegion[6];
         for (int i = 0; i < ZombieDown_Atack.length; i++) {
-            ZombieDown_Atack[i] = new TextureRegion(sheetZombie, i * 64, 64 * 14, 64, 64);
+            ZombieDown_Atack[i] = new TextureRegion(sheetBoos, i * 64, 64 * 14, 64, 64);
+        }
+
+
+
+
+
+
+
+
+        //Derecha Boss
+        bossRight_Animation = new TextureRegion[9];
+        for (int i = 0; i < bossRight_Animation.length; i++) {
+            bossRight_Animation[i] = new TextureRegion(sheetBoos, i * 64, 64 * 11, 64, 64);
+        }
+
+        //Izquierda Boss
+        bossLeft_Animation = new TextureRegion[9];
+        for (int i = 0; i < bossLeft_Animation.length; i++) {
+            bossLeft_Animation[i] = new TextureRegion(sheetBoos, i * 64, 64 * 9, 64, 64);
+        }
+
+        //Arriba Boss
+        bossUp_Animation = new TextureRegion[9];
+        for (int i = 0; i < bossUp_Animation.length; i++) {
+            bossUp_Animation[i] = new TextureRegion(sheetBoos, i * 64, 64 * 8, 64, 64);
+        }
+
+        //Abajo Boss
+        bossDown_Animation = new TextureRegion[9];
+        for (int i = 0; i < bossDown_Animation.length; i++) {
+            bossDown_Animation[i] = new TextureRegion(sheetBoos, i * 64, 64 * 10, 64, 64);
+        }
+
+        //Spawn Boss
+        bossSpawn_Animation = new TextureRegion[5];
+        for (int i = bossSpawn_Animation.length - 1; i >= 0 ; i--) {
+            bossSpawn_Animation[(zombieSpawn_Animation.length - 1) - i] = new TextureRegion(sheetBoos, i * 64, 64 * 20, 64, 64);
+        }
+
+        //Muerte Boss
+        bossDead_Animation = new TextureRegion[6];
+        for (int i = 0; i < bossDead_Animation.length; i++) {
+            bossDead_Animation[i] = new TextureRegion(sheetBoos, i * 64, 64 * 20, 64, 64);
+        }
+
+
+
+
+
+
+
+        //Derecha Boss Ataque
+        bossRight_Atack = new TextureRegion[6];
+        for (int i = 0; i < bossRight_Atack.length; i++) {
+            bossRight_Atack[i] = new TextureRegion(sheetBoos, i * 64, 64 * 15, 64, 64);
+        }
+
+        //Izquierda Boss Ataque
+        bossLeft_Atack = new TextureRegion[6];
+        for (int i = 0; i < bossLeft_Atack.length; i++) {
+            bossLeft_Atack[i] = new TextureRegion(sheetBoos, i * 64, 64 * 13, 64, 64);
+        }
+
+        //Arriba Boss Ataque
+        bossUp_Atack = new TextureRegion[6];
+        for (int i = 0; i < bossUp_Atack.length; i++) {
+            bossUp_Atack[i] = new TextureRegion(sheetBoos, i * 64, 64 * 12, 64, 64);
+        }
+
+        //Abajo Boss Ataque
+        bossDown_Atack = new TextureRegion[6];
+        for (int i = 0; i < bossDown_Atack.length; i++) {
+            bossDown_Atack[i] = new TextureRegion(sheetBoos, i * 64, 64 * 14, 64, 64);
         }
 
 

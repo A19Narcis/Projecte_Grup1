@@ -472,8 +472,8 @@ public class MultiGameScreen implements Screen {
     }
 
     private void spawnZombie() {
-        if (TimeUtils.nanoTime() - lastZombieTime > Settings.SPAWN_INTERVAL) {
-            Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
+        if (TimeUtils.nanoTime() - lastZombieTime > Settings.ZOMBIE_SPAWN_INTERVAL) {
+            Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map, 1);
             enemies.add(zombie);
             stage.addActor(zombie);
             zombie.setZIndex(50);

@@ -72,7 +72,9 @@ public class Jugador extends Actor {
 
     private ArrayList<Arrow> arrowList = new ArrayList<>();
 
-    private int bonusMultiplier [] = {1, 1, 1, 1};
+    private int bonusMultiplier [] = {0, 0, 0, 0};
+    private long timeoutVelocity;
+    private long timeoutDamage;
 
     public Jugador(float x, float y, int width, int height, String categoria, int tipusJugador, Map map){
         this.width = width;
@@ -135,6 +137,14 @@ public class Jugador extends Actor {
 
         public void act(float delta){
         super.act(delta);
+        if(TimeUtils.nanoTime() - timeoutVelocity >= Settings.B_VELOCITY_TIMEOUT && bonusMultiplier[Settings.BONUS_VELOCITY] > 0){
+            bonusMultiplier[Settings.BONUS_VELOCITY]--;
+            timeoutVelocity = TimeUtils.nanoTime();
+        }
+        if(TimeUtils.nanoTime() - timeoutDamage >= Settings.B_VELOCITY_TIMEOUT && bonusMultiplier[Settings.BONUS_DAMAGE] > 0){
+            bonusMultiplier[Settings.BONUS_DAMAGE]--;
+            timeoutDamage = TimeUtils.nanoTime();
+        }
         if(vida > 0) {
             if (this.categoria.equals("bot")) {
                 this.position.x += 5;
@@ -146,7 +156,7 @@ public class Jugador extends Actor {
                 oldy = this.position.y;
                 if ((Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A) || this.bntLeftIsPressed) && !attack) {
                     this.direction = Settings.PRESSED_LEFT;
-                    this.position.x -= Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
+                    this.position.x -= (Settings.PLAYER_VELOCITY + (bonusMultiplier[Settings.BONUS_VELOCITY] * 10)) * Gdx.graphics.getDeltaTime();
                     this.position.x -= 8;
                     if (map.searchColision(position.x, position.y)) {
                         this.position.x = oldx;
@@ -157,7 +167,7 @@ public class Jugador extends Actor {
                 }
                 if ((Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D) || this.bntRightIsPressed) && !attack) {
                     this.direction = Settings.PRESSED_RIGHT;
-                    this.position.x += Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
+                    this.position.x += (Settings.PLAYER_VELOCITY + (bonusMultiplier[Settings.BONUS_VELOCITY] * 10)) * Gdx.graphics.getDeltaTime();
                     this.position.x += 8;
                     if (map.searchColision(position.x, position.y)) {
                         this.position.x = oldx;
@@ -168,7 +178,7 @@ public class Jugador extends Actor {
                 }
                 if ((Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W) || this.bntUpIsPressed) && !attack) {
                     this.direction = Settings.PRESSED_UP;
-                    this.position.y += Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
+                    this.position.y += (Settings.PLAYER_VELOCITY + (bonusMultiplier[Settings.BONUS_VELOCITY] * 10)) * Gdx.graphics.getDeltaTime();
                     if (map.searchColision(position.x, position.y)) {
                         this.position.x = oldx;
                         this.position.y = oldy;
@@ -176,7 +186,7 @@ public class Jugador extends Actor {
                 }
                 if ((Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S) || this.bntDownIsPressed) && !attack) {
                     this.direction = Settings.PRESSED_DOWN;
-                    this.position.y -= Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
+                    this.position.y -= (Settings.PLAYER_VELOCITY + (bonusMultiplier[Settings.BONUS_VELOCITY] * 10)) * Gdx.graphics.getDeltaTime();
                     this.position.y -= 12;
                     if (map.searchColision(position.x, position.y)) {
                         this.position.x = oldx;
@@ -260,6 +270,7 @@ public class Jugador extends Actor {
     public void draw(Batch batch, float parentAlpha){
         batch.draw(getPlayerAnimation(), this.position.x, this.position.y, width, height);
         doDamage = false;
+        System.out.println(vida +" --- "+ armadura);
     }
 
     private TextureRegion getPlayerAnimation() {
@@ -399,7 +410,7 @@ public class Jugador extends Actor {
     }
 
     private void setDamageZombie(Zombie zombie) {
-        int damage = Settings.PLAYER_FUERZA * bonusMultiplier[Settings.BONUS_DAMAGE];
+        int damage = Settings.PLAYER_FUERZA + bonusMultiplier[Settings.BONUS_DAMAGE];
         zombie.setDamage(damage);
         zombie.die(this.direction);
     }
@@ -461,5 +472,27 @@ public class Jugador extends Actor {
 
     public int[] getBonusMultiplier() {
         return bonusMultiplier;
+    }
+
+    public void subirVida() {
+        bonusMultiplier[Settings.BONUS_LIVE]++;
+        vida += bonusMultiplier[Settings.BONUS_LIVE];
+        bonusMultiplier[Settings.BONUS_LIVE] = 0;
+    }
+
+    public void subirArmadura() {
+        bonusMultiplier[Settings.BONUS_SHIELD]++;
+        armadura += bonusMultiplier[Settings.BONUS_SHIELD];
+        bonusMultiplier[Settings.BONUS_SHIELD] = 0;
+    }
+
+    public void subirVelocidad() {
+        bonusMultiplier[Settings.BONUS_VELOCITY] += 1;
+        timeoutVelocity = TimeUtils.nanoTime();
+    }
+
+    public void subirFuerza() {
+        bonusMultiplier[Settings.BONUS_DAMAGE] += 1;
+        timeoutDamage = TimeUtils.nanoTime();
     }
 }

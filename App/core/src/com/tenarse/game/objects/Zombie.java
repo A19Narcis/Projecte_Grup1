@@ -49,9 +49,12 @@ public class Zombie extends Actor{
     private boolean firstAnimationAttack;
     private boolean doDamage;
 
+    private int damage;
+    private int velocity;
+
     private long timeColisoningPlayer;
 
-    public Zombie(int width, int height, Map map) {
+    public Zombie(int width, int height, Map map, int tipoZombie) {
         this.width = width;
         this.height = height;
         this.map = map;
@@ -69,17 +72,33 @@ public class Zombie extends Actor{
         rectanguloDeteccion.width = Settings.ZOMBIE_WIDTH;
         rectanguloDeteccion.height = Settings.ZOMBIE_HEIGHT;
 
-        animacionRight = AssetManager.zombieRight_Animation;
-        animacionLeft = AssetManager.zombieLeft_Animation;
-        animacionUp = AssetManager.zombieUp_Animation;
-        animacionDown = AssetManager.zombieDown_Animation;
-        animacionSpawn = AssetManager.zombieSpawn_Animation;
-        animacionDead = AssetManager.zombieDead_Animation;
-        animacionAtackL = AssetManager.ZombieLeft_Atack;
-        animacionAtackR = AssetManager.ZombieRight_Atack;
-        animacionAtackU = AssetManager.ZombieUp_Atack;
-        animacionAtackD = AssetManager.ZombieDown_Atack;
-
+        if(tipoZombie == 1) {
+            animacionRight = AssetManager.zombieRight_Animation;
+            animacionLeft = AssetManager.zombieLeft_Animation;
+            animacionUp = AssetManager.zombieUp_Animation;
+            animacionDown = AssetManager.zombieDown_Animation;
+            animacionSpawn = AssetManager.zombieSpawn_Animation;
+            animacionDead = AssetManager.zombieDead_Animation;
+            animacionAtackL = AssetManager.ZombieLeft_Atack;
+            animacionAtackR = AssetManager.ZombieRight_Atack;
+            animacionAtackU = AssetManager.ZombieUp_Atack;
+            animacionAtackD = AssetManager.ZombieDown_Atack;
+            damage = Settings.ZOMBIE_FUERZA;
+            velocity = Settings.ZOMBIE_VELOCITY;
+        }else if(tipoZombie == 2){
+            animacionRight = AssetManager.bossRight_Animation;
+            animacionLeft = AssetManager.bossLeft_Animation;
+            animacionUp = AssetManager.bossUp_Animation;
+            animacionDown = AssetManager.bossDown_Animation;
+            animacionSpawn = AssetManager.bossSpawn_Animation;
+            animacionDead = AssetManager.bossDead_Animation;
+            animacionAtackL = AssetManager.bossLeft_Atack;
+            animacionAtackR = AssetManager.bossRight_Atack;
+            animacionAtackU = AssetManager.bossUp_Atack;
+            animacionAtackD = AssetManager.bossDown_Atack;
+            damage = Settings.BOSS_FUERZA;
+            velocity = Settings.BOSS_VELOCITY;
+        }
         spawned = false;
         colision = false;
     }
@@ -104,7 +123,7 @@ public class Zombie extends Actor{
             int colisionMov;
             Vector2 direction = new Vector2(jugador.x - position.x, jugador.y - position.y);
             direction.nor();
-            position.x += direction.x * Settings.ZOMBIE_VELOCITY * delta;
+            position.x += direction.x * velocity * delta;
             if(oldX < position.x){
                 colisionMov = 8;
             }else{
@@ -118,7 +137,7 @@ public class Zombie extends Actor{
             }
 
 
-            position.y += direction.y * Settings.ZOMBIE_VELOCITY * delta;
+            position.y += direction.y * velocity * delta;
             if(oldY < position.y){
                 colisionMov = 8;
             }else{
@@ -163,7 +182,8 @@ public class Zombie extends Actor{
             zombie.setDetected(colision);
     }
 
-    public boolean colisionWithPlayer(Jugador jugador) {
+    public int colisionWithPlayer(Jugador jugador) {
+        int damageDone = 0;
         if (!colision) {
             boolean result;
             float calculoX = jugador.getCollisionRectPlayer().x - rectanguloDeteccion.x;
@@ -182,14 +202,15 @@ public class Zombie extends Actor{
             }
             oldColisionPlayer = result;
             colision = result;
-            if(oldColisionPlayer && TimeUtils.nanoTime() - timeColisoningPlayer > Settings.ZOMBIE_HIT_DELAY && !doDamage){
+            if(oldColisionPlayer && TimeUtils.nanoTime() - timeColisoningPlayer > Settings.ZOMBIE_HIT_DELAY && !doDamage && vida > 0){
                 attack = true;
                 firstAnimationAttack = true;
                 doDamage = true;
-                jugador.setDamage(Settings.ZOMBIE_FUERZA);
+                damageDone = damage;
+                jugador.setDamage(damage);
             }
         }
-        return firstAnimationAttack;
+        return damageDone;
     }
 
     private TextureRegion getZombieAnimation() {
@@ -258,9 +279,6 @@ public class Zombie extends Actor{
     public void act(float delta){
         colision = false;
         detected = false;
-        if(isDead()) {
-            remove();
-        }else{
             if (vida > 0) {
                 if (!spawned) {
                     stateTime += delta;
@@ -307,12 +325,12 @@ public class Zombie extends Actor{
                     currentFrame++;
                     if (currentFrame >= animacionDead.length) {
                         currentFrame = 0;
+                        remove();
                         dead = true;
                     }
                     stateTime = 0;
                 }
             }
-        }
         if(hited && TimeUtils.nanoTime() - timeHited > Settings.ZOMBIE_HIT_DELAY){
             hited = false;
         }

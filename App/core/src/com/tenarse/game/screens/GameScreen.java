@@ -3,7 +3,6 @@ package com.tenarse.game.screens;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -18,12 +17,8 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.tenarse.game.Tenarse;
@@ -352,17 +347,17 @@ public class  GameScreen implements Screen {
         for (Jugador player: players){
             arrowList = player.getArrowList();
             for (Zombie zombie: enemies) {
-                boolean atacado = zombie.colisionWithPlayer(player);
-                if(atacado){
-                    if(armorArray.size() > 0){
-                        armorArray.get(armorArray.size()-1).remove();
-                        armorArray.remove(armorArray.size()-1);
-                    }else {
-                        if (corazonesArray.size() > 0){
-                            corazonesArray.get(corazonesArray.size() - 1).remove();
-                            corazonesArray.remove(corazonesArray.size() - 1);
+                int atacado = zombie.colisionWithPlayer(player);
+                if(atacado > 0){
+                        for (int i = atacado; i > 0; i--) {
+                            if(armorArray.size() > 0) {
+                                armorArray.get(armorArray.size() - 1).remove();
+                                armorArray.remove(armorArray.size() - 1);
+                            }else{
+                                corazonesArray.get(corazonesArray.size() - 1).remove();
+                                corazonesArray.remove(corazonesArray.size() - 1);
+                            }
                         }
-                    }
                 }
                 zombie.calculateMovement(player.getCollisionRectPlayer(), delta);
                 player.attacking(zombie, delta);
@@ -380,12 +375,32 @@ public class  GameScreen implements Screen {
                 }
             }
             for (int i = 0; i < bonusList.size(); i++) {
-                if(bonusList.get(i).getColisionRectangle().overlaps(player.getCollisionRectPlayer())){
-                    player.getBonusMultiplier()[bonusList.get(i).getGemType()] += 1;
-                    System.out.println(player.getBonusMultiplier()[bonusList.get(i).getGemType()]);
-                    bonusList.get(i).remove();
-                    bonusList.remove(bonusList.get(i));
+                if(bonusList.get(i).isDelete()){
+                    bonusList.remove(i);
                     i--;
+                }else {
+                    if (bonusList.get(i).isActive() && bonusList.get(i).getColisionRectangle().overlaps(player.getCollisionRectPlayer())) {
+                        if (bonusList.get(i).getGemType() == Settings.BONUS_LIVE) {
+                            hp_player = new ImageButton(new TextureRegionDrawable(new TextureRegion(corazonesTexture)));
+                            hp_player.setSize(12, 12);
+                            corazonesArray.add(hp_player);
+                            stage.addActor(hp_player);
+                            player.subirVida();
+                        } else if (bonusList.get(i).getGemType() == Settings.BONUS_VELOCITY) {
+                            player.subirVelocidad();
+                        } else if (bonusList.get(i).getGemType() == Settings.BONUS_DAMAGE) {
+                            player.subirFuerza();
+                        } else if (bonusList.get(i).getGemType() == Settings.BONUS_SHIELD) {
+                            armor_player = new ImageButton(new TextureRegionDrawable(new TextureRegion(armaduraTexture)));
+                            armor_player.setSize(12, 12);
+                            armorArray.add(armor_player);
+                            stage.addActor(armor_player);
+                            player.subirArmadura();
+                        }
+                        bonusList.get(i).remove();
+                        bonusList.remove(bonusList.get(i));
+                        i--;
+                    }
                 }
             }
         }
@@ -401,7 +416,6 @@ public class  GameScreen implements Screen {
                 enemies.remove(enemies.get(i));
                 puntosParida = puntosParida + 1;
                 jugador.unaKillMas();
-                System.out.println(jugador.getKillsJugador());
                 hud.getScoreLabel().setText(puntosParida);
                 i--;
             }
@@ -426,7 +440,9 @@ public class  GameScreen implements Screen {
 
         if (players.size() > 0){
             spawnZombie();
+            spawnBoss();
         } else {
+            dialog.setZIndex(150);
             stage.addActor(dialog);
             dialog.getTexto().setText("Partida terminada\n\nPuntos: " + puntosParida + "\nKills: " + jugador.getKillsJugador());
             if (Gdx.app.getType() == Application.ApplicationType.Android) {
@@ -472,12 +488,21 @@ public class  GameScreen implements Screen {
     }
 
     private void spawnZombie() {
-        if (TimeUtils.nanoTime() - lastZombieTime > Settings.SPAWN_INTERVAL) {
-            Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
+        if (TimeUtils.nanoTime() - lastZombieTime > Settings.ZOMBIE_SPAWN_INTERVAL) {
+            Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map, 1);
             enemies.add(zombie);
             stage.addActor(zombie);
             zombie.setZIndex(25);
-            System.out.println("Zombie: " + zombie.getZIndex());
+            lastZombieTime = TimeUtils.nanoTime();
+        }
+    }
+
+    private void spawnBoss() {
+        if (TimeUtils.nanoTime() - lastZombieTime > Settings.BOSS_SPAWN_INTERVAL) {
+            Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map, 2);
+            enemies.add(zombie);
+            stage.addActor(zombie);
+            zombie.setZIndex(25);
             lastZombieTime = TimeUtils.nanoTime();
         }
     }

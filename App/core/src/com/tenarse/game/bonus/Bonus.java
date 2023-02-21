@@ -7,9 +7,12 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.tenarse.game.helpers.AssetManager;
 import com.tenarse.game.objects.Jugador;
 import com.tenarse.game.utils.Settings;
+
+import java.util.concurrent.TimeUnit;
 
 
 public class Bonus extends Actor {
@@ -23,6 +26,10 @@ public class Bonus extends Actor {
 
     private TextureRegion gemTexture;
     private Rectangle colisionRectangle;
+
+    private boolean active = false;
+    private long timeFromStart;
+    private boolean delete;
 
     public Bonus(Vector2 position) {
         this.position = position;
@@ -40,14 +47,23 @@ public class Bonus extends Actor {
             gemTexture = AssetManager.bonusShield;
             gemType = Settings.BONUS_SHIELD;
         }
+        this.position.x += (gemTexture.getRegionWidth() / 8);
         colisionRectangle = new Rectangle(position.x, position.y, gemTexture.getRegionWidth() / 8, gemTexture.getRegionHeight() / 8);
+        timeFromStart = TimeUtils.nanoTime();
+        delete = false;
     }
 
 
 
     @Override
     public void act(float delta) {
-        this.setZIndex(62);
+        this.setZIndex(25);
+        if(TimeUtils.nanoTime() - timeFromStart >= Settings.BONUS_DELAY_ACTIVATION && !isActive()){
+            active = true;
+        }else if(TimeUtils.nanoTime() - timeFromStart >= Settings.BONUS_TIME_DESPAWN){
+            remove();
+            delete = true;
+        }
     }
 
     @Override
@@ -59,8 +75,16 @@ public class Bonus extends Actor {
         return colisionRectangle;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
     public int getGemType() {
         return gemType;
+    }
+
+    public boolean isDelete() {
+        return delete;
     }
 }
 
