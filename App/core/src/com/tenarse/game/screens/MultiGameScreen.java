@@ -13,39 +13,49 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.tenarse.game.Tenarse;
+import com.tenarse.game.bonus.Bonus;
 import com.tenarse.game.helpers.AssetManager;
 import com.tenarse.game.objects.Arrow;
 import com.tenarse.game.objects.ConnectionNode;
 import com.tenarse.game.objects.ContadorTiempo;
+import com.tenarse.game.objects.Hud;
 import com.tenarse.game.objects.Jugador;
+import com.tenarse.game.objects.JugadorOnline;
 import com.tenarse.game.objects.Map;
 import com.tenarse.game.objects.Zombie;
 import com.tenarse.game.utils.Settings;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
-public class MultiGameScreen implements Screen {
+public class  MultiGameScreen implements Screen {
 
-    private Socket socket;
+    private EndGameDialog dialog;
 
     private ContadorTiempo contadorTiempo;
 
@@ -57,9 +67,6 @@ public class MultiGameScreen implements Screen {
     private Boolean buttonAttackPressed = false;
 
     private String username;
-    private int tipus;
-
-    private JSONObject coor = new JSONObject();
 
     private Stage stage;
     private Jugador jugador;
@@ -79,37 +86,49 @@ public class MultiGameScreen implements Screen {
     private OrthographicCamera camera;
 
     private OrthogonalTiledMapRenderer renderer;
-
-    private Label puntosText;
     private int puntosParida;
     private BitmapFont fontBold;
 
     long lastZombieTime = 0;
 
+    float delta;
+
     ArrayList<Zombie> enemies = new ArrayList<>();
     ArrayList<Jugador> players = new ArrayList<>();
+    ArrayList<Arrow> arrowList = new ArrayList<>();
+    ArrayList<Bonus> bonusList = new ArrayList<>();
 
-    ArrayList<String> idJugadores = new ArrayList<>();
+    private Hud hud;
 
-    private HashMap<String, Jugador> jugadoresOnline;
+    private Tenarse game;
+
+    private HashMap<String, JugadorOnline> jugadoresOnline = new HashMap<>();
+
+    private Socket socket;
+
+    private int tipus;
+
+    private Timer timer;
+
 
     public MultiGameScreen(Tenarse game, Batch prevBatch, Viewport prevViewport, String username, int tipus, int velocidad, int fuerza, int vidas, int armaduras) {
 
+        this.game = game;
+
         contadorTiempo = new ContadorTiempo();
 
-        jugadoresOnline = new HashMap<>();
-
-        this.username = username;
         this.tipus = tipus;
+        this.username = username;
 
+        /* Connexió SOCKETS NodeJS */
         socket = null;
         try {
-            socket = IO.socket("http://192.168.207.61:7074/");
+            socket = IO.socket("http://192.168.207.103:7074/");
             socket.connect();
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
-
+        /* ----------------------- */
 
         shapeRenderer = new ShapeRenderer();
 
@@ -129,22 +148,31 @@ public class MultiGameScreen implements Screen {
 
         renderer = new OrthogonalTiledMapRenderer(map.getMap());
 
-        if (this.tipus == 4){
+        if (tipus == 4){
             jugador = new Jugador(map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT, "player", 1, map);
             players.add(jugador);
-        } else if (this.tipus == 5){
+        } else if (tipus == 5){
             jugador = new Jugador(map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT, "player", 2, map);
             players.add(jugador);
-        } else if (this.tipus == 6){
+        } else if (tipus == 6){
             jugador = new Jugador(map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT, "player", 3, map);
             players.add(jugador);
         }
 
-        JSONObject dadesJugador = new JSONObject();
+        //Crear stage
+        stage = new Stage(prevViewport, prevBatch);
+
+        //Añadir Actores
+        jugador.setName("jugador");
+        stage.addActor(jugador);
+
+        jugador.setZIndex(51);
+
+        final JSONObject dadesJugador = new JSONObject();
         dadesJugador.put("username", this.username);
         dadesJugador.put("tipo", this.tipus);
-        dadesJugador.put("x", jugador.getCollisionRectPlayer().x);
-        dadesJugador.put("y", jugador.getCollisionRectPlayer().y);
+        dadesJugador.put("x", map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2));
+        dadesJugador.put("y", map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2));
 
         socket.emit("user_con", dadesJugador);
 
@@ -158,24 +186,52 @@ public class MultiGameScreen implements Screen {
             @Override
             public void call(Object... args) {
                 JSONObject data = (JSONObject) args[0];
-                try {
+                try{
                     String id = data.getString("id");
-                    Gdx.app.log("SocketIO", "My ID: " + id);
-                    idJugadores.add(id);
-                } catch (JSONException e) {
+                    System.out.println("My ID: " + id);
+                } catch (JSONException e){
+                    System.out.println(e);
+                }
+            }
+        }).on("new_player", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject data = (JSONObject) args[0];
+                try{
+                    String id = data.getString("id");
+                    System.out.println("New player connected: " + id);
+                    jugadoresOnline.put(id, new JugadorOnline(1924, 1044, Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT, 6, map));
+                } catch (JSONException e){
+                    System.out.println(e);
+                }
+            }
+        }).on("player_disc", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject data = (JSONObject) args[0];
+                try{
+                    String id = data.getString("id");
+                    jugadoresOnline.remove(id);
+                } catch (JSONException e){
+                    System.out.println(e);
+                }
+            }
+        }).on("getPlayers", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONArray objects = (JSONArray) args[0];
+                try {
+                    for (int i = 0; i < objects.length(); i++) {
+                        System.out.println(objects.getJSONObject(i));
+                        JugadorOnline jugadorOnline =  new JugadorOnline(1924, 1044, Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT, 2, map);
+                        jugadoresOnline.put(objects.getJSONObject(i).getString("id"), jugadorOnline);
+                        stage.addActor(jugadorOnline);
+                    }
+                } catch (JSONException e){
                     System.out.println(e);
                 }
             }
         });
-
-        //Crear stage
-        stage = new Stage(prevViewport, prevBatch);
-
-        //Añadir Actores
-        jugador.setName("jugador");
-        stage.addActor(jugador);
-
-        jugador.setZIndex(51);
 
 
         /*Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
@@ -190,6 +246,12 @@ public class MultiGameScreen implements Screen {
 
         corazonesTexture = AssetManager.hp_player;
         armaduraTexture = AssetManager.armor_player;
+
+        Skin skin = AssetManager.skinTextBox;
+        dialog = new EndGameDialog("Fin de la partida", skin, puntosParida, jugador.getKillsJugador(), game, socket);
+        dialog.setZIndex(Integer.MAX_VALUE);
+
+
 
         if (Gdx.app.getType() == Application.ApplicationType.Android) {//Zoom para Android
             stage.getViewport().setWorldSize(stage.getViewport().getWorldWidth() / zoomAndroid, stage.getViewport().getWorldHeight() / zoomAndroid);
@@ -231,7 +293,10 @@ public class MultiGameScreen implements Screen {
         } else {
             stage.getViewport().setWorldSize(stage.getViewport().getWorldWidth() / zoomPc, stage.getViewport().getWorldHeight() / zoomPc);
             stage.getViewport().apply();
+
+            dialog.setScale(0.8f);
         }
+
 
         for (int i = 1; i <= Settings.PLAYER_VIDAS; i++) {
             hp_player = new ImageButton(new TextureRegionDrawable(new TextureRegion(corazonesTexture)));
@@ -257,17 +322,15 @@ public class MultiGameScreen implements Screen {
 
         fontBold = AssetManager.fontTextBold.generateFont(parametros);
 
+        hud = new Hud(stage.getBatch());
+        timer = new Timer();
 
-        Label.LabelStyle labelStyleBold = new Label.LabelStyle();
-        labelStyleBold.font = fontBold;
-        labelStyleBold.fontColor = Color.BLACK;
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
 
-        puntosText = new Label("" + puntosParida, labelStyleBold);
-        puntosText.setAlignment(Align.left);
-        puntosText.setScale(0.25f);
-
-        stage.addActor(puntosText);
-
+            }
+        }, 5000, 1000);
 
         Gdx.input.setInputProcessor(stage);
     }
@@ -350,6 +413,7 @@ public class MultiGameScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(.5f, .7f, .9f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        this.delta = delta;
 
         cameraMapPosition();
 
@@ -390,51 +454,92 @@ public class MultiGameScreen implements Screen {
                 }
             }
         }
-        if(enemies.size() <= 0){
-            for (Jugador player: players){
-                ArrayList <Arrow> arrowList= player.getArrowList();
-                for(Arrow arrow : arrowList){
-                    arrow.remove();
-                }
-                arrowList.clear();
-            }
-        }
-
 
         for (Jugador player: players){
+            arrowList = player.getArrowList();
             for (Zombie zombie: enemies) {
-                zombie.colisionWithPlayer(jugador);
-                zombie.calculateMovement(jugador.getCollisionRectPlayer(), delta);
+                boolean atacado = zombie.colisionWithPlayer(player);
+                if(atacado){
+                    if(armorArray.size() > 0){
+                        armorArray.get(armorArray.size()-1).remove();
+                        armorArray.remove(armorArray.size()-1);
+                    }else {
+                        if (corazonesArray.size() > 0){
+                            corazonesArray.get(corazonesArray.size() - 1).remove();
+                            corazonesArray.remove(corazonesArray.size() - 1);
+                        }
+                    }
+                }
+                zombie.calculateMovement(player.getCollisionRectPlayer(), delta);
                 player.attacking(zombie, delta);
             }
         }
 
-
-        int size = enemies.size();
-        for (int i = 0; i < size; i++) {
-            if(enemies.get(i).isDead()){
-                enemies.remove(enemies.get(i));
-                puntosParida = puntosParida + 1;
-                jugador.unaKillMas();
-                System.out.println(jugador.getKillsJugador());
-                if (puntosParida == 0){
-                    puntosParida = 1;
+        for (Jugador player: players){
+            arrowList= player.getArrowList();
+            for(Arrow arrow : arrowList){
+                if(enemies.size() <= 0) {
+                    arrow.remove();
+                    arrowList.clear();
+                }else {
+                    arrow.move(delta);
                 }
-                if (puntosParida == 5){
-                    //Enviar POST de addNewPartida
-                    contadorTiempo.detener();
-                    String tiempo = contadorTiempo.getTiempo();
-                    System.out.println(tiempo);
-                    ConnectionNode nodeJS = new ConnectionNode();
-                    nodeJS.addNewPartida(this.username, jugador.getTypePlayer(), jugador.getKillsJugador(), tiempo, puntosParida);
+            }
+            for (int i = 0; i < bonusList.size(); i++) {
+                if(bonusList.get(i).getColisionRectangle().overlaps(player.getCollisionRectPlayer())){
+                    player.getBonusMultiplier()[bonusList.get(i).getGemType()] += 1;
+                    bonusList.get(i).remove();
+                    bonusList.remove(bonusList.get(i));
+                    i--;
                 }
-                puntosText.setText(puntosParida);
-                i--;
-                size--;
             }
         }
 
-        spawnZombie();
+
+        for (int i = 0; i < enemies.size(); i++) {
+            if(enemies.get(i).isDead()){
+                if(MathUtils.random() < Settings.BONUS_POSIBILITY) {
+                    Bonus bonus = new Bonus(enemies.get(i).getPosition());
+                    bonusList.add(bonus);
+                    getStage().addActor(bonus);
+                }
+                enemies.remove(enemies.get(i));
+                puntosParida = puntosParida + 1;
+                jugador.unaKillMas();
+                hud.getScoreLabel().setText(puntosParida);
+                i--;
+            }
+        }
+
+        for (int i = 0; i < players.size(); i++) {
+            if(players.get(i).isDead()){
+                for (int j = 0; j < enemies.size(); j++) {
+                    players.get(i).die(enemies.get(i).getDirection());
+                }
+                players.remove(players.get(i));
+                if (players.size() == 0){
+                    //Enviar POST de addNewPartida
+                    contadorTiempo.detener();
+                    String tiempo = contadorTiempo.getTiempo();
+                    ConnectionNode nodeJS = new ConnectionNode();
+                    nodeJS.addNewPartida(this.username, jugador.getTypePlayer(), jugador.getKillsJugador(), tiempo, hud.getScore());
+                }
+                i--;
+            }
+        }
+
+        if (players.size() > 0){
+            //spawnZombie();
+        } else {
+            stage.addActor(dialog);
+            dialog.getTexto().setText("Partida terminada\n\nPuntos: " + puntosParida + "\nKills: " + jugador.getKillsJugador());
+            if (Gdx.app.getType() == Application.ApplicationType.Android) {
+                dialog.getTitleLabel().setFontScale(0.90f);
+                dialog.setPosition(jugador.getCollisionRectPlayer().x - dialog.getWidth() / 2.5f , jugador.getCollisionRectPlayer().y - 60);
+            } else {
+                dialog.setPosition(jugador.getCollisionRectPlayer().x - 35 , jugador.getCollisionRectPlayer().y - 50);
+            }
+        }
 
         if (buttonAttackPressed) {
             jugador.startAttack();
@@ -443,8 +548,6 @@ public class MultiGameScreen implements Screen {
         }
 
 
-        //1 - 345 ; 2 - 335 ; 3 - 325
-
         if (Gdx.app.getType() == Application.ApplicationType.Android) {
             btnU_img.setPosition(camera.position.x - camera.viewportWidth / 2 + 20, camera.position.y - camera.viewportHeight / 2 + 40);
             btnD_img.setPosition(camera.position.x - camera.viewportWidth / 2 + 20, camera.position.y - camera.viewportHeight / 2);
@@ -452,13 +555,7 @@ public class MultiGameScreen implements Screen {
             btnR_img.setPosition(camera.position.x - camera.viewportWidth / 2 + 40, camera.position.y - camera.viewportHeight / 2 + 20);
 
             btn_atacar.setPosition(camera.position.x + camera.viewportWidth / 2 - 50, camera.position.y - camera.viewportHeight / 2 + 10);
-            puntosText.setPosition(camera.position.x - (camera.viewportWidth / 2 - (375 - (10 * Integer.toString(puntosParida).length()))), camera.position.y + camera.viewportHeight / 2 - 30);
-            puntosText.setFontScale(0.5f);
-        } else {
-            puntosText.setPosition(camera.position.x - (camera.viewportWidth / 2 - (355 - (10 * Integer.toString(puntosParida).length()))), camera.position.y + camera.viewportHeight / 2 - 20);
         }
-
-        puntosText.setZIndex(100);
 
         for (int i = 1; i <= corazonesArray.size(); i++) {
             corazonesArray.get(i-1).setPosition(camera.position.x - (camera.viewportWidth / 2 + 10) + 15 * i, camera.position.y + camera.viewportHeight / 2 - 20);
@@ -468,6 +565,11 @@ public class MultiGameScreen implements Screen {
             armorArray.get(i-1).setPosition(camera.position.x - (camera.viewportWidth / 2 + 10) + 15 * i, camera.position.y + camera.viewportHeight / 2 - 33);
             armorArray.get(i-1).setZIndex(100);
         }
+
+
+
+        stage.getBatch().setProjectionMatrix(stage.getCamera().combined);
+        hud.stage.draw();
         stage.draw();
     }
 
@@ -476,7 +578,7 @@ public class MultiGameScreen implements Screen {
             Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
             enemies.add(zombie);
             stage.addActor(zombie);
-            zombie.setZIndex(50);
+            zombie.setZIndex(25);
             lastZombieTime = TimeUtils.nanoTime();
         }
     }
@@ -499,25 +601,8 @@ public class MultiGameScreen implements Screen {
             }
         }
 
-        coor.put("x", jugador.getCollisionRectPlayer().x);
-        coor.put("y", jugador.getCollisionRectPlayer().y);
-        socket.emit("coor", coor);
-
-        socket.on("coorJugador", new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                JSONObject data = (JSONObject) args[0];
-                try {
-                    int x = data.getInt("x");
-                    int y = data.getInt("y");
-                    Gdx.app.log("Coor", "x: " + x + ", y: " + y);
-                } catch (JSONException e) {
-                    System.out.println(e);
-                }
-            }
-        });
-
     }
+
 
     @Override
     public void resize(int width, int height) {

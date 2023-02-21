@@ -9,6 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Timer;
 import com.tenarse.game.Tenarse;
 
+import io.socket.client.Socket;
+
 public class EndGameDialog extends Dialog {
 
     private Tenarse game;
@@ -16,6 +18,8 @@ public class EndGameDialog extends Dialog {
     private int puntosPartida;
     private int killsJugador;
     private Label texto;
+    private Socket socket;
+    private boolean multiplayer = false;
 
     public int getPuntosPartida() {
         return puntosPartida;
@@ -35,6 +39,30 @@ public class EndGameDialog extends Dialog {
 
     public Label getTexto() {
         return texto;
+    }
+
+    public EndGameDialog(String title, Skin skin, int puntosParida, int killsJugador, final Tenarse game, Socket socket) {
+        super(title, skin);
+        this.game = game;
+
+        this.puntosPartida = puntosParida;
+        this.killsJugador = killsJugador;
+        this.socket = socket;
+
+        this.multiplayer = true;
+
+        // Agrega el contenido que deseas mostrar en el diálogo
+        this.texto = new Label("", skin);
+        this.texto.setScale(0.80f);
+
+        getContentTable().add(this.texto).pad(5f);
+        // Agrega el botón para volver al menú
+        TextButton button = new TextButton("Menu Principal", skin, "default");
+        if (Gdx.app.getType() == Application.ApplicationType.Android){
+            texto.setFontScale(0.90f);
+            button.getLabel().setFontScale(0.85f);
+        }
+        this.button(button, true);
     }
 
     public EndGameDialog(String title, Skin skin, int puntosParida, int killsJugador, final Tenarse game) {
@@ -63,6 +91,9 @@ public class EndGameDialog extends Dialog {
         if ((Boolean) obj) {
             // Aquí debes implementar el código para volver al menú
             game.setScreen(new MainMenuScreen(game));
+            if (this.multiplayer){
+                this.socket.disconnect();
+            }
         }
     }
 
