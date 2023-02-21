@@ -20,8 +20,8 @@ public class ConnectionNode {
         //Connexió NodeJS
         HttpRequestBuilder requestBuilder = new HttpRequestBuilder();
 
-        final Net.HttpRequest httpRequest = requestBuilder.newRequest().method(Net.HttpMethods.GET).url("http://admin.alumnes.inspedralbes.cat:7073/getStats").build();
-        //final Net.HttpRequest httpRequest = requestBuilder.newRequest().method(Net.HttpMethods.GET).url("http://192.168.209.15:7073/getStats").build();
+        //final Net.HttpRequest httpRequest = requestBuilder.newRequest().method(Net.HttpMethods.GET).url("http://admin.alumnes.inspedralbes.cat:7073/getStats").build();
+        final Net.HttpRequest httpRequest = requestBuilder.newRequest().method(Net.HttpMethods.GET).url("http://192.168.207.103:7073/getStats").build();
 
         Gdx.net.sendHttpRequest(httpRequest, new Net.HttpResponseListener() {
             @Override

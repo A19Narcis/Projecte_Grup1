@@ -159,28 +159,31 @@ app.post("/getSession", async (req, res) => {
 
 /* =========== SOCKETS MULTIJUGADOR =========== */
 
-var jugadores = []
+var players = []
 
 //Controlar les connexions i desconnexions
 io.on('connection', (socketJugador) =>{
     
-    socketJugador.on('user_con', (dadesJug) => {
-        socketJugador.username = dadesJug.username;
-        console.log('Se ha conectado ' + dadesJug.username + ", Tipo: " + dadesJug.tipo);
-        jugadores.push(new jugador(socketJugador.id, dadesJug.tipo, dadesJug.x, dadesJug.y))
-        console.log(jugadores);
-    })
-
-    socketJugador.emit('socketID', { id: socketJugador.id })
-
-    socketJugador.on('disconnect', () => {
-        console.log('user disconnected');
+    console.log("Jugador conectado");
+    socketJugador.emit('socketID', { id: socketJugador.id });
+    socketJugador.emit('getPlayers', players);
+    socketJugador.broadcast.emit('new_player', { id: socketJugador.id });
+    socketJugador.on('disconnect', function(){
+        console.log("Jugador desconectado");
+        socketJugador.broadcast.emit('player_disc', { id: socketJugador.id });
+        for (let i = 0; i < players.length; i++) {
+            if (players[i].id == socketJugador.id) {
+                players.splice(i, 1);
+            }
+            
+        }
     });
+    players.push(new player(socketJugador.id, 1924, 1044));
+    
 });
 
-function jugador(id, tipo, x, y){
+function player(id, x, y){
     this.id = id;
-    this.tipo = tipo;
     this.x = x;
     this.y = y;
 }
