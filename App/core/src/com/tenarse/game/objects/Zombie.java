@@ -51,6 +51,7 @@ public class Zombie extends Actor{
 
     private int damage;
     private int velocity;
+    private int points;
 
     private long timeColisoningPlayer;
 
@@ -64,9 +65,9 @@ public class Zombie extends Actor{
         attack = false;
         firstAnimationAttack = false;
         doDamage = false;
-        //createSpawnPosition();
-        position.x = map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2) - 20; //SPAWN EN EL CENTRO PARA PRUEBAS
-        position.y = map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2);
+        createSpawnPosition();
+        //position.x = map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2) - 20; //SPAWN EN EL CENTRO PARA PRUEBAS
+        //position.y = map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2);
 
         rectanguloDeteccion = new Rectangle();
         rectanguloDeteccion.width = Settings.ZOMBIE_WIDTH;
@@ -85,6 +86,8 @@ public class Zombie extends Actor{
             animacionAtackD = AssetManager.ZombieDown_Atack;
             damage = Settings.ZOMBIE_FUERZA;
             velocity = Settings.ZOMBIE_VELOCITY;
+            points = Settings.PUNTOS_ZOMBIE;
+            vida = Settings.ZOMBIE_LIFE;
         }else if(tipoZombie == 2){
             animacionRight = AssetManager.bossRight_Animation;
             animacionLeft = AssetManager.bossLeft_Animation;
@@ -98,9 +101,15 @@ public class Zombie extends Actor{
             animacionAtackD = AssetManager.bossDown_Atack;
             damage = Settings.BOSS_FUERZA;
             velocity = Settings.BOSS_VELOCITY;
+            points = Settings.PUNTOS_BOSS;
+            vida = Settings.BOSS_LIFE;
         }
         spawned = false;
         colision = false;
+    }
+
+    public int getKillPoints() {
+        return points;
     }
 
     private int getRandomIntInclusive(int min, int max) {

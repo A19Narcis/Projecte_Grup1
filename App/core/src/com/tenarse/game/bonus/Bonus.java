@@ -12,6 +12,7 @@ import com.tenarse.game.helpers.AssetManager;
 import com.tenarse.game.objects.Jugador;
 import com.tenarse.game.utils.Settings;
 
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 
@@ -33,19 +34,22 @@ public class Bonus extends Actor {
 
     public Bonus(Vector2 position) {
         this.position = position;
-        float random = MathUtils.random();
-        if(random >= 0 && random < Settings.B_LIVE_POSIBILITY){
+        float random = MathUtils.random(); // entre 0 y 1 (decimales)
+        if(random >= 0 && random <= Settings.B_LIVE_POSIBILITY){ //Entre 0 y 0.10
             gemTexture = AssetManager.bonusLive;
             gemType = Settings.BONUS_LIVE;
-        }else if (random > Settings.B_LIVE_POSIBILITY && random <= Settings.B_VELOCITY_POSIBILITY) {
-            gemTexture = AssetManager.bonusVelocity;
-            gemType = Settings.BONUS_VELOCITY;
-        } else if (random > Settings.B_VELOCITY_POSIBILITY && random <= (1 - Settings.B_DAMAGE_POSIBILITY)) {
+        }else if (random > Settings.B_LIVE_POSIBILITY && random <= Settings.B_DAMAGE_POSIBILITY) { //Entre 0.11 y 0.30
             gemTexture = AssetManager.bonusDamage;
             gemType = Settings.BONUS_DAMAGE;
-        } else if (random > (1 - Settings.B_DAMAGE_POSIBILITY) && random < 1) {
+        } else if (random > Settings.B_DAMAGE_POSIBILITY && random <= Settings.B_VELOCITY_POSIBILITY) { //Entre 0.31 y 0.60
+            gemTexture = AssetManager.bonusVelocity;
+            gemType = Settings.BONUS_VELOCITY;
+        } else if (random > Settings.B_VELOCITY_POSIBILITY && random <= Settings.B_SHIELD_POSIBILITY) { //Entre 0.61 y
             gemTexture = AssetManager.bonusShield;
             gemType = Settings.BONUS_SHIELD;
+        } else if (random > Settings.B_SHIELD_POSIBILITY && random <= Settings.B_POINTS_POSIBILITY) {
+            gemTexture = AssetManager.bonusPoints;
+            gemType = Settings.BONUS_POINTS;
         }
         this.position.x += (gemTexture.getRegionWidth() / 8);
         colisionRectangle = new Rectangle(position.x, position.y, gemTexture.getRegionWidth() / 8, gemTexture.getRegionHeight() / 8);

@@ -270,7 +270,7 @@ public class Jugador extends Actor {
     public void draw(Batch batch, float parentAlpha){
         batch.draw(getPlayerAnimation(), this.position.x, this.position.y, width, height);
         doDamage = false;
-        System.out.println(vida +" --- "+ armadura);
+        //System.out.println(vida +" --- "+ armadura);
     }
 
     private TextureRegion getPlayerAnimation() {
@@ -446,8 +446,11 @@ public class Jugador extends Actor {
     public void setDamage(int damage) {
         if(armadura > 0){
             this.armadura -= damage;
-        }else{
+        }else if (vida > 0){
             this.vida -= damage;
+            if (this.vida < 0){
+                this.vida = 0;
+            }
         }
         getStage().addActor(new HitEffect(this.position));
     }

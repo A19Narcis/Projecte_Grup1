@@ -25,6 +25,7 @@ public class AssetManager {
     public static Texture sheetBonusDamage;
     public static Texture sheetBonusVelocity;
     public static Texture sheetBonusShield;
+    public static Texture sheetBonusPoints;
 
 
     public static Texture sheetPlayerWar;
@@ -56,6 +57,7 @@ public class AssetManager {
     public static TextureRegion bonusDamage;
     public static TextureRegion bonusVelocity;
     public static TextureRegion bonusShield;
+    public static TextureRegion bonusPoints;
 
 
 
@@ -159,6 +161,8 @@ public class AssetManager {
         sheetBonusVelocity.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         sheetBonusShield = new Texture(Gdx.files.internal("shield.png"));
         sheetBonusShield.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        sheetBonusPoints = new Texture(Gdx.files.internal("points.png"));
+        sheetBonusPoints.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
         //Sheet PJ Crossbow
         playerDownA = new TextureRegion(sheetPlayerCrossbow, 0, 64*10, 64, 64);
@@ -229,6 +233,8 @@ public class AssetManager {
         bonusVelocity.flip(false, false);
         bonusShield = new TextureRegion(sheetBonusShield, 0, 0, 107, 107);
         bonusShield.flip(false, false);
+        bonusPoints = new TextureRegion(sheetBonusPoints, 0, 0, 83, 112);
+        bonusPoints.flip(false, false);
 
 
         //Animaciones en Arrays[]
@@ -466,25 +472,25 @@ public class AssetManager {
         //Derecha Zombie Ataque
         ZombieRight_Atack = new TextureRegion[6];
         for (int i = 0; i < ZombieRight_Atack.length; i++) {
-            ZombieRight_Atack[i] = new TextureRegion(sheetBoos, i * 64, 64 * 15, 64, 64);
+            ZombieRight_Atack[i] = new TextureRegion(sheetZombie, i * 64, 64 * 15, 64, 64);
         }
 
         //Izquierda Zombie Ataque
         ZombieLeft_Atack = new TextureRegion[6];
         for (int i = 0; i < ZombieLeft_Atack.length; i++) {
-            ZombieLeft_Atack[i] = new TextureRegion(sheetBoos, i * 64, 64 * 13, 64, 64);
+            ZombieLeft_Atack[i] = new TextureRegion(sheetZombie, i * 64, 64 * 13, 64, 64);
         }
 
         //Arriba Zombie Ataque
         ZombieUp_Atack = new TextureRegion[6];
         for (int i = 0; i < ZombieUp_Atack.length; i++) {
-            ZombieUp_Atack[i] = new TextureRegion(sheetBoos, i * 64, 64 * 12, 64, 64);
+            ZombieUp_Atack[i] = new TextureRegion(sheetZombie, i * 64, 64 * 12, 64, 64);
         }
 
         //Abajo Zombie Ataque
         ZombieDown_Atack = new TextureRegion[6];
         for (int i = 0; i < ZombieDown_Atack.length; i++) {
-            ZombieDown_Atack[i] = new TextureRegion(sheetBoos, i * 64, 64 * 14, 64, 64);
+            ZombieDown_Atack[i] = new TextureRegion(sheetZombie, i * 64, 64 * 14, 64, 64);
         }
 
 

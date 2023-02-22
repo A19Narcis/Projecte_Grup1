@@ -458,13 +458,13 @@ public class  MultiGameScreen implements Screen {
         for (Jugador player: players){
             arrowList = player.getArrowList();
             for (Zombie zombie: enemies) {
-                boolean atacado = zombie.colisionWithPlayer(player);
-                if(atacado){
-                    if(armorArray.size() > 0){
-                        armorArray.get(armorArray.size()-1).remove();
-                        armorArray.remove(armorArray.size()-1);
-                    }else {
-                        if (corazonesArray.size() > 0){
+                int atacado = zombie.colisionWithPlayer(player);
+                if(atacado > 0){
+                    for (int i = atacado; i > 0; i--) {
+                        if(armorArray.size() > 0) {
+                            armorArray.get(armorArray.size() - 1).remove();
+                            armorArray.remove(armorArray.size() - 1);
+                        }else{
                             corazonesArray.get(corazonesArray.size() - 1).remove();
                             corazonesArray.remove(corazonesArray.size() - 1);
                         }
