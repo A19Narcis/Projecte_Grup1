@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.tenarse.game.bonus.Bonus;
 import com.tenarse.game.effects.HitEffect;
 import com.tenarse.game.effects.PoolBlood;
 import com.tenarse.game.helpers.AssetManager;
@@ -334,6 +335,7 @@ public class Zombie extends Actor{
             hited = true;
             timeHited = TimeUtils.nanoTime();
             getStage().addActor(new PoolBlood(this.position, direction));
+            getStage().addActor(new Bonus(this.position));
         }
     }
 

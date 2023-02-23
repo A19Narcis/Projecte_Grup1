@@ -21,6 +21,12 @@ public class AssetManager {
     public static Texture sheetArrowU;
     public static Texture sheetArrowD;
 
+    public static Texture sheetBonusLive;
+    public static Texture sheetBonusDamage;
+    public static Texture sheetBonusVelocity;
+    public static Texture sheetBonusShield;
+
+
     public static Texture sheetPlayerWar;
     public static Texture sheetPlayerShield;
     public static Texture sheetZombie;
@@ -44,6 +50,11 @@ public class AssetManager {
     public static TextureRegion arrowUp;
     public static TextureRegion arrowRight;
     public static TextureRegion arrowDown;
+
+    public static TextureRegion bonusLive;
+    public static TextureRegion bonusDamage;
+    public static TextureRegion bonusVelocity;
+    public static TextureRegion bonusShield;
 
 
 
@@ -132,6 +143,15 @@ public class AssetManager {
         sheetPoolBloodR2 = new Texture(Gdx.files.internal("bloodRight2.png"));
         sheetPoolBloodR2.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
+        sheetBonusLive = new Texture(Gdx.files.internal("live.png"));
+        sheetBonusLive.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        sheetBonusDamage = new Texture(Gdx.files.internal("damage.png"));
+        sheetBonusDamage.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        sheetBonusVelocity = new Texture(Gdx.files.internal("velocity.png"));
+        sheetBonusVelocity.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        sheetBonusShield = new Texture(Gdx.files.internal("shield.png"));
+        sheetBonusShield.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+
         //Sheet PJ Crossbow
         playerDownA = new TextureRegion(sheetPlayerCrossbow, 0, 64*10, 64, 64);
         playerDownA.flip(false, false);
@@ -193,6 +213,14 @@ public class AssetManager {
         zombieSpawn = new TextureRegion(sheetZombie, 0, 64*20, 64, 64);
         zombieSpawn.flip(false, false);
 
+        bonusLive = new TextureRegion(sheetBonusLive, 0, 0, 120, 114);
+        bonusLive.flip(false, false);
+        bonusDamage = new TextureRegion(sheetBonusDamage, 0, 0, 83, 123);
+        bonusDamage.flip(false, false);
+        bonusVelocity = new TextureRegion(sheetBonusVelocity, 0, 0, 83, 112);
+        bonusVelocity.flip(false, false);
+        bonusShield = new TextureRegion(sheetBonusShield, 0, 0, 107, 107);
+        bonusShield.flip(false, false);
 
 
         //Animaciones en Arrays[]

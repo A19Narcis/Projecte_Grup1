@@ -16,7 +16,7 @@ public class EndGameDialog extends Dialog {
         // Agrega el contenido que deseas mostrar en el diálogo
         Label texto = new Label("Partida terminada\n\nPuntos: " + puntosParida + "\nKills: " + killsJugador, skin);
         texto.setScale(0.80f);
-        getContentTable().add(texto).pad(20f);
+        getContentTable().add(texto).pad(5f);
         // Agrega el botón para volver al menú
         button("Menu Principal", true);
     }
@@ -26,6 +26,7 @@ public class EndGameDialog extends Dialog {
         if ((Boolean) obj) {
             // Aquí debes implementar el código para volver al menú
             game.setScreen(new MainMenuScreen(game));
+            System.out.println("TOCADO");
         }
     }
 

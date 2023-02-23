@@ -36,23 +36,28 @@ var vue_app = new Vue({
         zomArrVida: [],
         zomArrArmadura: [],
         zomArrVelocidad: [],
+        canvas3: null,
+        medianaArr: [],
+        url: ''
 
         
     },
     mounted(){
-        this.getStats();   
+        this.getStats();
+        this.getPartidas();
     },
 
     methods: {
         createCanv: function() {
-            this.createElements();
             this.canvas = document.getElementById('canvas')
             console.log(this.canvas);
             console.log(this.arrNom);
+            console.log(this.zomArrNom);
+
             var ctx = this.canvas.getContext('2d');
             //hay que llamar al get stats como sea, usaba dos funciones.
-            canvas.width = 800;
-            canvas.height = 600;
+            this.canvas.width = 800;
+            this.canvas.height = 600;
             console.log(this.arrStats);
             var chart = new Chart(ctx, {
                 type: 'bar',
@@ -108,9 +113,9 @@ var vue_app = new Vue({
             this.canvas2 = document.getElementById('canvas2')
             var ctx2 = this.canvas2.getContext('2d');
             //hay que llamar al get stats como sea, usaba dos funciones.
-            canvas.width = 800;
-            canvas.height = 600;
-            var chart = new Chart(ctx2, {
+            this.canvas2.width = 800;
+            this.canvas2.height = 600;
+            var chart2 = new Chart(ctx2, {
                 type: 'bar',
                 data: {
                     labels: this.zomArrNom,
@@ -140,19 +145,57 @@ var vue_app = new Vue({
                         borderWidth: 1,
                     }]
                 },
-                options: {
+                options: {  
                     scales: {
                         yAxes: [{
-                            id: 'y-axis-1',
                             type: 'linear',
                             position: 'left',
                             ticks: {min: 0, max:10}
+                        }]                    }
+                }
+            });
+
+            this.canvas3 = document.getElementById('canvas3')
+            var ctx3 = this.canvas3.getContext('2d');
+            //hay que llamar al get stats como sea, usaba dos funciones.
+            this.canvas3.width = 800;
+            this.canvas3.height = 600;
+            var arrNoms = ['0-250', '251-500', '501-750', '751-1000', '>1000'];
+            console.log(arrNoms[0]);
+            var chart3 = new Chart(ctx3, {
+                type: 'bar',
+                data: {
+                    labels: arrNoms,
+                    datasets: [{
+                        label: 'MEDIANA TIEMPO',
+                        data: this.medianaArr,
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1,
+                    }]
+                },
+                options: {  
+                    scales: {
+                        yAxes: [{
+                            type: 'linear',
+                            position: 'left',
+                            ticks: {min: 0, max:this.arrPartidas.length}
                         }]                    }
                 }
             }); 
         },
         createElements: function (){
             var count = 0;
+            this.arrNom = [];
+            this.arrFuerza = [];
+            this.arrVida = [];
+            this.arrArmadura = [];
+            this.arrVelocidad = [];
+            this.zomArrNom = [];
+            this.zomArrFuerza = [];
+            this.zomArrVida = [];
+            this.zomArrArmadura = [];
+            this.zomArrVelocidad = [];  
             this.arrStats.forEach( el =>{
                 if(count < 3){
                     this.arrNom.push(el.nombreTipo);
@@ -169,6 +212,33 @@ var vue_app = new Vue({
                 }                
                 count++;
             });
+            this.createCanv();
+        },
+
+        createElements2: function(){
+            var one = 0; //0-250
+            var two = 0; //251-500
+            var three = 0; //501-750
+            var four = 0; //751-1000
+            var five = 0; //>1000
+            this.arrPartidas.forEach(el =>{
+                if(el.puntos <= 250 && el.puntos >= 0)
+                    one++;
+                if(el.puntos <= 500 && el.puntos >= 251)
+                    two++;
+                if(el.puntos <= 750 && el.puntos >= 501)
+                    three++;
+                if(el.puntos <= 1000 && el.puntos >= 751)
+                    four++;
+                if(el.puntos >= 1001)
+                    five++;
+            });
+            this.medianaArr.push(one);
+            this.medianaArr.push(two);
+            this.medianaArr.push(three);
+            this.medianaArr.push(four);
+            this.medianaArr.push(five);
+            this.createCanv();
         },
         getAuth: function () {
             console.log("Entro")
@@ -224,6 +294,31 @@ var vue_app = new Vue({
                 }
             );
         },
+         uploadImage: function() {
+            const fileInput = document.getElementById('file-input');
+            const file = fileInput.files[0];
+            this.url = 'http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/' + file.name;
+            console.log(this.url);
+            const formData = new FormData();
+            formData.append('image', file);
+          
+            fetch('http://admin.alumnes.inspedralbes.cat:7073/upload', {
+              method: 'POST',
+              body: formData
+            })
+            .then(response => {
+              if (response.ok) {
+                console.log('Image uploaded successfully!');
+                this.dialog_2 = true;
+              } else {
+                console.error('Failed to upload image!');
+              }
+            })
+            .catch(error => {
+              console.error('Error uploading image:', error);
+            });
+          },
+        
         getSession: function () {
             console.log("SSSS" + this.info.values[0])
             fetch("http://admin.alumnes.inspedralbes.cat:7073/getSession/",
@@ -312,8 +407,37 @@ var vue_app = new Vue({
                 (data) => {
                     this.arrStats = data;
                     this.arrLen = data.length;
-                    this.createCanv();
+                    this.createElements();
                     console.log(this.arrStats);
+                }
+            ).catch(
+                (error) => {
+                    console.log(error);
+                }
+            );
+        },
+
+        getPartidas: function(){
+            fetch("http://admin.alumnes.inspedralbes.cat:7073/getPartidas2/",
+                {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                    credentials: "include",
+                    mode: "cors",
+                    cache: "default"
+                }
+            ).then(
+                (response) => {
+                    return (response.json());
+                }
+            ).then(
+                (data) => {
+                    this.arrPartidas = data;
+                    this.createElements2();
+                    console.log(this.arrPartidas);
                 }
             ).catch(
                 (error) => {
@@ -363,6 +487,37 @@ var vue_app = new Vue({
             ); 
         },
 
+        deleteZom: function (nombreTipo) {
+            this.info.values.push(nombreTipo);
+            fetch("http://admin.alumnes.inspedralbes.cat:7073/delete/",
+                {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                    credentials: "include",
+                    body: JSON.stringify(this.info),
+                    mode: "cors",
+                    cache: "default"
+                }
+            ).then(
+                (response) => {
+                    return (response.json());
+                }
+            ).then(
+                (data) => {
+                    this.info.values = this.info.values.slice(0, 2);
+                    this.getStats();
+                }
+            ).catch(
+                (error) => {
+                    this.getStats();
+                    console.log(error);
+                }
+            ); 
+        },
+
         addNewZombie: function (velocidad, fuerza, vida, cantidad) {
             var nombreTipo = 'ZombieEsqueleto';
             nombreTipo = nombreTipo + (this.arrLen +1);
@@ -376,6 +531,7 @@ var vue_app = new Vue({
             this.info.values.push(velocidad);
             this.info.values.push(fuerza);
             this.info.values.push(vida);
+            this.info.values.push(this.url);
             fetch("http://admin.alumnes.inspedralbes.cat:7073/addNewZombie/",
                 {
                     method: "POST",
@@ -406,42 +562,7 @@ var vue_app = new Vue({
             );
 
         },
-        check: function (type) {
-            console.log("fumo skeletons" + type);
-            this.new_type = type;
-        },
-/*         handleDrop(event) {
-            event.preventDefault();
-            let file = event.dataTransfer.files[0];
-            let reader = new FileReader();
-            reader.addEventListener('load', () => {
-              this.image = reader.result;
-              this.dialog_2 = true;
-              console.log(this.dialog_2);
-            });
-            reader.readAsDataURL(file);
-          },
-          handleDragOver(event) {
-            event.preventDefault();
-            event.target.classList.add('drop-zone-active');
-          },
-          handleDragLeave(event) {
-            event.target.classList.remove('drop-zone-active');
-          } */
-
-          openFileDialog() {
-            this.$refs.fileInput.click();
-            this.dialog_2 = true; 
-          },
-          addImage(event) {
-            this.image = event.target.files[0];
-            this.dialog_2 = true;
-            // Do something with the file, such as previewing it or uploading it to a server
-          },
-
     },
-
-
     created() {
         const myText = new SplitType('#title')
         const myText2 = new SplitType('#subt')

@@ -27,71 +27,106 @@ const insertPartida = function (partida, callback) {
     })
 }
 
-const insertStats = function (callback) {
-    //Afegir 5 docuemnts per Axe, War, Shield, Zombie, Boss els que venen ja fets amb el joc
-
+const insertStats = async function (callback) {
+    const statsPromises = [];
+  
     const statsCrossbow = new Stats({
-        nombreTipo: "Crossbow",
-        velocidad: 3,
-        fuerza: 1,
-        vida: 2,
-        armadura: 0
-    })
-    statsCrossbow.save(function (err) {
-        if (err) return console.log("Ya existen las stats de CROSSBOW");
-        console.log("¡Stats de CROSSBOW insertadas!");
-    })
+      nombreTipo: "Crossbow",
+      velocidad: 3,
+      fuerza: 1,
+      vida: 2,
+      armadura: 0
+    });
 
+    const validateStatsCrossbow = await Stats.findOne({ nombreTipo: statsCrossbow.nombreTipo })
+    if (validateStatsCrossbow !== null) {
+        console.log("Stats de CROSSBOW ya existen");
+    } else {
+        statsPromises.push(statsCrossbow.save());
+        console.log("Stats de CROSSBOW insertadas");
+    }
+
+
+    
     const statsWar = new Stats({
-        nombreTipo: "Warhammer",
-        velocidad: 3,
-        fuerza: 2,
-        vida: 2,
-        armadura: 0
-    })
-    statsWar.save(function (err) {
-        if (err) return console.log("Ya existen las stats de WARHAMMER");
-        console.log("¡Stats de WARHAMMER insertadas!");
-    })
-
+      nombreTipo: "Warhammer",
+      velocidad: 3,
+      fuerza: 2,
+      vida: 2,
+      armadura: 0
+    });
+  
+    const validateStatsWar = await Stats.findOne({ nombreTipo: statsWar.nombreTipo })
+    if (validateStatsWar !== null) {
+        console.log("Stats de WARHAMMER ya existen");
+    } else {
+        statsPromises.push(statsWar.save());
+        console.log("Stats de WARHAMMER insertadas");
+    }
+    
+  
     const statsShield = new Stats({
-        nombreTipo: "Shield",
-        velocidad: 3,
-        fuerza: 1,
-        vida: 3,
-        armadura: 2
-    })
-    statsShield.save(function (err) {
-        if (err) return console.log("Ya existen las stats de SHIELD");
-        console.log("¡Stats de SHIELD insertadas!");
-    })
+      nombreTipo: "Shield",
+      velocidad: 3,
+      fuerza: 1,
+      vida: 3,
+      armadura: 2
+    });
 
+    const validateStatsShield = await Stats.findOne({ nombreTipo: statsShield.nombreTipo })
+    if (validateStatsShield !== null) {
+        console.log("Stats de SHIELD ya existen");
+    } else {
+        statsPromises.push(statsShield.save());
+        console.log("Stats de SHIELD insertadas");
+    }
+  
+    
+  
     const statsZombie = new Stats({
-        nombreTipo: "Zombie",
-        cantidadMinuto: 10,
-        velocidad: 3,
-        fuerza: 2,
-        vida: 2
-    })
-    statsZombie.save(function (err) {
-        if (err) return console.log("Ya existen las stats de ZOMBIE");
-        console.log("¡Stats de ZOMBIE insertadas!");
-    })
-
+      nombreTipo: "Zombie",
+      cantidadMinuto: 10,
+      velocidad: 3,
+      fuerza: 2,
+      vida: 2
+    });
+  
+    const validateStatsZombie = await Stats.findOne({ nombreTipo: statsZombie.nombreTipo })
+    if (validateStatsZombie !== null) {
+        console.log("Stats de ZOMBIE ya existen");
+    } else {
+        statsPromises.push(statsZombie.save());
+        console.log("Stats de ZOMBIE insertadas");
+    }
+    
+  
     const statsBoss = new Stats({
-        nombreTipo: "Boss",
-        cantidadMinuto: 1,
-        velocidad: 3,
-        fuerza: 2,
-        vida: 2
-    })
-    statsBoss.save(function (err) {
-        if (err) return console.log("Ya existen las stats de BOSS");
-        console.log("¡Stats de BOSS insertadas!");
-    })
-
-    callback();
-}
+      nombreTipo: "Boss",
+      cantidadMinuto: 1,
+      velocidad: 3,
+      fuerza: 2,
+      vida: 2
+    });
+  
+    const validateStatsBoss = await Stats.findOne({ nombreTipo: statsBoss.nombreTipo })
+    if (validateStatsBoss !== null) {
+        console.log("Stats de BOSS ya existen");
+    } else {
+        statsPromises.push(statsBoss.save());
+        console.log("Stats de BOSS insertadas");
+    }
+    
+  
+    Promise.all(statsPromises)
+      .then(() => {
+        console.log("Todas las stats han sido guardadas correctamente.");
+        callback();
+      })
+      .catch((err) => {
+        console.error("Error al guardar las estadísticas: ", err);
+        callback(err);
+      });
+};
 
 module.exports = {
     insertPartida,

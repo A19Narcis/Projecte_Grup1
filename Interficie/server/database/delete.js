@@ -12,7 +12,7 @@ const removeStatsFrom = async function(tipo, callback) {
     }) */
 
     const deleteResult = Stats.deleteOne({ nombreTipo: tipo});
-
+    console.log(tipo);
     deleteResult.exec().then(result => callback('El ' + tipo + ' ha sido eliminado')).catch(error => console.error(error));
 }
 

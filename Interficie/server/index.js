@@ -13,6 +13,8 @@ const app = express();
 const http = require('http');
 const { Server } = require("socket.io"); 
 const server = http.createServer(app);
+const multer = require('multer');
+const upload = multer({dest: 'uploads/'});
 
 const io = new Server(server);
 
@@ -94,7 +96,38 @@ app.post("/statusPost", async (req, res) => {
 
 });
 
-//Ruta a /logOutPost amb dos parametres que s'envien per "param"
+app.post('/upload', upload.single('image'), (req, res) => {
+    const filePath = req.file.path;
+    const originalName = req.file.originalname;
+    
+
+    fs.readFile(filePath, (err, data) => {
+      if (err) throw err;
+  
+      const contentType = req.file.mimetype;
+      const fileExt = contentType.split('/')[1];
+  
+      const newFileName = `${originalName.split('.')[0]}.${fileExt}`;
+  
+      const newPath = `${__dirname}/uploads/${newFileName}`;
+      fs.unlink(filePath, (err => {}));
+      if (fs.existsSync(newPath)){
+        console.log("EXISTS");
+      }
+
+
+      else{
+        fs.writeFile(newPath, data, { encoding: 'binary' }, (err) => {
+            if (err) throw err;
+      
+            console.log(`File ${newFileName} uploaded successfully!`);
+      
+            res.json({ success: true });
+          });
+      }
+
+    });
+  });
 
 app.listen(PORT, () => {
     console.log("Server Running [" + PORT + "]");
@@ -243,6 +276,7 @@ app.post("/updateStats", (req, res) => {
 })
 
 
+
 //Insertar una nueva partida cuando acaba en la APP
 app.post("/newPartida", (req, res) => {
     const partida = {
@@ -280,7 +314,8 @@ app.get("/getStatsPlayer/:nombreTipo", (req, res) => {
 
 //Delete
 app.post("/delete", (req, res) => {
-    var deletedType = "ZombieEsqueleto8"
+    console.log(req.body.values[2]);
+    var deletedType = req.body.values[2];
     deleteDB.removeStatsFrom(deletedType, (callback) => {
         res.send(callback)
     })
@@ -300,6 +335,7 @@ app.post("/addNewZombie", (req, res) => {
         velocidad: req.body.values[4],
         fuerza: req.body.values[5],
         vida: req.body.values[6],
+        url: req.body.values[7]
     }
 
     insertDB.addNewZombie(statsNewZombie, (callback) => {
