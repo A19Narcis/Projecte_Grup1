@@ -29,13 +29,21 @@
         "fuerza":2,
         "vida":2,
         "armadura":null,
-        "cantidadMinuto":10.0
+        "cantidadMinuto":6.0
     },
     {
         "nombreTipo":"Boss",
         "velocidad":3,
         "fuerza":2,
         "vida":2,
+        "armadura":null,
+        "cantidadMinuto":1.0
+    },
+    {
+        "nombreTipo":"ZombieEsqueleto6",
+        "velocidad":1,
+        "fuerza":2,
+        "vida":4,
         "armadura":null,
         "cantidadMinuto":1.0
     }

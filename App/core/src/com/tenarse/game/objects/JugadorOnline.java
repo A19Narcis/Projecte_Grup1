@@ -65,8 +65,7 @@ public class JugadorOnline extends Actor {
 
     private ArrayList<Arrow> arrowList = new ArrayList<>();
 
-
-    public JugadorOnline(float x, float y, int width, int height, boolean isBot, int tipusJugador, Map map){
+    public JugadorOnline(float x, float y, int width, int height, int tipo, Map map){
         this.width = width;
         this.height = height;
         position = new Vector2(x, y);
@@ -76,13 +75,11 @@ public class JugadorOnline extends Actor {
         attackDelay = Settings.PLAYER_ATTACK_DELAY;
         this.map = map;
 
-        this.isBot = isBot;
-
         collisionRectPlayer = new Rectangle();
         collisionRectPlayer.width = this.width;
         collisionRectPlayer.height = this.height;
 
-        this.tipusJugador = tipusJugador;
+        this.tipusJugador = tipo - 3;
 
         if (tipusJugador == Crossbow_PLAYER){
             animacionRight = AssetManager.playerRightA_Animation;
@@ -120,115 +117,11 @@ public class JugadorOnline extends Actor {
 
     public void act(float delta){
         super.act(delta);
-        /*
-        if (this.isBot){
-            this.position.x += 5;
-            if (this.position.x >= Gdx.graphics.getWidth()){
-                this.position.x = -400;
-            }
-        } else {
-            oldx = this.position.x;
-            oldy = this.position.y;
-            if ((Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A) || this.bntLeftIsPressed) && !attack) {
-                this.direction = Settings.PRESSED_LEFT;
-                this.position.x -= Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
-                this.position.x -= 8;
-                if(map.searchColision(position.x, position.y)) {
-                    this.position.x = oldx;
-                    this.position.y = oldy;
-                }else {
-                    this.position.x += 8;
-                }
-            }
-            if ((Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D) || this.bntRightIsPressed) && !attack) {
-                this.direction = Settings.PRESSED_RIGHT;
-                this.position.x += Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
-                this.position.x += 8;
-                if(map.searchColision(position.x, position.y)) {
-                    this.position.x = oldx;
-                    this.position.y = oldy;
-                }else {
-                    this.position.x -= 8;
-                }
-            }
-            if ((Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W) || this.bntUpIsPressed) && !attack) {
-                this.direction = Settings.PRESSED_UP;
-                this.position.y += Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
-                if(map.searchColision(position.x, position.y)) {
-                    this.position.x = oldx;
-                    this.position.y = oldy;
-                }
-            }
-            if ((Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S) || this.bntDownIsPressed) && !attack) {
-                this.direction = Settings.PRESSED_DOWN;
-                this.position.y -= Settings.PLAYER_VELOCITY * Gdx.graphics.getDeltaTime();
-                this.position.y -= 12;
-                if(map.searchColision(position.x, position.y)) {
-                    this.position.x = oldx;
-                    this.position.y = oldy;
-                }else {
-                    this.position.y += 12;
-                }
-            }
-            if ((Gdx.input.isKeyPressed(Input.Keys.SPACE) || bntAttackPressed) && !attack && TimeUtils.nanoTime() - attackDelay >= Settings.PLAYER_ATTACK_DELAY) {
-                attack = true;
-                firstAnimationAttack = true;
-                doDamage = true;
 
-            }
-
-            //Colision personaje con los bordes del mapa
-            if (this.position.y <= 5){
-                this.position.y = 5;
-            }
-            if (this.position.x <= 5){
-                this.position.x = 5;
-            }
-            if (this.position.x >= 3840 - this.width - 5){
-                this.position.x = 3840 - this.width - 5;
-            }
-            if (this.position.y >= 2160 - this.height - 2){
-                this.position.y = 2160 - this.height - 2;
-            }
-
-            collisionRectPlayer.x = this.position.x;
-            collisionRectPlayer.y = this.position.y;
-
-        }
-        if(attack){
-            if(firstAnimationAttack){
-                currentFrame = 0;
-                firstAnimationAttack = false;
-            }
-            stateTime += delta;
-            if (stateTime >= frameTime){
-                currentFrame++;
-                if(tipusJugador == 1 && currentFrame == 6){
-                    Arrow arrow= new Arrow(direction, position, this);
-                    arrowList.add(arrow);
-                    getStage().addActor(arrow);
-                }
-                if (currentFrame >= animacionAtaqueRight.length){
-                    currentFrame = 0;
-                    attack = false;
-                    attackDelay = TimeUtils.nanoTime();
-                }
-                stateTime = 0;
-            }
-        }else{
-            stateTime += delta;
-            if (stateTime >= frameTime){
-                currentFrame++;
-                if (currentFrame >= animacionRight.length){
-                    currentFrame = 0;
-                }
-                stateTime = 0;
-            }
-        }*/
     }
 
     public void draw(Batch batch, float parentAlpha){
-        batch.draw(getPlayerAnimation(), this.position.x, this.position.y, width, height);
+        batch.draw(animacionDown[0], this.position.x, this.position.y, width, height);
         doDamage = false;
     }
 

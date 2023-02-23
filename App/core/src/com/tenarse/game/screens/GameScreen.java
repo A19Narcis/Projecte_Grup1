@@ -3,7 +3,6 @@ package com.tenarse.game.screens;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -13,25 +12,28 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.tenarse.game.Tenarse;
+import com.tenarse.game.bonus.Bonus;
 import com.tenarse.game.helpers.AssetManager;
 import com.tenarse.game.objects.Arrow;
 import com.tenarse.game.objects.ConnectionNode;
 import com.tenarse.game.objects.ContadorTiempo;
+import com.tenarse.game.objects.Hud;
 import com.tenarse.game.objects.Jugador;
 import com.tenarse.game.objects.Map;
 import com.tenarse.game.objects.Zombie;
 import com.tenarse.game.utils.Settings;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -53,6 +55,8 @@ public class  GameScreen implements Screen {
     private Stage stage;
     private Jugador jugador;
 
+    private int bonusPoints = 1;
+
     private int zoomAndroid;
     private int zoomPc;
 
@@ -68,22 +72,26 @@ public class  GameScreen implements Screen {
     private OrthographicCamera camera;
 
     private OrthogonalTiledMapRenderer renderer;
-
-    private Label puntosText;
-    private int puntosParida;
+    private int puntosPartida;
     private BitmapFont fontBold;
 
     long lastZombieTime = 0;
+    long lastBossTime = 0;
 
     float delta;
 
     ArrayList<Zombie> enemies = new ArrayList<>();
     ArrayList<Jugador> players = new ArrayList<>();
     ArrayList<Arrow> arrowList = new ArrayList<>();
+    ArrayList<Bonus> bonusList = new ArrayList<>();
+
+    private Hud hud;
 
     private Tenarse game;
 
-    public GameScreen(Tenarse game, Batch prevBatch, Viewport prevViewport, String username, int tipus, int velocidad, int fuerza, int vidas, int armaduras) {
+    private long tiempoBonusPoints;
+
+    public GameScreen(Tenarse game, Batch prevBatch, Viewport prevViewport, String username, int tipus, int velocidad, int fuerza, int vidas, int armaduras, JSONObject statsZombie, JSONObject statsBoss) {
 
         this.game = game;
 
@@ -93,10 +101,27 @@ public class  GameScreen implements Screen {
 
         shapeRenderer = new ShapeRenderer();
 
-        Settings.PLAYER_VELOCITY = velocidad * 25;
+        Settings.PLAYER_VELOCITY = velocidad * 30;
         Settings.PLAYER_FUERZA = fuerza;
         Settings.PLAYER_VIDAS = vidas;
         Settings.PLAYER_ARMADURA = armaduras;
+
+        System.out.println("Fuerza: " + Settings.PLAYER_FUERZA);
+
+        /* Cargar stats Zombie */
+        Settings.ZOMBIE_VELOCITY = statsZombie.getInt("velocidad") * 30;
+        Settings.ZOMBIE_FUERZA = statsZombie.getInt("fuerza");
+        Settings.ZOMBIE_LIFE = statsZombie.getInt("vida");
+        Settings.ZOMBIE_LIFE = statsZombie.getInt("vida");
+        Settings.ZOMBIE_SPAWN_INTERVAL = 60 / (long) statsZombie.getInt("cantidadMinuto") * 1000000000L;
+
+        /* Cargar stats Boss */
+        Settings.BOSS_VELOCITY = statsBoss.getInt("velocidad") * 30;
+        Settings.BOSS_FUERZA = statsBoss.getInt("fuerza");
+        Settings.BOSS_LIFE = statsBoss.getInt("vida");
+        Settings.BOSS_SPAWN_INTERVAL = 60 / (long) statsBoss.getInt("cantidadMinuto") * 1000000000L;
+
+        System.out.println("Vida BOSS: " + Settings.BOSS_LIFE);
 
         zoomAndroid = 6;
         zoomPc = 3;
@@ -130,18 +155,24 @@ public class  GameScreen implements Screen {
         jugador.setZIndex(51);
 
 
-        /*Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
+        /*Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map, 1);
         enemies.add(zombie);
         stage.addActor(zombie);
-        /*Zombie zombie2 = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
+        Zombie zombie2 = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map, 1);
         enemies.add(zombie2);
         stage.addActor(zombie2);
-        Zombie zombie3 = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
+        Zombie zombie3 = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map, 1);
         enemies.add(zombie3);
         stage.addActor(zombie3);*/
 
         corazonesTexture = AssetManager.hp_player;
         armaduraTexture = AssetManager.armor_player;
+
+        Skin skin = AssetManager.skinTextBox;
+        dialog = new EndGameDialog("Fin de la partida", skin, puntosPartida, jugador.getKillsJugador(), game);
+        dialog.setZIndex(Integer.MAX_VALUE);
+
+
 
         if (Gdx.app.getType() == Application.ApplicationType.Android) {//Zoom para Android
             stage.getViewport().setWorldSize(stage.getViewport().getWorldWidth() / zoomAndroid, stage.getViewport().getWorldHeight() / zoomAndroid);
@@ -175,27 +206,13 @@ public class  GameScreen implements Screen {
             stage.addActor(btnR_img);
             stage.addActor(btn_atacar);
 
-            btnU_img.setZIndex(100);
-            btnD_img.setZIndex(100);
-            btnL_img.setZIndex(100);
-            btnR_img.setZIndex(100);
-            btn_atacar.setZIndex(100);
-
-            Skin skin = AssetManager.skinTextBox;
-            dialog = new EndGameDialog("Fin de la partida", skin, puntosParida, jugador.getKillsJugador(), game);
-
         } else {
             stage.getViewport().setWorldSize(stage.getViewport().getWorldWidth() / zoomPc, stage.getViewport().getWorldHeight() / zoomPc);
             stage.getViewport().apply();
 
-            Skin skin = AssetManager.skinTextBox;
-            dialog = new EndGameDialog("Fin de la partida", skin, puntosParida, jugador.getKillsJugador(), game);
             dialog.setScale(0.8f);
-
         }
 
-        stage.addActor(dialog);
-        stage.getActors().get(1).setVisible(false);
 
         for (int i = 1; i <= Settings.PLAYER_VIDAS; i++) {
             hp_player = new ImageButton(new TextureRegionDrawable(new TextureRegion(corazonesTexture)));
@@ -221,16 +238,9 @@ public class  GameScreen implements Screen {
 
         fontBold = AssetManager.fontTextBold.generateFont(parametros);
 
+        hud = new Hud(stage.getBatch());
 
-        Label.LabelStyle labelStyleBold = new Label.LabelStyle();
-        labelStyleBold.font = fontBold;
-        labelStyleBold.fontColor = Color.BLACK;
-
-        puntosText = new Label("" + puntosParida, labelStyleBold);
-        puntosText.setAlignment(Align.left);
-        puntosText.setScale(0.25f);
-
-        stage.addActor(puntosText);
+        stage.addActor(hud);
 
         Gdx.input.setInputProcessor(stage);
     }
@@ -358,17 +368,17 @@ public class  GameScreen implements Screen {
         for (Jugador player: players){
             arrowList = player.getArrowList();
             for (Zombie zombie: enemies) {
-                boolean atacado = zombie.colisionWithPlayer(player);
-                if(atacado){
-                    if(armorArray.size() > 0){
-                        armorArray.get(armorArray.size()-1).remove();
-                        armorArray.remove(armorArray.size()-1);
-                    }else {
-                        if (corazonesArray.size() > 0){
-                            corazonesArray.get(corazonesArray.size() - 1).remove();
-                            corazonesArray.remove(corazonesArray.size() - 1);
+                int atacado = zombie.colisionWithPlayer(player);
+                if(atacado > 0){
+                        for (int i = atacado; i > 0 && corazonesArray.size() > 0; i--) {
+                            if(armorArray.size() > 0) {
+                                armorArray.get(armorArray.size() - 1).remove(); //Remove actor
+                                armorArray.remove(armorArray.size() - 1); //Remove array
+                            }else{
+                                corazonesArray.get(corazonesArray.size() - 1).remove();
+                                corazonesArray.remove(corazonesArray.size() - 1);
+                            }
                         }
-                    }
                 }
                 zombie.calculateMovement(player.getCollisionRectPlayer(), delta);
                 player.attacking(zombie, delta);
@@ -377,12 +387,44 @@ public class  GameScreen implements Screen {
 
         for (Jugador player: players){
             arrowList= player.getArrowList();
-            for(Arrow arrow : arrowList){
+            for(int i = 0; i < arrowList.size() && arrowList.size() > 0; i++){
                 if(enemies.size() <= 0) {
-                    arrow.remove();
+                    arrowList.get(i).remove();
                     arrowList.clear();
                 }else {
-                    arrow.move(delta);
+                    arrowList.get(i).move(delta);
+                }
+            }
+            for (int i = 0; i < bonusList.size(); i++) {
+                if(bonusList.get(i).isDelete()){
+                    bonusList.remove(i);
+                    i--;
+                }else {
+                    if (bonusList.get(i).isActive() && bonusList.get(i).getColisionRectangle().overlaps(player.getCollisionRectPlayer()) && jugador.getVida() > 0) {
+                        if (bonusList.get(i).getGemType() == Settings.BONUS_LIVE) {
+                            hp_player = new ImageButton(new TextureRegionDrawable(new TextureRegion(corazonesTexture)));
+                            hp_player.setSize(12, 12);
+                            corazonesArray.add(hp_player);
+                            stage.addActor(hp_player);
+                            player.subirVida();
+                        } else if (bonusList.get(i).getGemType() == Settings.BONUS_VELOCITY) {
+                            player.subirVelocidad();
+                        } else if (bonusList.get(i).getGemType() == Settings.BONUS_DAMAGE) {
+                            player.subirFuerza();
+                        } else if (bonusList.get(i).getGemType() == Settings.BONUS_SHIELD) {
+                            armor_player = new ImageButton(new TextureRegionDrawable(new TextureRegion(armaduraTexture)));
+                            armor_player.setSize(12, 12);
+                            armorArray.add(armor_player);
+                            stage.addActor(armor_player);
+                            player.subirArmadura();
+                        } else if (bonusList.get(i).getGemType() == Settings.BONUS_POINTS){
+                            bonusPoints++;
+                            tiempoBonusPoints = TimeUtils.nanoTime();
+                        }
+                        bonusList.get(i).remove();
+                        bonusList.remove(bonusList.get(i));
+                        i--;
+                    }
                 }
             }
         }
@@ -390,10 +432,19 @@ public class  GameScreen implements Screen {
 
         for (int i = 0; i < enemies.size(); i++) {
             if(enemies.get(i).isDead()){
+                if(MathUtils.random() < Settings.BONUS_POSIBILITY) {
+                    Bonus bonus = new Bonus(enemies.get(i).getPosition());
+                    bonusList.add(bonus);
+                    getStage().addActor(bonus);
+                }
+                if (TimeUtils.nanoTime() - tiempoBonusPoints >= Settings.B_POINTS_TIMEOUT && bonusPoints > 1){
+                    bonusPoints--;
+                    tiempoBonusPoints = TimeUtils.nanoTime();
+                }
+                puntosPartida = puntosPartida + enemies.get(i).getKillPoints() * bonusPoints;
                 enemies.remove(enemies.get(i));
-                puntosParida = puntosParida + 1;
                 jugador.unaKillMas();
-                puntosText.setText(puntosParida);
+                hud.getScoreLabel().setText(puntosPartida);
                 i--;
             }
         }
@@ -409,30 +460,26 @@ public class  GameScreen implements Screen {
                     contadorTiempo.detener();
                     String tiempo = contadorTiempo.getTiempo();
                     ConnectionNode nodeJS = new ConnectionNode();
-                    nodeJS.addNewPartida(this.username, jugador.getTypePlayer(), jugador.getKillsJugador(), tiempo, puntosParida);
+                    nodeJS.addNewPartida(this.username, jugador.getTypePlayer(), jugador.getKillsJugador(), tiempo, puntosPartida);
                 }
                 i--;
             }
         }
 
-
-        if(players.size() == 0){
+        if (players.size() > 0){
+            spawnZombie();
+            spawnBoss();
+        } else {
+            dialog.setZIndex(150);
+            stage.addActor(dialog);
+            dialog.getTexto().setText("Partida terminada\n\nPuntos: " + puntosPartida + "\nKills: " + jugador.getKillsJugador());
             if (Gdx.app.getType() == Application.ApplicationType.Android) {
-                dialog.setWidth(150f);
-                dialog.setHeight(150f);
-                dialog.setPosition(jugador.getCollisionRectPlayer().x - dialog.getWidth() / 2.5f , jugador.getCollisionRectPlayer().y - dialog.getHeight() / 2.5f);
+                dialog.getTitleLabel().setFontScale(0.90f);
+                dialog.setPosition(jugador.getCollisionRectPlayer().x - dialog.getWidth() / 2.5f , jugador.getCollisionRectPlayer().y - 60);
             } else {
-                stage.getActors().get(1).setVisible(true);
-                dialog.setZIndex(300);
-                dialog.setWidth(300f);
-                dialog.setHeight(200f);
-                dialog.setPosition(jugador.getCollisionRectPlayer().x , jugador.getCollisionRectPlayer().y);
-                dialog.getButtonTable().setWidth(100f);
-                dialog.getButtonTable().setPosition(100, 20);
+                dialog.setPosition(jugador.getCollisionRectPlayer().x - 35 , jugador.getCollisionRectPlayer().y - 50);
             }
         }
-
-        spawnZombie();
 
         if (buttonAttackPressed) {
             jugador.startAttack();
@@ -450,13 +497,13 @@ public class  GameScreen implements Screen {
             btnR_img.setPosition(camera.position.x - camera.viewportWidth / 2 + 40, camera.position.y - camera.viewportHeight / 2 + 20);
 
             btn_atacar.setPosition(camera.position.x + camera.viewportWidth / 2 - 50, camera.position.y - camera.viewportHeight / 2 + 10);
-            puntosText.setPosition(camera.position.x - (camera.viewportWidth / 2 - (375 - (10 * Integer.toString(puntosParida).length()))), camera.position.y + camera.viewportHeight / 2 - 30);
-            puntosText.setFontScale(0.5f);
-        } else {
-            puntosText.setPosition(camera.position.x - (camera.viewportWidth / 2 - (355 - (10 * Integer.toString(puntosParida).length()))), camera.position.y + camera.viewportHeight / 2 - 20);
-        }
 
-        puntosText.setZIndex(100);
+            btn_atacar.toFront();
+            btnD_img.toFront();
+            btnL_img.toFront();
+            btnR_img.toFront();
+            btnU_img.toFront();
+        }
 
         for (int i = 1; i <= corazonesArray.size(); i++) {
             corazonesArray.get(i-1).setPosition(camera.position.x - (camera.viewportWidth / 2 + 10) + 15 * i, camera.position.y + camera.viewportHeight / 2 - 20);
@@ -466,16 +513,31 @@ public class  GameScreen implements Screen {
             armorArray.get(i-1).setPosition(camera.position.x - (camera.viewportWidth / 2 + 10) + 15 * i, camera.position.y + camera.viewportHeight / 2 - 33);
             armorArray.get(i-1).setZIndex(100);
         }
+
+
+
+        stage.getBatch().setProjectionMatrix(stage.getCamera().combined);
         stage.draw();
+        hud.stage.draw();
     }
 
     private void spawnZombie() {
-        if (TimeUtils.nanoTime() - lastZombieTime > Settings.SPAWN_INTERVAL) {
-            Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map);
+        if (TimeUtils.nanoTime() - lastZombieTime > Settings.ZOMBIE_SPAWN_INTERVAL) {
+            Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map, 1);
             enemies.add(zombie);
             stage.addActor(zombie);
-            zombie.setZIndex(50);
+            //zombie.setZIndex(2);
             lastZombieTime = TimeUtils.nanoTime();
+        }
+    }
+
+    private void spawnBoss() {
+        if (TimeUtils.nanoTime() - lastBossTime > Settings.BOSS_SPAWN_INTERVAL) {
+            Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map, 2);
+            enemies.add(zombie);
+            stage.addActor(zombie);
+            //zombie.setZIndex(25);
+            lastBossTime = TimeUtils.nanoTime();
         }
     }
 
@@ -522,6 +584,7 @@ public class  GameScreen implements Screen {
 
     @Override
     public void dispose() {
+        this.dispose();
 
     }
 

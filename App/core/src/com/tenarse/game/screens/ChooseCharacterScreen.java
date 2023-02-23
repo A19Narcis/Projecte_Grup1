@@ -82,6 +82,9 @@ public class ChooseCharacterScreen implements Screen {
     private JSONObject statsWarhammer;
     private JSONObject statsShield;
 
+    private JSONObject statsZombie;
+    private JSONObject statsBoss;
+
     private TextField textUsername;
     private Skin skin;
 
@@ -102,12 +105,18 @@ public class ChooseCharacterScreen implements Screen {
         }
 
 
+
         fullStats = nodeJs.getStatsArray();
+
+        System.out.println(fullStats);
 
         //Darle las stats a cada tipo (Crossbow, Warhammer, Shield)
         statsCrossbow = fullStats.getJSONObject(0);
         statsWarhammer = fullStats.getJSONObject(1);
         statsShield = fullStats.getJSONObject(2);
+
+        statsZombie = fullStats.getJSONObject(3);
+        statsBoss = fullStats.getJSONObject(4);
 
 
         stage = new Stage(new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
@@ -283,7 +292,7 @@ public class ChooseCharacterScreen implements Screen {
                 System.out.println(username.length());
                 if (username.length() > 0){
                     if (modeJoc == SINGLE){
-                        game.setScreen(new GameScreen(game, stage.getBatch(), stage.getViewport(), username, selectedCharacter, velocidad, fuerza, vidas, armadura));
+                        game.setScreen(new GameScreen(game, stage.getBatch(), stage.getViewport(), username, selectedCharacter, velocidad, fuerza, vidas, armadura, statsZombie, statsBoss));
                     } else {
                         game.setScreen(new MultiGameScreen(game, stage.getBatch(), stage.getViewport(), username, selectedCharacter, velocidad, fuerza, vidas, armadura));
                     }
