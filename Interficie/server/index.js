@@ -29,6 +29,7 @@ app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Methods", "GET,POST,DELETE,PUT,OPTIONS");
     next();
 });
+
 app.use(sessions({
     secret: "sadsadsadasd",
     resave: false,
