@@ -51,10 +51,6 @@ public class AssetManager {
     public static Texture sheetPoolBloodR2;
 
     //Images
-    public static TextureRegion playerUpA, playerDownA, playerLeftA, playerRightA;
-    public static TextureRegion playerUpW, playerDownW, playerLeftW, playerRightW;
-    public static TextureRegion playerUpS, playerDownS, playerLeftS, playerRightS;
-    public static TextureRegion zombieUp, zombieDown, zombieLeft, zombieRight, zombieSpawn;
     public static TextureRegion arrowLeft;
     public static TextureRegion arrowUp;
     public static TextureRegion arrowRight;
@@ -75,13 +71,6 @@ public class AssetManager {
     public static TextureRegion[] playerRightW_Atack, playerLeftW_Atack, playerUpW_Atack, playerDownW_Atack;
     public static TextureRegion[] playerRightS_Atack, playerLeftS_Atack, playerUpS_Atack, playerDownS_Atack;
 
-    public static TextureRegion[] zombieRight_Animation, zombieLeft_Animation, zombieUp_Animation, zombieDown_Animation, zombieSpawn_Animation, zombieDead_Animation;
-    public static TextureRegion[] ZombieRight_Atack, ZombieLeft_Atack, ZombieUp_Atack, ZombieDown_Atack;
-
-    public static TextureRegion[] bossRight_Animation, bossLeft_Animation, bossUp_Animation, bossDown_Animation, bossSpawn_Animation, bossDead_Animation;
-    public static TextureRegion[] bossRight_Atack, bossLeft_Atack, bossUp_Atack, bossDown_Atack;
-
-    public static TextureRegion[] ShieldDeadAnimation, CrossbowlDeadAnimation, WarhamerDeadAnimation;
 
     public static TextureRegion[] hit_Animation;
     public static TextureRegion[] poolBloodAnimationL1;
@@ -156,7 +145,7 @@ public class AssetManager {
             SpritesPlayers.add(amSprites);
 
             if(i >= 3){
-                ZombiesInterval.add(new SpawnInterval((60 / (long) stats.getInt("cantidadMinuto") * 1000000000L) / 2));
+                ZombiesInterval.add(new SpawnInterval(60 / (long) stats.getInt("cantidadMinuto") * 1000000000L));
             }
 
         }

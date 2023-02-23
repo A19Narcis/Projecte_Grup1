@@ -156,7 +156,7 @@ public class  GameScreen implements Screen {
 
         Skin skin = AssetManager.skinTextBox;
         dialog = new EndGameDialog("Fin de la partida", skin, puntosPartida, jugador.getKillsJugador(), game);
-        dialog.setZIndex(Integer.MAX_VALUE);
+        dialog.toFront();
 
 
 
@@ -513,7 +513,7 @@ public class  GameScreen implements Screen {
                 Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map, i + 1);
                 enemies.add(zombie);
                 stage.addActor(zombie);
-                //zombie.setZIndex(2);
+                zombie.toBack();
                 intervals.get(i).time = TimeUtils.nanoTime();
             }
         }

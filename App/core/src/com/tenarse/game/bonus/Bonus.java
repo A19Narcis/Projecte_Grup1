@@ -61,7 +61,6 @@ public class Bonus extends Actor {
 
     @Override
     public void act(float delta) {
-        this.setZIndex(25);
         if(TimeUtils.nanoTime() - timeFromStart >= Settings.BONUS_DELAY_ACTIVATION && !isActive()){
             active = true;
         }else if(TimeUtils.nanoTime() - timeFromStart >= Settings.BONUS_TIME_DESPAWN){

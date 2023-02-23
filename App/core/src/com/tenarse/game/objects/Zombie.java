@@ -352,7 +352,9 @@ public class Zombie extends Actor{
             currentFrame = 0;
             hited = true;
             timeHited = TimeUtils.nanoTime();
-            getStage().addActor(new PoolBlood(this.position, direction));
+            PoolBlood pool = new PoolBlood(this.position, direction);
+            getStage().addActor(pool);
+            pool.toBack();
         }
     }
 
