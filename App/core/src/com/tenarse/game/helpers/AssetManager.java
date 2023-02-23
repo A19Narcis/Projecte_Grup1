@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.tenarse.game.objects.ConnectionNode;
 
@@ -26,7 +28,10 @@ public class AssetManager {
     //Tiled Map
     public static TiledMap map;
     public static TmxMapLoader mapLoader;
-    public static Texture mapa_png;
+    public static Texture mapa_png1;
+    public static Texture mapa_png2;
+    public static Texture mapa_png3;
+    public static ArrayList<Texture> mapasPNG = new ArrayList<>();
 
     //Textures
     public static Texture sheetArrowL;
@@ -265,7 +270,13 @@ public class AssetManager {
         skinTextBox = new Skin(Gdx.files.internal("skin/uiskin.json"));
 
         //Mapas PNG para elegir
-        mapa_png = new Texture(Gdx.files.internal("Mapas/developmentMap/developmentMap.png"));
+        mapa_png1 = new Texture(Gdx.files.internal("Mapas/developmentMap/developmentMap.png"));
+        mapa_png2 = new Texture(Gdx.files.internal("Mapas/developmentMap/developmentMap.png"));
+        mapa_png3 = new Texture(Gdx.files.internal("Mapas/developmentMap/developmentMap.png"));
+
+        mapasPNG.add(mapa_png1);
+        mapasPNG.add(mapa_png2);
+        mapasPNG.add(mapa_png3);
     }
 
     public static void dispose() {

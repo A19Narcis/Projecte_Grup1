@@ -131,7 +131,6 @@ public class  GameScreen implements Screen {
         jugador.setName("jugador");
         stage.addActor(jugador);
 
-        jugador.setZIndex(51);
 
 
         /*Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map, 1);

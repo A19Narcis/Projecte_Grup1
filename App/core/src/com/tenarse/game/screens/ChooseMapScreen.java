@@ -30,6 +30,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public class ChooseMapScreen implements Screen {
 
     private Tenarse game;
@@ -39,13 +41,13 @@ public class ChooseMapScreen implements Screen {
     private final int SINGLE = 0;
 
     private int selectedCharacter;
+    private int selectedMap = 0;
     private String username;
 
     private int modeJoc;
 
     private Texture background;
     private Texture btnPlay, btn_left, btn_right;
-    private Texture mapa;
 
     private Texture btnReturn;
     private ImageButton returnBTN;
@@ -65,6 +67,8 @@ public class ChooseMapScreen implements Screen {
     private TextField textUsername;
     private Skin skin;
 
+    private ArrayList<Image> imgMapas;
+
     public ChooseMapScreen(Tenarse game, int modeJoc, int selectedCharacter, String usuario) {
         this.game = game;
 
@@ -75,6 +79,19 @@ public class ChooseMapScreen implements Screen {
         fullStats = AssetManager.fullStats;
 
         stage = new Stage(new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+
+        //Mapas para seleccionar
+        imgMapas = new ArrayList<>();
+
+        for (int i = 0; i < AssetManager.mapasPNG.size(); i++) {
+            imgMapas.add(new Image(new TextureRegionDrawable(new TextureRegion(AssetManager.mapasPNG.get(i)))));
+            stage.addActor(imgMapas.get(i));
+            imgMapas.get(i).setVisible(false);
+        }
+
+        System.out.println(imgMapas);
+
+        imgMapas.get(0).setVisible(true);
 
         //Background
         background = AssetManager.imgMainMenu;
@@ -121,29 +138,24 @@ public class ChooseMapScreen implements Screen {
         titolMapa = new Label("MAPA 1", labelStyleBold);
         Label textoInicio = new Label("¡Elige el mapa!", labelStyleNormal);
 
-        //Caja de texto
-        skin = AssetManager.skinTextBox;
-
-        textUsername = new TextField("", skin);
-        textUsername.setWidth(textUsername.getMinWidth() * 1.5f);
-
-
-
-
         //Add actors
         //stage.addActor(imgBackground);
         stage.addActor(imgBtnPlay);
-
         stage.addActor(imgBtnLeft);
         stage.addActor(imgBtnRight);
         stage.addActor(titolMapa);
         stage.addActor(textoInicio);
-        stage.addActor(textUsername);
         stage.addActor(returnBTN);
 
 
         //Posicionamiento de los actores en la pantalla (Android / Desktop)
         textoInicio.setPosition(Gdx.graphics.getWidth() / 2 - textoInicio.getMinWidth() / 2, Gdx.graphics.getHeight() - textoInicio.getMinHeight());
+        titolMapa.setPosition(Gdx.graphics.getWidth() / 2 - titolMapa.getMinWidth() / 2, textoInicio.getY() - titolMapa.getMinHeight());
+        imgBtnRight.setPosition(Gdx.graphics.getWidth() - btn_right.getWidth() * 2, Gdx.graphics.getHeight() / 2 - btn_right.getHeight() / 2);
+        for (int i = 0; i < imgMapas.size(); i++) {
+            imgMapas.get(i).setScale(0.18f);
+            imgMapas.get(i).setPosition(Gdx.graphics.getHeight() / 3.5f, Gdx.graphics.getHeight() / 6);
+        }
 
         if (Gdx.app.getType() == Application.ApplicationType.Android){
             imgBtnPlay.setPosition(Gdx.graphics.getWidth() - imgBtnPlay.getWidth() * 2.5f, 0 + imgBtnPlay.getHeight());
@@ -151,15 +163,11 @@ public class ChooseMapScreen implements Screen {
             imgBtnLeft.getImage().setScale(1.5f);
             imgBtnRight.getImage().setScale(1.5f);
             imgBtnLeft.setPosition(0 + btn_left.getWidth() * 2, Gdx.graphics.getHeight() / 2 - btn_left.getHeight() / 2);
-            imgBtnRight.setPosition(0 + btn_right.getWidth() * 11.75f, Gdx.graphics.getHeight() / 2 - btn_right.getHeight() / 2);
-            titolMapa.setPosition(0  , 0);
             returnBTN.setPosition(0 + returnBTN.getWidth(), Gdx.graphics.getHeight() - returnBTN.getHeight() * 2.5f);
             returnBTN.getImage().setScale(2f);
         } else {
             imgBtnPlay.setPosition(Gdx.graphics.getWidth() / 2 + imgBtnPlay.getWidth() * 1.5f, 0 + imgBtnPlay.getHeight());
             imgBtnLeft.setPosition(0 + btn_left.getWidth() / 2, Gdx.graphics.getHeight() / 2 - btn_left.getHeight() / 2);
-            imgBtnRight.setPosition(0 + btn_right.getWidth() * 7, Gdx.graphics.getHeight() / 2 - btn_right.getHeight() / 2);
-            titolMapa.setPosition(0, 0);
             returnBTN.setPosition(0 + returnBTN.getWidth() / 2, Gdx.graphics.getHeight() - returnBTN.getHeight() * 1.25f);
         }
 
@@ -183,6 +191,16 @@ public class ChooseMapScreen implements Screen {
         imgBtnLeft.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                //Ver otro mapa
+                selectedMap--;
+                if (selectedMap == -1){
+                    selectedMap = imgMapas.size() - 1;
+                    imgMapas.get(0).setVisible(false);
+                } else {
+                    imgMapas.get(selectedMap + 1).setVisible(false);
+                }
+                imgMapas.get(selectedMap).setVisible(true);
+                System.out.println(selectedMap);
                 return true;
             }
         });
@@ -190,6 +208,16 @@ public class ChooseMapScreen implements Screen {
         imgBtnRight.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                //Ver otro mapa
+                selectedMap++;
+                if (selectedMap == imgMapas.size()){
+                    selectedMap = 0;
+                    imgMapas.get(imgMapas.size() - 1).setVisible(false);
+                } else {
+                    imgMapas.get(selectedMap - 1).setVisible(false);
+                }
+                imgMapas.get(selectedMap).setVisible(true);
+                System.out.println(selectedMap);
                 return true;
             }
         });
