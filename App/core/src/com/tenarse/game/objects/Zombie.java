@@ -65,7 +65,7 @@ public class Zombie extends Actor{
         this.height = height;
         this.map = map;
         position = new Vector2();
-        vida = Settings.ZOMBIE_LIFE;
+        vida = AssetManager.fullStats.getJSONObject(tipoZombie + 2).getInt("vida");
         dead = false;
         attack = false;
         firstAnimationAttack = false;

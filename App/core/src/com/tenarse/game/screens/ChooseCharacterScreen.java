@@ -2,41 +2,31 @@ package com.tenarse.game.screens;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.assets.loaders.AssetLoader;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.tenarse.game.Tenarse;
 import com.tenarse.game.helpers.AssetManager;
-import com.tenarse.game.objects.ConnectionNode;
 import com.tenarse.game.objects.Jugador;
 import com.tenarse.game.objects.Map;
 import com.tenarse.game.utils.Settings;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 
-import org.json.Cookie;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -51,7 +41,7 @@ public class ChooseCharacterScreen implements Screen {
     private int modeJoc;
 
     private Texture background, chooseBox;
-    private Texture btnPlay, btn_left, btn_right;
+    private Texture btnMapSelect, btn_left, btn_right;
 
     private Texture btnReturn;
     private ImageButton returnBTN;
@@ -61,7 +51,7 @@ public class ChooseCharacterScreen implements Screen {
     private Jugador botChooseShield;
 
     private Image imgBackground, imgChooseBox;
-    private ImageButton imgBtnPlay, imgBtnLeft, imgBtnRight;
+    private ImageButton imgBtnMapSelect, imgBtnLeft, imgBtnRight;
 
     private int selectedCharacter = 4; //Para que salga Crossbow cuando entra
 
@@ -120,8 +110,8 @@ public class ChooseCharacterScreen implements Screen {
         Map map = new Map();
 
         //Boton JUGAR
-        btnPlay = AssetManager.imgPlayBtn;
-        imgBtnPlay = new ImageButton(new TextureRegionDrawable(new TextureRegion(btnPlay)));
+        btnMapSelect = AssetManager.imgPlayBtn;
+        imgBtnMapSelect = new ImageButton(new TextureRegionDrawable(new TextureRegion(btnMapSelect)));
 
         //Flecha return
         btnReturn = AssetManager.imgReturnBtn;
@@ -195,7 +185,7 @@ public class ChooseCharacterScreen implements Screen {
 
         //Add actors
         //stage.addActor(imgBackground);
-        stage.addActor(imgBtnPlay);
+        stage.addActor(imgBtnMapSelect);
         stage.addActor(imgChooseBox);
         stage.addActor(imgBtnLeft);
         stage.addActor(imgBtnRight);
@@ -250,8 +240,8 @@ public class ChooseCharacterScreen implements Screen {
             textUsername.setSize(500, 75);
             textUsername.getStyle().font.getData().setScale(1.5f);
             textUsername.setAlignment(Align.center);
-            imgBtnPlay.setPosition(Gdx.graphics.getWidth() - imgBtnPlay.getWidth() * 2.5f, 0 + imgBtnPlay.getHeight());
-            imgBtnPlay.getImage().setScale(2f);
+            imgBtnMapSelect.setPosition(Gdx.graphics.getWidth() - imgBtnMapSelect.getWidth() * 2.5f, 0 + imgBtnMapSelect.getHeight());
+            imgBtnMapSelect.getImage().setScale(2f);
             imgChooseBox.setScale(3f);
             imgChooseBox.setPosition(0 + chooseBox.getWidth() * 2, Gdx.graphics.getHeight() / 2.5f - chooseBox.getHeight());
             imgBtnLeft.getImage().setScale(1.5f);
@@ -266,7 +256,7 @@ public class ChooseCharacterScreen implements Screen {
             returnBTN.setPosition(0 + returnBTN.getWidth(), Gdx.graphics.getHeight() - returnBTN.getHeight() * 2.5f);
             returnBTN.getImage().setScale(2f);
         } else {
-            imgBtnPlay.setPosition(Gdx.graphics.getWidth() / 2 + imgBtnPlay.getWidth() * 1.5f, 0 + imgBtnPlay.getHeight());
+            imgBtnMapSelect.setPosition(Gdx.graphics.getWidth() / 2 + imgBtnMapSelect.getWidth() * 1.5f, 0 + imgBtnMapSelect.getHeight());
             imgChooseBox.setScale(2f);
             imgChooseBox.setPosition(0 + chooseBox.getWidth(), Gdx.graphics.getHeight() / 2 - chooseBox.getHeight());
             imgBtnLeft.setPosition(0 + btn_left.getWidth() / 2, Gdx.graphics.getHeight() / 2 - btn_left.getHeight() / 2);
@@ -283,17 +273,20 @@ public class ChooseCharacterScreen implements Screen {
 
     @Override
     public void show() {
-        imgBtnPlay.addListener(new InputListener(){
+        imgBtnMapSelect.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 String username = textUsername.getText().replace(" ", "");
                 System.out.println(username.length());
                 if (username.length() > 0){
+                    game.setScreen(new ChooseMapScreen(game, modeJoc, selectedCharacter, username));
+                    /*
                     if (modeJoc == SINGLE){
                         game.setScreen(new GameScreen(game, stage.getBatch(), stage.getViewport(), username, selectedCharacter, velocidad, fuerza, vidas, armadura, statsZombie, statsBoss));
                     } else {
                         game.setScreen(new MultiGameScreen(game, stage.getBatch(), stage.getViewport(), username, selectedCharacter, velocidad, fuerza, vidas, armadura));
                     }
+                    */
                 } else {
                     stage.getActors().get(16).setVisible(true);
                 }

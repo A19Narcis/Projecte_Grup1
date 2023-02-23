@@ -1,5 +1,7 @@
 package com.tenarse.game.utils;
 
+import com.tenarse.game.helpers.AssetManager;
+
 public class Settings {
 
     //Propietats joc
@@ -12,11 +14,6 @@ public class Settings {
     public static final int PRESSED_RIGHT = 4;
 
     //Propietats jugador
-    public static int PLAYER_VELOCITY = 1;
-    public static int PLAYER_FUERZA = 1;
-    public static int PLAYER_VIDAS = 1;
-    public static int PLAYER_ARMADURA = 0;
-
     public static final int PLAYER_WIDTH = 32;
     public static final int PLAYER_HEIGHT = 32;
     public static final long PLAYER_ATTACK_DELAY = 250000000l;
@@ -24,22 +21,8 @@ public class Settings {
     //Propietats Zombie
     public static final int ZOMBIE_WIDTH = 32;
     public static final int ZOMBIE_HEIGHT = 32;
-    public static int ZOMBIE_VELOCITY;
-    public static int ZOMBIE_LIFE;
     public static final long ZOMBIE_HIT_DELAY = 1500000000l;
-    public static int ZOMBIE_FUERZA;
     public static long ZOMBIE_SPAWN_INTERVAL;
-    public static final int PUNTOS_ZOMBIE = 1;
-
-    //Propietats Boss
-    public static final int BOSS_WIDTH = 32;
-    public static final int BOSS_HEIGHT = 32;
-    public static int BOSS_VELOCITY;
-    public static int BOSS_LIFE;
-    public static final long BOSS_HIT_DELAY = 750000000l;
-    public static int BOSS_FUERZA;
-    public static long BOSS_SPAWN_INTERVAL;
-    public static final int PUNTOS_BOSS = 3;
 
     //Efectos
     public static final long POOL_TIME_DESPAWN = 240000000000l;
@@ -47,7 +30,6 @@ public class Settings {
 
     //PROPIETATS ARROW
     public static final float ARROW_VELOCITY = 400;
-    public static final float ARROW_VLOCITY_MULTIPLIER = 8;
 
     //Propietats bonus
     public static final float BONUS_POSIBILITY = 0.2f;

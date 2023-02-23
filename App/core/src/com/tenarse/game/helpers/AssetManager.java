@@ -26,6 +26,7 @@ public class AssetManager {
     //Tiled Map
     public static TiledMap map;
     public static TmxMapLoader mapLoader;
+    public static Texture mapa_png;
 
     //Textures
     public static Texture sheetArrowL;
@@ -262,6 +263,9 @@ public class AssetManager {
 
         //Skin
         skinTextBox = new Skin(Gdx.files.internal("skin/uiskin.json"));
+
+        //Mapas PNG para elegir
+        mapa_png = new Texture(Gdx.files.internal("Mapas/developmentMap/developmentMap.png"));
     }
 
     public static void dispose() {
