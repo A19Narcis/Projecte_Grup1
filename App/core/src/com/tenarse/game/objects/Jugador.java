@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.tenarse.game.effects.HitEffect;
 import com.tenarse.game.effects.PoolBlood;
+import com.tenarse.game.helpers.AMSprites;
 import com.tenarse.game.helpers.AssetManager;
 import com.tenarse.game.utils.Settings;
 
@@ -56,6 +57,8 @@ public class Jugador extends Actor {
     private TextureRegion[] animacionMuerte;
     private long attackDelay;
 
+    private AMSprites playerSprites;
+
     private int currentFrame = 0;
     private float frameTime = 0.1f;
     private float stateTime = 0;
@@ -99,37 +102,19 @@ public class Jugador extends Actor {
         armadura = Settings.PLAYER_ARMADURA;
         isDead = false;
 
-        if (tipusJugador == Crossbow_PLAYER){
-            animacionRight = AssetManager.playerRightA_Animation;
-            animacionLeft = AssetManager.playerLeftA_Animation;
-            animacionUp = AssetManager.playerUpA_Animation;
-            animacionDown = AssetManager.playerDownA_Animation;
-            animacionAtaqueRight = AssetManager.playerRightA_Attack;
-            animacionAtaqueLeft = AssetManager.playerLeftA_Attack;
-            animacionAtaqueUp = AssetManager.playerUpA_Attack;
-            animacionAtaqueDown = AssetManager.playerDownA_Attack;
-            animacionMuerte = AssetManager.CrossbowlDeadAnimation;
-        } else if (tipusJugador == WAR_PLAYER){
-            animacionRight = AssetManager.playerRightW_Animation;
-            animacionLeft = AssetManager.playerLeftW_Animation;
-            animacionUp = AssetManager.playerUpW_Animation;
-            animacionDown = AssetManager.playerDownW_Animation;
-            animacionAtaqueRight = AssetManager.playerRightW_Atack;
-            animacionAtaqueLeft = AssetManager.playerLeftW_Atack;
-            animacionAtaqueUp = AssetManager.playerUpW_Atack;
-            animacionAtaqueDown = AssetManager.playerDownW_Atack;
-            animacionMuerte = AssetManager.WarhamerDeadAnimation;
-        } else if (tipusJugador == SHI_PLAYER){
-            animacionRight = AssetManager.playerRightS_Animation;
-            animacionLeft = AssetManager.playerLeftS_Animation;
-            animacionUp = AssetManager.playerUpS_Animation;
-            animacionDown = AssetManager.playerDownS_Animation;
-            animacionAtaqueRight = AssetManager.playerRightS_Atack;
-            animacionAtaqueLeft = AssetManager.playerLeftS_Atack;
-            animacionAtaqueUp = AssetManager.playerUpS_Atack;
-            animacionAtaqueDown = AssetManager.playerDownS_Atack;
-            animacionMuerte = AssetManager.ShieldDeadAnimation;
-        }
+        playerSprites = AssetManager.SpritesPlayers.get(tipusJugador - 1);
+
+
+        animacionRight = playerSprites.M_R;
+        animacionLeft = playerSprites.M_L;
+        animacionUp = playerSprites.M_U;
+        animacionDown = playerSprites.M_D;
+        animacionAtaqueRight = playerSprites.A_R;
+        animacionAtaqueLeft = playerSprites.A_L;
+        animacionAtaqueUp = playerSprites.A_U;
+        animacionAtaqueDown = playerSprites.A_D;
+        animacionMuerte = playerSprites.Dead;
+
 
         setBounds(position.x, position.y, width, height);
         setTouchable(Touchable.enabled);
