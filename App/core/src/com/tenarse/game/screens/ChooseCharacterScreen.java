@@ -53,6 +53,9 @@ public class ChooseCharacterScreen implements Screen {
     private Texture background, chooseBox;
     private Texture btnPlay, btn_left, btn_right;
 
+    private Texture btnReturn;
+    private ImageButton returnBTN;
+
     private Jugador botChooseCrossbow;
     private Jugador botChooseWarhammer;
     private Jugador botChooseShield;
@@ -119,6 +122,11 @@ public class ChooseCharacterScreen implements Screen {
         //Boton JUGAR
         btnPlay = AssetManager.imgPlayBtn;
         imgBtnPlay = new ImageButton(new TextureRegionDrawable(new TextureRegion(btnPlay)));
+
+        //Flecha return
+        btnReturn = AssetManager.imgReturnBtn;
+        returnBTN = new ImageButton(new TextureRegionDrawable(new TextureRegion(btnReturn)));
+
 
         //Caja elegir personaje
         chooseBox = AssetManager.imgChooseBox;
@@ -204,6 +212,7 @@ public class ChooseCharacterScreen implements Screen {
         stage.addActor(textUsername);
         stage.addActor(textNombre);
         stage.addActor(textErrorNombre);
+        stage.addActor(returnBTN);
 
         //Start Character && Start text
         stage.getActors().get(4).setVisible(false);
@@ -254,6 +263,8 @@ public class ChooseCharacterScreen implements Screen {
             textErrorNombre.setPosition(Gdx.graphics.getWidth() / 2 - textErrorNombre.getMinWidth() / 2, textErrorNombre.getMinHeight());
             textUsername.setPosition(Gdx.graphics.getWidth() / 2 - textUsername.getWidth() / 2, textUsername.getMinHeight() + textErrorNombre.getHeight() * 1.5f);
             textNombre.setPosition(Gdx.graphics.getWidth() / 2 - textNombre.getWidth() / 2, textNombre.getMinHeight() + textUsername.getMinHeight() + textErrorNombre.getHeight() * 1.5f);
+            returnBTN.setPosition(0 + returnBTN.getWidth(), Gdx.graphics.getHeight() - returnBTN.getHeight() * 2.5f);
+            returnBTN.getImage().setScale(2f);
         } else {
             imgBtnPlay.setPosition(Gdx.graphics.getWidth() / 2 + imgBtnPlay.getWidth() * 1.5f, 0 + imgBtnPlay.getHeight());
             imgChooseBox.setScale(2f);
@@ -264,6 +275,7 @@ public class ChooseCharacterScreen implements Screen {
             textErrorNombre.setPosition(Gdx.graphics.getWidth() / 2 - textErrorNombre.getMinWidth() / 2, textErrorNombre.getMinHeight());
             textUsername.setPosition(Gdx.graphics.getWidth() / 2 - textUsername.getWidth() / 2, textUsername.getMinHeight() + textErrorNombre.getHeight());
             textNombre.setPosition(Gdx.graphics.getWidth() / 2 - textNombre.getWidth() / 2, textNombre.getMinHeight() + textUsername.getMinHeight() + textErrorNombre.getHeight());
+            returnBTN.setPosition(0 + returnBTN.getWidth() / 2, Gdx.graphics.getHeight() - returnBTN.getHeight() * 1.25f);
         }
 
         Gdx.input.setInputProcessor(stage);
@@ -397,6 +409,14 @@ public class ChooseCharacterScreen implements Screen {
                     textStatArmadura.setText("Armadura: " + armadura);
                 }
 
+                return true;
+            }
+        });
+
+        returnBTN.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                game.setScreen(new MainMenuScreen(game));
                 return true;
             }
         });
