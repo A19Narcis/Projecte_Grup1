@@ -262,7 +262,8 @@ app.post("/updateStats", (req, res) => {
             velocidad: req.body.values[3],
             fuerza: req.body.values[4],
             vida: req.body.values[5],
-            armadura: req.body.values[6]
+            armadura: req.body.values[6],
+            
         }
     } else {
         newStats = {
@@ -270,7 +271,8 @@ app.post("/updateStats", (req, res) => {
             cantidadMinuto: req.body.values[6],
             velocidad: req.body.values[3],
             fuerza: req.body.values[4],
-            vida: req.body.values[5]
+            vida: req.body.values[5],
+            puntos: req.body.values[8]
         }
     }
     updateDB.updateStats(newStats, function (updatedStats) {
@@ -319,6 +321,8 @@ app.get("/getStatsPlayer/:nombreTipo", (req, res) => {
 app.post("/delete", (req, res) => {
     console.log(req.body.values[2]);
     var deletedType = req.body.values[2];
+    fs.unlink(req.body.values[3], (err => {}));
+
     deleteDB.removeStatsFrom(deletedType, (callback) => {
         res.send(callback)
     })
@@ -338,7 +342,8 @@ app.post("/addNewZombie", (req, res) => {
         velocidad: req.body.values[4],
         fuerza: req.body.values[5],
         vida: req.body.values[6],
-        url: req.body.values[7]
+        url: req.body.values[7],
+        puntos: req.body.values[8]
     }
 
     insertDB.addNewZombie(statsNewZombie, (callback) => {

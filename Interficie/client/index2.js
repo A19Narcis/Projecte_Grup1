@@ -22,6 +22,7 @@ var vue_app = new Vue({
         new_velocidad: 0,
         new_vida: 0,
         new_cantidad: 0,
+        new_puntos: 0,
         done: 0,
         color: '',
         canvas: null,
@@ -36,9 +37,10 @@ var vue_app = new Vue({
         zomArrVida: [],
         zomArrArmadura: [],
         zomArrVelocidad: [],
+        zomPuntos: [],
         canvas3: null,
         medianaArr: [],
-        url: ''
+        url: '',
 
         
     },
@@ -50,15 +52,11 @@ var vue_app = new Vue({
     methods: {
         createCanv: function() {
             this.canvas = document.getElementById('canvas')
-            console.log(this.canvas);
-            console.log(this.arrNom);
-            console.log(this.zomArrNom);
 
             var ctx = this.canvas.getContext('2d');
             //hay que llamar al get stats como sea, usaba dos funciones.
             this.canvas.width = 800;
             this.canvas.height = 600;
-            console.log(this.arrStats);
             var chart = new Chart(ctx, {
                 type: 'bar',
                 data: {
@@ -120,8 +118,8 @@ var vue_app = new Vue({
                 data: {
                     labels: this.zomArrNom,
                     datasets: [{
-                        label: 'CantidadMin',
-                        data: this.zomArrArmadura,
+                        label: 'Puntos',
+                        data: this.zomPuntos,
                         backgroundColor: 'rgba(255, 99, 132, 0.2)',
                         borderColor: 'rgba(255, 99, 132, 1)',
                         borderWidth: 1,
@@ -161,7 +159,6 @@ var vue_app = new Vue({
             this.canvas3.width = 800;
             this.canvas3.height = 600;
             var arrNoms = ['0-250', '251-500', '501-750', '751-1000', '>1000'];
-            console.log(arrNoms[0]);
             var chart3 = new Chart(ctx3, {
                 type: 'bar',
                 data: {
@@ -196,6 +193,7 @@ var vue_app = new Vue({
             this.zomArrVida = [];
             this.zomArrArmadura = [];
             this.zomArrVelocidad = [];  
+            this.zomPuntos = [];
             this.arrStats.forEach( el =>{
                 if(count < 3){
                     this.arrNom.push(el.nombreTipo);
@@ -205,7 +203,7 @@ var vue_app = new Vue({
                     this.arrVida.push(el.vida);
                 }else{
                     this.zomArrNom.push(el.nombreTipo);
-                    this.zomArrArmadura.push(el.cantidadMinuto);
+                    this.zomPuntos.push(el.puntos);
                     this.zomArrVelocidad.push(el.velocidad);
                     this.zomArrFuerza.push(el.fuerza);
                     this.zomArrVida.push(el.vida);
@@ -241,9 +239,6 @@ var vue_app = new Vue({
             this.createCanv();
         },
         getAuth: function () {
-            console.log("Entro")
-            console.log(this.username)
-            console.log(this.pass)
             this.info.values.push(this.username);
             this.info.values.push(this.pass);
             if (this.username == '' || this.pass == '') {
@@ -298,10 +293,10 @@ var vue_app = new Vue({
             const fileInput = document.getElementById('file-input');
             const file = fileInput.files[0];
             this.url = 'http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/' + file.name;
-            console.log(this.url);
+            console.log(file);
             const formData = new FormData();
             formData.append('image', file);
-          
+
             fetch('http://admin.alumnes.inspedralbes.cat:7073/upload', {
               method: 'POST',
               body: formData
@@ -310,6 +305,7 @@ var vue_app = new Vue({
               if (response.ok) {
                 console.log('Image uploaded successfully!');
                 this.dialog_2 = true;
+                
               } else {
                 console.error('Failed to upload image!');
               }
@@ -446,7 +442,7 @@ var vue_app = new Vue({
             );
         },
 
-        updateStats: function (id, vel, fuerza, vida, armadura, nombreTipo) {
+        updateStats: function (id, vel, fuerza, vida, armadura, nombreTipo, puntos) {
             console.log(id);
             console.log(vel);
             console.log(fuerza);
@@ -458,7 +454,7 @@ var vue_app = new Vue({
             this.info.values.push(vida);
             this.info.values.push(armadura);
             this.info.values.push(nombreTipo);
-
+            this.info.values.push(puntos);
             fetch("http://admin.alumnes.inspedralbes.cat:7073/updateStats/",
                 {
                     method: "POST",
@@ -487,8 +483,14 @@ var vue_app = new Vue({
             ); 
         },
 
-        deleteZom: function (nombreTipo) {
+        deleteZom: function (nombreTipo, url) {
             this.info.values.push(nombreTipo);
+            var urlSegments = url.split("/");
+            urlSegments = urlSegments.slice(-2);
+            urlSegments = urlSegments.join("/")
+            var del = '../server/'+ urlSegments;
+            this.info.values.push(del);
+            
             fetch("http://admin.alumnes.inspedralbes.cat:7073/delete/",
                 {
                     method: "POST",
@@ -508,18 +510,20 @@ var vue_app = new Vue({
             ).then(
                 (data) => {
                     this.info.values = this.info.values.slice(0, 2);
+                    console.log("POST DELETE: ", this.info.values);
                     this.getStats();
                 }
             ).catch(
                 (error) => {
+                    this.info.values = this.info.values.slice(0, 2);
                     this.getStats();
                     console.log(error);
                 }
             ); 
         },
 
-        addNewZombie: function (velocidad, fuerza, vida, cantidad) {
-            var nombreTipo = 'ZombieEsqueleto';
+        addNewZombie: function (velocidad, fuerza, vida, cantidad, puntos) {
+            var nombreTipo = 'zombie_new';
             nombreTipo = nombreTipo + (this.arrLen +1);
             console.log(nombreTipo);
             console.log(velocidad);
@@ -532,6 +536,7 @@ var vue_app = new Vue({
             this.info.values.push(fuerza);
             this.info.values.push(vida);
             this.info.values.push(this.url);
+            this.info.values.push(puntos);
             fetch("http://admin.alumnes.inspedralbes.cat:7073/addNewZombie/",
                 {
                     method: "POST",
