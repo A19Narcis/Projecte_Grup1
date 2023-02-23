@@ -93,22 +93,8 @@ public class ChooseCharacterScreen implements Screen {
 
         this.modeJoc = modeJoc;
 
-        //NodeJS Connection
-        ConnectionNode nodeJs = new ConnectionNode();
-        synchronized (nodeJs.lock) {
-            try {
-                nodeJs.getStats();
-                nodeJs.lock.wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
 
-
-
-        fullStats = nodeJs.getStatsArray();
-
-        System.out.println(fullStats);
+        fullStats = AssetManager.fullStats;
 
         //Darle las stats a cada tipo (Crossbow, Warhammer, Shield)
         statsCrossbow = fullStats.getJSONObject(0);

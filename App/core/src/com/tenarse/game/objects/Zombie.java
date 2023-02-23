@@ -10,8 +10,11 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.tenarse.game.bonus.Bonus;
 import com.tenarse.game.effects.HitEffect;
 import com.tenarse.game.effects.PoolBlood;
+import com.tenarse.game.helpers.AMSprites;
 import com.tenarse.game.helpers.AssetManager;
 import com.tenarse.game.utils.Settings;
+
+import org.json.JSONObject;
 
 public class Zombie extends Actor{
     private Vector2 position;
@@ -41,6 +44,8 @@ public class Zombie extends Actor{
 
     private Rectangle rectanguloDeteccion;
 
+    private AMSprites playerSprites;
+
     private boolean spawned;
     private boolean colision;
     private boolean detected;
@@ -65,45 +70,31 @@ public class Zombie extends Actor{
         attack = false;
         firstAnimationAttack = false;
         doDamage = false;
-        createSpawnPosition();
-        //position.x = map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2) - 20; //SPAWN EN EL CENTRO PARA PRUEBAS
-        //position.y = map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2);
+        //createSpawnPosition();
+        position.x = map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2) - 20; //SPAWN EN EL CENTRO PARA PRUEBAS
+        position.y = map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2);
 
         rectanguloDeteccion = new Rectangle();
         rectanguloDeteccion.width = Settings.ZOMBIE_WIDTH;
         rectanguloDeteccion.height = Settings.ZOMBIE_HEIGHT;
 
-        if(tipoZombie == 1) {
-            animacionRight = AssetManager.zombieRight_Animation;
-            animacionLeft = AssetManager.zombieLeft_Animation;
-            animacionUp = AssetManager.zombieUp_Animation;
-            animacionDown = AssetManager.zombieDown_Animation;
-            animacionSpawn = AssetManager.zombieSpawn_Animation;
-            animacionDead = AssetManager.zombieDead_Animation;
-            animacionAtackL = AssetManager.ZombieLeft_Atack;
-            animacionAtackR = AssetManager.ZombieRight_Atack;
-            animacionAtackU = AssetManager.ZombieUp_Atack;
-            animacionAtackD = AssetManager.ZombieDown_Atack;
-            damage = Settings.ZOMBIE_FUERZA;
-            velocity = Settings.ZOMBIE_VELOCITY;
-            points = Settings.PUNTOS_ZOMBIE;
-            vida = Settings.ZOMBIE_LIFE;
-        }else if(tipoZombie == 2){
-            animacionRight = AssetManager.bossRight_Animation;
-            animacionLeft = AssetManager.bossLeft_Animation;
-            animacionUp = AssetManager.bossUp_Animation;
-            animacionDown = AssetManager.bossDown_Animation;
-            animacionSpawn = AssetManager.bossSpawn_Animation;
-            animacionDead = AssetManager.bossDead_Animation;
-            animacionAtackL = AssetManager.bossLeft_Atack;
-            animacionAtackR = AssetManager.bossRight_Atack;
-            animacionAtackU = AssetManager.bossUp_Atack;
-            animacionAtackD = AssetManager.bossDown_Atack;
-            damage = Settings.BOSS_FUERZA;
-            velocity = Settings.BOSS_VELOCITY;
-            points = Settings.PUNTOS_BOSS;
-            vida = Settings.BOSS_LIFE;
-        }
+        playerSprites = AssetManager.SpritesPlayers.get(tipoZombie + 2);
+
+        animacionRight = playerSprites.M_R;
+        animacionLeft = playerSprites.M_L;
+        animacionUp = playerSprites.M_U;
+        animacionDown = playerSprites.M_D;
+        animacionSpawn = playerSprites.Spawn;
+        animacionDead = playerSprites.Dead;
+        animacionAtackL = playerSprites.A_L;
+        animacionAtackR = playerSprites.A_R;
+        animacionAtackU = playerSprites.A_U;
+        animacionAtackD = playerSprites.A_D;
+        damage = AssetManager.fullStats.getJSONObject(tipoZombie + 2).getInt("fuerza");
+        velocity = AssetManager.fullStats.getJSONObject(tipoZombie + 2).getInt("velocidad") * 30;
+        points = AssetManager.fullStats.getJSONObject(tipoZombie + 2).getInt("puntos");
+        vida = AssetManager.fullStats.getJSONObject(tipoZombie + 2).getInt("vida");
+
         spawned = false;
         colision = false;
     }

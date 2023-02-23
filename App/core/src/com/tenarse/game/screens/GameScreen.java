@@ -24,6 +24,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.tenarse.game.Tenarse;
 import com.tenarse.game.bonus.Bonus;
 import com.tenarse.game.helpers.AssetManager;
+import com.tenarse.game.helpers.SpawnInterval;
 import com.tenarse.game.objects.Arrow;
 import com.tenarse.game.objects.ConnectionNode;
 import com.tenarse.game.objects.ContadorTiempo;
@@ -106,22 +107,7 @@ public class  GameScreen implements Screen {
         Settings.PLAYER_VIDAS = vidas;
         Settings.PLAYER_ARMADURA = armaduras;
 
-        System.out.println("Fuerza: " + Settings.PLAYER_FUERZA);
-
-        /* Cargar stats Zombie */
-        Settings.ZOMBIE_VELOCITY = statsZombie.getInt("velocidad") * 30;
-        Settings.ZOMBIE_FUERZA = statsZombie.getInt("fuerza");
-        Settings.ZOMBIE_LIFE = statsZombie.getInt("vida");
-        Settings.ZOMBIE_LIFE = statsZombie.getInt("vida");
-        Settings.ZOMBIE_SPAWN_INTERVAL = 60 / (long) statsZombie.getInt("cantidadMinuto") * 1000000000L;
-
-        /* Cargar stats Boss */
-        Settings.BOSS_VELOCITY = statsBoss.getInt("velocidad") * 30;
-        Settings.BOSS_FUERZA = statsBoss.getInt("fuerza");
-        Settings.BOSS_LIFE = statsBoss.getInt("vida");
         Settings.BOSS_SPAWN_INTERVAL = 60 / (long) statsBoss.getInt("cantidadMinuto") * 1000000000L;
-
-        System.out.println("Vida BOSS: " + Settings.BOSS_LIFE);
 
         zoomAndroid = 6;
         zoomPc = 3;
@@ -467,8 +453,7 @@ public class  GameScreen implements Screen {
         }
 
         if (players.size() > 0){
-            spawnZombie();
-            spawnBoss();
+            spawnEnemies();
         } else {
             dialog.setZIndex(150);
             stage.addActor(dialog);
@@ -521,26 +506,18 @@ public class  GameScreen implements Screen {
         hud.stage.draw();
     }
 
-    private void spawnZombie() {
-        if (TimeUtils.nanoTime() - lastZombieTime > Settings.ZOMBIE_SPAWN_INTERVAL) {
-            Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map, 1);
-            enemies.add(zombie);
-            stage.addActor(zombie);
-            //zombie.setZIndex(2);
-            lastZombieTime = TimeUtils.nanoTime();
+    private void spawnEnemies() {
+        ArrayList<SpawnInterval> intervals = AssetManager.ZombiesInterval;
+        for (int i = 0; i < intervals.size(); i++) {
+            if (TimeUtils.nanoTime() - intervals.get(i).time > intervals.get(i).interval) {
+                Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map, i + 1);
+                enemies.add(zombie);
+                stage.addActor(zombie);
+                //zombie.setZIndex(2);
+                intervals.get(i).time = TimeUtils.nanoTime();
+            }
         }
     }
-
-    private void spawnBoss() {
-        if (TimeUtils.nanoTime() - lastBossTime > Settings.BOSS_SPAWN_INTERVAL) {
-            Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map, 2);
-            enemies.add(zombie);
-            stage.addActor(zombie);
-            //zombie.setZIndex(25);
-            lastBossTime = TimeUtils.nanoTime();
-        }
-    }
-
 
     private void cameraMapPosition() {
         if (Gdx.app.getType() == Application.ApplicationType.Android) {
