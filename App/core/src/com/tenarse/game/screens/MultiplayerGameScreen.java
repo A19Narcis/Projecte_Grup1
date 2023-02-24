@@ -34,11 +34,11 @@ import com.tenarse.game.objects.Map;
 import com.tenarse.game.objects.Zombie;
 import com.tenarse.game.utils.Settings;
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 
-public class  GameScreen implements Screen {
+import io.socket.client.Socket;
+
+public class MultiplayerGameScreen implements Screen {
 
     private EndGameDialog dialog;
 
@@ -86,13 +86,15 @@ public class  GameScreen implements Screen {
     ArrayList<Arrow> arrowList = new ArrayList<>();
     ArrayList<Bonus> bonusList = new ArrayList<>();
 
+    private Socket socket;
+
     private Hud hud;
 
     private Tenarse game;
 
     private long tiempoBonusPoints;
 
-    public GameScreen(Tenarse game, Batch prevBatch, Viewport prevViewport, String username, int tipus, int selectedMap) {
+    public MultiplayerGameScreen(Tenarse game, Batch prevBatch, Viewport prevViewport, String username, int tipus, int selectedMap) {
 
         this.game = game;
 
