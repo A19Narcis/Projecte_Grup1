@@ -1,5 +1,6 @@
 const { Partida } = require('./connection');
 const { Stats } = require('./connection');
+const { Mapas } = require('./connection');
 
 
 //Select stats nomes 1 tipus
@@ -15,6 +16,12 @@ const getStats = async (callback) => {
     const fullStats = await Stats.find({});
     console.log("Cogiendo datos de los personajes i de los zombies...");
     callback(fullStats)
+}
+
+const getMapas = async (callback) => {
+    const mapasJoc = await Mapas.find({});
+    console.log("Cogiendo las imagenes de los mapas");
+    callback(mapasJoc)
 }
 
 //Select de les partides

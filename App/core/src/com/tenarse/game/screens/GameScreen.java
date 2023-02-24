@@ -92,7 +92,7 @@ public class  GameScreen implements Screen {
 
     private long tiempoBonusPoints;
 
-    public GameScreen(Tenarse game, Batch prevBatch, Viewport prevViewport, String username, int tipus, int velocidad, int fuerza, int vidas, int armaduras, JSONObject statsZombie, JSONObject statsBoss) {
+    public GameScreen(Tenarse game, Batch prevBatch, Viewport prevViewport, String username, int tipus, int selectedMap) {
 
         this.game = game;
 
@@ -102,17 +102,16 @@ public class  GameScreen implements Screen {
 
         shapeRenderer = new ShapeRenderer();
 
-        Settings.PLAYER_VELOCITY = velocidad * 30;
-        Settings.PLAYER_FUERZA = fuerza;
-        Settings.PLAYER_VIDAS = vidas;
-        Settings.PLAYER_ARMADURA = armaduras;
-
-        Settings.BOSS_SPAWN_INTERVAL = 60 / (long) statsBoss.getInt("cantidadMinuto") * 1000000000L;
-
         zoomAndroid = 6;
         zoomPc = 3;
 
-        map = new Map(AssetManager.map);
+        if(selectedMap == 0){
+            map = new Map(AssetManager.map1);
+        }else if(selectedMap == 1){
+            map = new Map(AssetManager.map2);
+        }
+
+
 
         camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         prevViewport.setCamera(camera);
@@ -138,7 +137,6 @@ public class  GameScreen implements Screen {
         jugador.setName("jugador");
         stage.addActor(jugador);
 
-        jugador.setZIndex(51);
 
 
         /*Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map, 1);
@@ -200,7 +198,7 @@ public class  GameScreen implements Screen {
         }
 
 
-        for (int i = 1; i <= Settings.PLAYER_VIDAS; i++) {
+        for (int i = 1; i <= jugador.getVida(); i++) {
             hp_player = new ImageButton(new TextureRegionDrawable(new TextureRegion(corazonesTexture)));
             hp_player.setSize(12,12);
             corazonesArray.add(hp_player);
@@ -208,7 +206,7 @@ public class  GameScreen implements Screen {
 
         }
 
-        for (int i = 0; i < Settings.PLAYER_ARMADURA; i++) {
+        for (int i = 0; i < jugador.getArmadura(); i++) {
             armor_player = new ImageButton(new TextureRegionDrawable(new TextureRegion(armaduraTexture)));
             armor_player.setSize(12, 12);
             armorArray.add(armor_player);
