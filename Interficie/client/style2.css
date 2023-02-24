@@ -28,6 +28,16 @@ h4{
 	text-align: center;
 }
 
+.v-image__image--cover{
+	background-size: unset !important;
+}
+
+@media (max-width: 827px){
+	.pepe{
+		display: none;
+	}
+}
+
 
 .dialog_vel{
 	font-size: 1.5rem;

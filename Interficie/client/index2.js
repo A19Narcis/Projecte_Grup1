@@ -41,16 +41,19 @@ var vue_app = new Vue({
         canvas3: null,
         medianaArr: [],
         url: '',
+        arrBonus: [],
+        map1: 0,
+        map2: 0,
 
-        
+
     },
-    mounted(){
+    mounted() {
         this.getStats();
         this.getPartidas();
     },
 
     methods: {
-        createCanv: function() {
+        createCanv: function () {
             this.canvas = document.getElementById('canvas')
 
             var ctx = this.canvas.getContext('2d');
@@ -69,7 +72,7 @@ var vue_app = new Vue({
                         borderWidth: 1,
                         yAxisID: 'y-axis-1'
 
-                    },{
+                    }, {
                         label: 'Vida',
                         data: this.arrVida,
                         backgroundColor: 'rgba(54, 162, 235, 0.2)',
@@ -77,7 +80,7 @@ var vue_app = new Vue({
                         borderWidth: 1,
                         yAxisID: 'y-axis-1'
 
-                    },{
+                    }, {
                         label: 'Velocidad',
                         data: this.arrVelocidad,
                         backgroundColor: 'rgba(54, 262, 135, 0.2)',
@@ -85,7 +88,7 @@ var vue_app = new Vue({
                         borderWidth: 1,
                         yAxisID: 'y-axis-1'
 
-                    },{
+                    }, {
                         label: 'Armadura',
                         data: this.arrArmadura,
                         backgroundColor: 'rgba(54, 262, 135, 0.2)',
@@ -101,7 +104,7 @@ var vue_app = new Vue({
                             id: 'y-axis-1',
                             type: 'linear',
                             position: 'left',
-                            ticks: {min: 0, max:10}
+                            ticks: { min: 0, max: 10 }
                         }]
                     }
                 }
@@ -123,19 +126,19 @@ var vue_app = new Vue({
                         backgroundColor: 'rgba(255, 99, 132, 0.2)',
                         borderColor: 'rgba(255, 99, 132, 1)',
                         borderWidth: 1,
-                    },{
+                    }, {
                         label: 'Vida',
                         data: this.zomArrVida,
                         backgroundColor: 'rgba(54, 162, 235, 0.2)',
                         borderColor: 'rgba(54, 162, 235, 1)',
                         borderWidth: 1,
-                    },{
+                    }, {
                         label: 'Velocidad',
                         data: this.zomArrVelocidad,
                         backgroundColor: 'rgba(54, 262, 135, 0.2)',
                         borderColor: 'rgba(54, 262, 135, 1)',
                         borderWidth: 1,
-                    },{
+                    }, {
                         label: 'Fuerza',
                         data: this.zomArrFuerza,
                         backgroundColor: 'rgba(54, 262, 135, 0.2)',
@@ -143,13 +146,14 @@ var vue_app = new Vue({
                         borderWidth: 1,
                     }]
                 },
-                options: {  
+                options: {
                     scales: {
                         yAxes: [{
                             type: 'linear',
                             position: 'left',
-                            ticks: {min: 0, max:10}
-                        }]                    }
+                            ticks: { min: 0, max: 10 }
+                        }]
+                    }
                 }
             });
 
@@ -164,24 +168,25 @@ var vue_app = new Vue({
                 data: {
                     labels: arrNoms,
                     datasets: [{
-                        label: 'MEDIANA TIEMPO',
+                        label: 'MEDIANA PUNTOS',
                         data: this.medianaArr,
                         backgroundColor: 'rgba(255, 99, 132, 0.2)',
                         borderColor: 'rgba(255, 99, 132, 1)',
                         borderWidth: 1,
                     }]
                 },
-                options: {  
+                options: {
                     scales: {
                         yAxes: [{
                             type: 'linear',
                             position: 'left',
-                            ticks: {min: 0, max:this.arrPartidas.length}
-                        }]                    }
+                            ticks: { min: 0, max: this.arrPartidas.length }
+                        }]
+                    }
                 }
-            }); 
+            });
         },
-        createElements: function (){
+        createElements: function () {
             var count = 0;
             this.arrNom = [];
             this.arrFuerza = [];
@@ -192,43 +197,43 @@ var vue_app = new Vue({
             this.zomArrFuerza = [];
             this.zomArrVida = [];
             this.zomArrArmadura = [];
-            this.zomArrVelocidad = [];  
+            this.zomArrVelocidad = [];
             this.zomPuntos = [];
-            this.arrStats.forEach( el =>{
-                if(count < 3){
+            this.arrStats.forEach(el => {
+                if (count < 3) {
                     this.arrNom.push(el.nombreTipo);
                     this.arrArmadura.push(el.armadura);
                     this.arrVelocidad.push(el.velocidad);
                     this.arrFuerza.push(el.fuerza);
                     this.arrVida.push(el.vida);
-                }else{
+                } else {
                     this.zomArrNom.push(el.nombreTipo);
                     this.zomPuntos.push(el.puntos);
                     this.zomArrVelocidad.push(el.velocidad);
                     this.zomArrFuerza.push(el.fuerza);
                     this.zomArrVida.push(el.vida);
-                }                
+                }
                 count++;
             });
             this.createCanv();
         },
 
-        createElements2: function(){
+        createElements2: function () {
             var one = 0; //0-250
             var two = 0; //251-500
             var three = 0; //501-750
             var four = 0; //751-1000
             var five = 0; //>1000
-            this.arrPartidas.forEach(el =>{
-                if(el.puntos <= 250 && el.puntos >= 0)
+            this.arrPartidas.forEach(el => {
+                if (el.puntos <= 250 && el.puntos >= 0)
                     one++;
-                if(el.puntos <= 500 && el.puntos >= 251)
+                if (el.puntos <= 500 && el.puntos >= 251)
                     two++;
-                if(el.puntos <= 750 && el.puntos >= 501)
+                if (el.puntos <= 750 && el.puntos >= 501)
                     three++;
-                if(el.puntos <= 1000 && el.puntos >= 751)
+                if (el.puntos <= 1000 && el.puntos >= 751)
                     four++;
-                if(el.puntos >= 1001)
+                if (el.puntos >= 1001)
                     five++;
             });
             this.medianaArr.push(one);
@@ -289,7 +294,7 @@ var vue_app = new Vue({
                 }
             );
         },
-         uploadImage: function() {
+        uploadImage: function () {
             const fileInput = document.getElementById('file-input');
             const file = fileInput.files[0];
             this.url = 'http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/' + file.name;
@@ -298,23 +303,23 @@ var vue_app = new Vue({
             formData.append('image', file);
 
             fetch('http://admin.alumnes.inspedralbes.cat:7073/upload', {
-              method: 'POST',
-              body: formData
+                method: 'POST',
+                body: formData
             })
-            .then(response => {
-              if (response.ok) {
-                console.log('Image uploaded successfully!');
-                this.dialog_2 = true;
-                
-              } else {
-                console.error('Failed to upload image!');
-              }
-            })
-            .catch(error => {
-              console.error('Error uploading image:', error);
-            });
-          },
-        
+                .then(response => {
+                    if (response.ok) {
+                        console.log('Image uploaded successfully!');
+                        this.dialog_2 = true;
+
+                    } else {
+                        console.error('Failed to upload image!');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error uploading image:', error);
+                });
+        },
+
         getSession: function () {
             console.log("SSSS" + this.info.values[0])
             fetch("http://admin.alumnes.inspedralbes.cat:7073/getSession/",
@@ -403,8 +408,55 @@ var vue_app = new Vue({
                 (data) => {
                     this.arrStats = data;
                     this.arrLen = data.length;
-                    this.createElements();
+                    this.arrBonus = [{
+                        'nomBonus': 'damage',
+                        'img': 'http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/damageBonus.png',
+                        'descr': 'Te da un punto más de daño durante 10 segundos'
+                    }, {
+                        'nomBonus': 'live',
+                        'img': 'http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/liveBonus.png',
+                        'descr': 'Te da una vida más'
+                    }, {
+                        'nomBonus': 'points',
+                        'img': 'http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/pointsBonus.png',
+                        'descr': 'Te da un x2 en cada kill que hagas durante 10 segundos'
+                    }, {
+                        'nomBonus': 'velocity',
+                        'img': 'http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/velocityBonus.png',
+                        'descr': 'Te sube un punto de velocidad durante 10 segundos'
+                    }, {
+                        'nomBonus': 'shield',
+                        'img': 'http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/shieldBonus.png',
+                        'descr': 'Te da una armadura más'
+                    }];
                     console.log(this.arrStats);
+                    var i = 0;
+/*                     this.arrStats.forEach(el => {
+                        if (i > 2) {
+                            console.log(el.mapa);
+                            if (el.mapa.length == 0) {
+
+                                this.map1 = 0;
+                                this.map2 = 0;
+                            }
+                            if (el.mapa.length == 1) {
+
+                                if (el.mapa[0] == 1)
+                                    this.map1 = 1;
+                                else
+                                    this.map2 = 2;
+                            }
+                            if (el.mapa.length == 2) {
+                                this.map1 = 1;
+                                this.map2 = 2;
+                            }
+                            i++;
+                        }
+                        i++;
+                    }); */
+                    console.log(this.arrBonus);
+                    this.createElements();
+
                 }
             ).catch(
                 (error) => {
@@ -413,7 +465,7 @@ var vue_app = new Vue({
             );
         },
 
-        getPartidas: function(){
+        getPartidas: function () {
             fetch("http://admin.alumnes.inspedralbes.cat:7073/getPartidas2/",
                 {
                     method: "POST",
@@ -442,12 +494,24 @@ var vue_app = new Vue({
             );
         },
 
-        updateStats: function (id, vel, fuerza, vida, armadura, nombreTipo, puntos) {
-            console.log(id);
+        updateStats: function (id, vel, fuerza, vida, armadura, nombreTipo, puntos, check1, check2) {
+            console.log(check1, check2);
+            var maps = [];
+            if (check1 != false)
+               { maps.push(1); console.log("ES FALSE")}
+            else
+                maps.push(0);
+            if (check2 != false)
+                {maps.push(2); console.log("ES FALSE")}
+            else
+                maps.push(0);
+            console.log(maps);
+
+            /* console.log(id);
             console.log(vel);
             console.log(fuerza);
             console.log(vida);
-            console.log(armadura);
+            console.log(armadura); */
             this.info.values.push(id);
             this.info.values.push(vel);
             this.info.values.push(fuerza);
@@ -455,6 +519,7 @@ var vue_app = new Vue({
             this.info.values.push(armadura);
             this.info.values.push(nombreTipo);
             this.info.values.push(puntos);
+            this.info.values.push(maps);
             fetch("http://admin.alumnes.inspedralbes.cat:7073/updateStats/",
                 {
                     method: "POST",
@@ -480,7 +545,7 @@ var vue_app = new Vue({
                 (error) => {
                     console.log(error);
                 }
-            ); 
+            );
         },
 
         deleteZom: function (nombreTipo, url) {
@@ -488,9 +553,9 @@ var vue_app = new Vue({
             var urlSegments = url.split("/");
             urlSegments = urlSegments.slice(-2);
             urlSegments = urlSegments.join("/")
-            var del = '../server/'+ urlSegments;
+            var del = '../server/' + urlSegments;
             this.info.values.push(del);
-            
+
             fetch("http://admin.alumnes.inspedralbes.cat:7073/delete/",
                 {
                     method: "POST",
@@ -519,12 +584,22 @@ var vue_app = new Vue({
                     this.getStats();
                     console.log(error);
                 }
-            ); 
+            );
         },
 
         addNewZombie: function (velocidad, fuerza, vida, cantidad, puntos) {
+            var maps = [];
+            if (this.map1 != null)
+                maps.push(parseInt(this.map1));
+            else
+                maps.push(0);
+            if (this.map2 != null)
+                maps.push(parseInt(this.map2));
+            else
+                maps.push(0);
+            console.log(maps);
             var nombreTipo = 'zombie_new';
-            nombreTipo = nombreTipo + (this.arrLen +1);
+            nombreTipo = nombreTipo + (this.arrLen + 1);
             console.log(nombreTipo);
             console.log(velocidad);
             console.log(fuerza);
@@ -537,6 +612,7 @@ var vue_app = new Vue({
             this.info.values.push(vida);
             this.info.values.push(this.url);
             this.info.values.push(puntos);
+            this.info.values.push(maps);
             fetch("http://admin.alumnes.inspedralbes.cat:7073/addNewZombie/",
                 {
                     method: "POST",
@@ -597,7 +673,7 @@ var vue_app = new Vue({
             });
         }, 3900)
 
-        
+
     }
 });
 

@@ -273,7 +273,8 @@ app.post("/updateStats", (req, res) => {
             velocidad: req.body.values[3],
             fuerza: req.body.values[4],
             vida: req.body.values[5],
-            puntos: req.body.values[8]
+            puntos: req.body.values[8],
+            mapa: req.body.values[9]
         }
     }
     updateDB.updateStats(newStats, function (updatedStats) {
@@ -345,7 +346,8 @@ app.post("/addNewZombie", (req, res) => {
         fuerza: req.body.values[5],
         vida: req.body.values[6],
         url: req.body.values[7],
-        puntos: req.body.values[8]
+        puntos: req.body.values[8],
+        mapa: req.body.values[9]
     }
 
     insertDB.addNewZombie(statsNewZombie, (callback) => {
