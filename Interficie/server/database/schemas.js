@@ -35,6 +35,10 @@ const statsPersonatges = new mongoose.Schema({
     },
     puntos:{
         type: Number
+    },
+    mapa: {
+        type: [Number],
+        sparse: true
     }
 })
 
