@@ -15,7 +15,6 @@ public class ContadorTiempo {
             @Override
             public void run() {
                 segundos++;
-                System.out.println(segundos);
             }
         }, 0, 1000); // se actualiza cada 1000 milisegundos, es decir, cada segundo
     }

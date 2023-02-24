@@ -30,13 +30,21 @@ import com.tenarse.game.objects.ConnectionNode;
 import com.tenarse.game.objects.ContadorTiempo;
 import com.tenarse.game.objects.Hud;
 import com.tenarse.game.objects.Jugador;
+import com.tenarse.game.objects.JugadorOnline;
 import com.tenarse.game.objects.Map;
 import com.tenarse.game.objects.Zombie;
 import com.tenarse.game.utils.Settings;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
+import io.socket.client.IO;
 import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
 
 public class MultiplayerGameScreen implements Screen {
 
@@ -55,6 +63,7 @@ public class MultiplayerGameScreen implements Screen {
 
     private Stage stage;
     private Jugador jugador;
+    private JugadorOnline jugador2;
 
     private int bonusPoints = 1;
 
@@ -95,6 +104,67 @@ public class MultiplayerGameScreen implements Screen {
     private long tiempoBonusPoints;
 
     public MultiplayerGameScreen(Tenarse game, Batch prevBatch, Viewport prevViewport, String username, int tipus, int selectedMap) {
+
+        try {
+            socket = IO.socket("http://admin.alumnes.inspedralbes.cat:7074/");
+            socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    System.out.println("Connected");
+                }
+            }).on("socketID", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    JSONObject data = (JSONObject) args[0];
+                    try{
+                        String id = data.getString("id");
+                        System.out.println("My socket ID: " + id);
+                    } catch (JSONException e){
+                        System.out.println(e);
+                    }
+                }
+            }).on("getPlayers", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    JSONArray objects = (JSONArray) args[0];
+                    try {
+                        for (int i = 0; i < objects.length(); i++) {
+                            System.out.println(objects.getJSONObject(i));
+                        }
+                    } catch (JSONException e){
+                        System.out.println(e);
+                    }
+                    if(objects.length() != 0) {
+                        jugador2 = new JugadorOnline(map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT, 1, map);
+                        players.add(jugador2);
+                        stage.addActor(jugador2);
+                    }
+                }
+            }).on("new_player", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    JSONObject data = (JSONObject) args[0];
+                    try{
+                        String id = data.getString("id");
+                        System.out.println("New Player: " + id);
+                    } catch (JSONException e){
+                        System.out.println(e);
+                    }
+                    jugador2 = new JugadorOnline(map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT, 1, map);
+                    players.add(jugador2);
+                    stage.addActor(jugador2);
+                }
+            }).on("disconnect", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    System.out.println(args[0]);
+                }
+            });
+            socket.connect();
+        } catch (URISyntaxException e) {
+            Gdx.app.error("SocketIO", e.getMessage());
+        }
+
 
         this.game = game;
 
@@ -453,7 +523,7 @@ public class MultiplayerGameScreen implements Screen {
         }
 
         if (players.size() > 0){
-            spawnEnemies();
+            //spawnEnemies();
         } else {
             dialog.setZIndex(150);
             stage.addActor(dialog);

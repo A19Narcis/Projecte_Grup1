@@ -19,67 +19,67 @@ import java.util.ArrayList;
 
 public class Jugador extends Actor {
 
-    private final int Crossbow_PLAYER = 1;
-    private final int WAR_PLAYER = 2;
-    private final int SHI_PLAYER = 3;
+    protected final int Crossbow_PLAYER = 1;
+    protected final int WAR_PLAYER = 2;
+    protected final int SHI_PLAYER = 3;
 
-    private final int Crossbow_PLAYER_STAND = 4;
-    private final int WAR_PLAYER_STAND = 5;
-    private final int SHI_PLAYER_STAND = 6;
+    protected final int Crossbow_PLAYER_STAND = 4;
+    protected final int WAR_PLAYER_STAND = 5;
+    protected final int SHI_PLAYER_STAND = 6;
 
-    private int direction = 3;
-    private boolean attack;
-    private boolean firstAnimationAttack;
-    private boolean firstAnimationDie;
-    private boolean doDamage;
-    private Vector2 position;
-    private int width, height;
-    private String categoria;
-    private int tipusJugador;
-    private int killsJugador;
+    protected int direction = 3;
+    protected boolean attack;
+    protected boolean firstAnimationAttack;
+    protected boolean firstAnimationDie;
+    protected boolean doDamage;
+    protected Vector2 position;
+    protected int width, height;
+    protected String categoria;
+    protected int tipusJugador;
+    protected int killsJugador;
 
-    private Boolean bntUpIsPressed = false;
-    private Boolean bntDownIsPressed = false;
-    private Boolean bntLeftIsPressed = false;
-    private Boolean bntRightIsPressed = false;
-    private Boolean bntAttackPressed = false;
-    private boolean isDead;
+    protected Boolean bntUpIsPressed = false;
+    protected Boolean bntDownIsPressed = false;
+    protected Boolean bntLeftIsPressed = false;
+    protected Boolean bntRightIsPressed = false;
+    protected Boolean bntAttackPressed = false;
+    protected boolean isDead;
 
-    private TextureRegion[] animacionRight;
-    private TextureRegion[] animacionUp;
-    private TextureRegion[] animacionDown;
-    private TextureRegion[] animacionLeft;
+    protected TextureRegion[] animacionRight;
+    protected TextureRegion[] animacionUp;
+    protected TextureRegion[] animacionDown;
+    protected TextureRegion[] animacionLeft;
 
-    private TextureRegion[] animacionAtaqueRight;
-    private TextureRegion[] animacionAtaqueLeft;
-    private TextureRegion[] animacionAtaqueUp;
-    private TextureRegion[] animacionAtaqueDown;
-    private TextureRegion[] animacionMuerte;
-    private long attackDelay;
+    protected TextureRegion[] animacionAtaqueRight;
+    protected TextureRegion[] animacionAtaqueLeft;
+    protected TextureRegion[] animacionAtaqueUp;
+    protected TextureRegion[] animacionAtaqueDown;
+    protected TextureRegion[] animacionMuerte;
+    protected long attackDelay;
 
-    private AMSprites playerSprites;
+    protected AMSprites playerSprites;
 
-    private int currentFrame = 0;
-    private float frameTime = 0.1f;
-    private float stateTime = 0;
+    protected int currentFrame = 0;
+    protected float frameTime = 0.1f;
+    protected float stateTime = 0;
 
-    private float oldx;
-    private float oldy;
+    protected float oldx;
+    protected float oldy;
 
-    private int vida;
-    private int armadura;
-    private int velocidad;
-    private int fuerza;
+    protected int vida;
+    protected int armadura;
+    protected int velocidad;
+    protected int fuerza;
 
-    private Map map;
+    protected Map map;
 
-    private Rectangle collisionRectPlayer;
+    protected Rectangle collisionRectPlayer;
 
-    private ArrayList<Arrow> arrowList = new ArrayList<>();
+    protected ArrayList<Arrow> arrowList = new ArrayList<>();
 
-    private int bonusMultiplier [] = {0, 0, 0, 0};
-    private long timeoutVelocity;
-    private long timeoutDamage;
+    protected int bonusMultiplier [] = {0, 0, 0, 0};
+    protected long timeoutVelocity;
+    protected long timeoutDamage;
 
     public Jugador(float x, float y, int width, int height, String categoria, int tipusJugador, Map map){
         this.width = width;
