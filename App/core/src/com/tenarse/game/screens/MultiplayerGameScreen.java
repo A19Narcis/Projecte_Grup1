@@ -106,7 +106,7 @@ public class MultiplayerGameScreen implements Screen {
     public MultiplayerGameScreen(Tenarse game, Batch prevBatch, Viewport prevViewport, String username, int tipus, int selectedMap) {
 
         try {
-            socket = IO.socket("http://admin.alumnes.inspedralbes.cat:7074/");
+            socket = IO.socket("http://192.168.168.56:7074/");
             socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
@@ -153,6 +153,30 @@ public class MultiplayerGameScreen implements Screen {
                     jugador2 = new JugadorOnline(map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT, 1, map);
                     players.add(jugador2);
                     stage.addActor(jugador2);
+                }
+            }).on("new_player", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    JSONObject data = (JSONObject) args[0];
+                    try{
+                        String id = data.getString("id");
+                        System.out.println("New Player: " + id);
+                    } catch (JSONException e){
+                        System.out.println(e);
+                    }
+                    jugador2 = new JugadorOnline(map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT, 1, map);
+                    players.add(jugador2);
+                    stage.addActor(jugador2);
+                }
+            }).on("position", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    JSONObject data = (JSONObject) args[0];
+                    try{
+                        System.out.println("Position: " + data);
+                    } catch (JSONException e){
+                        System.out.println(e);
+                    }
                 }
             }).on("disconnect", new Emitter.Listener() {
                 @Override
