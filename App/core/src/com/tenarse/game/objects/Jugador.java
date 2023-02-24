@@ -68,6 +68,8 @@ public class Jugador extends Actor {
 
     private int vida;
     private int armadura;
+    private int velocidad;
+    private int fuerza;
 
     private Map map;
 
@@ -98,8 +100,10 @@ public class Jugador extends Actor {
 
         this.tipusJugador = tipusJugador;
 
-        vida = Settings.PLAYER_VIDAS;
-        armadura = Settings.PLAYER_ARMADURA;
+        fuerza = AssetManager.fullStats.getJSONObject(this.tipusJugador - 1).getInt("fuerza");
+        vida = AssetManager.fullStats.getJSONObject(this.tipusJugador - 1).getInt("vida");
+        armadura = AssetManager.fullStats.getJSONObject(this.tipusJugador - 1).getInt("armadura");
+        velocidad = AssetManager.fullStats.getJSONObject(this.tipusJugador - 1).getInt("velocidad") * 30;;
         isDead = false;
 
         playerSprites = AssetManager.SpritesPlayers.get(tipusJugador - 1);
@@ -141,7 +145,7 @@ public class Jugador extends Actor {
                 oldy = this.position.y;
                 if ((Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A) || this.bntLeftIsPressed) && !attack) {
                     this.direction = Settings.PRESSED_LEFT;
-                    this.position.x -= (Settings.PLAYER_VELOCITY + (bonusMultiplier[Settings.BONUS_VELOCITY] * 10)) * Gdx.graphics.getDeltaTime();
+                    this.position.x -= (this.velocidad + (bonusMultiplier[Settings.BONUS_VELOCITY] * 10)) * Gdx.graphics.getDeltaTime();
                     this.position.x -= 8;
                     if (map.searchColision(position.x, position.y)) {
                         this.position.x = oldx;
@@ -152,7 +156,7 @@ public class Jugador extends Actor {
                 }
                 if ((Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D) || this.bntRightIsPressed) && !attack) {
                     this.direction = Settings.PRESSED_RIGHT;
-                    this.position.x += (Settings.PLAYER_VELOCITY + (bonusMultiplier[Settings.BONUS_VELOCITY] * 10)) * Gdx.graphics.getDeltaTime();
+                    this.position.x += (this.velocidad + (bonusMultiplier[Settings.BONUS_VELOCITY] * 10)) * Gdx.graphics.getDeltaTime();
                     this.position.x += 8;
                     if (map.searchColision(position.x, position.y)) {
                         this.position.x = oldx;
@@ -163,7 +167,7 @@ public class Jugador extends Actor {
                 }
                 if ((Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W) || this.bntUpIsPressed) && !attack) {
                     this.direction = Settings.PRESSED_UP;
-                    this.position.y += (Settings.PLAYER_VELOCITY + (bonusMultiplier[Settings.BONUS_VELOCITY] * 10)) * Gdx.graphics.getDeltaTime();
+                    this.position.y += (this.velocidad + (bonusMultiplier[Settings.BONUS_VELOCITY] * 10)) * Gdx.graphics.getDeltaTime();
                     if (map.searchColision(position.x, position.y)) {
                         this.position.x = oldx;
                         this.position.y = oldy;
@@ -171,7 +175,7 @@ public class Jugador extends Actor {
                 }
                 if ((Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S) || this.bntDownIsPressed) && !attack) {
                     this.direction = Settings.PRESSED_DOWN;
-                    this.position.y -= (Settings.PLAYER_VELOCITY + (bonusMultiplier[Settings.BONUS_VELOCITY] * 10)) * Gdx.graphics.getDeltaTime();
+                    this.position.y -= (this.velocidad + (bonusMultiplier[Settings.BONUS_VELOCITY] * 10)) * Gdx.graphics.getDeltaTime();
                     this.position.y -= 12;
                     if (map.searchColision(position.x, position.y)) {
                         this.position.x = oldx;
@@ -395,7 +399,7 @@ public class Jugador extends Actor {
     }
 
     private void setDamageZombie(Zombie zombie) {
-        int damage = Settings.PLAYER_FUERZA + bonusMultiplier[Settings.BONUS_DAMAGE];
+        int damage = this.fuerza + bonusMultiplier[Settings.BONUS_DAMAGE];
         zombie.setDamage(damage);
         zombie.die(this.direction);
     }
@@ -482,5 +486,9 @@ public class Jugador extends Actor {
     public void subirFuerza() {
         bonusMultiplier[Settings.BONUS_DAMAGE] += 1;
         timeoutDamage = TimeUtils.nanoTime();
+    }
+
+    public int getFuerza() {
+        return this.fuerza;
     }
 }

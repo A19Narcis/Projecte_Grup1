@@ -74,7 +74,7 @@ public class Arrow extends Actor {
         boolean removed = false;
         if(position.x - zombie.getPosition().x < width && position.x - zombie.getPosition().x > -width) {
             if(position.y - zombie.getPosition().y < height && position.y - zombie.getPosition().y > -height) {
-                zombie.setDamage(Settings.PLAYER_FUERZA + jugador.getBonusMultiplier()[Settings.BONUS_DAMAGE]);
+                zombie.setDamage(jugador.getFuerza() + jugador.getBonusMultiplier()[Settings.BONUS_DAMAGE]);
                 zombie.die(this.direction);
                 jugador.removeArrow(this);
                 remove();

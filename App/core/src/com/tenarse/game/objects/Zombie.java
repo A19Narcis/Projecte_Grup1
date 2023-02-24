@@ -65,14 +65,14 @@ public class Zombie extends Actor{
         this.height = height;
         this.map = map;
         position = new Vector2();
-        vida = Settings.ZOMBIE_LIFE;
+        vida = AssetManager.fullStats.getJSONObject(tipoZombie + 2).getInt("vida");
         dead = false;
         attack = false;
         firstAnimationAttack = false;
         doDamage = false;
-        //createSpawnPosition();
-        position.x = map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2) - 20; //SPAWN EN EL CENTRO PARA PRUEBAS
-        position.y = map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2);
+        createSpawnPosition();
+        //position.x = map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2) - 20; //SPAWN EN EL CENTRO PARA PRUEBAS
+        //position.y = map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2);
 
         rectanguloDeteccion = new Rectangle();
         rectanguloDeteccion.width = Settings.ZOMBIE_WIDTH;

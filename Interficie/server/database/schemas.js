@@ -32,6 +32,9 @@ const statsPersonatges = new mongoose.Schema({
     url:{
         type: String,
         required: true
+    },
+    puntos:{
+        type: Number
     }
 })
 
@@ -68,13 +71,22 @@ const partidaSchema = new mongoose.Schema({
     }
 });
 
-partidaSchema.plugin(autoIncrement.plugin, { model: 'Partida', field: 'idP'})
-const Partida = mongoose.model('Partida', partidaSchema);
+const mapaSchema = new mongoose.Schema({
+    nombre: {
+        type: String,
+        required: true
+    }
+});
 
+partidaSchema.plugin(autoIncrement.plugin, { model: 'Partida', field: 'idP'})
+
+const Partida = mongoose.model('Partida', partidaSchema);
 const Stats = mongoose.model('Stats', statsPersonatges);
+const Mapas = mongoose.model('Mapas', mapaSchema);
 
 
 module.exports = { 
     Partida,
-    Stats
+    Stats,
+    Mapas
 }

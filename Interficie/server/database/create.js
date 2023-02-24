@@ -36,7 +36,8 @@ const insertStats = async function (callback) {
       fuerza: 1,
       vida: 2,
       armadura: 0,
-      url: "http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/crossbow.png"
+      url: "http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/crossbow.png",
+
     });
 
     const validateStatsCrossbow = await Stats.findOne({ nombreTipo: statsCrossbow.nombreTipo })
@@ -92,7 +93,8 @@ const insertStats = async function (callback) {
       velocidad: 3,
       fuerza: 2,
       vida: 2,
-      url: "http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/zombie.png"
+      url: "http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/zombie.png",
+      puntos: 1
     });
   
     const validateStatsZombie = await Stats.findOne({ nombreTipo: statsZombie.nombreTipo })
@@ -110,7 +112,8 @@ const insertStats = async function (callback) {
       velocidad: 3,
       fuerza: 2,
       vida: 2,
-      url: "http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/boss.png"
+      url: "http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/boss.png",
+      puntos: 2
     });
   
     const validateStatsBoss = await Stats.findOne({ nombreTipo: statsBoss.nombreTipo })
