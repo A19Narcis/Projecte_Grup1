@@ -90,6 +90,7 @@ public class ChooseMapScreen implements Screen {
         }
 
         System.out.println(imgMapas);
+        Gdx.app.log("MAPAS", ""+imgMapas);
 
         imgMapas.get(0).setVisible(true);
 
@@ -152,10 +153,6 @@ public class ChooseMapScreen implements Screen {
         textoInicio.setPosition(Gdx.graphics.getWidth() / 2 - textoInicio.getMinWidth() / 2, Gdx.graphics.getHeight() - textoInicio.getMinHeight());
         titolMapa.setPosition(Gdx.graphics.getWidth() / 2 - titolMapa.getMinWidth() / 2, textoInicio.getY() - titolMapa.getMinHeight());
         imgBtnRight.setPosition(Gdx.graphics.getWidth() - btn_right.getWidth() * 2, Gdx.graphics.getHeight() / 2 - btn_right.getHeight() / 2);
-        for (int i = 0; i < imgMapas.size(); i++) {
-            imgMapas.get(i).setScale(0.18f);
-            imgMapas.get(i).setPosition(Gdx.graphics.getHeight() / 3.5f, Gdx.graphics.getHeight() / 6);
-        }
 
         if (Gdx.app.getType() == Application.ApplicationType.Android){
             imgBtnPlay.setPosition(Gdx.graphics.getWidth() - imgBtnPlay.getWidth() * 2.5f, 0 + imgBtnPlay.getHeight());
@@ -163,11 +160,21 @@ public class ChooseMapScreen implements Screen {
             imgBtnLeft.getImage().setScale(1.5f);
             imgBtnRight.getImage().setScale(1.5f);
             imgBtnLeft.setPosition(0 + btn_left.getWidth() * 2, Gdx.graphics.getHeight() / 2 - btn_left.getHeight() / 2);
+            imgBtnRight.setPosition(Gdx.graphics.getWidth() - btn_right.getWidth() * 3, Gdx.graphics.getHeight() / 2 - btn_right.getHeight() / 2);
             returnBTN.setPosition(0 + returnBTN.getWidth(), Gdx.graphics.getHeight() - returnBTN.getHeight() * 2.5f);
             returnBTN.getImage().setScale(2f);
+            for (int i = 0; i < imgMapas.size(); i++) {
+                imgMapas.get(i).setScale(0.35f);
+                imgMapas.get(i).setPosition(Gdx.graphics.getHeight() / 2.5f, Gdx.graphics.getHeight() / 7);
+            }
         } else {
+            for (int i = 0; i < imgMapas.size(); i++) {
+                imgMapas.get(i).setScale(0.18f);
+                imgMapas.get(i).setPosition(Gdx.graphics.getHeight() / 3.5f, Gdx.graphics.getHeight() / 6);
+            }
             imgBtnPlay.setPosition(Gdx.graphics.getWidth() / 2 + imgBtnPlay.getWidth() * 1.5f, 0 + imgBtnPlay.getHeight());
             imgBtnLeft.setPosition(0 + btn_left.getWidth() / 2, Gdx.graphics.getHeight() / 2 - btn_left.getHeight() / 2);
+            imgBtnRight.setPosition(Gdx.graphics.getWidth() - btn_right.getWidth() * 2, Gdx.graphics.getHeight() / 2 - btn_right.getHeight() / 2);
             returnBTN.setPosition(0 + returnBTN.getWidth() / 2, Gdx.graphics.getHeight() - returnBTN.getHeight() * 1.25f);
         }
 
@@ -180,7 +187,7 @@ public class ChooseMapScreen implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if (modeJoc == SINGLE){
-                    game.setScreen(new GameScreen(game, stage.getBatch(), stage.getViewport(), username, selectedCharacter));
+                    game.setScreen(new GameScreen(game, stage.getBatch(), stage.getViewport(), username, selectedCharacter, selectedMap));
                 } else {
                     //game.setScreen(new MultiGameScreen(game, stage.getBatch(), stage.getViewport(), username, selectedCharacter));
                 }

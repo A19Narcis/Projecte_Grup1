@@ -34,8 +34,6 @@ import com.tenarse.game.objects.Map;
 import com.tenarse.game.objects.Zombie;
 import com.tenarse.game.utils.Settings;
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 
 public class  GameScreen implements Screen {
@@ -92,7 +90,7 @@ public class  GameScreen implements Screen {
 
     private long tiempoBonusPoints;
 
-    public GameScreen(Tenarse game, Batch prevBatch, Viewport prevViewport, String username, int tipus) {
+    public GameScreen(Tenarse game, Batch prevBatch, Viewport prevViewport, String username, int tipus, int selectedMap) {
 
         this.game = game;
 
@@ -105,7 +103,11 @@ public class  GameScreen implements Screen {
         zoomAndroid = 6;
         zoomPc = 3;
 
-        map = new Map(AssetManager.map);
+        if (selectedMap == 1){
+            map = new Map(AssetManager.map);
+        } else if (selectedMap == 2){
+            map = new Map(AssetManager.map);
+        }
 
         camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         prevViewport.setCamera(camera);
