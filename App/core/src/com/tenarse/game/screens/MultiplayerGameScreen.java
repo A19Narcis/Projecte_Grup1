@@ -36,7 +36,9 @@ import com.tenarse.game.utils.Settings;
 
 import java.util.ArrayList;
 
-public class  GameScreen implements Screen {
+import io.socket.client.Socket;
+
+public class MultiplayerGameScreen implements Screen {
 
     private EndGameDialog dialog;
 
@@ -84,13 +86,15 @@ public class  GameScreen implements Screen {
     ArrayList<Arrow> arrowList = new ArrayList<>();
     ArrayList<Bonus> bonusList = new ArrayList<>();
 
+    private Socket socket;
+
     private Hud hud;
 
     private Tenarse game;
 
     private long tiempoBonusPoints;
 
-    public GameScreen(Tenarse game, Batch prevBatch, Viewport prevViewport, String username, int tipus, int selectedMap) {
+    public MultiplayerGameScreen(Tenarse game, Batch prevBatch, Viewport prevViewport, String username, int tipus, int selectedMap) {
 
         this.game = game;
 
@@ -108,6 +112,8 @@ public class  GameScreen implements Screen {
         }else if(selectedMap == 1){
             map = new Map(AssetManager.map2);
         }
+
+
 
         camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         prevViewport.setCamera(camera);
