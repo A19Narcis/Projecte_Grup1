@@ -94,7 +94,8 @@ const insertStats = async function (callback) {
       fuerza: 2,
       vida: 2,
       url: "http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/zombie.png",
-      puntos: 1
+      puntos: 1,
+      mapa: [1, 2]
     });
   
     const validateStatsZombie = await Stats.findOne({ nombreTipo: statsZombie.nombreTipo })
@@ -113,7 +114,8 @@ const insertStats = async function (callback) {
       fuerza: 2,
       vida: 2,
       url: "http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/boss.png",
-      puntos: 2
+      puntos: 2,
+      mapa: [1, 2]
     });
   
     const validateStatsBoss = await Stats.findOne({ nombreTipo: statsBoss.nombreTipo })

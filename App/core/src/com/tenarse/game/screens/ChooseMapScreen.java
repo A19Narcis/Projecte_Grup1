@@ -187,7 +187,7 @@ public class ChooseMapScreen implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if (modeJoc == SINGLE){
-                    game.setScreen(new GameScreen(game, stage.getBatch(), stage.getViewport(), username, selectedCharacter, selectedMap));
+                    game.setScreen(new GameScreen(game, stage.getBatch(), stage.getViewport(), username, selectedCharacter, selectedMap, titolMapa.getText().toString()));
                 } else {
                     game.setScreen(new MultiplayerGameScreen(game, stage.getBatch(), stage.getViewport(), username, selectedCharacter, selectedMap));
                 }
@@ -207,6 +207,7 @@ public class ChooseMapScreen implements Screen {
                     imgMapas.get(selectedMap + 1).setVisible(false);
                 }
                 imgMapas.get(selectedMap).setVisible(true);
+                titolMapa.setText("MAPA "+ (selectedMap+1));
                 System.out.println(selectedMap);
                 return true;
             }
@@ -224,6 +225,7 @@ public class ChooseMapScreen implements Screen {
                     imgMapas.get(selectedMap - 1).setVisible(false);
                 }
                 imgMapas.get(selectedMap).setVisible(true);
+                titolMapa.setText("MAPA "+ (selectedMap+1));
                 System.out.println(selectedMap);
                 return true;
             }

@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.StringBuilder;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.tenarse.game.Tenarse;
@@ -90,7 +91,11 @@ public class  GameScreen implements Screen {
 
     private long tiempoBonusPoints;
 
-    public GameScreen(Tenarse game, Batch prevBatch, Viewport prevViewport, String username, int tipus, int selectedMap) {
+    private String nomMapa;
+
+    private int selectedMap;
+
+    public GameScreen(Tenarse game, Batch prevBatch, Viewport prevViewport, String username, int tipus, int selectedMap, String nomMapa) {
 
         this.game = game;
 
@@ -103,11 +108,15 @@ public class  GameScreen implements Screen {
         zoomAndroid = 6;
         zoomPc = 3;
 
+        this.selectedMap = selectedMap;
+
         if(selectedMap == 0){
             map = new Map(AssetManager.map1);
         }else if(selectedMap == 1){
             map = new Map(AssetManager.map2);
         }
+
+        this.nomMapa = nomMapa;
 
         camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         prevViewport.setCamera(camera);
@@ -440,7 +449,7 @@ public class  GameScreen implements Screen {
                     contadorTiempo.detener();
                     String tiempo = contadorTiempo.getTiempo();
                     ConnectionNode nodeJS = new ConnectionNode();
-                    nodeJS.addNewPartida(this.username, jugador.getTypePlayer(), jugador.getKillsJugador(), tiempo, puntosPartida);
+                    nodeJS.addNewPartida(this.username, jugador.getTypePlayer(), jugador.getKillsJugador(), tiempo, puntosPartida, this.nomMapa);
                 }
                 i--;
             }
@@ -449,7 +458,6 @@ public class  GameScreen implements Screen {
         if (players.size() > 0){
             spawnEnemies();
         } else {
-            dialog.setZIndex(150);
             stage.addActor(dialog);
             dialog.getTexto().setText("Partida terminada\n\nPuntos: " + puntosPartida + "\nKills: " + jugador.getKillsJugador());
             if (Gdx.app.getType() == Application.ApplicationType.Android) {
@@ -505,10 +513,14 @@ public class  GameScreen implements Screen {
         for (int i = 0; i < intervals.size(); i++) {
             if (TimeUtils.nanoTime() - intervals.get(i).time > intervals.get(i).interval) {
                 Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map, i + 1);
-                enemies.add(zombie);
-                stage.addActor(zombie);
-                zombie.toBack();
-                intervals.get(i).time = TimeUtils.nanoTime();
+                for (int j = 0; j <  AssetManager.fullStats.getJSONObject(i + 3).getJSONArray("mapa").length(); j++) {
+                    if ( AssetManager.fullStats.getJSONObject(i + 3).getJSONArray("mapa").getInt(j) == this.selectedMap+1){
+                        enemies.add(zombie);
+                        stage.addActor(zombie);
+                        zombie.toBack();
+                        intervals.get(i).time = TimeUtils.nanoTime();
+                    }
+                }
             }
         }
     }

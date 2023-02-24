@@ -18,12 +18,6 @@ const getStats = async (callback) => {
     callback(fullStats)
 }
 
-const getMapas = async (callback) => {
-    const mapasJoc = await Mapas.find({});
-    console.log("Cogiendo las imagenes de los mapas");
-    callback(mapasJoc)
-}
-
 //Select de les partides
 const getPartidas = function (callback) {
     Partida.find({}, (error, partidas) => {

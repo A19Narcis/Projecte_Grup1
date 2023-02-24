@@ -288,7 +288,8 @@ app.post("/newPartida", (req, res) => {
     const partida = {
         jugadores: req.body.jugadores,
         tiempo: req.body.tiempo,
-        puntos: req.body.puntos
+        puntos: req.body.puntos,
+        mapa: req.body.mapa
     }
     insertDB.insertPartida(partida, function () {
         res.send({ success: true })

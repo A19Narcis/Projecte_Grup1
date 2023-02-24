@@ -46,7 +46,7 @@ public class ConnectionNode {
     }
 
     //POST per pujar una partida (arrayJugadores, tiempo, puntos)
-    public void addNewPartida(String username, String type, int kills, String timePlayed, int puntos){
+    public void addNewPartida(String username, String type, int kills, String timePlayed, int puntos, String nomMapa){
         JSONObject partidaJSON = new JSONObject();
 
         JSONArray jugadores = new JSONArray();
@@ -60,11 +60,12 @@ public class ConnectionNode {
         partidaJSON.put("jugadores", jugadores);
         partidaJSON.put("tiempo", timePlayed);
         partidaJSON.put("puntos", puntos);
+        partidaJSON.put("mapa", nomMapa);
 
 
         Net.HttpRequest httpRequest = new Net.HttpRequest(Net.HttpMethods.POST);
         //httpRequest.setUrl("http://admin.alumnes.inspedralbes.cat:7073/newPartida");
-        httpRequest.setUrl("http://192.168.207.195:7073/newPartida");
+        httpRequest.setUrl("http://192.168.258.72:7073/newPartida");
         String data = partidaJSON.toString();
         httpRequest.setContent(data);
         httpRequest.setHeader("Content-Type", "application/json");
