@@ -278,11 +278,9 @@ public class AssetManager {
         //Mapas PNG para elegir
         mapa_png1 = new Texture(Gdx.files.internal("Mapas/developmentMap/developmentMap.png"));
         mapa_png2 = new Texture(Gdx.files.internal("Mapas/developmentMap2/developmentMap2.png"));
-        mapa_png3 = new Texture(Gdx.files.internal("Mapas/developmentMap/developmentMap.png"));
 
         mapasPNG.add(mapa_png1);
         mapasPNG.add(mapa_png2);
-        mapasPNG.add(mapa_png3);
     }
 
     public static void dispose() {

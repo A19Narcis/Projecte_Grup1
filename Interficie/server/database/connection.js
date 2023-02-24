@@ -1,6 +1,6 @@
 const mongoose = require("mongoose")
 const autoIncrement = require("mongoose-auto-increment")
-const { Partida, Stats, Mapas } = require("./schemas")
+const { Partida, Stats } = require("./schemas")
 
 autoIncrement.initialize(mongoose.connection)
 const URL = 'mongodb://a19nargomcar2:paco1234@labs.inspedralbes.cat:7010/?tls=false&authMechanism=DEFAULT&authSource=DAMA_Grup1'
@@ -31,7 +31,6 @@ async function main() {
 
 module.exports = { 
     Partida,
-    Stats,
-    Mapas
+    Stats
 }
 
