@@ -14,6 +14,7 @@ const http = require('http');
 const { Server } = require("socket.io"); 
 const server = http.createServer(app);
 const multer = require('multer');
+const { Socket } = require('dgram');
 const upload = multer({dest: 'uploads/'});
 
 const io = new Server(server);
@@ -201,7 +202,24 @@ io.on('connection', (socketJugador) =>{
     console.log("Jugador conectado");
     socketJugador.emit('socketID', { id: socketJugador.id });
     socketJugador.emit('getPlayers', players);
-    socketJugador.broadcast.emit('new_player', { id: socketJugador.id });
+    socketJugador.on("newStatsPlayer", function(x, y, tipo, direccion) {
+        players.push(new player(socketJugador.id, x, y, tipo, direccion));
+        socketJugador.broadcast.emit('new_player', { id: socketJugador.id, xPl: x, yPl: y, tipoPl: tipo, direPl: direccion });
+    });
+    
+    socketJugador.on('coorJugador', function(x, y, direccion) {
+        for (let i = 0; i < players.length; i++) {
+            if (players[i].id == socketJugador.id) {
+                players[i].x = x;
+                players[i].y = y;
+                players[i].direccion = direccion
+                socketJugador.broadcast.emit('coorNuevas', players[i])
+            }
+        }    
+    })
+
+    
+
     socketJugador.on('disconnect', function(){
         console.log("Jugador desconectado");
         socketJugador.broadcast.emit('player_disc', { id: socketJugador.id });
@@ -212,14 +230,14 @@ io.on('connection', (socketJugador) =>{
             
         }
     });
-    players.push(new player(socketJugador.id, 1924, 1044));
-    
 });
 
-function player(id, x, y){
+function player(id, x, y, tipo, direccion){
     this.id = id;
     this.x = x;
     this.y = y;
+    this.tipo = tipo,
+    this.direccion = direccion
 }
 
 server.listen(SOCKET_PORT, () => {

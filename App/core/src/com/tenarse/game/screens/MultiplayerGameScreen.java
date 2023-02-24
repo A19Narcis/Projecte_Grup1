@@ -106,7 +106,8 @@ public class MultiplayerGameScreen implements Screen {
     public MultiplayerGameScreen(Tenarse game, Batch prevBatch, Viewport prevViewport, String username, int tipus, int selectedMap) {
 
         try {
-            socket = IO.socket("http://192.168.168.56:7074/");
+            socket = IO.socket("http://192.168.2.127:7074/");
+            socket.connect();
             socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
@@ -127,6 +128,7 @@ public class MultiplayerGameScreen implements Screen {
                 @Override
                 public void call(Object... args) {
                     JSONArray objects = (JSONArray) args[0];
+                    System.out.println(objects);
                     try {
                         for (int i = 0; i < objects.length(); i++) {
                             System.out.println(objects.getJSONObject(i));
@@ -135,9 +137,11 @@ public class MultiplayerGameScreen implements Screen {
                         System.out.println(e);
                     }
                     if(objects.length() != 0) {
-                        jugador2 = new JugadorOnline(map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT, 1, map);
-                        players.add(jugador2);
-                        stage.addActor(jugador2);
+                        for (int i = 0; i < objects.length(); i++) {
+                            jugador2 = new JugadorOnline((float)objects.getJSONObject(i).getInt("x"), (float)objects.getJSONObject(i).getInt("y"), Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT, objects.getJSONObject(i).getInt("tipo"), map);
+                            players.add(jugador2);
+                            stage.addActor(jugador2);
+                        }
                     }
                 }
             }).on("new_player", new Emitter.Listener() {
@@ -146,45 +150,42 @@ public class MultiplayerGameScreen implements Screen {
                     JSONObject data = (JSONObject) args[0];
                     try{
                         String id = data.getString("id");
+                        System.out.println(data);
                         System.out.println("New Player: " + id);
                     } catch (JSONException e){
                         System.out.println(e);
                     }
-                    jugador2 = new JugadorOnline(map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT, 1, map);
+                    jugador2 = new JugadorOnline((float)data.getInt("xPl"), (float)data.getInt("yPl"), Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT, data.getInt("tipoPl"), map);
                     players.add(jugador2);
                     stage.addActor(jugador2);
                 }
-            }).on("new_player", new Emitter.Listener() {
+            }).on("coorNuevas", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    JSONObject data = (JSONObject) args[0];
+                    try{
+                        jugador2.setOldx(jugador2.getPosition().x);
+                        jugador2.setOldy(jugador2.getPosition().y);
+                        jugador2.setPosition((float)data.getInt("x"), (float)data.getInt("y"));
+                        jugador2.setDirection(data.getInt("direccion"));
+                    } catch (JSONException e){
+                        System.out.println(e);
+                    }
+                }
+            }).on("player_disc", new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
                     JSONObject data = (JSONObject) args[0];
                     try{
                         String id = data.getString("id");
-                        System.out.println("New Player: " + id);
+                        System.out.println("Disconnected Socket: " + id);
+                        jugador2.remove();
+                        players.remove(jugador2);
                     } catch (JSONException e){
                         System.out.println(e);
                     }
-                    jugador2 = new JugadorOnline(map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT, 1, map);
-                    players.add(jugador2);
-                    stage.addActor(jugador2);
-                }
-            }).on("position", new Emitter.Listener() {
-                @Override
-                public void call(Object... args) {
-                    JSONObject data = (JSONObject) args[0];
-                    try{
-                        System.out.println("Position: " + data);
-                    } catch (JSONException e){
-                        System.out.println(e);
-                    }
-                }
-            }).on("disconnect", new Emitter.Listener() {
-                @Override
-                public void call(Object... args) {
-                    System.out.println(args[0]);
                 }
             });
-            socket.connect();
         } catch (URISyntaxException e) {
             Gdx.app.error("SocketIO", e.getMessage());
         }
@@ -225,6 +226,8 @@ public class MultiplayerGameScreen implements Screen {
             jugador = new Jugador(map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2), Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT, "player", 3, map);
             players.add(jugador);
         }
+
+        socket.emit("newStatsPlayer", jugador.getPosition().x, jugador.getPosition().y, jugador.getTipusJugador(), jugador.getDirection());
 
         //Crear stage
         stage = new Stage(prevViewport, prevBatch);
@@ -433,6 +436,8 @@ public class MultiplayerGameScreen implements Screen {
         renderer.render();
         stage.act(delta);
 
+        socket.emit("coorJugador", jugador.getPosition().x, jugador.getPosition().y, jugador.getDirection());
+
         for (Zombie zombie1: enemies){
             if(!zombie1.isDetected()) {
                 for (Zombie zombie2 : enemies) {
@@ -547,7 +552,7 @@ public class MultiplayerGameScreen implements Screen {
         }
 
         if (players.size() > 0){
-            //spawnEnemies();
+            spawnEnemies();
         } else {
             dialog.setZIndex(150);
             stage.addActor(dialog);
@@ -656,7 +661,6 @@ public class MultiplayerGameScreen implements Screen {
     @Override
     public void dispose() {
         this.dispose();
-
     }
 
     public Stage getStage() {

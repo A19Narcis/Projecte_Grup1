@@ -259,7 +259,18 @@ public class Jugador extends Actor {
     public void draw(Batch batch, float parentAlpha){
         batch.draw(getPlayerAnimation(), this.position.x, this.position.y, width, height);
         doDamage = false;
-        //System.out.println(vida +" --- "+ armadura);
+    }
+
+    public Vector2 getPosition() {
+        return position;
+    }
+
+    public int getDirection() {
+        return direction;
+    }
+
+    public void setDirection(int direction) {
+        this.direction = direction;
     }
 
     private TextureRegion getPlayerAnimation() {
@@ -404,6 +415,10 @@ public class Jugador extends Actor {
         zombie.die(this.direction);
     }
 
+    public int getTipusJugador() {
+        return tipusJugador;
+    }
+
     public String getTypePlayer(){
         String tipus = "";
         if (this.tipusJugador == 1){
@@ -488,7 +503,28 @@ public class Jugador extends Actor {
         timeoutDamage = TimeUtils.nanoTime();
     }
 
+    public void setPosition(float x, float y) {
+        this.position.x = x;
+        this.position.y = y;
+    }
+
     public int getFuerza() {
         return this.fuerza;
+    }
+
+    public float getOldx() {
+        return oldx;
+    }
+
+    public void setOldx(float oldx) {
+        this.oldx = oldx;
+    }
+
+    public float getOldy() {
+        return oldy;
+    }
+
+    public void setOldy(float oldy) {
+        this.oldy = oldy;
     }
 }
