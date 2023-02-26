@@ -16,6 +16,8 @@ import com.tenarse.game.utils.Settings;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public class Zombie extends Actor{
     private Vector2 position;
     private float oldX, oldY;
@@ -116,42 +118,55 @@ public class Zombie extends Actor{
         } while (map.searchColision(this.position.x, this.position.y));
     }
 
-    public void calculateMovement(Rectangle jugador ,float delta){
-        if(spawned && !hited) {
+    public void calculateMovement(ArrayList<Jugador> players, float delta) {
+        if (spawned && !hited) {
             float oldX = position.x;
             float oldY = position.y;
             int colisionMov;
-            Vector2 direction = new Vector2(jugador.x - position.x, jugador.y - position.y);
-            direction.nor();
-            position.x += direction.x * velocity * delta;
-            if(oldX < position.x){
-                colisionMov = 8;
-            }else{
-                colisionMov = -8;
+            int focus = -1;
+            float minDistance = Integer.MAX_VALUE;
+            for (int i = 0; i < players.size(); i++) {
+                float distanceX = Math.abs(players.get(i).position.x - this.position.x);
+                float distanceY = Math.abs(players.get(i).position.y - this.position.y);
+                float actualDistance = distanceX + distanceY;
+                if (actualDistance < minDistance) {
+                    minDistance = actualDistance;
+                    focus = i;
+                }
             }
-            position.x += colisionMov;
-            if(map.searchColision(position.x, position.y) || colision){
-                position.x = oldX;
-            }else{
-                position.x -= colisionMov;
-            }
+            if (focus != -1) {
+                Vector2 direction = new Vector2(players.get(focus).position.x - this.position.x, players.get(focus).position.y - this.position.y);
+                direction.nor();
+                position.x += direction.x * velocity * delta;
+                if (oldX < position.x) {
+                    colisionMov = 8;
+                } else {
+                    colisionMov = -8;
+                }
+                position.x += colisionMov;
+                if (map.searchColision(position.x, position.y) || colision) {
+                    position.x = oldX;
+                } else {
+                    position.x -= colisionMov;
+                }
 
 
-            position.y += direction.y * velocity * delta;
-            if(oldY < position.y){
-                colisionMov = 8;
-            }else{
-                colisionMov = -8;
+                position.y += direction.y * velocity * delta;
+                if (oldY < position.y) {
+                    colisionMov = 8;
+                } else {
+                    colisionMov = -8;
+                }
+                position.y += colisionMov;
+                if (map.searchColision(position.x, position.y) || colision) {
+                    position.y = oldY;
+                } else {
+                    position.y -= colisionMov;
+                }
             }
-            position.y += colisionMov;
-            if(map.searchColision(position.x, position.y) || colision){
-                position.y = oldY;
-            }else{
-                position.y -= colisionMov;
-            }
+            rectanguloDeteccion.x = this.position.x;
+            rectanguloDeteccion.y = this.position.y;
         }
-        rectanguloDeteccion.x = this.position.x;
-        rectanguloDeteccion.y = this.position.y;
     }
 
     public void colisionWithZombie(Zombie zombie){

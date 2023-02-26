@@ -97,6 +97,8 @@ public class MultiplayerGameScreen implements Screen {
 
     private Socket socket;
 
+    private boolean host = false;
+
     private Hud hud;
 
     private Tenarse game;
@@ -106,7 +108,7 @@ public class MultiplayerGameScreen implements Screen {
     public MultiplayerGameScreen(Tenarse game, Batch prevBatch, Viewport prevViewport, String username, int tipus, int selectedMap) {
 
         try {
-            socket = IO.socket("http://192.168.2.127:7074/");
+            socket = IO.socket("http://192.168.1.138:7074/");
             socket.connect();
             socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
                 @Override
@@ -142,6 +144,8 @@ public class MultiplayerGameScreen implements Screen {
                             players.add(jugador2);
                             stage.addActor(jugador2);
                         }
+                    }else{
+                        host = true;
                     }
                 }
             }).on("new_player", new Emitter.Listener() {
@@ -450,6 +454,10 @@ public class MultiplayerGameScreen implements Screen {
             }
         }
 
+        for (Zombie zombie : enemies){
+            zombie.calculateMovement(players, delta);
+        }
+
         for (Jugador player: players){
             arrowList = player.getArrowList();
             for (Zombie zombie: enemies) {
@@ -465,7 +473,7 @@ public class MultiplayerGameScreen implements Screen {
                             }
                         }
                 }
-                zombie.calculateMovement(player.getCollisionRectPlayer(), delta);
+
                 player.attacking(zombie, delta);
             }
         }
@@ -552,7 +560,10 @@ public class MultiplayerGameScreen implements Screen {
         }
 
         if (players.size() > 0){
-            spawnEnemies();
+            if(host) {
+                spawnEnemies();
+                System.out.println(host);
+            }
         } else {
             dialog.setZIndex(150);
             stage.addActor(dialog);

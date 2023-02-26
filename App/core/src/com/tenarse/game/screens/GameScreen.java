@@ -369,7 +369,7 @@ public class  GameScreen implements Screen {
                             }
                         }
                 }
-                zombie.calculateMovement(player.getCollisionRectPlayer(), delta);
+                zombie.calculateMovement(players, delta);
                 player.attacking(zombie, delta);
             }
         }
