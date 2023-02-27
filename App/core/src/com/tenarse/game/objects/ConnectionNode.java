@@ -20,8 +20,8 @@ public class ConnectionNode {
         //Connexió NodeJS
         HttpRequestBuilder requestBuilder = new HttpRequestBuilder();
 
-        final Net.HttpRequest httpRequest = requestBuilder.newRequest().method(Net.HttpMethods.GET).url("http://admin.alumnes.inspedralbes.cat:7073/getStats").build();
-        //final Net.HttpRequest httpRequest = requestBuilder.newRequest().method(Net.HttpMethods.GET).url("http://192.168.1.34:7073/getStats").build();
+        //final Net.HttpRequest httpRequest = requestBuilder.newRequest().method(Net.HttpMethods.GET).url("http://admin.alumnes.inspedralbes.cat:7073/getStats").build();
+        final Net.HttpRequest httpRequest = requestBuilder.newRequest().method(Net.HttpMethods.GET).url("http://192.168.236.66:7073/getStats").build();
 
         Gdx.net.sendHttpRequest(httpRequest, new Net.HttpResponseListener() {
             @Override
@@ -45,7 +45,7 @@ public class ConnectionNode {
         });
     }
 
-    //POST per pujar una partida (arrayJugadores, tiempo, puntos)
+    //POST per pujar una partida SINGLE
     public void addNewPartida(String username, String type, int kills, String timePlayed, int puntos, String nomMapa){
         JSONObject partidaJSON = new JSONObject();
 
@@ -85,6 +85,11 @@ public class ConnectionNode {
 
             }
         });
+    }
+
+    //POST per pujar una partida MULTI (Array<Jugador>, tiempoPartida, puntosTotal, nombreMapa)
+    public void addNewPartidaMulti(){
+
     }
 
     public JSONArray getStatsArray() {

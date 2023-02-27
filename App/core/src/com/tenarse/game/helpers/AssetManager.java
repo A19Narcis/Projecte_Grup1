@@ -89,7 +89,7 @@ public class AssetManager {
     public static ArrayList<SpawnInterval> ZombiesInterval = new ArrayList<>();
 
     //Skins Buttons
-    public static Texture imgPlayBtn, imgSingleBtn, imgMultiBtn, imgReturnBtn;
+    public static Texture imgPlayBtn, imgSingleBtn, imgMultiBtn, imgReturnBtn, imgPickMapBtn;
     public static Texture btnMovUp, btnMovDown, btnMovLeft, btnMovRight;
     public static Texture btnAtacar;
     public static Texture hp_player;
@@ -257,6 +257,7 @@ public class AssetManager {
         imgSingleBtn = new Texture(Gdx.files.internal("button_single.png"));
         imgMultiBtn = new Texture(Gdx.files.internal("button_multi.png"));
         imgReturnBtn = new Texture(Gdx.files.internal("returnArrow.png"));
+        imgPickMapBtn = new Texture(Gdx.files.internal("button_sel_mapa.png"));
         btnMovUp = new Texture(Gdx.files.internal("up_arr.png"));
         btnMovDown = new Texture(Gdx.files.internal("down_arr.png"));
         btnMovLeft = new Texture(Gdx.files.internal("left_arr.png"));

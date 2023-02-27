@@ -109,8 +109,8 @@ public class ChooseCharacterScreen implements Screen {
         //Mapa
         Map map = new Map();
 
-        //Boton JUGAR
-        btnMapSelect = AssetManager.imgPlayBtn;
+        //Boton ELEGIR MAPA
+        btnMapSelect = AssetManager.imgPickMapBtn;
         imgBtnMapSelect = new ImageButton(new TextureRegionDrawable(new TextureRegion(btnMapSelect)));
 
         //Flecha return
