@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.google.gson.JsonObject;
 import com.tenarse.game.Tenarse;
 import com.tenarse.game.bonus.Bonus;
 import com.tenarse.game.helpers.AssetManager;
@@ -108,7 +109,7 @@ public class MultiplayerGameScreen implements Screen {
     public MultiplayerGameScreen(Tenarse game, Batch prevBatch, Viewport prevViewport, String username, int tipus, int selectedMap) {
 
         try {
-            socket = IO.socket("http://192.168.1.138:7074/");
+            socket = IO.socket("http://192.168.168.56:7074/");
             socket.connect();
             socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
                 @Override
@@ -172,6 +173,23 @@ public class MultiplayerGameScreen implements Screen {
                         jugador2.setOldy(jugador2.getPosition().y);
                         jugador2.setPosition((float)data.getInt("x"), (float)data.getInt("y"));
                         jugador2.setDirection(data.getInt("direccion"));
+                    } catch (JSONException e){
+                        System.out.println(e);
+                    }
+                }
+            }).on("newZombieInfo", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    JSONArray objects = (JSONArray) args[0];
+                    try {
+                        for (int i = 0; i < objects.length(); i++) {
+                            JSONObject info = objects.getJSONObject(i);
+                            if(objects.length() > enemies.size()){
+                                Zombie zombie = new Zombie((float) info.getInt("x"), (float) info.getInt("y"), Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map, info.getInt("tipoZombie"));
+                                enemies.add(zombie);
+                                stage.addActor(zombie);
+                            }
+                        }
                     } catch (JSONException e){
                         System.out.println(e);
                     }
@@ -441,6 +459,19 @@ public class MultiplayerGameScreen implements Screen {
         stage.act(delta);
 
         socket.emit("coorJugador", jugador.getPosition().x, jugador.getPosition().y, jugador.getDirection());
+        if(host) {
+            System.out.println("Zombie Info");
+            JSONArray enemiesJSON = new JSONArray();
+            for (int i = 0; i < enemies.size(); i++) {
+                JSONObject info = new JSONObject();
+                info.put("x", enemies.get(i).getPosition().x);
+                info.put("y", enemies.get(i).getPosition().y);
+                info.put("direccion", enemies.get(i).getDirection());
+                info.put("tipoZombie", enemies.get(i).getTipoZombie());
+                enemiesJSON.put(info);
+            }
+            socket.emit("zombieInfo", enemiesJSON);
+        }
 
         for (Zombie zombie1: enemies){
             if(!zombie1.isDetected()) {
@@ -562,7 +593,6 @@ public class MultiplayerGameScreen implements Screen {
         if (players.size() > 0){
             if(host) {
                 spawnEnemies();
-                System.out.println(host);
             }
         } else {
             dialog.setZIndex(150);

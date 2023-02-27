@@ -62,23 +62,39 @@ public class Zombie extends Actor{
 
     private long timeColisoningPlayer;
 
+    private int tipoZombie;
+
+    public Zombie(float x, float y, int width, int height, Map map, int tipoZombie){
+        this(width, height, map, tipoZombie);
+        this.position = new Vector2(x,y);
+        rectanguloDeteccion = new Rectangle();
+        rectanguloDeteccion.width = Settings.ZOMBIE_WIDTH;
+        rectanguloDeteccion.height = Settings.ZOMBIE_HEIGHT;
+        rectanguloDeteccion.setPosition(x, y);
+    }
+
     public Zombie(int width, int height, Map map, int tipoZombie) {
         this.width = width;
         this.height = height;
         this.map = map;
-        position = new Vector2();
-        vida = AssetManager.fullStats.getJSONObject(tipoZombie + 2).getInt("vida");
+        this.tipoZombie = tipoZombie;
+        if(position == null) {
+            position = new Vector2();
+            createSpawnPosition();
+            //position.x = map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2) - 20; //SPAWN EN EL CENTRO PARA PRUEBAS
+            //position.y = map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2);
+        }
+
         dead = false;
         attack = false;
         firstAnimationAttack = false;
         doDamage = false;
-        createSpawnPosition();
-        //position.x = map.getMapWidthInPixels() / 2 - (Settings.PLAYER_WIDTH / 2) - 20; //SPAWN EN EL CENTRO PARA PRUEBAS
-        //position.y = map.getMapHeightInPixels() / 2 - (Settings.PLAYER_WIDTH / 2);
 
-        rectanguloDeteccion = new Rectangle();
-        rectanguloDeteccion.width = Settings.ZOMBIE_WIDTH;
-        rectanguloDeteccion.height = Settings.ZOMBIE_HEIGHT;
+        if(rectanguloDeteccion == null) {
+            rectanguloDeteccion = new Rectangle();
+            rectanguloDeteccion.width = Settings.ZOMBIE_WIDTH;
+            rectanguloDeteccion.height = Settings.ZOMBIE_HEIGHT;
+        }
 
         playerSprites = AssetManager.SpritesPlayers.get(tipoZombie + 2);
 
@@ -92,10 +108,12 @@ public class Zombie extends Actor{
         animacionAtackR = playerSprites.A_R;
         animacionAtackU = playerSprites.A_U;
         animacionAtackD = playerSprites.A_D;
+        System.out.println(animacionDead);
         damage = AssetManager.fullStats.getJSONObject(tipoZombie + 2).getInt("fuerza");
         velocity = AssetManager.fullStats.getJSONObject(tipoZombie + 2).getInt("velocidad") * 30;
         points = AssetManager.fullStats.getJSONObject(tipoZombie + 2).getInt("puntos");
         vida = AssetManager.fullStats.getJSONObject(tipoZombie + 2).getInt("vida");
+        System.out.println(vida);
 
         spawned = false;
         colision = false;
@@ -397,5 +415,9 @@ public class Zombie extends Actor{
 
     public int getDirection() {
         return direction;
+    }
+
+    public int getTipoZombie() {
+        return tipoZombie;
     }
 }
