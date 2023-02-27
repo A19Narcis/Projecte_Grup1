@@ -106,7 +106,10 @@ public class MultiplayerGameScreen implements Screen {
 
     private long tiempoBonusPoints;
 
-    public MultiplayerGameScreen(Tenarse game, Batch prevBatch, Viewport prevViewport, String username, int tipus, int selectedMap) {
+    private String nomMapa;
+
+    public MultiplayerGameScreen(Tenarse game, Batch prevBatch, Viewport prevViewport, String username, int tipus, int selectedMap, String nomMapa
+    ) {
 
         try {
             socket = IO.socket("http://192.168.2.113:7074/");
@@ -169,8 +172,10 @@ public class MultiplayerGameScreen implements Screen {
                 public void call(Object... args) {
                     JSONObject data = (JSONObject) args[0];
                     try{
+                        System.out.println(data);
                         jugador2.setOldx(jugador2.getPosition().x);
                         jugador2.setOldy(jugador2.getPosition().y);
+                        jugador2.setVida(data.getInt("vidas"));
                         jugador2.setPosition((float)data.getInt("x"), (float)data.getInt("y"));
                         jugador2.setDirection(data.getInt("direccion"));
                     } catch (JSONException e){
@@ -232,6 +237,8 @@ public class MultiplayerGameScreen implements Screen {
         }else if(selectedMap == 1){
             map = new Map(AssetManager.map2);
         }
+
+        this.nomMapa = nomMapa;
 
 
 
@@ -461,7 +468,7 @@ public class MultiplayerGameScreen implements Screen {
         renderer.render();
         stage.act(delta);
 
-        socket.emit("coorJugador", jugador.getPosition().x, jugador.getPosition().y, jugador.getDirection());
+        socket.emit("coorJugador", jugador.getPosition().x, jugador.getPosition().y, jugador.getDirection(), jugador.getVida());
         if(host) {
             JSONArray enemiesJSON = new JSONArray();
             for (int i = 0; i < enemies.size(); i++) {
@@ -588,7 +595,11 @@ public class MultiplayerGameScreen implements Screen {
                     contadorTiempo.detener();
                     String tiempo = contadorTiempo.getTiempo();
                     ConnectionNode nodeJS = new ConnectionNode();
-                    //nodeJS.addNewPartida(this.username, jugador.getTypePlayer(), jugador.getKillsJugador(), tiempo, puntosPartida);
+                    //JSONArray ->
+                    /*
+                    for con players
+                    */
+                    nodeJS.addNewPartida(this.username, jugador.getTypePlayer(), jugador.getKillsJugador(), tiempo, puntosPartida, nomMapa);
                 }
                 i--;
             }

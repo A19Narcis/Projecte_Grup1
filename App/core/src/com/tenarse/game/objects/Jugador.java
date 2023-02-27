@@ -469,6 +469,10 @@ public class Jugador extends Actor {
         return vida;
     }
 
+    public void setVida(int vida) {
+        this.vida = vida;
+    }
+
     public int getArmadura() {
         return armadura;
     }

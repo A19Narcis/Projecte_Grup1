@@ -189,7 +189,7 @@ public class ChooseMapScreen implements Screen {
                 if (modeJoc == SINGLE){
                     game.setScreen(new GameScreen(game, stage.getBatch(), stage.getViewport(), username, selectedCharacter, selectedMap, titolMapa.getText().toString()));
                 } else {
-                    game.setScreen(new MultiplayerGameScreen(game, stage.getBatch(), stage.getViewport(), username, selectedCharacter, selectedMap));
+                    game.setScreen(new MultiplayerGameScreen(game, stage.getBatch(), stage.getViewport(), username, selectedCharacter, selectedMap, titolMapa.getText().toString()));
                 }
                 return true;
             }

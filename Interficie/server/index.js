@@ -209,12 +209,14 @@ io.on('connection', (socketJugador) =>{
         socketJugador.broadcast.emit('new_player', { id: socketJugador.id, xPl: x, yPl: y, tipoPl: tipo, direPl: direccion });
     });
     
-    socketJugador.on('coorJugador', function(x, y, direccion) {
+    socketJugador.on('coorJugador', function(x, y, direccion, vidas, kills) {
         for (let i = 0; i < players.length; i++) {
             if (players[i].id == socketJugador.id) {
                 players[i].x = x;
                 players[i].y = y;
                 players[i].direccion = direccion
+                players[i].vidas = vidas
+                console.log(players[i]);
                 socketJugador.broadcast.emit('coorNuevas', players[i])
             }
         }    
@@ -237,12 +239,15 @@ io.on('connection', (socketJugador) =>{
     });
 });
 
-function player(id, x, y, tipo, direccion){
+function player(id, x, y, tipo, direccion, vidas, kills, username){
     this.id = id;
     this.x = x;
     this.y = y;
     this.tipo = tipo,
-    this.direccion = direccion
+    this.direccion = direccion,
+    this.vidas = vidas
+    this.kills,
+    this.username
 }
 
 server.listen(SOCKET_PORT, () => {
