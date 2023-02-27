@@ -220,7 +220,10 @@ io.on('connection', (socketJugador) =>{
         }    
     })
 
-    
+    socketJugador.on('zombieInfo', function(enemie) {
+        socketJugador.broadcast.emit('newZombieInfo', enemie)
+    })
+
 
     socketJugador.on('disconnect', function(){
         console.log("Jugador desconectado");
