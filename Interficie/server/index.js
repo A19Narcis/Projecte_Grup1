@@ -159,6 +159,7 @@ function checkUserFromJson(username, passwd) {
                 console.log("user found");
                 ret.isAuth = user.isAuth;
                 ret.username = user.username;
+                ret.rol = user.rol;
             }
             console.log(ret);
             resolve(ret);
@@ -182,7 +183,8 @@ app.post("/getSession", async (req, res) => {
     if (session.user && session.user.isAuth) {
         var ret = {
             isAuth: session.user.isAuth,
-            username: session.user.username
+            username: session.user.username,
+            rol: session.user.rol
         };
     }
 

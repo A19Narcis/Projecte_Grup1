@@ -1,10 +1,27 @@
 {"admins": [{
     "username": "admin",
     "password": "admin",
-    "isAuth": true
+    "isAuth": true,
+    "rol": "admin"
 },
 {
     "username": "admin2",
     "password": "admin2",
-    "isAuth": true
+    "isAuth": true,
+    "rol": "admin"
+},{
+    "username": "sergi",
+    "password": "sergi",
+    "isAuth": true,
+    "rol": "user"
+},{
+    "username": "narcis",
+    "password": "narcis",
+    "isAuth": true,
+    "rol": "user"
+},{
+    "username": "teo",
+    "password": "teo",
+    "isAuth": true,
+    "rol": "user"
 }]}

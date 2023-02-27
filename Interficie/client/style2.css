@@ -340,3 +340,16 @@ h2 {
 		  width: 100%;
 	  }
   }
+
+  .users {
+    border: 2px solid grey;
+    padding: 10px;
+	position: relative;
+	transition: 0.7s;
+  }
+
+
+  .users:hover {
+	border-color: red;
+	cursor: pointer;
+  }

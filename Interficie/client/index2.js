@@ -40,10 +40,13 @@ var vue_app = new Vue({
         zomPuntos: [],
         canvas3: null,
         medianaArr: [],
+        tiempoArr: [],
         url: '',
         arrBonus: [],
         map1: 0,
         map2: 0,
+        rol: '',
+        infoDialog: false
 
 
     },
@@ -54,13 +57,11 @@ var vue_app = new Vue({
 
     methods: {
         createCanv: function () {
-            this.canvas = document.getElementById('canvas')
-
-            var ctx = this.canvas.getContext('2d');
+            var canvas = document.getElementById('canvas')
             //hay que llamar al get stats como sea, usaba dos funciones.
-            this.canvas.width = 800;
-            this.canvas.height = 600;
-            var chart = new Chart(ctx, {
+            canvas.width = 800;
+            canvas.height = 600;
+            var chart = new Chart(canvas, {
                 type: 'bar',
                 data: {
                     labels: this.arrNom,
@@ -111,12 +112,11 @@ var vue_app = new Vue({
             });
 
 
-            this.canvas2 = document.getElementById('canvas2')
-            var ctx2 = this.canvas2.getContext('2d');
+            var canvas2 = document.getElementById('canvas2')
             //hay que llamar al get stats como sea, usaba dos funciones.
-            this.canvas2.width = 800;
-            this.canvas2.height = 600;
-            var chart2 = new Chart(ctx2, {
+            canvas2.width = 800;
+            canvas2.height = 600;
+            var chart2 = new Chart(canvas2, {
                 type: 'bar',
                 data: {
                     labels: this.zomArrNom,
@@ -157,13 +157,12 @@ var vue_app = new Vue({
                 }
             });
 
-            this.canvas3 = document.getElementById('canvas3')
-            var ctx3 = this.canvas3.getContext('2d');
+            var canvas3 = document.getElementById('canvas3')
             //hay que llamar al get stats como sea, usaba dos funciones.
-            this.canvas3.width = 800;
-            this.canvas3.height = 600;
-            var arrNoms = ['0-250', '251-500', '501-750', '751-1000', '>1000'];
-            var chart3 = new Chart(ctx3, {
+            canvas3.width = 800;
+            canvas3.height = 600;
+            var arrNoms = ['0-1000', '1000-2000', '2000-3000', '3000-4000', '>5000'];
+            var chart3 = new Chart(canvas3, {
                 type: 'bar',
                 data: {
                     labels: arrNoms,
@@ -185,6 +184,38 @@ var vue_app = new Vue({
                     }
                 }
             });
+
+
+            var canvas4 = document.getElementById('canvas4')
+            //hay que llamar al get stats como sea, usaba dos funciones.
+            canvas4.width = 800;
+            canvas4.height = 600;
+            var arrNoms = ['0-5', '5-10', '10-15', '15-20', '>20'];
+            console.log(this.tiempoArr);
+            var chart4 = new Chart(canvas4, {
+                type: 'bar',
+                data: {
+                    labels: arrNoms,
+                    datasets: [{
+                        label: 'MEDIANA TIEMPO',
+                        data: this.tiempoArr,
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1,
+                    }]
+                    
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            type: 'linear',
+                            position: 'left',
+                            ticks: { min: 0, max: this.arrPartidas.length }
+                        }]
+                    }
+                }
+            });
+
         },
         createElements: function () {
             var count = 0;
@@ -224,23 +255,48 @@ var vue_app = new Vue({
             var three = 0; //501-750
             var four = 0; //751-1000
             var five = 0; //>1000
+            var one1 = 0; //0-5
+            var two2 = 0; //5-10
+            var three3 = 0; //10-15
+            var four4 = 0; //15-20
+            var five5 = 0; //>20
             this.arrPartidas.forEach(el => {
-                if (el.puntos <= 250 && el.puntos >= 0)
+                var splitted = el.tiempo.split(':');
+                console.log(splitted[0]);
+                if (splitted[0] <= 5 && splitted[0] >= 0)
+                    one1++;
+                if (splitted[0] <= 10 && splitted[0] >= 6)
+                    two2++;
+                if (splitted[0] <= 15 && splitted[0] >= 11)
+                    three3++;
+                if (splitted[0] <= 20 && splitted[0] >= 16)
+                    four4++;
+                if (splitted[0] > 20)
+                    five5++;
+
+                if (el.puntos <= 1000 && el.puntos >= 0)
                     one++;
-                if (el.puntos <= 500 && el.puntos >= 251)
+                if (el.puntos <= 2000 && el.puntos >= 1001)
                     two++;
-                if (el.puntos <= 750 && el.puntos >= 501)
+                if (el.puntos <= 3000 && el.puntos >= 2001)
                     three++;
-                if (el.puntos <= 1000 && el.puntos >= 751)
+                if (el.puntos <= 4000 && el.puntos >= 3001)
                     four++;
-                if (el.puntos >= 1001)
+                if (el.puntos >= 4001)
                     five++;
+
             });
             this.medianaArr.push(one);
             this.medianaArr.push(two);
             this.medianaArr.push(three);
             this.medianaArr.push(four);
             this.medianaArr.push(five);
+
+            this.tiempoArr.push(one1);
+            this.tiempoArr.push(two2);
+            this.tiempoArr.push(three3);
+            this.tiempoArr.push(four4);
+            this.tiempoArr.push(five5);
             this.createCanv();
         },
         getAuth: function () {
@@ -273,9 +329,11 @@ var vue_app = new Vue({
                     if (data.isAuth == true) {
                         this.auth = data.isAuth;
                         this.userAuth = data.username;
+                        this.rol = data.rol;
                         console.log("isAuth peti" + data.isAuth);
                         console.log("userPeticion" + data.username);
                         console.log("mine-" + this.username);
+
 
                         setTimeout(() => {
                             this.ready = 1;
@@ -343,9 +401,11 @@ var vue_app = new Vue({
                     this.auth = data.isAuth;
                     this.userAuth = data.username;
                     this.username = this.userAuth;
+                    this.rol = data.rol;
                     console.log("sesion user" + this.userAuth);
                     console.log("session mine" + this.username);
                     console.log("sesion auth" + this.auth);
+                    console.log("rol" + data.rol);
 
                     if (this.auth == true && this.userAuth == this.username) {
                         this.ready = 1;
@@ -430,33 +490,8 @@ var vue_app = new Vue({
                         'descr': 'Te da una armadura más'
                     }];
                     console.log(this.arrStats);
-                    var i = 0;
-/*                     this.arrStats.forEach(el => {
-                        if (i > 2) {
-                            console.log(el.mapa);
-                            if (el.mapa.length == 0) {
-
-                                this.map1 = 0;
-                                this.map2 = 0;
-                            }
-                            if (el.mapa.length == 1) {
-
-                                if (el.mapa[0] == 1)
-                                    this.map1 = 1;
-                                else
-                                    this.map2 = 2;
-                            }
-                            if (el.mapa.length == 2) {
-                                this.map1 = 1;
-                                this.map2 = 2;
-                            }
-                            i++;
-                        }
-                        i++;
-                    }); */
                     console.log(this.arrBonus);
                     this.createElements();
-
                 }
             ).catch(
                 (error) => {
@@ -485,7 +520,7 @@ var vue_app = new Vue({
                 (data) => {
                     this.arrPartidas = data;
                     this.createElements2();
-                    console.log(this.arrPartidas);
+
                 }
             ).catch(
                 (error) => {
@@ -497,12 +532,10 @@ var vue_app = new Vue({
         updateStats: function (id, vel, fuerza, vida, armadura, nombreTipo, puntos, check1, check2) {
             console.log(check1, check2);
             var maps = [];
-            if (check1 != false)
-               { maps.push(1); console.log("ES FALSE")}
+            if (check1 != false) { maps.push(1); console.log("ES FALSE") }
             else
                 maps.push(0);
-            if (check2 != false)
-                {maps.push(2); console.log("ES FALSE")}
+            if (check2 != false) { maps.push(2); console.log("ES FALSE") }
             else
                 maps.push(0);
             console.log(maps);
