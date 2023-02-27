@@ -399,8 +399,9 @@ public class Zombie extends Actor{
         return position;
     }
 
-    public void setPositionZ(Vector2 position) {
-        this.position = position;
+    public void setPosition(float x, float y) {
+        position.x = x;
+        position.y = y;
         rectanguloDeteccion.x = this.position.x;
         rectanguloDeteccion.y = this.position.y;
     }
