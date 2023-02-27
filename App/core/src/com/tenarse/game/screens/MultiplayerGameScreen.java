@@ -109,7 +109,7 @@ public class MultiplayerGameScreen implements Screen {
     public MultiplayerGameScreen(Tenarse game, Batch prevBatch, Viewport prevViewport, String username, int tipus, int selectedMap) {
 
         try {
-            socket = IO.socket("http://192.168.168.56:7074/");
+            socket = IO.socket("http://192.168.2.113:7074/");
             socket.connect();
             socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
                 @Override
@@ -184,10 +184,8 @@ public class MultiplayerGameScreen implements Screen {
                     try {
                         for (int i = 0; i < objects.length(); i++) {
                             JSONObject info = objects.getJSONObject(i);
-                            System.out.println("I: "+ i + ", ObjectLenght: "+ objects.length());
                             int createZombies = objects.length() - enemies.size();
                             if(objects.length() > enemies.size() && i == objects.length() - createZombies){
-                                System.out.println("GOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOORDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                                 Zombie zombie = new Zombie((float) info.getInt("x"), (float) info.getInt("y"), Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map, info.getInt("tipoZombie"));
                                 enemies.add(zombie);
                                 stage.addActor(zombie);
@@ -465,17 +463,16 @@ public class MultiplayerGameScreen implements Screen {
 
         socket.emit("coorJugador", jugador.getPosition().x, jugador.getPosition().y, jugador.getDirection());
         if(host) {
-            System.out.println("Zombie Info");
-            //[{"x":3294,"direccion":3,"y":1204,"tipoZombie":1}]
             JSONArray enemiesJSON = new JSONArray();
             for (int i = 0; i < enemies.size(); i++) {
-                JSONObject info = new JSONObject()
-                        .put("x", enemies.get(i).getPosition().x)
-                        .put("y", enemies.get(i).getPosition().y)
-                        .put("direccion", enemies.get(i).getDirection())
-                        .put("tipoZombie", enemies.get(i).getTipoZombie());;
+                String data = "{\"x\":" + enemies.get(i).getPosition().x
+                        + ",\"direccion\":" + enemies.get(i).getDirection()
+                        + ",\"y\":" + enemies.get(i).getPosition().y
+                        + ",\"tipoZombie\":" + enemies.get(i).getTipoZombie() + "}";
+
+                JSONObject info = new JSONObject(data);
+
                 enemiesJSON.put(info);
-                System.out.println(enemiesJSON);
             }
             socket.emit("zombieInfo", enemiesJSON);
         }

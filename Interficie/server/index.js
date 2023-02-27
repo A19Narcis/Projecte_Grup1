@@ -220,8 +220,8 @@ io.on('connection', (socketJugador) =>{
         }    
     })
 
-    socketJugador.on('zombieInfo', function(enemie) {
-        socketJugador.broadcast.emit('newZombieInfo', enemie)
+    socketJugador.on('zombieInfo', function(enemies) {
+        socketJugador.broadcast.emit('newZombieInfo', enemies)
     })
 
 
