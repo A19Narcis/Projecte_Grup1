@@ -216,14 +216,14 @@ io.on('connection', (socketJugador) =>{
                 players[i].y = y;
                 players[i].direccion = direccion
                 players[i].vidas = vidas
-                console.log(players[i]);
                 socketJugador.broadcast.emit('coorNuevas', players[i])
             }
         }    
     })
 
-    socketJugador.on('zombieInfo', function(enemies) {
-        socketJugador.broadcast.emit('newZombieInfo', enemies)
+    socketJugador.on('zombieInfo', function(deadEnemies, enemies) {
+        socketJugador.broadcast.emit('newZombieInfo', deadEnemies, enemies)
+        console.log("dead enemies: " + deadEnemies);
     })
 
 
