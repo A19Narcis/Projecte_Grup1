@@ -6,6 +6,8 @@ import com.badlogic.gdx.net.HttpRequestBuilder;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 
 public class ConnectionNode {
 
@@ -21,7 +23,7 @@ public class ConnectionNode {
         HttpRequestBuilder requestBuilder = new HttpRequestBuilder();
 
         //final Net.HttpRequest httpRequest = requestBuilder.newRequest().method(Net.HttpMethods.GET).url("http://admin.alumnes.inspedralbes.cat:7073/getStats").build();
-        final Net.HttpRequest httpRequest = requestBuilder.newRequest().method(Net.HttpMethods.GET).url("http://192.168.2.113:7073/getStats").build();
+        final Net.HttpRequest httpRequest = requestBuilder.newRequest().method(Net.HttpMethods.GET).url("http://192.168.236.71:7073/getStats").build();
 
         Gdx.net.sendHttpRequest(httpRequest, new Net.HttpResponseListener() {
             @Override
@@ -65,7 +67,7 @@ public class ConnectionNode {
 
         Net.HttpRequest httpRequest = new Net.HttpRequest(Net.HttpMethods.POST);
         //httpRequest.setUrl("http://admin.alumnes.inspedralbes.cat:7073/newPartida");
-        httpRequest.setUrl("http://192.168.258.72:7073/newPartida");
+        httpRequest.setUrl("http://192.168.236.71:7073/newPartida");
         String data = partidaJSON.toString();
         httpRequest.setContent(data);
         httpRequest.setHeader("Content-Type", "application/json");
@@ -88,7 +90,52 @@ public class ConnectionNode {
     }
 
     //POST per pujar una partida MULTI (Array<Jugador>, tiempoPartida, puntosTotal, nombreMapa)
-    public void addNewPartidaMulti(){
+    public void addNewPartidaMulti(ArrayList<Jugador> jugadores, String tiempo, int puntos, String nombreMapa){
+        JSONObject partidaJSON = new JSONObject();
+
+        JSONArray jugadoresJSON = new JSONArray();
+
+        for (int i = 0; i < jugadores.size(); i++) {
+            JSONObject jugador = new JSONObject();
+
+            jugador.put("username", jugadores.get(i).getUsername());
+            jugador.put("tipo", jugadores.get(i).getTypePlayer());
+            jugador.put("kills", jugadores.get(i).getKillsJugador());
+
+            String infoJugador = "{\"username\":" + jugadores.get(i).getUsername()
+                    +",\"tipo\":\"" + jugadores.get(i).getTypePlayer()
+                    + "\",\"kills\":" + jugadores.get(i).getKillsJugador() + "}";
+
+            jugadoresJSON.put(jugador);
+        }
+
+        partidaJSON.put("jugadores", jugadoresJSON);
+        partidaJSON.put("tiempo", tiempo);
+        partidaJSON.put("puntos", puntos);
+        partidaJSON.put("mapa", nombreMapa);
+
+        Net.HttpRequest httpRequest = new Net.HttpRequest(Net.HttpMethods.POST);
+        //httpRequest.setUrl("http://admin.alumnes.inspedralbes.cat:7073/newPartida");
+        httpRequest.setUrl("http://192.168.236.71:7073/newPartida");
+        String data = partidaJSON.toString();
+        httpRequest.setContent(data);
+        httpRequest.setHeader("Content-Type", "application/json");
+        Gdx.net.sendHttpRequest(httpRequest, new Net.HttpResponseListener() {
+            @Override
+            public void handleHttpResponse(Net.HttpResponse httpResponse) {
+                System.out.println("Partida añadida correctamente!");
+            }
+
+            @Override
+            public void failed(Throwable t) {
+
+            }
+
+            @Override
+            public void cancelled() {
+
+            }
+        });
 
     }
 

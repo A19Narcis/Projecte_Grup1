@@ -93,6 +93,7 @@ public class MultiplayerGameScreen implements Screen {
 
     ArrayList<Zombie> enemies = new ArrayList<>();
     ArrayList<Jugador> players = new ArrayList<>();
+    ArrayList<Jugador> playersFinal = new ArrayList<>();
     ArrayList<Arrow> arrowList = new ArrayList<>();
     ArrayList<Bonus> bonusList = new ArrayList<>();
 
@@ -108,11 +109,11 @@ public class MultiplayerGameScreen implements Screen {
 
     private String nomMapa;
 
-    public MultiplayerGameScreen(Tenarse game, Batch prevBatch, Viewport prevViewport, String username, int tipus, int selectedMap, String nomMapa
+    public MultiplayerGameScreen(Tenarse game, Batch prevBatch, Viewport prevViewport, final String username, int tipus, int selectedMap, String nomMapa
     ) {
 
         try {
-            socket = IO.socket("http://192.168.2.113:7074/");
+            socket = IO.socket("http://192.168.236.71:7074/");
             socket.connect();
             socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
                 @Override
@@ -134,10 +135,10 @@ public class MultiplayerGameScreen implements Screen {
                 @Override
                 public void call(Object... args) {
                     JSONArray objects = (JSONArray) args[0];
-                    System.out.println(objects);
+                    //System.out.println(objects);
                     try {
                         for (int i = 0; i < objects.length(); i++) {
-                            System.out.println(objects.getJSONObject(i));
+                            //System.out.println(objects.getJSONObject(i));
                         }
                     } catch (JSONException e){
                         System.out.println(e);
@@ -145,7 +146,9 @@ public class MultiplayerGameScreen implements Screen {
                     if(objects.length() != 0) {
                         for (int i = 0; i < objects.length(); i++) {
                             jugador2 = new JugadorOnline((float)objects.getJSONObject(i).getInt("x"), (float)objects.getJSONObject(i).getInt("y"), Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT, objects.getJSONObject(i).getInt("tipo"), map);
+                            jugador2.setUsername(objects.getJSONObject(i).getString("username"));
                             players.add(jugador2);
+                            playersFinal.add(jugador2);
                             stage.addActor(jugador2);
                         }
                     }else{
@@ -158,13 +161,14 @@ public class MultiplayerGameScreen implements Screen {
                     JSONObject data = (JSONObject) args[0];
                     try{
                         String id = data.getString("id");
-                        System.out.println(data);
-                        System.out.println("New Player: " + id);
+                        //System.out.println(data);
                     } catch (JSONException e){
                         System.out.println(e);
                     }
                     jugador2 = new JugadorOnline((float)data.getInt("xPl"), (float)data.getInt("yPl"), Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT, data.getInt("tipoPl"), map);
+                    jugador2.setUsername(data.getString("usernamePl"));
                     players.add(jugador2);
+                    playersFinal.add(jugador2);
                     stage.addActor(jugador2);
                 }
             }).on("coorNuevas", new Emitter.Listener() {
@@ -172,12 +176,13 @@ public class MultiplayerGameScreen implements Screen {
                 public void call(Object... args) {
                     JSONObject data = (JSONObject) args[0];
                     try{
-                        System.out.println(data);
+                        //System.out.println(data);
                         jugador2.setOldx(jugador2.getPosition().x);
                         jugador2.setOldy(jugador2.getPosition().y);
                         jugador2.setVida(data.getInt("vidas"));
                         jugador2.setPosition((float)data.getInt("x"), (float)data.getInt("y"));
                         jugador2.setDirection(data.getInt("direccion"));
+                        jugador2.setKillsJugador(data.getInt("kills"));
                     } catch (JSONException e){
                         System.out.println(e);
                     }
@@ -201,6 +206,15 @@ public class MultiplayerGameScreen implements Screen {
                     } catch (JSONException e){
                         System.out.println(e);
                     }
+                }
+            }).on("newPuntosPartida", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    int newPuntos = (int) args[0];
+                    System.out.println("Nuevos puntos: " + newPuntos);
+                    puntosPartida = newPuntos;
+                    System.out.println("Puntos partida: " + puntosPartida);
+                    hud.getScoreLabel().setText(puntosPartida);
                 }
             }).on("player_disc", new Emitter.Listener() {
                 @Override
@@ -259,7 +273,9 @@ public class MultiplayerGameScreen implements Screen {
             players.add(jugador);
         }
 
-        socket.emit("newStatsPlayer", jugador.getPosition().x, jugador.getPosition().y, jugador.getTipusJugador(), jugador.getDirection());
+        socket.emit("newStatsPlayer", jugador.getPosition().x, jugador.getPosition().y, jugador.getTipusJugador(), jugador.getDirection(), jugador.getVida(), jugador.getKillsJugador(), this.username);
+        jugador.setUsername(this.username);
+        playersFinal.add(jugador);
 
         //Crear stage
         stage = new Stage(prevViewport, prevBatch);
@@ -268,17 +284,6 @@ public class MultiplayerGameScreen implements Screen {
         jugador.setName("jugador");
         stage.addActor(jugador);
 
-
-
-        /*Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map, 1);
-        enemies.add(zombie);
-        stage.addActor(zombie);
-        Zombie zombie2 = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map, 1);
-        enemies.add(zombie2);
-        stage.addActor(zombie2);
-        Zombie zombie3 = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map, 1);
-        enemies.add(zombie3);
-        stage.addActor(zombie3);*/
 
         corazonesTexture = AssetManager.hp_player;
         armaduraTexture = AssetManager.armor_player;
@@ -468,7 +473,8 @@ public class MultiplayerGameScreen implements Screen {
         renderer.render();
         stage.act(delta);
 
-        socket.emit("coorJugador", jugador.getPosition().x, jugador.getPosition().y, jugador.getDirection(), jugador.getVida());
+        socket.emit("coorJugador", jugador.getPosition().x, jugador.getPosition().y, jugador.getDirection(), jugador.getVida(), jugador.getKillsJugador(), this.username);
+
         if(host) {
             JSONArray enemiesJSON = new JSONArray();
             for (int i = 0; i < enemies.size(); i++) {
@@ -577,6 +583,7 @@ public class MultiplayerGameScreen implements Screen {
                     tiempoBonusPoints = TimeUtils.nanoTime();
                 }
                 puntosPartida = puntosPartida + enemies.get(i).getKillPoints() * bonusPoints;
+                socket.emit("updatePuntos", enemies.get(i).getKillPoints() * bonusPoints);
                 enemies.remove(enemies.get(i));
                 jugador.unaKillMas();
                 hud.getScoreLabel().setText(puntosPartida);
@@ -595,11 +602,10 @@ public class MultiplayerGameScreen implements Screen {
                     contadorTiempo.detener();
                     String tiempo = contadorTiempo.getTiempo();
                     ConnectionNode nodeJS = new ConnectionNode();
-                    //JSONArray ->
-                    /*
-                    for con players
-                    */
-                    nodeJS.addNewPartida(this.username, jugador.getTypePlayer(), jugador.getKillsJugador(), tiempo, puntosPartida, nomMapa);
+                    System.out.println("Players FINAL: " + playersFinal.toString());
+                    if (host){
+                        nodeJS.addNewPartidaMulti(playersFinal, tiempo, puntosPartida, nomMapa);
+                    }
                 }
                 i--;
             }
