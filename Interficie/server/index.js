@@ -235,7 +235,6 @@ io.on('connection', (socketJugador) =>{
 
     socketJugador.on('zombieInfo', function(deadEnemies, enemies) {
         socketJugador.broadcast.emit('newZombieInfo', deadEnemies, enemies)
-        console.log("dead enemies: " + deadEnemies);
     })
 
 
