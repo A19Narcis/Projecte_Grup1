@@ -2,9 +2,16 @@ const mongoose = require("mongoose")
 const autoIncrement = require("mongoose-auto-increment")
 const { Partida, Stats } = require("./schemas")
 
+
+const user = "a19nargomcar2"
+const passwd = "paco1234"
+const host = "labs.inspedralbes.cat"
+const puerto = 7010
+const database = "DAMA_Grup1"
+
 autoIncrement.initialize(mongoose.connection)
-//const URL = 'mongodb://a19nargomcar2:paco1234@labs.inspedralbes.cat:7010/?tls=false&authMechanism=DEFAULT&authSource=DAMA_Grup1'
-const URL = 'mongodb://localhost:27017/DAMA_Grup1'
+const URL = 'mongodb://' + user + ':' + passwd + '@' + host + ':' + puerto + '/?tls=false&authMechanism=DEFAULT&authSource=' + database + ''
+//const URL = 'mongodb://localhost:27017/DAMA_Grup1'
 const options = {
     dbName: 'DAMA_Grup1',
     connectTimeoutMS: 10000

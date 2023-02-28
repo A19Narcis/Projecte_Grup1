@@ -115,7 +115,7 @@ public class MultiplayerGameScreen implements Screen {
     public MultiplayerGameScreen(Tenarse game, Batch prevBatch, Viewport prevViewport, final String username, int tipus, int selectedMap, String nomMapa) {
 
         try {
-            socket = IO.socket("http://192.168.236.71:7074/");
+            socket = IO.socket("http://" + Settings.IP_SERVER +":" + Settings.PUERTO_SOCKETS +"/");
 
             socket.connect();
             socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {

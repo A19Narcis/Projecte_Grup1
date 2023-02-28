@@ -4,6 +4,10 @@ import com.tenarse.game.helpers.AssetManager;
 
 public class Settings {
 
+    public static final String IP_SERVER = "192.168.2.113";
+    public static final String PUERTO_PETICIONES = "7073";
+    public static final String PUERTO_SOCKETS = "7074";
+
     //Propietats joc
     public static final int GAME_WIDTH = 1080;
     public static final int GAME_HEIGHT = 620;
