@@ -81,6 +81,8 @@ public class Jugador extends Actor {
     protected long timeoutVelocity;
     protected long timeoutDamage;
 
+    protected String username;
+
     public Jugador(float x, float y, int width, int height, String categoria, int tipusJugador, Map map){
         this.width = width;
         this.height = height;
@@ -443,6 +445,10 @@ public class Jugador extends Actor {
         return this.killsJugador;
     }
 
+    public void setKillsJugador(int killsJugador) {
+        this.killsJugador = killsJugador;
+    }
+
     public ArrayList<Arrow> getArrowList() {
         return arrowList;
     }
@@ -530,5 +536,13 @@ public class Jugador extends Actor {
 
     public void setOldy(float oldy) {
         this.oldy = oldy;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }
