@@ -197,29 +197,40 @@ app.post("/getSession", async (req, res) => {
 /* =========== SOCKETS MULTIJUGADOR =========== */
 
 var players = []
+var puntosPartida = 0
 
 //Controlar les connexions i desconnexions
 io.on('connection', (socketJugador) =>{
+
+    if (players.length == 0) {
+        puntosPartida = 0;
+    }
     
     console.log("Jugador conectado");
     socketJugador.emit('socketID', { id: socketJugador.id });
     socketJugador.emit('getPlayers', players);
-    socketJugador.on("newStatsPlayer", function(x, y, tipo, direccion) {
-        players.push(new player(socketJugador.id, x, y, tipo, direccion));
-        socketJugador.broadcast.emit('new_player', { id: socketJugador.id, xPl: x, yPl: y, tipoPl: tipo, direPl: direccion });
+    socketJugador.on("newStatsPlayer", function(x, y, tipo, direccion, vidas, kills, username) {
+        players.push(new player(socketJugador.id, x, y, tipo, direccion, vidas, kills, username));
+        socketJugador.broadcast.emit('new_player', { id: socketJugador.id, xPl: x, yPl: y, tipoPl: tipo, direPl: direccion, vidasPl: vidas, killsPl: kills, usernamePl: username});
     });
     
-    socketJugador.on('coorJugador', function(x, y, direccion, vidas, kills) {
+    socketJugador.on('coorJugador', function(x, y, direccion, vidas, kills, username) {
         for (let i = 0; i < players.length; i++) {
             if (players[i].id == socketJugador.id) {
                 players[i].x = x;
                 players[i].y = y;
                 players[i].direccion = direccion
                 players[i].vidas = vidas
-                console.log(players[i]);
+                players[i].username = username
+                players[i].kills = kills
                 socketJugador.broadcast.emit('coorNuevas', players[i])
             }
         }    
+    })
+
+    socketJugador.on('updatePuntos', function(puntosKill) {
+        puntosPartida = puntosPartida + puntosKill;
+        socketJugador.broadcast.emit('newPuntosPartida', puntosPartida)
     })
 
     socketJugador.on('zombieInfo', function(enemies) {
@@ -246,8 +257,8 @@ function player(id, x, y, tipo, direccion, vidas, kills, username){
     this.tipo = tipo,
     this.direccion = direccion,
     this.vidas = vidas
-    this.kills,
-    this.username
+    this.kills = kills,
+    this.username = username
 }
 
 server.listen(SOCKET_PORT, () => {
