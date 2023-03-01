@@ -419,4 +419,12 @@ public class Zombie extends Actor{
     public int getTipoZombie() {
         return tipoZombie;
     }
+
+    public void instaKill() {
+        this.vida = 0;
+        currentFrame = 0;
+        PoolBlood pool = new PoolBlood(this.position, direction);
+        getStage().addActor(pool);
+        pool.toBack();
+    }
 }

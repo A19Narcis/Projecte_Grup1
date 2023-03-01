@@ -185,13 +185,12 @@ public class MultiplayerGameScreen implements Screen {
             }).on("newZombieInfo", new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
-                    System.out.println(args[0].toString());
                     JSONArray objects = (JSONArray) args[0];
 
                     for (int i = 0; i < objects.length(); i++) {
                         JSONObject info = objects.getJSONObject(i);
                         int position = info.getInt("position");
-                        enemies.get(position).remove();
+                        enemies.get(position).instaKill();
                         enemies.remove(position);
                     }
 
@@ -495,9 +494,6 @@ public class MultiplayerGameScreen implements Screen {
             }
         }
 
-        for (Zombie zombie : enemies){
-            zombie.calculateMovement(players, delta);
-        }
 
         for (Jugador player: players){
             arrowList = player.getArrowList();
@@ -514,7 +510,7 @@ public class MultiplayerGameScreen implements Screen {
                             }
                         }
                 }
-
+                zombie.calculateMovement(players, delta);
                 player.attacking(zombie, delta);
             }
         }
@@ -604,11 +600,11 @@ public class MultiplayerGameScreen implements Screen {
         for (int i = 0; i < players.size(); i++) {
             if(players.get(i).isDead()){
                 for (int j = 0; j < enemies.size(); j++) {
-                    players.get(i).die(enemies.get(i).getDirection());//NO FUNCIONA: Index 1 out of bounds for length 1
+                    players.get(i).die(enemies.get(i).getDirection());
                 }
                 players.remove(players.get(i));
-                socket.disconnect();
                 if (players.size() == 0){
+                    socket.disconnect();
                     //Enviar POST de addNewPartida
                     contadorTiempo.detener();
                     String tiempo = contadorTiempo.getTiempo();
