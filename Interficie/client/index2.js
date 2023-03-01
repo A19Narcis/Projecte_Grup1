@@ -307,7 +307,8 @@ var vue_app = new Vue({
                 this.pass = ''
                 return;
             }
-            fetch("http://admin.alumnes.inspedralbes.cat:7073/authPost/",
+            fetch("http://192.168.1.34:7073/authPost/",
+            //fetch("http://admin.alumnes.inspedralbes.cat:7073/authPost/",
                 {
                     method: "POST",
                     headers: {
@@ -355,12 +356,14 @@ var vue_app = new Vue({
         uploadImage: function () {
             const fileInput = document.getElementById('file-input');
             const file = fileInput.files[0];
-            this.url = 'http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/' + file.name;
+            this.url = 'http://127.0.0.1:5500/Projecte_Grup1/Interficie/server/uploads/' + file.name;
+            //this.url = 'http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/' + file.name;
             console.log(file);
             const formData = new FormData();
             formData.append('image', file);
 
-            fetch('http://admin.alumnes.inspedralbes.cat:7073/upload', {
+            fetch('http://192.168.1.34:7073/upload', {
+            //fetch('http://admin.alumnes.inspedralbes.cat:7073/upload', {
                 method: 'POST',
                 body: formData
             })
@@ -380,7 +383,8 @@ var vue_app = new Vue({
 
         getSession: function () {
             console.log("SSSS" + this.info.values[0])
-            fetch("http://admin.alumnes.inspedralbes.cat:7073/getSession/",
+            fetch("http://192.168.1.34:7073/getSession/",
+            //fetch("http://admin.alumnes.inspedralbes.cat:7073/getSession/",
                 {
                     method: "POST",
                     headers: {
@@ -421,7 +425,8 @@ var vue_app = new Vue({
         },
         status: function () {
 
-            fetch("http://admin.alumnes.inspedralbes.cat:7073/statusPost/",
+            fetch("http://192.168.1.34:7073/statusPost/",
+            //fetch("http://admin.alumnes.inspedralbes.cat:7073/statusPost/",
                 {
                     method: "POST",
                     headers: {
@@ -449,7 +454,8 @@ var vue_app = new Vue({
         },
 
         getStats: function () {
-            fetch("http://admin.alumnes.inspedralbes.cat:7073/getStats2/",
+            fetch("http://192.168.1.34:7073/getStats2/",
+            //fetch("http://admin.alumnes.inspedralbes.cat:7073/getStats2/",
                 {
                     method: "POST",
                     headers: {
@@ -470,23 +476,28 @@ var vue_app = new Vue({
                     this.arrLen = data.length;
                     this.arrBonus = [{
                         'nomBonus': 'damage',
-                        'img': 'http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/damageBonus.png',
+                        'img': 'http://127.0.0.1:5500/Projecte_Grup1/Interficie/server/uploads/damageBonus.png',
+                        //'img': 'http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/damageBonus.png',
                         'descr': 'Te da un punto más de daño durante 10 segundos'
                     }, {
                         'nomBonus': 'live',
-                        'img': 'http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/liveBonus.png',
+                        'img': 'http://127.0.0.1:5500/Projecte_Grup1/Interficie/server/uploads/liveBonus.png',
+                        //'img': 'http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/liveBonus.png',
                         'descr': 'Te da una vida más'
                     }, {
                         'nomBonus': 'points',
-                        'img': 'http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/pointsBonus.png',
+                        'img': 'http://127.0.0.1:5500/Projecte_Grup1/Interficie/server/uploads/pointsBonus.png',
+                        //'img': 'http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/pointsBonus.png',
                         'descr': 'Te da un x2 en cada kill que hagas durante 10 segundos'
                     }, {
                         'nomBonus': 'velocity',
-                        'img': 'http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/velocityBonus.png',
+                        'img': 'http://127.0.0.1:5500/Projecte_Grup1/Interficie/server/uploads/velocityBonus.png',
+                        //'img': 'http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/velocityBonus.png',
                         'descr': 'Te sube un punto de velocidad durante 10 segundos'
                     }, {
                         'nomBonus': 'shield',
-                        'img': 'http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/shieldBonus.png',
+                        'img': 'http://127.0.0.1:5500/Projecte_Grup1/Interficie/server/uploads/shieldBonus.png',
+                        //'img': 'http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/shieldBonus.png',
                         'descr': 'Te da una armadura más'
                     }];
                     console.log(this.arrStats);
@@ -501,7 +512,8 @@ var vue_app = new Vue({
         },
 
         getPartidas: function () {
-            fetch("http://admin.alumnes.inspedralbes.cat:7073/getPartidas2/",
+            fetch("http://192.168.1.34:7073/getPartidas2/",
+            //fetch("http://admin.alumnes.inspedralbes.cat:7073/getPartidas2/",
                 {
                     method: "POST",
                     headers: {
@@ -553,7 +565,8 @@ var vue_app = new Vue({
             this.info.values.push(nombreTipo);
             this.info.values.push(puntos);
             this.info.values.push(maps);
-            fetch("http://admin.alumnes.inspedralbes.cat:7073/updateStats/",
+            fetch("http://192.168.1.34:7073/updateStats/",
+            //fetch("http://admin.alumnes.inspedralbes.cat:7073/updateStats/",
                 {
                     method: "POST",
                     headers: {
@@ -589,7 +602,8 @@ var vue_app = new Vue({
             var del = '../server/' + urlSegments;
             this.info.values.push(del);
 
-            fetch("http://admin.alumnes.inspedralbes.cat:7073/delete/",
+            fetch("http://192.168.1.34:7073/delete/",
+            //fetch("http://admin.alumnes.inspedralbes.cat:7073/delete/",
                 {
                     method: "POST",
                     headers: {
@@ -646,7 +660,8 @@ var vue_app = new Vue({
             this.info.values.push(this.url);
             this.info.values.push(puntos);
             this.info.values.push(maps);
-            fetch("http://admin.alumnes.inspedralbes.cat:7073/addNewZombie/",
+            fetch("http://192.168.1.34:7073/addNewZombie/",
+            //fetch("http://admin.alumnes.inspedralbes.cat:7073/addNewZombie/",
                 {
                     method: "POST",
                     headers: {

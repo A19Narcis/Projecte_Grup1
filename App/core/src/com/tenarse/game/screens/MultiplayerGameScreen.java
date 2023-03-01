@@ -184,10 +184,7 @@ public class MultiplayerGameScreen implements Screen {
             }).on("newZombieInfo", new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
-<<<<<<< HEAD
-=======
-                    //System.out.println(args[0].toString());
->>>>>>> d86985711b03daeba0253c72016a0f42e212a4b2
+
                     JSONArray objects = (JSONArray) args[0];
 
                     for (int i = 0; i < objects.length(); i++) {
@@ -228,8 +225,8 @@ public class MultiplayerGameScreen implements Screen {
                     try{
                         String id = data.getString("id");
                         System.out.println("Disconnected Socket: " + id);
-                        jugador2.remove();
                         players.remove(jugador2);
+                        jugador2.remove();
                     } catch (JSONException e){
                         System.out.println(e);
                     }
@@ -498,12 +495,8 @@ public class MultiplayerGameScreen implements Screen {
                     }
                 }
             }
-<<<<<<< HEAD
-        }
-
-=======
         }*/
->>>>>>> d86985711b03daeba0253c72016a0f42e212a4b2
+
 
         for (Jugador player: players){
             arrowList = player.getArrowList();
@@ -613,10 +606,6 @@ public class MultiplayerGameScreen implements Screen {
                     players.get(i).die(enemies.get(i).getDirection());
                 }
                 players.remove(players.get(i));
-<<<<<<< HEAD
-=======
-                //socket.disconnect();
->>>>>>> d86985711b03daeba0253c72016a0f42e212a4b2
                 if (players.size() == 0){
                     socket.disconnect();
                     //Enviar POST de addNewPartida
@@ -633,9 +622,8 @@ public class MultiplayerGameScreen implements Screen {
         }
 
         if (players.size() > 0){
-            spawnEnemies();
             if(host) {
-
+                spawnEnemies();
             }
         } else {
             dialog.setZIndex(150);

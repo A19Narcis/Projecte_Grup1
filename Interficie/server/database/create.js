@@ -32,12 +32,12 @@ const insertStats = async function (callback) {
   
     const statsCrossbow = new Stats({
       nombreTipo: "Crossbow",
-      velocidad: 3,
-      fuerza: 1,
+      velocidad: 5,
+      fuerza: 2,
       vida: 2,
       armadura: 0,
-      url: "http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/crossbow.png",
-
+      url: "http://127.0.0.1:5500/Projecte_Grup1/Interficie/server/uploads/crossbow.png"
+      //url: "http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/crossbow.png",
     });
 
     const validateStatsCrossbow = await Stats.findOne({ nombreTipo: statsCrossbow.nombreTipo })
@@ -53,10 +53,11 @@ const insertStats = async function (callback) {
     const statsWar = new Stats({
       nombreTipo: "Warhammer",
       velocidad: 3,
-      fuerza: 2,
-      vida: 2,
+      fuerza: 3,
+      vida: 3,
       armadura: 0,
-      url: "http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/warhammer.png"
+      url: "http://127.0.0.1:5500/Projecte_Grup1/Interficie/server/uploads/warhammer.png"
+      //url: "http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/warhammer.png"
     });
   
     const validateStatsWar = await Stats.findOne({ nombreTipo: statsWar.nombreTipo })
@@ -72,9 +73,10 @@ const insertStats = async function (callback) {
       nombreTipo: "Shield",
       velocidad: 3,
       fuerza: 1,
-      vida: 3,
-      armadura: 2,
-      url: "http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/shield.png"
+      vida: 5,
+      armadura: 3,
+      url: "http://127.0.0.1:5500/Projecte_Grup1/Interficie/server/uploads/shield.png"
+      //url: "http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/shield.png"
     });
 
     const validateStatsShield = await Stats.findOne({ nombreTipo: statsShield.nombreTipo })
@@ -93,7 +95,8 @@ const insertStats = async function (callback) {
       velocidad: 3,
       fuerza: 2,
       vida: 2,
-      url: "http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/zombie.png",
+      url: "http://127.0.0.2:5500/Projecte_Grup1/Interficie/server/uploads/zombie.png",
+      //url: "http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/zombie.png",
       puntos: 1,
       mapa: [1, 2]
     });
@@ -113,7 +116,8 @@ const insertStats = async function (callback) {
       velocidad: 3,
       fuerza: 2,
       vida: 2,
-      url: "http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/boss.png",
+      url: "http://127.0.0.2:5500/Projecte_Grup1/Interficie/server/uploads/boss.png",
+      //url: "http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/boss.png",
       puntos: 2,
       mapa: [1, 2]
     });

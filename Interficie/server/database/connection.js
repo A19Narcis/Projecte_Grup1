@@ -10,8 +10,8 @@ const puerto = 7010
 const database = "DAMA_Grup1"
 
 autoIncrement.initialize(mongoose.connection)
-const URL = 'mongodb://' + user + ':' + passwd + '@' + host + ':' + puerto + '/?tls=false&authMechanism=DEFAULT&authSource=' + database + ''
-//const URL = 'mongodb://localhost:27017/DAMA_Grup1'
+//const URL = 'mongodb://' + user + ':' + passwd + '@' + host + ':' + puerto + '/?tls=false&authMechanism=DEFAULT&authSource=' + database + ''
+const URL = 'mongodb://localhost:27017/DAMA_Grup1'
 const options = {
     dbName: 'DAMA_Grup1',
     connectTimeoutMS: 10000

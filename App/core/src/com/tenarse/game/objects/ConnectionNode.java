@@ -25,8 +25,7 @@ public class ConnectionNode {
         HttpRequestBuilder requestBuilder = new HttpRequestBuilder();
 
         //final Net.HttpRequest httpRequest = requestBuilder.newRequest().method(Net.HttpMethods.GET).url("http://admin.alumnes.inspedralbes.cat:7073/getStats").build();
-        final Net.HttpRequest httpRequest = requestBuilder.newRequest().method(Net.HttpMethods.GET).url("http://192.168.236.248:7073/getStats").build();
-        //final Net.HttpRequest httpRequest = requestBuilder.newRequest().method(Net.HttpMethods.GET).url("http://" + Settings.IP_SERVER +":" + Settings.PUERTO_PETICIONES +"/getStats").build();
+        final Net.HttpRequest httpRequest = requestBuilder.newRequest().method(Net.HttpMethods.GET).url("http://" + Settings.IP_SERVER +":" + Settings.PUERTO_PETICIONES +"/getStats").build();
 
         Gdx.net.sendHttpRequest(httpRequest, new Net.HttpResponseListener() {
             @Override
@@ -70,7 +69,7 @@ public class ConnectionNode {
 
         Net.HttpRequest httpRequest = new Net.HttpRequest(Net.HttpMethods.POST);
         //httpRequest.setUrl("http://admin.alumnes.inspedralbes.cat:7073/newPartida");
-        httpRequest.setUrl("http://192.168.236.71:7073/newPartida");
+        httpRequest.setUrl("http://" + Settings.IP_SERVER +":" + Settings.PUERTO_PETICIONES +"/newPartida");
         String data = partidaJSON.toString();
         httpRequest.setContent(data);
         httpRequest.setHeader("Content-Type", "application/json");
@@ -119,7 +118,7 @@ public class ConnectionNode {
 
         Net.HttpRequest httpRequest = new Net.HttpRequest(Net.HttpMethods.POST);
         //httpRequest.setUrl("http://admin.alumnes.inspedralbes.cat:7073/newPartida");
-        httpRequest.setUrl("http://192.168.236.71:7073/newPartida");
+        httpRequest.setUrl("http://" + Settings.IP_SERVER +":" + Settings.PUERTO_PETICIONES +"/newPartida123");
         String data = partidaJSON.toString();
         httpRequest.setContent(data);
         httpRequest.setHeader("Content-Type", "application/json");
