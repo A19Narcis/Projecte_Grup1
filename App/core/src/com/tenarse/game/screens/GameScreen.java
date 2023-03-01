@@ -142,18 +142,6 @@ public class  GameScreen implements Screen {
         jugador.setName("jugador");
         stage.addActor(jugador);
 
-
-
-        /*Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map, 1);
-        enemies.add(zombie);
-        stage.addActor(zombie);
-        Zombie zombie2 = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map, 1);
-        enemies.add(zombie2);
-        stage.addActor(zombie2);
-        Zombie zombie3 = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map, 1);
-        enemies.add(zombie3);
-        stage.addActor(zombie3);*/
-
         corazonesTexture = AssetManager.hp_player;
         armaduraTexture = AssetManager.armor_player;
 
@@ -353,6 +341,8 @@ public class  GameScreen implements Screen {
                 }
             }
         }
+
+
 
         for (Jugador player: players){
             arrowList = player.getArrowList();

@@ -113,7 +113,6 @@ public class MultiplayerGameScreen implements Screen {
 
 
     public MultiplayerGameScreen(Tenarse game, Batch prevBatch, Viewport prevViewport, final String username, int tipus, int selectedMap, String nomMapa) {
-
         try {
             socket = IO.socket("http://" + Settings.IP_SERVER +":" + Settings.PUERTO_SOCKETS +"/");
 
@@ -185,6 +184,10 @@ public class MultiplayerGameScreen implements Screen {
             }).on("newZombieInfo", new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
+<<<<<<< HEAD
+=======
+                    //System.out.println(args[0].toString());
+>>>>>>> d86985711b03daeba0253c72016a0f42e212a4b2
                     JSONArray objects = (JSONArray) args[0];
 
                     for (int i = 0; i < objects.length(); i++) {
@@ -215,9 +218,7 @@ public class MultiplayerGameScreen implements Screen {
                 @Override
                 public void call(Object... args) {
                     int newPuntos = (int) args[0];
-                    System.out.println("Nuevos puntos: " + newPuntos);
                     puntosPartida = newPuntos;
-                    System.out.println("Puntos partida: " + puntosPartida);
                     hud.getScoreLabel().setText(puntosPartida);
                 }
             }).on("player_disc", new Emitter.Listener() {
@@ -477,12 +478,17 @@ public class MultiplayerGameScreen implements Screen {
 
         renderer.setView(camera);
         renderer.render();
+
+        if (stage == null){
+            System.out.println("Stage es NULL");
+        }
+
         stage.act(delta);
 
         socket.emit("coorJugador", jugador.getPosition().x, jugador.getPosition().y, jugador.getDirection(), jugador.getVida(), jugador.getKillsJugador(), this.username);
 
 
-        for (Zombie zombie1: enemies){
+        /*for (Zombie zombie1: enemies){
             if(!zombie1.isDetected()) {
                 for (Zombie zombie2 : enemies) {
                     if (!zombie2.isDetected()) {
@@ -492,8 +498,12 @@ public class MultiplayerGameScreen implements Screen {
                     }
                 }
             }
+<<<<<<< HEAD
         }
 
+=======
+        }*/
+>>>>>>> d86985711b03daeba0253c72016a0f42e212a4b2
 
         for (Jugador player: players){
             arrowList = player.getArrowList();
@@ -603,14 +613,16 @@ public class MultiplayerGameScreen implements Screen {
                     players.get(i).die(enemies.get(i).getDirection());
                 }
                 players.remove(players.get(i));
+<<<<<<< HEAD
+=======
+                //socket.disconnect();
+>>>>>>> d86985711b03daeba0253c72016a0f42e212a4b2
                 if (players.size() == 0){
                     socket.disconnect();
                     //Enviar POST de addNewPartida
                     contadorTiempo.detener();
                     String tiempo = contadorTiempo.getTiempo();
                     ConnectionNode nodeJS = new ConnectionNode();
-
-                    System.out.println("Players FINAL: " + playersFinal.toString());
                     if (host){
                         nodeJS.addNewPartidaMulti(playersFinal, tiempo, puntosPartida, nomMapa);
                     }
@@ -621,8 +633,9 @@ public class MultiplayerGameScreen implements Screen {
         }
 
         if (players.size() > 0){
+            spawnEnemies();
             if(host) {
-                spawnEnemies();
+
             }
         } else {
             dialog.setZIndex(150);
@@ -682,7 +695,7 @@ public class MultiplayerGameScreen implements Screen {
             if (TimeUtils.nanoTime() - intervals.get(i).time > intervals.get(i).interval) {
                 Zombie zombie = new Zombie(Settings.ZOMBIE_WIDTH, Settings.ZOMBIE_HEIGHT, map, i + 1);
                 for (int j = 0; j <  AssetManager.fullStats.getJSONObject(i + 3).getJSONArray("mapa").length(); j++) {
-                    if ( AssetManager.fullStats.getJSONObject(i + 3).getJSONArray("mapa").getInt(j) == this.selectedMap+1){
+                    if ( AssetManager.fullStats.getJSONObject(i + 3).getJSONArray("mapa").getInt(j) == this.selectedMap + 1){
                         enemies.add(zombie);
                         stage.addActor(zombie);
                         zombie.toBack();
