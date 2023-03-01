@@ -25,7 +25,8 @@ public class ConnectionNode {
         HttpRequestBuilder requestBuilder = new HttpRequestBuilder();
 
         //final Net.HttpRequest httpRequest = requestBuilder.newRequest().method(Net.HttpMethods.GET).url("http://admin.alumnes.inspedralbes.cat:7073/getStats").build();
-        final Net.HttpRequest httpRequest = requestBuilder.newRequest().method(Net.HttpMethods.GET).url("http://" + Settings.IP_SERVER +":" + Settings.PUERTO_PETICIONES +"/getStats").build();
+        final Net.HttpRequest httpRequest = requestBuilder.newRequest().method(Net.HttpMethods.GET).url("http://192.168.236.248:7073/getStats").build();
+        //final Net.HttpRequest httpRequest = requestBuilder.newRequest().method(Net.HttpMethods.GET).url("http://" + Settings.IP_SERVER +":" + Settings.PUERTO_PETICIONES +"/getStats").build();
 
         Gdx.net.sendHttpRequest(httpRequest, new Net.HttpResponseListener() {
             @Override
