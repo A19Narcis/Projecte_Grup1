@@ -214,7 +214,7 @@ io.on('connection', (socketJugador) =>{
         socketJugador.broadcast.emit('new_player', { id: socketJugador.id, xPl: x, yPl: y, tipoPl: tipo, direPl: direccion, vidasPl: vidas, killsPl: kills, usernamePl: username});
     });
     
-    socketJugador.on('coorJugador', function(x, y, direccion, vidas, kills, username) {
+    socketJugador.on('coorJugador', function(x, y, direccion, vidas, kills, username, ataque) {
         for (let i = 0; i < players.length; i++) {
             if (players[i].id == socketJugador.id) {
                 players[i].x = x;
@@ -223,6 +223,7 @@ io.on('connection', (socketJugador) =>{
                 players[i].vidas = vidas
                 players[i].username = username
                 players[i].kills = kills
+                players[i].ataque = ataque
                 socketJugador.broadcast.emit('coorNuevas', players[i])
             }
         }    
@@ -250,7 +251,7 @@ io.on('connection', (socketJugador) =>{
     });
 });
 
-function player(id, x, y, tipo, direccion, vidas, kills, username){
+function player(id, x, y, tipo, direccion, vidas, kills, username, ataque){
     this.id = id;
     this.x = x;
     this.y = y;
@@ -258,7 +259,8 @@ function player(id, x, y, tipo, direccion, vidas, kills, username){
     this.direccion = direccion,
     this.vidas = vidas
     this.kills = kills,
-    this.username = username
+    this.username = username,
+    this.ataque = ataque
 }
 
 server.listen(SOCKET_PORT, () => {
@@ -266,13 +268,6 @@ server.listen(SOCKET_PORT, () => {
 });
 
 /* =========== FUNCIONS RELACIONADES MONGODB =========== */
-
-//Insertat los primeros datos del juego (Stats Jugadores, Zombies)
-app.post("/", (req, res) => {
-    insertDB.insertStats(function () {
-        res.send({ success: true })
-    });
-})
 
 //Ver las estadisticas de todos los personajes
 app.get("/getStats", (req, res) => {

@@ -3,7 +3,7 @@ package com.tenarse.game.utils;
 import com.tenarse.game.helpers.AssetManager;
 
 public class Settings {
-    public static final String IP_SERVER = "192.168.236.25";
+    public static final String IP_SERVER = "192.168.2.113";
     public static final String PUERTO_PETICIONES = "7073";
     public static final String PUERTO_SOCKETS = "7074";
 

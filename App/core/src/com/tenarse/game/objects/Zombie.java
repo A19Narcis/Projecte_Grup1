@@ -372,7 +372,7 @@ public class Zombie extends Actor{
     }
 
     public void die(int direction) {
-        if(vida <= 0) {
+        if(vida <= 0 ) {
             currentFrame = 0;
             hited = true;
             timeHited = TimeUtils.nanoTime();
@@ -419,6 +419,22 @@ public class Zombie extends Actor{
         PoolBlood pool = new PoolBlood(this.position, direction);
         getStage().addActor(pool);
         pool.toBack();
+    }
+
+    public int getVida() {
+        return vida;
+    }
+
+    public void setVida(int vida) {
+        this.vida = vida;
+    }
+
+    public boolean isAttack() {
+        return attack;
+    }
+
+    public void setAttack(boolean attack) {
+        this.attack = attack;
     }
 
     public void focus(ArrayList<Jugador> players) {
