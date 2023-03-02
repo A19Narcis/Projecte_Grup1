@@ -547,4 +547,5 @@ public class Jugador extends Actor {
     public void setUsername(String username) {
         this.username = username;
     }
+
 }

@@ -342,12 +342,14 @@ public class  GameScreen implements Screen {
             }
         }
 
-
+        for (int i = 0; i < enemies.size(); i++) {
+            enemies.get(i).focus(players);
+        }
 
         for (Jugador player: players){
             arrowList = player.getArrowList();
             for (Zombie zombie: enemies) {
-                int atacado = zombie.colisionWithPlayer(player);
+                int atacado = zombie.colisionWithPlayer();
                 if(atacado > 0){
                         for (int i = atacado; i > 0 && corazonesArray.size() > 0; i--) {
                             if(armorArray.size() > 0) {
@@ -359,7 +361,7 @@ public class  GameScreen implements Screen {
                             }
                         }
                 }
-                zombie.calculateMovement(players, delta);
+                zombie.calculateMovement(delta);
                 player.attacking(zombie, delta);
             }
         }

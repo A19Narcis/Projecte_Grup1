@@ -66,6 +66,8 @@ public class Zombie extends Actor{
 
     private int tipoZombie;
 
+    private Jugador presa;
+
     public Zombie(float x, float y, int width, int height, Map map, int tipoZombie){
         this(width, height, map, tipoZombie);
         this.position = new Vector2(x,y);
@@ -136,25 +138,13 @@ public class Zombie extends Actor{
         } while (map.searchColision(this.position.x, this.position.y));
     }
 
-    public void calculateMovement(ArrayList<Jugador> players, float delta) {
+    public void calculateMovement(float delta) {
         if (spawned && !hited) {
             float oldX = position.x;
             float oldY = position.y;
             int colisionMov;
-            int focus = -1;
-            float minDistance = Integer.MAX_VALUE;
-            for (int i = 0; i < players.size(); i++) {
-                float distanceX = Math.abs(players.get(i).position.x - this.position.x);
-                float distanceY = Math.abs(players.get(i).position.y - this.position.y);
-                float actualDistance = distanceX + distanceY;
-                if (actualDistance < minDistance) {
-                    minDistance = actualDistance;
-                    focus = i;
-                }
-            }
-            if (focus != -1) {
                 //System.out.println("FOCUS:" + players.get(focus).username+": "+colision);
-                Vector2 direction = new Vector2(players.get(focus).position.x - this.position.x, players.get(focus).position.y - this.position.y);
+                Vector2 direction = new Vector2(presa.position.x - this.position.x, presa.position.y - this.position.y);
                 direction.nor();
                 position.x += direction.x * velocity * delta;
                 if (oldX < position.x) {
@@ -182,7 +172,6 @@ public class Zombie extends Actor{
                 } else {
                     position.y -= colisionMov;
                 }
-            }
             rectanguloDeteccion.x = this.position.x;
             rectanguloDeteccion.y = this.position.y;
         }
@@ -216,12 +205,12 @@ public class Zombie extends Actor{
             zombie.setDetected(colision);
     }
 
-    public int colisionWithPlayer(Jugador jugador) {
+    public int colisionWithPlayer() {
         int damageDone = 0;
         if (!colision) {
             boolean result;
-            float calculoX = jugador.getCollisionRectPlayer().x - rectanguloDeteccion.x;
-            float calculoY = jugador.getCollisionRectPlayer().y - rectanguloDeteccion.y;
+            float calculoX = presa.getCollisionRectPlayer().x - rectanguloDeteccion.x;
+            float calculoY = presa.getCollisionRectPlayer().y - rectanguloDeteccion.y;
             if (calculoX < 17 && calculoX > -17) {
                 if (calculoY < 24 && calculoY > -24) {
                     result = true;
@@ -242,7 +231,7 @@ public class Zombie extends Actor{
                 firstAnimationAttack = true;
                 doDamage = true;
                 damageDone = damage;
-                jugador.setDamage(damage);
+                presa.setDamage(damage);
             }
         }
         return damageDone;
@@ -430,5 +419,18 @@ public class Zombie extends Actor{
         PoolBlood pool = new PoolBlood(this.position, direction);
         getStage().addActor(pool);
         pool.toBack();
+    }
+
+    public void focus(ArrayList<Jugador> players) {
+        float minDistance = Integer.MAX_VALUE;
+        for (int i = 0; i < players.size(); i++) {
+            float distanceX = Math.abs(players.get(i).position.x - this.position.x);
+            float distanceY = Math.abs(players.get(i).position.y - this.position.y);
+            float actualDistance = distanceX + distanceY;
+            if (actualDistance < minDistance) {
+                minDistance = actualDistance;
+                presa = players.get(i);
+            }
+        }
     }
 }
