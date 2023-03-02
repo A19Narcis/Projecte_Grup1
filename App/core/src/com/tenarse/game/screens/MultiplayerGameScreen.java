@@ -482,7 +482,7 @@ public class MultiplayerGameScreen implements Screen {
 
         stage.act(delta);
 
-        socket.emit("coorJugador", jugador.getPosition().x, jugador.getPosition().y, jugador.getDirection(), jugador.getVida(), jugador.getKillsJugador(), this.username);
+        socket.emit("coorJugador", jugador.getPosition().x, jugador.getPosition().y, jugador.getDirection(), jugador.getVida(), jugador.getKillsJugador(), this.username, jugador.isAttack());
 
 
         for (Zombie zombie1: enemies){
