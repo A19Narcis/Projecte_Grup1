@@ -1,5 +1,7 @@
 package com.tenarse.game.objects;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -151,6 +153,7 @@ public class Zombie extends Actor{
                 }
             }
             if (focus != -1) {
+                //System.out.println("FOCUS:" + players.get(focus).username+": "+colision);
                 Vector2 direction = new Vector2(players.get(focus).position.x - this.position.x, players.get(focus).position.y - this.position.y);
                 direction.nor();
                 position.x += direction.x * velocity * delta;
@@ -233,6 +236,7 @@ public class Zombie extends Actor{
             }
             oldColisionPlayer = result;
             colision = result;
+            //System.out.println("COLISION:" + jugador.username+": "+colision);
             if(oldColisionPlayer && TimeUtils.nanoTime() - timeColisoningPlayer > Settings.ZOMBIE_HIT_DELAY && !doDamage && vida > 0){
                 attack = true;
                 firstAnimationAttack = true;

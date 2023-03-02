@@ -516,6 +516,8 @@ public class Jugador extends Actor {
     public void setPosition(float x, float y) {
         this.position.x = x;
         this.position.y = y;
+        this.collisionRectPlayer.x = x;
+        this.collisionRectPlayer.y = y;
     }
 
     public int getFuerza() {

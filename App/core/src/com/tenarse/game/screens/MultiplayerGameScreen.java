@@ -485,7 +485,7 @@ public class MultiplayerGameScreen implements Screen {
         socket.emit("coorJugador", jugador.getPosition().x, jugador.getPosition().y, jugador.getDirection(), jugador.getVida(), jugador.getKillsJugador(), this.username);
 
 
-        /*for (Zombie zombie1: enemies){
+        for (Zombie zombie1: enemies){
             if(!zombie1.isDetected()) {
                 for (Zombie zombie2 : enemies) {
                     if (!zombie2.isDetected()) {
@@ -495,7 +495,7 @@ public class MultiplayerGameScreen implements Screen {
                     }
                 }
             }
-        }*/
+        }
 
 
         for (Jugador player: players){
@@ -513,7 +513,9 @@ public class MultiplayerGameScreen implements Screen {
                             }
                         }
                 }
-                zombie.calculateMovement(players, delta);
+                if(host) {
+                    zombie.calculateMovement(players, delta);
+                }
                 player.attacking(zombie, delta);
             }
         }
