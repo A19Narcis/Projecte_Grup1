@@ -114,6 +114,8 @@ public class  GameScreen implements Screen {
             map = new Map(AssetManager.map1);
         }else if(selectedMap == 1){
             map = new Map(AssetManager.map2);
+        } else if (selectedMap == 2){
+            map = new Map(AssetManager.map3);
         }
 
         this.nomMapa = nomMapa;

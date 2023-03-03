@@ -196,6 +196,7 @@ app.post("/getSession", async (req, res) => {
 
 /* =========== SOCKETS MULTIJUGADOR =========== */
 
+var salas = []
 var players = []
 var puntosPartida = 0
 
