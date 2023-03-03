@@ -143,7 +143,6 @@ public class Zombie extends Actor{
             float oldX = position.x;
             float oldY = position.y;
             int colisionMov;
-                //System.out.println("FOCUS:" + players.get(focus).username+": "+colision);
                 Vector2 direction = new Vector2(presa.position.x - this.position.x, presa.position.y - this.position.y);
                 direction.nor();
                 position.x += direction.x * velocity * delta;
@@ -422,6 +421,7 @@ public class Zombie extends Actor{
     }
 
     public void focus(ArrayList<Jugador> players) {
+        System.out.println(players.toString());
         float minDistance = Integer.MAX_VALUE;
         for (int i = 0; i < players.size(); i++) {
             float distanceX = Math.abs(players.get(i).position.x - this.position.x);
@@ -436,5 +436,17 @@ public class Zombie extends Actor{
 
     public Jugador getPresa() {
         return presa;
+    }
+
+    public boolean isAttack() {
+        return attack;
+    }
+
+    public void setAttack(boolean attack) {
+        this.attack = attack;
+        this.doDamage = attack;
+        if(attack) {
+            currentFrame = 0;
+        }
     }
 }

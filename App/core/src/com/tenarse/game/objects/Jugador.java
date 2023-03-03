@@ -548,4 +548,11 @@ public class Jugador extends Actor {
         this.username = username;
     }
 
+    public boolean isAttack() {
+        return attack;
+    }
+
+    public void setAttack(boolean attack) {
+        this.attack = attack;
+    }
 }
