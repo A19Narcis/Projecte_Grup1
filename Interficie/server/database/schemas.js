@@ -39,6 +39,10 @@ const statsPersonatges = new mongoose.Schema({
     mapa: {
         type: [Number],
         sparse: true
+    },
+    url2:{
+        type: String,
+        default: ""
     }
 })
 

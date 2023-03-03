@@ -33,7 +33,7 @@ async function main() {
                     fuerza: 2,
                     vida: 2,
                     armadura: 0,
-                    url: "http://192.168.2.113:5500/Projecte_Grup1/Interficie/server/uploads/crossbow.png"
+                    url: "http://192.168.236.187:5500/Projecte_Grup1/Interficie/server/uploads/crossbow.png"
                     //url: "http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/crossbow.png",
                 });
 
@@ -49,7 +49,7 @@ async function main() {
                     fuerza: 3,
                     vida: 3,
                     armadura: 0,
-                    url: "http://192.168.2.113:5500/Projecte_Grup1/Interficie/server/uploads/warhammer.png"
+                    url: "http://192.168.236.187:5500/Projecte_Grup1/Interficie/server/uploads/warhammer.png"
                     //url: "http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/warhammer.png"
                 });
 
@@ -65,7 +65,7 @@ async function main() {
                     fuerza: 1,
                     vida: 5,
                     armadura: 3,
-                    url: "http://192.168.2.113:5500/Projecte_Grup1/Interficie/server/uploads/shield.png"
+                    url: "http://192.168.236.187:5500/Projecte_Grup1/Interficie/server/uploads/shield.png"
                     //url: "http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/shield.png"
                 });
 
@@ -77,11 +77,11 @@ async function main() {
 
                 const statsZombie = new Stats({
                     nombreTipo: "Zombie",
-                    cantidadMinuto: 10,
-                    velocidad: 3,
-                    fuerza: 2,
-                    vida: 2,
-                    url: "http://192.168.2.113:5500/Projecte_Grup1/Interficie/server/uploads/zombie.png",
+                    cantidadMinuto: 20,
+                    velocidad: 1,
+                    fuerza: 1,
+                    vida: 1,
+                    url: "http://192.168.236.187:5500/Projecte_Grup1/Interficie/server/uploads/zombie.png",
                     //url: "http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/zombie.png",
                     puntos: 1,
                     mapa: [1, 2]
@@ -96,13 +96,13 @@ async function main() {
 
                 const statsBoss = new Stats({
                     nombreTipo: "Boss",
-                    cantidadMinuto: 1,
-                    velocidad: 3,
+                    cantidadMinuto: 4,
+                    velocidad: 2,
                     fuerza: 2,
                     vida: 2,
-                    url: "http://192.168.2.113:5500/Projecte_Grup1/Interficie/server/uploads/boss.png",
+                    url: "http://192.168.236.187:5500/Projecte_Grup1/Interficie/server/uploads/boss.png",
                     //url: "http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/boss.png",
-                    puntos: 2,
+                    puntos: 5,
                     mapa: [1, 2]
                 });
 

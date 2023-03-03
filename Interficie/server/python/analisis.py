@@ -14,9 +14,8 @@ PATH_IMG3 = os.path.join(current_directory, "punts.png")
 
 client = MongoClient()
 
-client = MongoClient('mongodb://a19nargomcar2:paco1234@labs.inspedralbes.cat:7010/?tls=false&authMechanism=DEFAULT&authSource=DAMA_Grup1')
-
-#client = MongoClient('mongodb://localhost:27017/DAMA_Grup1')
+#client = MongoClient('mongodb://a19nargomcar2:paco1234@labs.inspedralbes.cat:7010/?tls=false&authMechanism=DEFAULT&authSource=DAMA_Grup1')
+client = MongoClient('mongodb://localhost:27017/DAMA_Grup1')
 
 db = client['DAMA_Grup1']
 
@@ -66,9 +65,6 @@ df_rangoPuntos = pd.DataFrame(dataPuntos)
 dataTiempo = {'tiempo': df_2['tiempo']}
 
 df_tiempos = pd.DataFrame(dataTiempo);
-
-print(df_tiempos)
-
 
 #Grafico de los personajes
 df_characters.plot(kind = 'bar', x = 'nombreTipo', y=['velocidad', 'fuerza', 'vida', 'armadura'])

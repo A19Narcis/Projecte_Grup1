@@ -2,67 +2,40 @@
     {
         "jugadores":[
             {
-                "username":"Narcis",
-                "tipo":"Axe",
-                "kills":12
-            },
-            {
-                "username":"Sergi",
+                "username":"Neisis",
                 "tipo":"Warhammer",
-                "kills":32
-            },
-            {
-                "username":"Teo",
-                "tipo":"Shield",
-                "kills":28
+                "kills":10
             }
         ],
-        "tiempo":"32:11",
+        "tiempo":"0:40",
+        "puntos":14,
         "idP":0,
-        "puntos":120
+        "__v":0
     },
     {
         "jugadores":[
             {
-                "username":"Narcis",
-                "tipo":"Axe",
-                "kills":12
-            },
-            {
-                "username":"Sergi",
+                "username":"Neisis",
                 "tipo":"Warhammer",
-                "kills":32
-            },
-            {
-                "username":"Teo",
-                "tipo":"Shield",
-                "kills":28
+                "kills":1
             }
         ],
-        "tiempo":"32:11",
+        "tiempo":"0:46",
+        "puntos":2,
         "idP":1,
-        "puntos":50
+        "__v":0
     },
     {
         "jugadores":[
             {
-                "username":"Narcis",
-                "tipo":"Axe",
-                "kills":12
-            },
-            {
-                "username":"Sergi",
+                "username":"ewfwe",
                 "tipo":"Warhammer",
-                "kills":32
-            },
-            {
-                "username":"Teo",
-                "tipo":"Shield",
-                "kills":28
+                "kills":0
             }
         ],
-        "tiempo":"32:11",
+        "tiempo":"0:38",
+        "puntos":0,
         "idP":2,
-        "puntos":1200
+        "__v":0
     }
 ]

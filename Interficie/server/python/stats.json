@@ -1,50 +1,69 @@
 [
     {
         "nombreTipo":"Crossbow",
-        "velocidad":3,
-        "fuerza":1,
+        "velocidad":5,
+        "fuerza":2,
         "vida":2,
         "armadura":0.0,
-        "cantidadMinuto":null
+        "mapa":[
+
+        ],
+        "__v":0,
+        "cantidadMinuto":null,
+        "puntos":null
     },
     {
         "nombreTipo":"Warhammer",
         "velocidad":3,
-        "fuerza":2,
-        "vida":2,
+        "fuerza":3,
+        "vida":3,
         "armadura":0.0,
-        "cantidadMinuto":null
+        "mapa":[
+
+        ],
+        "__v":0,
+        "cantidadMinuto":null,
+        "puntos":null
     },
     {
         "nombreTipo":"Shield",
         "velocidad":3,
         "fuerza":1,
-        "vida":3,
-        "armadura":2.0,
-        "cantidadMinuto":null
+        "vida":5,
+        "armadura":3.0,
+        "mapa":[
+
+        ],
+        "__v":0,
+        "cantidadMinuto":null,
+        "puntos":null
     },
     {
         "nombreTipo":"Zombie",
-        "velocidad":3,
-        "fuerza":2,
-        "vida":2,
+        "velocidad":1,
+        "fuerza":1,
+        "vida":1,
         "armadura":null,
-        "cantidadMinuto":6.0
+        "mapa":[
+            1,
+            2
+        ],
+        "__v":0,
+        "cantidadMinuto":20.0,
+        "puntos":1.0
     },
     {
         "nombreTipo":"Boss",
-        "velocidad":3,
+        "velocidad":2,
         "fuerza":2,
         "vida":2,
         "armadura":null,
-        "cantidadMinuto":1.0
-    },
-    {
-        "nombreTipo":"ZombieEsqueleto6",
-        "velocidad":1,
-        "fuerza":2,
-        "vida":4,
-        "armadura":null,
-        "cantidadMinuto":1.0
+        "mapa":[
+            1,
+            2
+        ],
+        "__v":0,
+        "cantidadMinuto":4.0,
+        "puntos":5.0
     }
 ]
