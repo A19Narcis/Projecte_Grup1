@@ -372,7 +372,7 @@ public class Zombie extends Actor{
     }
 
     public void die(int direction) {
-        if(vida <= 0 ) {
+        if(vida <= 0) {
             currentFrame = 0;
             hited = true;
             timeHited = TimeUtils.nanoTime();
@@ -421,22 +421,6 @@ public class Zombie extends Actor{
         pool.toBack();
     }
 
-    public int getVida() {
-        return vida;
-    }
-
-    public void setVida(int vida) {
-        this.vida = vida;
-    }
-
-    public boolean isAttack() {
-        return attack;
-    }
-
-    public void setAttack(boolean attack) {
-        this.attack = attack;
-    }
-
     public void focus(ArrayList<Jugador> players) {
         float minDistance = Integer.MAX_VALUE;
         for (int i = 0; i < players.size(); i++) {
@@ -448,5 +432,9 @@ public class Zombie extends Actor{
                 presa = players.get(i);
             }
         }
+    }
+
+    public Jugador getPresa() {
+        return presa;
     }
 }

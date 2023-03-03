@@ -177,10 +177,6 @@ public class MultiplayerGameScreen implements Screen {
                         jugador2.setPosition((float)data.getInt("x"), (float)data.getInt("y"));
                         jugador2.setDirection(data.getInt("direccion"));
                         jugador2.setKillsJugador(data.getInt("kills"));
-                        if (!jugador2.isAttack()){
-                            //jugador2.setAttack(data.getBoolean("ataque"));
-                        }
-
                     } catch (JSONException e){
                         System.out.println(e);
                     }
@@ -189,7 +185,6 @@ public class MultiplayerGameScreen implements Screen {
                 @Override
                 public void call(Object... args) {
 
-                    /*BORRAR ZOMBIES MUERTOS*/
                     JSONArray objects = (JSONArray) args[0];
 
                     for (int i = 0; i < objects.length(); i++) {
@@ -199,7 +194,6 @@ public class MultiplayerGameScreen implements Screen {
                         enemies.remove(position);
                     }
 
-                    /*AÑADIR ZOMBIES NUEVOS*/
                     objects = (JSONArray) args[1];
                     try {
                         for (int i = 0; i < objects.length(); i++) {
@@ -211,13 +205,7 @@ public class MultiplayerGameScreen implements Screen {
                                 stage.addActor(zombie);
                                 zombie.toBack();
                             }
-                            /*MOVER ZOMBIES*/
                             enemies.get(i).setPosition((float) info.getInt("x"), (float) info.getInt("y"));
-                            /*ANIMACION ATAQUE (boolean)*/
-                            if (!enemies.get(i).isAttack()){
-                                enemies.get(i).setAttack(info.getBoolean("ataqueZ"));
-                            }
-
                         }
                     } catch (JSONException e){
                         System.out.println(e);
@@ -289,7 +277,7 @@ public class MultiplayerGameScreen implements Screen {
             players.add(jugador);
         }
 
-        socket.emit("newStatsPlayer", jugador.getPosition().x, jugador.getPosition().y, jugador.getTipusJugador(), jugador.getDirection(), jugador.getVida(), jugador.getKillsJugador(), this.username, jugador.isAttack());
+        socket.emit("newStatsPlayer", jugador.getPosition().x, jugador.getPosition().y, jugador.getTipusJugador(), jugador.getDirection(), jugador.getVida(), jugador.getKillsJugador(), this.username);
         jugador.setUsername(this.username);
         playersFinal.add(jugador);
 
@@ -494,10 +482,10 @@ public class MultiplayerGameScreen implements Screen {
 
         stage.act(delta);
 
-        socket.emit("coorJugador", jugador.getPosition().x, jugador.getPosition().y, jugador.getDirection(), jugador.getVida(), jugador.getKillsJugador(), this.username, jugador.isAttack());
+        socket.emit("coorJugador", jugador.getPosition().x, jugador.getPosition().y, jugador.getDirection(), jugador.getVida(), jugador.getKillsJugador(), this.username);
 
 
-        /*for (Zombie zombie1: enemies){
+        for (Zombie zombie1: enemies){
             if(!zombie1.isDetected()) {
                 for (Zombie zombie2 : enemies) {
                     if (!zombie2.isDetected()) {
@@ -507,18 +495,19 @@ public class MultiplayerGameScreen implements Screen {
                     }
                 }
             }
-        }*/
+        }
 
         for (int i = 0; i < enemies.size(); i++) {
             enemies.get(i).focus(players);
         }
 
-        for (Jugador player: players){
-            arrowList = player.getArrowList();
+
+        for (int i = 0; i < players.size(); i++){
+            arrowList = players.get(i).getArrowList();
             for (Zombie zombie: enemies) {
                 int atacado = zombie.colisionWithPlayer();
-                if(atacado > 0){
-                        for (int i = atacado; i > 0 && corazonesArray.size() > 0; i--) {
+                if(atacado > 0 && jugador == zombie.getPresa()){
+                        for (int j = atacado; j > 0 && corazonesArray.size() > 0; j--) {
                             if(armorArray.size() > 0) {
                                 armorArray.get(armorArray.size() - 1).remove(); //Remove actor
                                 armorArray.remove(armorArray.size() - 1); //Remove array
@@ -531,7 +520,7 @@ public class MultiplayerGameScreen implements Screen {
                 if(host) {
                     zombie.calculateMovement(delta);
                 }
-                player.attacking(zombie, delta);
+                players.get(i).attacking(zombie, delta);
             }
         }
 
@@ -609,8 +598,7 @@ public class MultiplayerGameScreen implements Screen {
                 String data = "{\"x\":" + enemies.get(i).getPosition().x
                         + ",\"direccion\":" + enemies.get(i).getDirection()
                         + ",\"y\":" + enemies.get(i).getPosition().y
-                        + ",\"tipoZombie\":" + enemies.get(i).getTipoZombie()
-                        + ",\"ataqueZ\":" + enemies.get(i).isAttack() + "}";
+                        + ",\"tipoZombie\":" + enemies.get(i).getTipoZombie() + "}";
 
                 JSONObject info = new JSONObject(data);
                 enemiesJSON.put(info);

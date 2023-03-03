@@ -373,7 +373,7 @@ public class Jugador extends Actor {
     }
 
     public void attacking(Zombie zombie, float delta) {
-        if (attack && zombie.getVida() > 0) {
+        if (attack) {
             if (tipusJugador != 1) {
                 float calculoX = zombie.getRectanguloDeteccion().x - collisionRectPlayer.x;
                 float calculoY = zombie.getRectanguloDeteccion().y - collisionRectPlayer.y;
@@ -547,16 +547,5 @@ public class Jugador extends Actor {
     public void setUsername(String username) {
         this.username = username;
     }
-
-    public boolean isAttack() {
-        return attack;
-    }
-
-    public void setAttack(boolean attack) {
-        this.attack = attack;
-        firstAnimationAttack = attack;
-        doDamage = attack;
-    }
-
 
 }
