@@ -111,6 +111,8 @@ public class MultiplayerGameScreen implements Screen {
 
     private int selectedMap;
 
+    private boolean partidaEmpezada = false;
+
 
     public MultiplayerGameScreen(Tenarse game, Batch prevBatch, Viewport prevViewport, final String username, int tipus, int selectedMap, String nomMapa) {
         try {
@@ -120,7 +122,7 @@ public class MultiplayerGameScreen implements Screen {
             socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
-                    System.out.println("Connected");
+                    //System.out.println("Connected");
                 }
             }).on("socketID", new Emitter.Listener() {
                 @Override
@@ -128,7 +130,7 @@ public class MultiplayerGameScreen implements Screen {
                     JSONObject data = (JSONObject) args[0];
                     try{
                         String id = data.getString("id");
-                        System.out.println("My socket ID: " + id);
+                        //System.out.println("My socket ID: " + id);
                     } catch (JSONException e){
                         System.out.println(e);
                     }
@@ -177,6 +179,7 @@ public class MultiplayerGameScreen implements Screen {
                         jugador2.setPosition((float)data.getInt("x"), (float)data.getInt("y"));
                         jugador2.setDirection(data.getInt("direccion"));
                         jugador2.setKillsJugador(data.getInt("kills"));
+                        System.out.println(data);
                         if (!jugador2.isAttack()){
                             jugador2.setAttack(data.getBoolean("ataque"));
                         }
@@ -230,7 +233,7 @@ public class MultiplayerGameScreen implements Screen {
                     JSONObject data = (JSONObject) args[0];
                     try{
                         String id = data.getString("id");
-                        System.out.println("Disconnected Socket: " + id);
+                        //System.out.println("Disconnected Socket: " + id);
                         players.remove(jugador2);
                         jugador2.remove();
                     } catch (JSONException e){
@@ -481,14 +484,9 @@ public class MultiplayerGameScreen implements Screen {
 
         renderer.setView(camera);
         renderer.render();
-
-        if (stage == null){
-            System.out.println("Stage es NULL");
-        }
-
         stage.act(delta);
 
-        socket.emit("coorJugador", jugador.getPosition().x, jugador.getPosition().y, jugador.getDirection(), jugador.getVida(), jugador.getKillsJugador(), this.username);
+        socket.emit("coorJugador", jugador.getPosition().x, jugador.getPosition().y, jugador.getDirection(), jugador.getVida(), jugador.getKillsJugador(), this.username, jugador.isAttack());
 
 
         /*for (Zombie zombie1: enemies){

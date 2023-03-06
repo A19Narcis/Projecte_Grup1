@@ -224,7 +224,6 @@ public class Zombie extends Actor{
             }
             oldColisionPlayer = result;
             colision = result;
-            //System.out.println("COLISION:" + jugador.username+": "+colision);
             if(oldColisionPlayer && TimeUtils.nanoTime() - timeColisoningPlayer > Settings.ZOMBIE_HIT_DELAY && !doDamage && vida > 0){
                 attack = true;
                 firstAnimationAttack = true;
@@ -421,7 +420,6 @@ public class Zombie extends Actor{
     }
 
     public void focus(ArrayList<Jugador> players) {
-        System.out.println(players.toString());
         float minDistance = Integer.MAX_VALUE;
         for (int i = 0; i < players.size(); i++) {
             float distanceX = Math.abs(players.get(i).position.x - this.position.x);

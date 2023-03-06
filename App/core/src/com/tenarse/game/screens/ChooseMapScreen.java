@@ -89,7 +89,6 @@ public class ChooseMapScreen implements Screen {
             imgMapas.get(i).setVisible(false);
         }
 
-        System.out.println(imgMapas);
         Gdx.app.log("MAPAS", ""+imgMapas);
 
         imgMapas.get(0).setVisible(true);
@@ -208,7 +207,6 @@ public class ChooseMapScreen implements Screen {
                 }
                 imgMapas.get(selectedMap).setVisible(true);
                 titolMapa.setText("MAPA "+ (selectedMap+1));
-                System.out.println(selectedMap);
                 return true;
             }
         });
@@ -226,7 +224,6 @@ public class ChooseMapScreen implements Screen {
                 }
                 imgMapas.get(selectedMap).setVisible(true);
                 titolMapa.setText("MAPA "+ (selectedMap+1));
-                System.out.println(selectedMap);
                 return true;
             }
         });

@@ -3,6 +3,7 @@ package com.tenarse.game;
 import com.badlogic.gdx.Game;
 import com.tenarse.game.helpers.AssetManager;
 import com.tenarse.game.screens.MainMenuScreen;
+import com.tenarse.game.screens.SplashScreen;
 
 
 public class Tenarse extends Game {
@@ -13,7 +14,7 @@ public class Tenarse extends Game {
 		AssetManager.load();
 
 		//Pantalla 'Inici'
-		setScreen(new MainMenuScreen(this));
+		setScreen(new SplashScreen(this));
 	}
 
 	@Override

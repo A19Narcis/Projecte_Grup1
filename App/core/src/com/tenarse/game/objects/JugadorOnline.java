@@ -30,7 +30,6 @@ public class JugadorOnline extends Jugador{
                         Arrow arrow = new Arrow(direction, position, this);
                         arrowList.add(arrow);
                         getStage().addActor(arrow);
-                        arrow.setZIndex(0);
                     }
                     if (currentFrame >= animacionAtaqueRight.length) {
                         currentFrame = 0;

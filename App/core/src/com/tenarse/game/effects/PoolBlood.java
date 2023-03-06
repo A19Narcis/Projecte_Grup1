@@ -80,10 +80,10 @@ public class PoolBlood extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha){
-        this.setZIndex(0);
+        this.toBack();
         Sprite bloodSprite = new Sprite(blood_animation[currentFrame]);
         if(direction == Settings.PRESSED_DOWN || direction == Settings.PRESSED_UP){
-            bloodSprite.rotate(90);
+            bloodSprite.setRotation(90f);
         }
         batch.draw(bloodSprite, this.position.x, this.position.y, width, height);
     }

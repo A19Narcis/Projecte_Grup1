@@ -70,7 +70,7 @@ public class AssetManager {
     public static TextureRegion bonusShield;
     public static TextureRegion bonusPoints;
 
-
+    public static Texture imgSplash;
 
     public static TextureRegion[] playerRightA_Animation, playerLeftA_Animation, playerUpA_Animation, playerDownA_Animation, playerRightA_Attack, playerLeftA_Attack, playerUpA_Attack, playerDownA_Attack;
     public static TextureRegion[] playerRightW_Animation, playerLeftW_Animation, playerUpW_Animation, playerDownW_Animation;
@@ -123,7 +123,6 @@ public class AssetManager {
             }
         }
         fullStats = nodeJs.getStatsArray();
-        System.out.println(fullStats);
 
         for (int i = 0; i < fullStats.length(); i++) {
 
@@ -192,7 +191,6 @@ public class AssetManager {
         sheetPoolBloodL1.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         sheetPoolBloodL2 = new Texture(Gdx.files.internal("bloodLeft2.png"));
         sheetPoolBloodL2.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
-
         sheetPoolBloodR1 = new Texture(Gdx.files.internal("bloodRight1.png"));
         sheetPoolBloodR1.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         sheetPoolBloodR2 = new Texture(Gdx.files.internal("bloodRight2.png"));
@@ -253,6 +251,9 @@ public class AssetManager {
             }
         }
 
+        //IMG SPLASH SCREEN
+        imgSplash = new Texture(Gdx.files.internal("splashScreen.png"));
+        
         //Imatge fons menu
         imgMainMenu = new Texture(Gdx.files.internal("mainScreen.png"));
 

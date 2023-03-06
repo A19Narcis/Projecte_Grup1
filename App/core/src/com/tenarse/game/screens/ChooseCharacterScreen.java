@@ -277,7 +277,6 @@ public class ChooseCharacterScreen implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 String username = textUsername.getText().replace(" ", "");
-                System.out.println(username.length());
                 if (username.length() > 0){
                     game.setScreen(new ChooseMapScreen(game, modeJoc, selectedCharacter, username));
                     /*

@@ -89,9 +89,9 @@ public class MainMenuScreen implements Screen {
         stage.getActors().get(6).setVisible(false);
         stage.getActors().get(7).setVisible(false);
 
-        botIniciCrossbow.desplazarAutomaticamente(0, Gdx.graphics.getHeight() * 0.163f);
-        botIniciWarHam.desplazarAutomaticamente(-200, Gdx.graphics.getHeight() * 0.163f);
-        botIniciShield.desplazarAutomaticamente(-400, Gdx.graphics.getHeight() * 0.163f);
+        botIniciCrossbow.desplazarAutomaticamente(-175, Gdx.graphics.getHeight() * 0.163f);
+        botIniciWarHam.desplazarAutomaticamente(-375, Gdx.graphics.getHeight() * 0.163f);
+        botIniciShield.desplazarAutomaticamente(-575, Gdx.graphics.getHeight() * 0.163f);
 
         if (Gdx.app.getType() == Application.ApplicationType.Android){
             jugarBTN.setPosition(Gdx.graphics.getWidth() / 2 - jugarBTN.getWidth(), Gdx.graphics.getHeight() / 2 - jugarBTN.getHeight());
