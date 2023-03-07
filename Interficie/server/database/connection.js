@@ -10,8 +10,8 @@ const puerto = 7010
 const database = "DAMA_Grup1"
 
 autoIncrement.initialize(mongoose.connection)
-//const URL = 'mongodb://' + user + ':' + passwd + '@' + host + ':' + puerto + '/?tls=false&authMechanism=DEFAULT&authSource=' + database + ''
-const URL = 'mongodb://127.0.0.1:27017/DAMA_Grup1'
+const URL = 'mongodb://' + user + ':' + passwd + '@' + host + ':' + puerto + '/?tls=false&authMechanism=DEFAULT&authSource=' + database + ''
+//const URL = 'mongodb://127.0.0.1:27017/DAMA_Grup1'
 const options = {
     dbName: 'DAMA_Grup1',
     connectTimeoutMS: 10000
@@ -33,8 +33,8 @@ async function main() {
                     fuerza: 2,
                     vida: 2,
                     armadura: 0,
-                    url: "http://192.168.2.113:5501/Projecte_Grup1/Interficie/server/uploads/crossbow.png"
-                    //url: "http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/crossbow.png",
+                    //url: "http://192.168.236.187:5500/Projecte_Grup1/Interficie/server/uploads/crossbow.png"
+                    url: "http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/crossbow.png",
                 });
 
                 const validateStatsCrossbow = await Stats.findOne({ nombreTipo: statsCrossbow.nombreTipo })
@@ -49,8 +49,8 @@ async function main() {
                     fuerza: 3,
                     vida: 3,
                     armadura: 0,
-                    url: "http://192.168.2.113:5501/Projecte_Grup1/Interficie/server/uploads/warhammer.png"
-                    //url: "http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/warhammer.png"
+                    //url: "http://192.168.236.187:5500/Projecte_Grup1/Interficie/server/uploads/warhammer.png"
+                    url: "http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/warhammer.png"
                 });
 
                 const validateStatsWar = await Stats.findOne({ nombreTipo: statsWar.nombreTipo })
@@ -65,8 +65,8 @@ async function main() {
                     fuerza: 1,
                     vida: 5,
                     armadura: 3,
-                    url: "http://192.168.2.113:5501/Projecte_Grup1/Interficie/server/uploads/shield.png"
-                    //url: "http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/shield.png"
+                    //url: "http://192.168.236.187:5500/Projecte_Grup1/Interficie/server/uploads/shield.png"
+                    url: "http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/shield.png"
                 });
 
                 const validateStatsShield = await Stats.findOne({ nombreTipo: statsShield.nombreTipo })
@@ -81,8 +81,8 @@ async function main() {
                     velocidad: 1,
                     fuerza: 1,
                     vida: 1,
-                    url: "http://192.168.2.113:5501/Projecte_Grup1/Interficie/server/uploads/zombie.png",
-                    //url: "http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/zombie.png",
+                    //url: "http://192.168.236.187:5500/Projecte_Grup1/Interficie/server/uploads/zombie.png",
+                    url: "http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/zombie.png",
                     puntos: 1,
                     mapa: [1, 2]
                 });
@@ -100,8 +100,8 @@ async function main() {
                     velocidad: 2,
                     fuerza: 2,
                     vida: 2,
-                    url: "http://192.168.2.113:5501/Projecte_Grup1/Interficie/server/uploads/boss.png",
-                    //url: "http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/boss.png",
+                    //url: "http://192.168.236.187:5500/Projecte_Grup1/Interficie/server/uploads/boss.png",
+                    url: "http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/boss.png",
                     puntos: 5,
                     mapa: [1, 2]
                 });
@@ -133,4 +133,3 @@ module.exports = {
     Partida,
     Stats
 }
-
