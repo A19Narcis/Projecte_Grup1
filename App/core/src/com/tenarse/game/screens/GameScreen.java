@@ -149,7 +149,6 @@ public class  GameScreen implements Screen {
 
         Skin skin = AssetManager.skinTextBox;
         dialog = new EndGameDialog("Fin de la partida", skin, puntosPartida, jugador.getKillsJugador(), game);
-        dialog.toFront();
 
 
 
@@ -453,6 +452,7 @@ public class  GameScreen implements Screen {
             spawnEnemies();
         } else {
             stage.addActor(dialog);
+            dialog.toFront();
             dialog.getTexto().setText("Partida terminada\n\nPuntos: " + puntosPartida + "\nKills: " + jugador.getKillsJugador());
             if (Gdx.app.getType() == Application.ApplicationType.Android) {
                 dialog.getTitleLabel().setFontScale(0.90f);
@@ -488,11 +488,11 @@ public class  GameScreen implements Screen {
 
         for (int i = 1; i <= corazonesArray.size(); i++) {
             corazonesArray.get(i-1).setPosition(camera.position.x - (camera.viewportWidth / 2 + 10) + 15 * i, camera.position.y + camera.viewportHeight / 2 - 20);
-            corazonesArray.get(i-1).setZIndex(100);
+            corazonesArray.get(i-1).toFront();
         }
         for (int i = 1; i <= armorArray.size(); i++) {
             armorArray.get(i-1).setPosition(camera.position.x - (camera.viewportWidth / 2 + 10) + 15 * i, camera.position.y + camera.viewportHeight / 2 - 33);
-            armorArray.get(i-1).setZIndex(100);
+            armorArray.get(i-1).toFront();
         }
 
 

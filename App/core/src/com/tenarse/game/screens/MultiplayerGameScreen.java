@@ -615,6 +615,7 @@ public class MultiplayerGameScreen implements Screen {
             if(players.get(i).isDead()){
                 for (int j = 0; j < enemies.size(); j++) {
                     players.get(i).die(enemies.get(i).getDirection());
+                    players.get(i).toBack();
                 }
                 players.remove(players.get(i));
                 if (players.size() == 0){
