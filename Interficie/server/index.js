@@ -11,11 +11,14 @@ const updateDB = require('./database/update')
 const deleteDB = require('./database/delete')
 const app = express();
 const http = require('http');
-const { Server } = require("socket.io"); 
+const { Server } = require("socket.io");
 const server = http.createServer(app);
 const multer = require('multer');
 const { Socket } = require('dgram');
-const upload = multer({dest: 'uploads/'});
+const upload = multer({ dest: 'uploads/' });
+const CryptoJS = require('crypto-js');
+const nodemailer = require('nodemailer');
+
 
 const io = new Server(server);
 
@@ -101,39 +104,132 @@ app.post("/statusPost", async (req, res) => {
 app.post('/upload', upload.single('image'), (req, res) => {
     const filePath = req.file.path;
     const originalName = req.file.originalname;
-    
+
 
     fs.readFile(filePath, (err, data) => {
-      if (err) throw err;
-  
-      const contentType = req.file.mimetype;
-      const fileExt = contentType.split('/')[1];
-  
-      const newFileName = `${originalName.split('.')[0]}.${fileExt}`;
-  
-      const newPath = `${__dirname}/uploads/${newFileName}`;
-      fs.unlink(filePath, (err => {}));
-      if (fs.existsSync(newPath)){
-        console.log("EXISTS");
-      }
+        if (err) throw err;
+
+        const contentType = req.file.mimetype;
+        const fileExt = contentType.split('/')[1];
+
+        const newFileName = `${originalName.split('.')[0]}.${fileExt}`;
+
+        const newPath = `${__dirname}/uploads/${newFileName}`;
+        fs.unlink(filePath, (err => { }));
+        if (fs.existsSync(newPath)) {
+            console.log("EXISTS");
+        }
 
 
-      else{
-        fs.writeFile(newPath, data, { encoding: 'binary' }, (err) => {
-            if (err) throw err;
-      
-            console.log(`File ${newFileName} uploaded successfully!`);
-      
-            res.json({ success: true });
-          });
-      }
+        else {
+            fs.writeFile(newPath, data, { encoding: 'binary' }, (err) => {
+                if (err) throw err;
+
+                console.log(`File ${newFileName} uploaded successfully!`);
+
+                res.json({ success: true });
+            });
+        }
 
     });
-  });
+});
+
+
+app.post('/uploadCropped', upload.single('croppedImage'), (req, res) => {
+    const filePath = req.file.path;
+    const originalName = req.file.originalname;
+
+
+    fs.readFile(filePath, (err, data) => {
+        if (err) throw err;
+
+        const contentType = req.file.mimetype;
+        const fileExt = contentType.split('/')[1];
+
+        const newFileName = `${originalName.split('.')[0]}.${fileExt}`;
+        console.log(filePath);
+        const newPath = `${__dirname}/uploads/cropped_${newFileName}`;
+        fs.unlink(filePath, (err => { }));
+        if (fs.existsSync(newPath)) {
+            const newPath = `${__dirname}/uploads/cropped_${newFileName}`;
+        }
+
+
+        else {
+            fs.writeFile(newPath, data, { encoding: 'binary' }, (err) => {
+                if (err) throw err;
+
+                console.log(`File ${newFileName} uploaded successfully!`);
+
+                res.json({ success: true });
+            });
+        }
+
+    });
+});
+
 
 app.listen(PORT, () => {
     console.log("Server Running [" + PORT + "]");
 });
+
+
+
+app.post("/sendEmail", (req, res) => {
+    console.log(req.body.values);
+    let dataN = fs.readFileSync('./copia.json', 'utf8');
+    let obj = JSON.parse(dataN);
+    for(const el of obj.admins){
+        if(el.username === req.body.values[0])
+        {
+            console.log("IGUALES")
+            res.send("NO")
+            res.end();
+            return;
+        }
+    }
+     var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'baldhead.oficial@gmail.com',
+            pass: 'zawzvjjxswcjrfxs'
+        }
+    });
+
+    let html2 = fs.readFileSync('../../../emailTemplate.html', 'utf8');
+
+    let mailOptions = {
+        from: 'baldhead.oficial@gmail.com', 
+        to: req.body.values[0], 
+        subject: 'REGISTRADO',
+        html: html2
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            return console.log(error);
+        }
+        console.log('Message sent: %s', info.messageId);
+        let passwd = CryptoJS.SHA256(req.body.values[1]).toString();
+        let newObj = {
+            "username": req.body.values[0],
+            "password": passwd,
+            "isAuth": true,
+            "rol": "user"
+          };
+          
+        // push the new object to the `admins` array
+        obj.admins.push(newObj);
+
+        fs.writeFile("./copia.json", JSON.stringify(obj), (err) => {
+            console.log(err);
+            if(!err)
+                res.json({ success: true });
+
+        });
+    });
+});
+
 
 function checkUserFromJson(username, passwd) {
     let ret = {
@@ -141,9 +237,11 @@ function checkUserFromJson(username, passwd) {
     };
     console.log("username => " + username);
     console.log("password => " + passwd);
+    passwd = CryptoJS.SHA256(passwd).toString();
+    console.log("after hash => " + passwd);
     var prom = new Promise((resolve, reject) => {
         //llegim l'array de admins
-        fs.readFile(path.join(__dirname, "admins.json"), (err, data) => {
+        fs.readFile(path.join(__dirname, "copia.json"), (err, data) => {
             if (err) {
                 console.log(err);
             }
@@ -151,6 +249,7 @@ function checkUserFromJson(username, passwd) {
             console.log(data);
             //fins es una funció d'arrays en javascript.
             user = dades.admins.find(user => {
+                console.log("USER" + user.username);
                 if (user.username == username && user.password == passwd) {
                     return true;
                 }
@@ -196,26 +295,25 @@ app.post("/getSession", async (req, res) => {
 
 /* =========== SOCKETS MULTIJUGADOR =========== */
 
-var salas = []
 var players = []
 var puntosPartida = 0
 
 //Controlar les connexions i desconnexions
-io.on('connection', (socketJugador) =>{
+io.on('connection', (socketJugador) => {
 
     if (players.length == 0) {
         puntosPartida = 0;
     }
-    
+
     console.log("Jugador conectado");
     socketJugador.emit('socketID', { id: socketJugador.id });
     socketJugador.emit('getPlayers', players);
-    socketJugador.on("newStatsPlayer", function(x, y, tipo, direccion, vidas, kills, username) {
+    socketJugador.on("newStatsPlayer", function (x, y, tipo, direccion, vidas, kills, username) {
         players.push(new player(socketJugador.id, x, y, tipo, direccion, vidas, kills, username));
-        socketJugador.broadcast.emit('new_player', { id: socketJugador.id, xPl: x, yPl: y, tipoPl: tipo, direPl: direccion, vidasPl: vidas, killsPl: kills, usernamePl: username});
+        socketJugador.broadcast.emit('new_player', { id: socketJugador.id, xPl: x, yPl: y, tipoPl: tipo, direPl: direccion, vidasPl: vidas, killsPl: kills, usernamePl: username });
     });
-    
-    socketJugador.on('coorJugador', function(x, y, direccion, vidas, kills, username, ataque) {
+
+    socketJugador.on('coorJugador', function (x, y, direccion, vidas, kills, username) {
         for (let i = 0; i < players.length; i++) {
             if (players[i].id == socketJugador.id) {
                 players[i].x = x;
@@ -224,44 +322,42 @@ io.on('connection', (socketJugador) =>{
                 players[i].vidas = vidas
                 players[i].username = username
                 players[i].kills = kills
-                players[i].ataque = ataque
                 socketJugador.broadcast.emit('coorNuevas', players[i])
             }
-        }    
+        }
     })
 
-    socketJugador.on('updatePuntos', function(puntosKill) {
+    socketJugador.on('updatePuntos', function (puntosKill) {
         puntosPartida = puntosPartida + puntosKill;
         socketJugador.broadcast.emit('newPuntosPartida', puntosPartida)
     })
 
-    socketJugador.on('zombieInfo', function(deadEnemies, enemies) {
+    socketJugador.on('zombieInfo', function (deadEnemies, enemies) {
         socketJugador.broadcast.emit('newZombieInfo', deadEnemies, enemies)
     })
 
 
-    socketJugador.on('disconnect', function(){
+    socketJugador.on('disconnect', function () {
         console.log("Jugador desconectado");
         socketJugador.broadcast.emit('player_disc', { id: socketJugador.id });
         for (let i = 0; i < players.length; i++) {
             if (players[i].id == socketJugador.id) {
                 players.splice(i, 1);
             }
-            
+
         }
     });
 });
 
-function player(id, x, y, tipo, direccion, vidas, kills, username, ataque){
+function player(id, x, y, tipo, direccion, vidas, kills, username) {
     this.id = id;
     this.x = x;
     this.y = y;
     this.tipo = tipo,
-    this.direccion = direccion,
-    this.vidas = vidas
+        this.direccion = direccion,
+        this.vidas = vidas
     this.kills = kills,
-    this.username = username,
-    this.ataque = ataque
+        this.username = username
 }
 
 server.listen(SOCKET_PORT, () => {
@@ -269,6 +365,13 @@ server.listen(SOCKET_PORT, () => {
 });
 
 /* =========== FUNCIONS RELACIONADES MONGODB =========== */
+
+//Insertat los primeros datos del juego (Stats Jugadores, Zombies)
+app.post("/", (req, res) => {
+    insertDB.insertStats(function () {
+        res.send({ success: true })
+    });
+})
 
 //Ver las estadisticas de todos los personajes
 app.get("/getStats", (req, res) => {
@@ -286,7 +389,7 @@ app.post("/getStats2", (req, res) => {
 //Actualiza las stats de un tipo de personaje segun el tipo -> req.body.values[0]
 app.post("/updateStats", (req, res) => {
     console.log(req.body.values);
-   
+
     if (!isNaN(req.body.values[0]))
         return;
     var type = req.body.values[7];
@@ -299,7 +402,7 @@ app.post("/updateStats", (req, res) => {
             fuerza: req.body.values[4],
             vida: req.body.values[5],
             armadura: req.body.values[6],
-            
+
         }
     } else {
         newStats = {
@@ -359,7 +462,8 @@ app.get("/getStatsPlayer/:nombreTipo", (req, res) => {
 app.post("/delete", (req, res) => {
     console.log(req.body.values[2]);
     var deletedType = req.body.values[2];
-    fs.unlink(req.body.values[3], (err => {}));
+    fs.unlink(req.body.values[3], (err => { }));
+    fs.unlink(req.body.values[4], (err => { }));
 
     deleteDB.removeStatsFrom(deletedType, (callback) => {
         res.send(callback)

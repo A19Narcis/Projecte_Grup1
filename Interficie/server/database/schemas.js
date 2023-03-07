@@ -40,9 +40,8 @@ const statsPersonatges = new mongoose.Schema({
         type: [Number],
         sparse: true
     },
-    url2:{
-        type: String,
-        default: ""
+    url2: {
+        type: String
     }
 })
 

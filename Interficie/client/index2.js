@@ -25,6 +25,9 @@ var vue_app = new Vue({
         new_puntos: 0,
         done: 0,
         color: '',
+        register: 0,
+        snackbar: false,
+        timeout: 2000,
         canvas: null,
         canvas2: null,
         arrNom: [],
@@ -34,6 +37,8 @@ var vue_app = new Vue({
         arrVelocidad: [],
         zomArrNom: [],
         zomArrFuerza: [],
+        email_new: '',
+        password_new: '',
         zomArrVida: [],
         zomArrArmadura: [],
         zomArrVelocidad: [],
@@ -45,11 +50,17 @@ var vue_app = new Vue({
         arrBonus: [],
         map1: 0,
         map2: 0,
+        map3: 0,
         rol: '',
         infoDialog: false,
         file_name: '',
-        counting: 0
-
+        counting: 0,
+        imgDialog: false,
+        imgDialog2: false,
+        imgDialog3: false,
+        idImg: 0,
+        new_name: '',
+        mess: null
 
     },
     mounted() {
@@ -60,10 +71,12 @@ var vue_app = new Vue({
     methods: {
         createCanv: function () {
             var canvas = document.getElementById('canvas')
+            var ctx = canvas.getContext('2d');
             //hay que llamar al get stats como sea, usaba dos funciones.
             canvas.width = 800;
             canvas.height = 600;
-            var chart = new Chart(canvas, {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            var chart = new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: this.arrNom,
@@ -114,11 +127,15 @@ var vue_app = new Vue({
             });
 
 
-            var canvas2 = document.getElementById('canvas2')
+            var canvas2 = document.getElementById('canvas2');
+            var ctx2 = canvas2.getContext('2d');
+
             //hay que llamar al get stats como sea, usaba dos funciones.
             canvas2.width = 800;
             canvas2.height = 600;
-            var chart2 = new Chart(canvas2, {
+            ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
+
+            var chart2 = new Chart(ctx2, {
                 type: 'bar',
                 data: {
                     labels: this.zomArrNom,
@@ -160,11 +177,15 @@ var vue_app = new Vue({
             });
 
             var canvas3 = document.getElementById('canvas3')
+            var ctx3 = canvas3.getContext('2d');
+
             //hay que llamar al get stats como sea, usaba dos funciones.
             canvas3.width = 800;
             canvas3.height = 600;
+            ctx3.clearRect(0, 0, canvas3.width, canvas3.height);
+
             var arrNoms = ['0-1000', '1000-2000', '2000-3000', '3000-4000', '>5000'];
-            var chart3 = new Chart(canvas3, {
+            var chart3 = new Chart(ctx3, {
                 type: 'bar',
                 data: {
                     labels: arrNoms,
@@ -309,7 +330,7 @@ var vue_app = new Vue({
                 this.pass = ''
                 return;
             }
-            fetch("http://192.168.2.113:7073/authPost/",
+            fetch("http://admin.alumnes.inspedralbes.cat:7073/authPost/",
                 {
                     method: "POST",
                     headers: {
@@ -335,8 +356,6 @@ var vue_app = new Vue({
                         console.log("isAuth peti" + data.isAuth);
                         console.log("userPeticion" + data.username);
                         console.log("mine-" + this.username);
-
-
                         setTimeout(() => {
                             this.ready = 1;
                         }, 4000);
@@ -354,23 +373,55 @@ var vue_app = new Vue({
                 }
             );
         },
+
+        registrar: function(){
+            this.info.values = [];
+            this.info.values.push(this.email_new);
+            this.info.values.push(this.password_new);
+            fetch("http://admin.alumnes.inspedralbes.cat:7073/sendEmail/",
+                {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                    credentials: "include",
+                    body: JSON.stringify(this.info),
+                    mode: "cors",
+                    cache: "default"
+                }
+            ).then(
+                (response) => {
+                    return (response.json());
+                }
+            ).then(
+                (data) => {
+                    this.mess = "REGISTRO COMPLETO, INICIA SESION Y DISFRUTA";
+                }
+            ).catch(
+                (error) => {
+                    this.mess = "NO HAS PODIDO REGISTRARTE, HA OCURRIDO UN ERROR";
+                    console.log(error);
+                }
+            );
+        },
         uploadImage: function () {
             const fileInput = document.getElementById('file-input');
             const file = fileInput.files[0];
             this.file_name = file.name;
-            this.url = 'http://192.168.2.113/Projecte_Grup1/Interficie/server/uploads/' + file.name;
+            this.url = 'http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/' + file.name;
             const formData = new FormData();
             formData.append('image', file);
 
-            fetch('http://192.168.2.113:7073/upload', {
+            fetch('http://admin.alumnes.inspedralbes.cat:7073/upload', {
                 method: 'POST',
                 body: formData
             })
                 .then(response => {
                     if (response.ok) {
                         console.log('Image uploaded successfully!');
+                        document.getElementById('file-input').value = "";
                         this.uploadCropped();
-                        this.dialog_2 = true;
 
                     } else {
                         console.error('Failed to upload image!');
@@ -410,7 +461,7 @@ var vue_app = new Vue({
                     formData.append("croppedImage", file);
                     
                     // send the FormData object to the server using Fetch API
-                    fetch("http://192.168.2.113:7073/uploadCropped", {
+                    fetch("http://admin.alumnes.inspedralbes.cat:7073/uploadCropped", {
                       method: "POST",
                       body: formData
                     })
@@ -426,7 +477,7 @@ var vue_app = new Vue({
 
         getSession: function () {
             console.log("SSSS" + this.info.values[0])
-            fetch("http://192.168.2.113:7073/getSession/",
+            fetch("http://admin.alumnes.inspedralbes.cat:7073/getSession/",
                 {
                     method: "POST",
                     headers: {
@@ -467,7 +518,7 @@ var vue_app = new Vue({
         },
         status: function () {
 
-            fetch("http://192.168.2.113:7073/statusPost/",
+            fetch("http://admin.alumnes.inspedralbes.cat:7073/statusPost/",
                 {
                     method: "POST",
                     headers: {
@@ -495,7 +546,7 @@ var vue_app = new Vue({
         },
 
         getStats: function () {
-            fetch("http://192.168.2.113:7073/getStats2/",
+            fetch("http://admin.alumnes.inspedralbes.cat:7073/getStats2/",
                 {
                     method: "POST",
                     headers: {
@@ -516,28 +567,28 @@ var vue_app = new Vue({
                     this.arrStats.forEach(el =>{
                         var splitted = el.url.split('/');
                         var new_url = "cropped_" + splitted[7];
-                        el.url2 = "http://192.168.2.113:5501/Projecte_Grup1/Interficie/server/uploads/"+new_url;
+                        el.url2 = "http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/"+new_url;
                     }); 
                     this.arrLen = data.length;
                     this.arrBonus = [{
                         'nomBonus': 'damage',
-                        'img': 'http://192.168.2.113:5501/Projecte_Grup1/Interficie/server/uploads/damageBonus.png',
+                        'img': 'http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/damageBonus.png',
                         'descr': 'Te da un punto más de daño durante 10 segundos'
                     }, {
                         'nomBonus': 'live',
-                        'img': 'http://192.168.2.113:5501/Projecte_Grup1/Interficie/server/uploads/liveBonus.png',
+                        'img': 'http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/liveBonus.png',
                         'descr': 'Te da una vida más'
                     }, {
                         'nomBonus': 'points',
-                        'img': 'http://192.168.2.113:5501/Projecte_Grup1/Interficie/server/uploads/pointsBonus.png',
+                        'img': 'http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/pointsBonus.png',
                         'descr': 'Te da un x2 en cada kill que hagas durante 10 segundos'
                     }, {
                         'nomBonus': 'velocity',
-                        'img': 'http://192.168.2.113:5501/Projecte_Grup1/Interficie/server/uploads/velocityBonus.png',
+                        'img': 'http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/velocityBonus.png',
                         'descr': 'Te sube un punto de velocidad durante 10 segundos'
                     }, {
                         'nomBonus': 'shield',
-                        'img': 'http://192.168.2.113:5501/Projecte_Grup1/Interficie/server/uploads/shieldBonus.png',
+                        'img': 'http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/shieldBonus.png',
                         'descr': 'Te da una armadura más'
                     }];
                     console.log(this.arrStats);
@@ -552,7 +603,7 @@ var vue_app = new Vue({
         },
 
         getPartidas: function () {
-            fetch("http://192.168.2.113:7073/getPartidas2/",
+            fetch("http://admin.alumnes.inspedralbes.cat:7073/getPartidas2/",
                 {
                     method: "POST",
                     headers: {
@@ -580,7 +631,7 @@ var vue_app = new Vue({
             );
         },
 
-        updateStats: function (id, vel, fuerza, vida, armadura, nombreTipo, puntos, check1, check2) {
+        updateStats: function (id, vel, fuerza, vida, armadura, nombreTipo, puntos, check1, check2, check3) {
             console.log(check1, check2);
             var maps = [];
             if (check1 != false) { maps.push(1); console.log("ES FALSE") }
@@ -589,6 +640,9 @@ var vue_app = new Vue({
             if (check2 != false) { maps.push(2); console.log("ES FALSE") }
             else
                 maps.push(0);
+            if (check3 != false) { maps.push(3); console.log("ES FALSE") }
+                else
+                    maps.push(0);
             console.log(maps);
 
             /* console.log(id);
@@ -604,7 +658,7 @@ var vue_app = new Vue({
             this.info.values.push(nombreTipo);
             this.info.values.push(puntos);
             this.info.values.push(maps);
-            fetch("http://192.168.2.113:7073/updateStats/",
+            fetch("http://admin.alumnes.inspedralbes.cat:7073/updateStats/",
                 {
                     method: "POST",
                     headers: {
@@ -638,9 +692,13 @@ var vue_app = new Vue({
             urlSegments = urlSegments.slice(-2);
             urlSegments = urlSegments.join("/")
             var del = '../server/' + urlSegments;
+            var cropp = urlSegments.split("/");
+            var del_cropp = '../server/uploads/cropped_' + cropp[1];
             this.info.values.push(del);
+            console.log(del_cropp);
+            this.info.values.push(del_cropp);
 
-            fetch("http://192.168.2.113:7073/delete/",
+            fetch("http://admin.alumnes.inspedralbes.cat:7073/delete/",
                 {
                     method: "POST",
                     headers: {
@@ -671,7 +729,7 @@ var vue_app = new Vue({
             );
         },
 
-        addNewZombie: function (velocidad, fuerza, vida, cantidad, puntos) {
+        addNewZombie: function (newNombre ,velocidad, fuerza, vida, cantidad, puntos) {
             var maps = [];
             if (this.map1 != null)
                 maps.push(parseInt(this.map1));
@@ -679,11 +737,13 @@ var vue_app = new Vue({
                 maps.push(0);
             if (this.map2 != null)
                 maps.push(parseInt(this.map2));
+            if (this.map3 != null)
+                maps.push(parseInt(this.map3));
             else
                 maps.push(0);
             console.log(maps);
-            var nombreTipo = 'zombie_new';
-            nombreTipo = nombreTipo + (this.arrLen + 1);
+            var nombreTipo = newNombre;
+            nombreTipo = nombreTipo;
             console.log(nombreTipo);
             console.log(velocidad);
             console.log(fuerza);
@@ -697,7 +757,7 @@ var vue_app = new Vue({
             this.info.values.push(this.url);
             this.info.values.push(puntos);
             this.info.values.push(maps);
-            fetch("http://192.168.2.113:7073/addNewZombie/",
+            fetch("http://admin.alumnes.inspedralbes.cat:7073/addNewZombie/",
                 {
                     method: "POST",
                     headers: {
@@ -718,6 +778,16 @@ var vue_app = new Vue({
                     console.log(data);
                     this.getStats();
                     this.info.values = this.info.values.slice(0, 2);
+                    this.new_velocidad = null
+                    this.new_name = null
+                    this.new_fuerza = null
+                    this.new_cantidad = null
+                    this.new_puntos = null
+                    this.new_vida = null
+                    this.maps = []
+                    this.map1 = 0
+                    this.map2 = 0
+                    this.map3 = 0
                 }
             ).catch(
                 (error) => {
@@ -760,3 +830,4 @@ var vue_app = new Vue({
 
     }
 });
+

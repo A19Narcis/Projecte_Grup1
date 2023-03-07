@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./Projecte_Grup1/Interficie/client/style2.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.10/dist/vue.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900">
+    <link rel="stylesheet" href="https://unpkg.com/@mdi/font@6.x/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Material+Icons">
+    <link rel="stylesheet" href="https://unpkg.com/vuetify@2.6.10/dist/vuetify.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.10/dist/vue.js"></script>
+    <script src="https://unpkg.com/babel-polyfill/dist/polyfill.min.js"></script>
+    <script src="https://unpkg.com/vuetify@2.6.10/dist/vuetify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-confetti@0.9.0/dist/js-confetti.browser.js"></script>
+    <link href="https://fonts.cdnfonts.com/css/bebas-neue" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.6.0/gsap.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.6.0/ScrollTrigger.js"></script>
+    <script src="https://unpkg.com/split-type"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <title>Project</title>
+</head>
+
+<body>
+    <header id="header">
+        <h1 id="title">TENARSE</h1>
+        <h2 id="subt">BALDHEAD</h2>
+    </header>
+    <v-app id="app">
+        <!--LOGIN-->
+        <v-container fill-height v-show="auth == undefined && register == 0">
+            <v-row justify="center" align-items="center">
+                <v-col cols="10" sm="auto">
+                    <v-card width="448" height="550" elevation="8" outlined color="grey lighten-2">
+                        <v-card-text>
+                            <v-card-title
+                                style="text-shadow: 0px 35px 1px #000000; margin-top: 30px; font-size: 3rem; font-weight: bold; color: red;font-family: 'Bebas Neue'; ">
+                                LOGIN</v-card-title>
+                            <v-text-field clearable ref="inputRef2" id="user" v-model="username" color="red"
+                                style="margin-top: 80px;" outlined label="User" append-icon="mdi-account">
+                            </v-text-field>
+                            <v-text-field clearable ref="inputRef" id="pass" color="red" v-model="pass"
+                                style="margin-top: 20px; margin-bottom: 20px;" outlined
+                                :type="showPassword ? 'text' : 'password'" label="Password"
+                                :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                                @click:append="showPassword = !showPassword" @keyup.enter="getAuth">
+                            </v-text-field>
+                            <v-row justify="center" align-items="center">
+                                <v-btn @click="getAuth" color="red">Sign In</v-btn>
+                            </v-row>
+                            <br><br>
+                            <v-row justify="center" align-items="center">
+
+                                <v-card-text style="text-align:center;">¿No tienes cuenta?</v-card-text>
+                                <button class="styleBtn" @click="register = 1">Registro</button>
+                            </v-row>
+                        </v-card-text>
+                    </v-card>
+                </v-col>
+            </v-row>
+        </v-container>
+
+        <v-container fill-height v-show="register == 1 && ready == 0">
+            <v-row justify="center" align-items="center">
+                <v-col cols="10" sm="auto">
+                    <v-card width="448" height="550" elevation="8" outlined color="grey lighten-2">
+                        <v-card-text>
+                            <v-card-title
+                                style="text-shadow: 0px 35px 1px #000000; margin-top: 30px; font-size: 3rem; font-weight: bold; color: red;font-family: 'Bebas Neue'; ">
+                                Registro</v-card-title>
+                            <v-text-field clearable ref="inputRef2" id="user_new" v-model="email_new" color="red"
+                                style="margin-top: 80px;" outlined label="Email" append-icon="mdi-account">
+                            </v-text-field>
+                            <v-text-field clearable ref="inputRef" id="pass_new" color="red" v-model="password_new"
+                                style="margin-top: 20px; margin-bottom: 20px;" outlined
+                                :type="showPassword ? 'text' : 'password'" label="Password"
+                                :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                                @click:append="showPassword = !showPassword"
+                                @keyup.enter="registrar(), register = 0, snackbar = true">
+                            </v-text-field>
+                            <v-row justify="center" align-items="center">
+                                <v-btn @click="registrar(), register=0, snackbar = true" color="red">Registro</v-btn>
+                            </v-row>
+                            <br><br>
+                            <v-row justify="center" align-items="center">
+                                <v-card-text style="text-align:center;">Ya tienes cuenta?</v-card-text>
+                                <button class="styleBtn" @click="register = 0">Inicia Sesión</button>
+                            </v-row>
+                        </v-card-text>
+                    </v-card>
+                    <v-snackbar v-model="snackbar" :timeout="timeout">
+                        {{snack_mess}}
+                        <template v-slot:actions>
+                            <v-btn color="blue" variant="text" @click="snackbar = false">
+                                Close
+                            </v-btn>
+                        </template>
+                    </v-snackbar>
+                </v-col>
+            </v-row>
+        </v-container>
+        <!--LOADING PAGE-->
+        <v-container fill-height v-if="auth == true && userAuth == username && ready == 0">
+            <div class="Character">
+            </div>
+            <v-row justify="center" align-items="center">
+                <div class="progress">
+                    <div class="progress__fill"></div>
+                </div>
+            </v-row>
+
+        </v-container>
+        <!--CHARACTERS ADMINS-->
+
+        <div v-show="auth == true && userAuth == username && ready == 1 && rol == 'admin'">
+            <v-container fill-height fluid>
+                <v-row justify="center">
+                    <h3>Characters</h3>
+                </v-row>
+                <v-col style="width: 100%;">
+                    <v-row justify="center">
+                        <v-card v-for="(stat, i) in arrStats" :key="i" width="300px" height="380px" elevation="8"
+                            class="ml-10 mb-10" v-if="i < 3" outlined color="grey lighten-1">
+
+                            <v-img v-if="stat.nombreTipo != `zombie_new${i+1}`" height="272px">
+                                <div :class="`stat-${i}`"></div>
+                            </v-img>
+                            <v-img :src="stat.url" v-if="stat.nombreTipo == `zombie_new${i+1}`" height="272px">
+                            </v-img>
+
+                            <v-card-title v-if="i != 4" class="pb-0"
+                                style="font-family: Bebas Neue; text-transform: uppercase; font-size: 2rem; font-weight: bold;">
+                                {{stat.nombreTipo}}
+                            </v-card-title>
+                            <v-card-title v-if="i == 4" class="pb-0"
+                                style="font-family: Bebas Neue; text-transform: uppercase; font-size: 2rem; font-weight: bold;">
+                                Zombie {{stat.nombreTipo}}
+                            </v-card-title>
+                            <v-divider></v-divider>
+                            <br>
+                            <v-row justify="center" align-items="center">
+                                <v-btn @click="id = `${i}`, dialog_1 = true" width="280px" color="red" dark>
+                                    SELECT
+                                </v-btn>
+                            </v-row>
+                            <v-dialog v-model="dialog_1" width="500" :retain-focus="false">
+                                <v-card v-for="(statD, d) in arrStats" :key="d" v-if="d == id">
+                                    <h2 class="dialog_title">
+                                        Configuration
+                                    </h2>
+                                    <v-card-text>
+                                        <h5 class="dialog_vel">Velocidad</h5>
+                                        <v-slider color="red" v-model="statD.velocidad" max="5" min="1" step="1"
+                                            thumb-label ticks></v-slider>
+                                        <v-divider></v-divider>
+                                        <br>
+                                        <h5 class="dialog_vel">Fuerza</h5>
+                                        <v-slider color="red" v-model="statD.fuerza" max="5" min="1" step="1"
+                                            thumb-label ticks>
+                                        </v-slider>
+                                        <v-divider></v-divider>
+                                        <br>
+                                        <h5 class="dialog_vel">Vida</h5>
+                                        <v-rating empty-icon="mdi-heart" full-icon="mdi-heart" half-icon="mdi-heart"
+                                            hover length="5" size="50" color="red" v-model="statD.vida"></v-rating>
+                                        <v-divider></v-divider>
+                                        <br>
+                                        <h5 v-if="id < 2" class="dialog_vel">Armadura</h5>
+                                        <h5 v-if="id > 2" class="dialog_vel">Cantidad x Mins</h5>
+                                        <v-slider v-if="id != 2 && id < 2" color="red" v-model="statD.armadura" disabled
+                                            thumb-label ticks></v-slider>
+                                        <v-rating empty-icon="mdi-shield" full-icon="mdi-shield" half-icon="mdi-shield"
+                                            hover length="5" v-if="id == 2" size="50" color="blue-grey darken-3"
+                                            v-model="statD.armadura" value="1"></v-rating>
+                                        <v-slider v-if="id > 2" color="red" v-model="statD.cantidadMinuto" max="60"
+                                            min="1" step="1" thumb-label ticks></v-slider>
+                                        <h5 v-if="id > 2" class="dialog_vel">Puntos x Kill</h5>
+                                        <v-slider v-if="id > 2" color="red" v-model="statD.puntos" max="10" min="1"
+                                            step="1" thumb-label ticks></v-slider>
+
+                                    </v-card-text>
+                                    <v-divider></v-divider>
+                                    <v-card-actions>
+                                        <v-spacer></v-spacer>
+                                        <v-btn v-if="id <= 2" color="red" text
+                                            @click="dialog_1 = false, updateStats(id, statD.velocidad, statD.fuerza, statD.vida, statD.armadura, statD.nombreTipo, statD.puntos)">
+                                            Save
+                                        </v-btn>
+                                        <v-btn v-if="id > 2" color="red" text
+                                            @click="dialog_1 = false, updateStats(id, statD.velocidad, statD.fuerza, statD.vida, statD.cantidadMinuto, statD.nombreTipo, statD.puntos)">
+                                            Save
+                                        </v-btn>
+                                        <v-btn v-if="id > 4" color="red" text
+                                            @click="dialog_1 = false, deleteZom(statD.nombreTipo, statD.url)">
+                                            Delete
+                                        </v-btn>
+                                    </v-card-actions>
+                                </v-card>
+                            </v-dialog>
+                        </v-card>
+                    </v-row>
+                </v-col>
+        </div>
+
+
+        <!--ZOMBIES ADMINS-->
+
+        <div v-show="auth == true && userAuth == username && ready == 1 && rol == 'admin'">
+            <v-container fill-height fluid>
+                <v-row justify="center">
+                    <h3>Zombies</h3>
+                </v-row>
+                <v-col style="width: 100%;">
+                    <v-row justify="center">
+                        <v-card v-for="(stat, n) in arrStats" :key="n" width="300px" height="380px" elevation="8"
+                            class="ml-10 mb-10" v-if="n > 2" outlined color="grey lighten-1">
+
+                            <v-img v-if="stat.nombreTipo != `zombie_new${n+1}`" height="272px">
+                                <div :class="`stat-${n}`"></div>
+                            </v-img>
+                            <v-img style="transform: scale(1.85);" :src="stat.url2"
+                                v-if="stat.nombreTipo == `zombie_new${n+1}`" height="272px">
+                            </v-img>
+
+                            <v-card-title v-if="n != 4" class="pb-0"
+                                style="font-family: Bebas Neue; text-transform: uppercase; font-size: 2rem; font-weight: bold;">
+                                {{stat.nombreTipo}}
+                            </v-card-title>
+                            <v-card-title v-if="n == 4" class="pb-0"
+                                style="font-family: Bebas Neue; text-transform: uppercase; font-size: 2rem; font-weight: bold;">
+                                Zombie {{stat.nombreTipo}}
+                            </v-card-title>
+                            <v-divider></v-divider>
+                            <br>
+                            <v-row justify="center" align-items="center">
+                                <v-btn @click="id = `${n}`, dialog_1 = true" width="280px" color="red" dark>
+                                    SELECT
+                                </v-btn>
+                            </v-row>
+                            <v-dialog v-model="dialog_1" width="500" :retain-focus="false">
+                                <v-card v-for="(statD, d) in arrStats" :key="d" v-if="d == id">
+                                    <h2 class="dialog_title">
+                                        Configuration
+                                    </h2>
+                                    <v-card-text>
+                                        <h5 class="dialog_vel">Velocidad</h5>
+                                        <v-slider color="red" v-model="statD.velocidad" max="5" min="1" step="1"
+                                            thumb-label ticks></v-slider>
+                                        <v-divider></v-divider>
+                                        <br>
+                                        <h5 class="dialog_vel">Fuerza</h5>
+                                        <v-slider color="red" v-model="statD.fuerza" max="5" min="1" step="1"
+                                            thumb-label ticks>
+                                        </v-slider>
+                                        <v-divider></v-divider>
+                                        <br>
+                                        <h5 class="dialog_vel">Vida</h5>
+                                        <v-rating empty-icon="mdi-heart" full-icon="mdi-heart" half-icon="mdi-heart"
+                                            hover length="5" size="50" color="red" v-model="statD.vida"></v-rating>
+                                        <v-divider></v-divider>
+                                        <br>
+                                        <h5 v-if="id < 2" class="dialog_vel">Armadura</h5>
+                                        <h5 v-if="id > 2" class="dialog_vel">Cantidad x Mins</h5>
+                                        <v-slider v-if="id != 2 && id < 2" color="red" v-model="statD.armadura" disabled
+                                            thumb-label ticks></v-slider>
+                                        <v-rating empty-icon="mdi-shield" full-icon="mdi-shield" half-icon="mdi-shield"
+                                            hover length="5" v-if="id == 2" size="50" color="blue-grey darken-3"
+                                            v-model="statD.armadura" value="1"></v-rating>
+                                        <v-slider v-if="id > 2" color="red" v-model="statD.cantidadMinuto" max="60"
+                                            min="1" step="1" thumb-label ticks></v-slider>
+                                        <h5 v-if="id > 2" class="dialog_vel">Puntos x Kill</h5>
+                                        <v-slider v-if="id > 2" color="red" v-model="statD.puntos" max="10" min="1"
+                                            step="1" thumb-label ticks></v-slider>
+                                        <h5 v-if="id > 2" class="dialog_vel">MAPAS</h5>
+
+                                        <div style="display: flex;" v-if="id > 2">
+                                            <v-checkbox style="width: 150px;" v-model="statD.mapa[0]" label="Mapa 1:">
+                                            </v-checkbox><button
+                                                style="background-color: transparent; border: none; color: red; font-family: 'Bebas Neue'; font-size: 22px; text-transform: uppercase; font-weight: bold;"
+                                                @click="imgDialog = true">Preveiw</button>
+                                        </div>
+                                        <div style="display: flex;" v-if="id > 2">
+                                            <v-checkbox style="width: 150px;" v-model="statD.mapa[1]" label="Mapa 2:">
+                                            </v-checkbox><button
+                                                style="background-color: transparent; border: none; color: red; font-family: 'Bebas Neue'; font-size: 22px; text-transform: uppercase; font-weight: bold;"
+                                                @click="imgDialog2 = true">Preveiw</button>
+                                        </div>
+                                        <div style="display: flex;" v-if="id > 2">
+                                            <v-checkbox style="width: 150px;" v-model="statD.mapa[2]" label="Mapa 3:">
+                                            </v-checkbox><button
+                                                style="background-color: transparent; border: none; color: red; font-family: 'Bebas Neue'; font-size: 22px; text-transform: uppercase; font-weight: bold;"
+                                                @click="imgDialog3 = true">Preveiw</button>
+                                        </div>
+                                        <v-dialog v-model="imgDialog" v-if="imgDialog == true" width="auto"
+                                            :retain-focus="false">
+                                            <v-card>
+                                                <v-img
+                                                    src="http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/map.png" />
+                                            </v-card>
+                                        </v-dialog>
+                                        <v-dialog v-model="imgDialog2" v-if="imgDialog2 == true" width="auto"
+                                            :retain-focus="false">
+                                            <v-card>
+                                                <v-img
+                                                    src="http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/map2.png" />
+                                            </v-card>
+                                        </v-dialog>
+                                        <v-dialog v-model="imgDialog3" v-if="imgDialog3 == true" width="auto"
+                                            :retain-focus="false">
+                                            <v-card>
+                                                <v-img
+                                                    src="http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/map3.png" />
+                                            </v-card>
+                                        </v-dialog>
+
+                                    </v-card-text>
+                                    <v-divider></v-divider>
+                                    <v-card-actions>
+                                        <v-spacer></v-spacer>
+                                        <v-btn v-if="id <= 2" color="red" text
+                                            @click="dialog_1 = false, updateStats(id, statD.velocidad, statD.fuerza, statD.vida, statD.armadura, statD.nombreTipo, statD.puntos, statD.mapa[0], statD.mapa[1], statD.mapa[2])">
+                                            Save
+                                        </v-btn>
+                                        <v-btn v-if="id > 2" color="red" text
+                                            @click="dialog_1 = false, updateStats(id, statD.velocidad, statD.fuerza, statD.vida, statD.cantidadMinuto, statD.nombreTipo, statD.puntos, statD.mapa[0], statD.mapa[1], statD.mapa[2])">
+                                            Save
+                                        </v-btn>
+                                        <v-btn v-if="id > 4" color="red" text
+                                            @click="dialog_1 = false, deleteZom(statD.nombreTipo, statD.url)">
+                                            Delete
+                                        </v-btn>
+                                    </v-card-actions>
+                                </v-card>
+                            </v-dialog>
+                        </v-card>
+                    </v-row>
+                </v-col>
+        </div>
+
+
+        <!--ADD NEW AND DIALOG ADMINS-->
+        <div v-show="auth == true && userAuth == username && ready == 1 && rol == 'admin'">
+            <v-row>
+                <v-col cols="12" class="d-flex justify-center">
+                    <v-card width="300px" outlined color="black" class="drop-zone pa-5">
+                        <!-- 						<input type="file" ref="fileInput" @change="addImage" />
+						<v-btn color="red" @click="openFileDialog">Add Image</v-btn> -->
+                        <form>
+                            <div
+                                style="font-family: 'Bebas Neue'; text-transform: uppercase; font-size: 20px; font-weight: bold;">
+                                <label style="color: white" for="file-input">Select an image:</label>
+                                <input
+                                    style="background-color: #FF5656; margin-bottom: 20px; padding: 20px; border: 2px solid white; border-radius: 10px;"
+                                    type="file" id="file-input">
+                            </div>
+                            <div style="display: flex;">
+                                <v-btn color="red" @click="uploadImage()">Upload Image</v-btn>
+                                <v-btn style="margin-left: 5px;" color="red"
+                                    href="https://sanderfrenken.github.io/Universal-LPC-Spritesheet-Character-Generator/"
+                                    target="_blank">Create Sprite</v-btn>
+                            </div>
+                        </form>
+                        <v-dialog v-model="dialog_2" v-if="dialog_2 == true" width="500" :retain-focus="false">
+                            <v-card>
+                                <h2 class="dialog_title">
+                                    Configuration
+                                </h2>
+                                <v-card-text>
+                                    <h5 class="dialog_vel">Puntos x Kill</h5>
+                                    <v-slider color="red" v-model="new_puntos" max="10" min="1" step="1" thumb-label
+                                        ticks></v-slider>
+                                    <v-divider></v-divider>
+                                    <br>
+                                    <h5 class="dialog_vel">Velocidad</h5>
+                                    <v-slider color="red" v-model="new_velocidad" max="5" min="1" step="1" thumb-label
+                                        ticks></v-slider>
+                                    <v-divider></v-divider>
+                                    <br>
+                                    <h5 class="dialog_vel">Fuerza</h5>
+                                    <v-slider color="red" v-model="new_fuerza" max="5" min="1" step="1" thumb-label
+                                        ticks>
+                                    </v-slider>
+                                    <v-divider></v-divider>
+                                    <br>
+                                    <h5 class="dialog_vel">Vida</h5>
+                                    <v-rating empty-icon="mdi-heart" full-icon="mdi-heart" half-icon="mdi-heart" hover
+                                        length="5" size="50" color="red" v-model="new_vida"></v-rating>
+                                    <v-divider></v-divider>
+                                    <br>
+                                    <h5 class="dialog_vel">Cantidad x Mins</h5>
+                                    <v-slider color="red" v-model="new_cantidad" max="60" min="1" step="1" thumb-label
+                                        ticks></v-slider>
+
+                                    <h5 class="dialog_vel">MAPAS</h5>
+                                    <div style="display: flex;">
+                                        <v-checkbox style="width: 150px;" v-model="map1" value="1" label="Mapa 1:">
+                                        </v-checkbox><button
+                                            style="background-color: transparent; border: none; color: red; font-family: 'Bebas Neue'; font-size: 22px; text-transform: uppercase; font-weight: bold;"
+                                            @click="imgDialog = true">Preveiw</button>
+                                    </div>
+                                    <div style="display: flex;">
+                                        <v-checkbox style="width: 150px;" v-model="map2" label="Mapa 2:" value="2">
+                                        </v-checkbox><button
+                                            style="background-color: transparent; border: none; color: red; font-family: 'Bebas Neue'; font-size: 22px; text-transform: uppercase; font-weight: bold;"
+                                            @click="imgDialog2 = true">Preveiw</button>
+                                    </div>
+                                    <div style="display: flex;">
+                                        <v-checkbox style="width: 150px;" v-model="map3" label="Mapa 3:" value="3">
+                                        </v-checkbox><button
+                                            style="background-color: transparent; border: none; color: red; font-family: 'Bebas Neue'; font-size: 22px; text-transform: uppercase; font-weight: bold;"
+                                            @click="imgDialog3 = true">Preveiw</button>
+                                    </div>
+                                    <v-dialog v-model="imgDialog" v-if="imgDialog == true" width="auto"
+                                        :retain-focus="false">
+                                        <v-card>
+                                            <v-img
+                                                src="http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/map.png" />
+                                        </v-card>
+                                    </v-dialog>
+                                    <v-dialog v-model="imgDialog2" v-if="imgDialog2 == true" width="auto"
+                                        :retain-focus="false">
+                                        <v-card>
+                                            <v-img
+                                                src="http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/map2.png" />
+                                        </v-card>
+                                    </v-dialog>
+                                    <v-dialog v-model="imgDialog3" v-if="imgDialog3 == true" width="auto"
+                                        :retain-focus="false">
+                                        <v-card>
+                                            <v-img
+                                                src="http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/map3.png" />
+                                        </v-card>
+                                    </v-dialog>
+                                </v-card-text>
+                                <v-divider></v-divider>
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn color="red" text
+                                        @click="dialog_2 = false, done = 1, addNewZombie(new_velocidad, new_fuerza, new_vida, new_cantidad, new_puntos, map1, map2)">
+                                        Save
+                                    </v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </v-dialog>
+                    </v-card>
+                </v-col>
+            </v-row>
+            </v-container>
+        </div>
+
+
+        <!--BONUS ADMINS-->
+        <div v-show="auth == true && userAuth == username && ready == 1 && rol == 'admin'">
+            <v-container fill-height fluid>
+                <v-row justify="center">
+                    <h3>Bonus</h3>
+                </v-row>
+                <v-col style="width: 100%;">
+                    <v-row justify="center">
+                        <v-card v-for="(bonus, j) in arrBonus" :key="j" width="300px" height="380px" elevation="8"
+                            class="ml-10 mb-10" outlined color="grey lighten-1">
+
+                            <v-img :src="bonus.img" height="272px">
+                            </v-img>
+                            <v-card-title class="pb-0"
+                                style="font-family: Bebas Neue; text-transform: uppercase; font-size: 2rem; font-weight: bold;">
+                                {{bonus.nomBonus}}
+                            </v-card-title>
+                            <v-card-text>{{bonus.descr}}</v-card-text>
+                        </v-card>
+                    </v-row>
+                </v-col>
+        </div>
+
+        <!--CANVAS ADMINS-->
+
+
+
+
+
+
+
+
+        <!--EMPEZAMOS ROL USER-->
+
+        <v-container fill-height fluid class=""
+            v-show="auth == true && userAuth == username && ready == 1 && rol == 'user'">
+            <v-row justify="center">
+                <h3>Characters / Zombies</h3>
+            </v-row>
+            <v-col style="width: 100%;">
+                <v-row justify="center">
+                    <div @click="infoDialog = true, id = `${u}`" class="users" v-for="(statU, u) in arrStats" :key="u"
+                        style="margin: 10px; width: 300px; height: 380px;">
+                        <h3 style="text-align: center; font-size: 35px;">{{statU.nombreTipo}}</h3>
+                        <!--                             <v-img :src="statU.url" height="272px">
+                            </v-img> -->
+                        <v-img v-if="statU.nombreTipo != `zombie_new${u+1}`" height="272px">
+                            <div :class="`stat-${u}`"></div>
+                        </v-img>
+                        <v-img style="transform: scale(1.85);" :src="statU.url2"
+                            v-if="statU.nombreTipo == `zombie_new${u+1}`" height="272px">
+                        </v-img>
+                        <v-dialog v-model="infoDialog" v-if="infoDialog == true" width="500" :retain-focus="false">
+                            <v-card v-for="(statK, k) in arrStats" :key="k" v-if="k == id">
+                                <h2 class="dialog_title">
+                                    CHECK INFO
+                                </h2>
+                                <v-card-text>
+                                    <h5 style="text-align: center;" class="dialog_vel">Información:</h5>
+                                    <v-card-text v-if="infoDialog == true">
+                                        <v-divider></v-divider>
+                                        <br>
+                                        <v-card-text>
+                                            Aqui está toda la Información sobre la configuración del jugador y del
+                                            zombie.
+                                            Empezamos con la Información del jugador. <br><br>
+                                            Has escogido el jugador de tipo: <b>{{statK.nombreTipo}}</b> <br><br>
+                                            &emsp;-Velocidad: <b>{{statK.velocidad}}</b> <br><br>
+                                            &emsp;-Fuerza: <b>{{statK.fuerza}}/5</b> <br><br>
+                                            &emsp;-Vida: <b>{{statK.vida}}/5</b> <br><br>
+                                            <p v-if="id <= 2">&emsp;-Armadura: <b>{{statK.armadura}}</b><br></p>
+                                            <p v-show="id > 2">&emsp;-Cantidad x Mins:
+                                                <b>{{statK.cantidadMinuto}}</b><br>
+                                            </p>
+                                            <p v-show="id > 2">&emsp;-Puntos: <b>{{statK.puntos}}</b><br></p>
+                                        </v-card-text>
+
+                                        <v-card-text v-if="id > 4">
+                                            Este zombie que estas viendo, puede ser eliminado en cualquier momento
+                                            por parte de los adminstradores,
+                                            los unicos zombies que podrán aparecer en el juego son el "zombie" y el
+                                            "zombie Boss", todos los demás son temporales.
+                                            Así que espabila a matarlos.
+                                        </v-card-text>
+                                        <div style="display: flex;" v-if="id > 2">
+                                            <button v-if="statK.mapa[0] != 0" class="styleBtn"
+                                                @click="imgDialog = true">Mapa 1</button>
+                                            <button v-if=" statK.mapa[1] != 0" class="styleBtn"
+                                                @click="imgDialog2 = true">Mapa 2</button>
+                                            <button v-if="statK.mapa[2] != 0" class="styleBtn"
+                                                @click="imgDialog3 = true">Mapa 3</button>
+                                        </div>
+                                        <v-dialog v-model="imgDialog" v-if="imgDialog == true" width="auto"
+                                            :retain-focus="false">
+                                            <v-card>
+                                                <v-img
+                                                    src="http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/map.png" />
+                                            </v-card>
+                                        </v-dialog>
+                                        <v-dialog v-model="imgDialog2" v-if="imgDialog2 == true" width="auto"
+                                            :retain-focus="false">
+                                            <v-card>
+                                                <v-img
+                                                    src="http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/map2.png" />
+                                            </v-card>
+                                        </v-dialog>
+                                        <v-dialog v-model="imgDialog3" v-if="imgDialog3 == true" width="auto"
+                                            :retain-focus="false">
+                                            <v-card>
+                                                <v-img
+                                                    src="http://admin.alumnes.inspedralbes.cat/Projecte_Grup1/Interficie/server/uploads/map3.png" />
+                                            </v-card>
+                                        </v-dialog>
+
+                                    </v-card-text>
+                                </v-card-text>
+                                <v-divider></v-divider>
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn color="red" text @click="infoDialog = false">
+                                        Close
+                                    </v-btn>
+                            </v-card>
+                        </v-dialog>
+                    </div>
+                </v-row>
+            </v-col>
+            <div v-show="auth == true && userAuth == username && ready == 1 && rol == 'user'">
+                <v-container fill-height fluid>
+                    <v-row justify="center">
+                        <h3>Bonus</h3>
+                    </v-row>
+                    <v-col style="width: 100%;">
+                        <v-row justify="center">
+                            <div class="users" v-for="(bonus, j) in arrBonus" :key="j"
+                                style="margin: 10px; width: 300px; height: 380px;">
+
+                                <v-img :src="bonus.img" height="272px">
+                                </v-img>
+                                <v-card-title class="red--text pb-0"
+                                    style="font-family: Bebas Neue; text-transform: uppercase; font-size: 2rem; font-weight: bold;">
+                                    {{bonus.nomBonus}}
+                                </v-card-title>
+                                <v-card-text class="white--text">{{bonus.descr}}</v-card-text>
+                            </div>
+                        </v-row>
+                    </v-col>
+            </div>
+        </v-container>
+        <br><br><br>
+        <div class="pepe">
+            <v-container fill-height fluid class=""
+                v-show="auth == true && userAuth == username && ready == 1 && (rol == 'admin' || rol == 'user')">
+                <v-row justify="center">
+
+                    <v-col cols="6" sm="auto">
+                        <h4>CharacterS</h4>
+                        <canvas id="canvas"
+                            style="min-width: 800px; min-height: 600px; background-color: rgba(255, 255, 255, 0.9)"
+                            width="800" height="600"></canvas>
+                    </v-col>
+
+                    <v-col cols="6" sm="auto">
+                        <h4>Zombies</h4>
+                        <canvas id="canvas2"
+                            style="min-width: 800px; min-height: 600px; background-color: rgba(255, 255, 255, 0.9)"
+                            width="800" height="600"></canvas>
+                    </v-col>
+                    <v-col cols="6" sm="auto">
+                        <h4>Partidas x Puntos</h4>
+                        <canvas id="canvas3"
+                            style="min-width: 800px; min-height: 600px; background-color: rgba(255, 255, 255, 0.9)"
+                            width="800" height="600"></canvas>
+                    </v-col>
+                    <v-col cols="6" sm="auto">
+                        <h4>Partidas x Tiempo</h4>
+                        <canvas id="canvas4"
+                            style="min-width: 800px; min-height: 600px; background-color: rgba(255, 255, 255, 0.9)"
+                            width="800" height="600"></canvas>
+                    </v-col>
+                </v-row>
+            </v-container>
+        </div>
+    </v-app>
+</body>
+<script src="./Projecte_Grup1/Interficie/client/index2.js"></script>
+<script>vue_app.getSession()</script>
+
+
+
+</html>
