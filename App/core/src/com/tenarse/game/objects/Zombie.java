@@ -322,6 +322,9 @@ public class Zombie extends Actor{
                         stateTime += delta;
                         if (stateTime >= frameTime) {
                             currentFrame++;
+                            if (currentFrame == 1){
+                                AssetManager.zombiePunch.play();
+                            }
                             if (currentFrame >= animacionAtackU.length) {
                                 currentFrame = 0;
                                 attack = false;
@@ -377,6 +380,7 @@ public class Zombie extends Actor{
             PoolBlood pool = new PoolBlood(this.position, direction);
             getStage().addActor(pool);
             pool.toBack();
+            AssetManager.dieSound.play();
         }
     }
 

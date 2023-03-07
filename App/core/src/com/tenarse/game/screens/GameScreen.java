@@ -99,6 +99,8 @@ public class  GameScreen implements Screen {
 
         this.game = game;
 
+        AssetManager.menuMusic.stop();
+
         contadorTiempo = new ContadorTiempo();
 
         this.username = username;
@@ -111,10 +113,16 @@ public class  GameScreen implements Screen {
         this.selectedMap = selectedMap;
 
         if(selectedMap == 0){
+            AssetManager.mapa1Music.play();
             map = new Map(AssetManager.map1);
+            AssetManager.mapa1Music.setVolume(0.10f);
         }else if(selectedMap == 1){
+            AssetManager.mapa2Music.play();
             map = new Map(AssetManager.map2);
+            AssetManager.mapa2Music.setVolume(0.10f);
         } else if (selectedMap == 2){
+            AssetManager.mapa3Music.play();
+            AssetManager.mapa3Music.setVolume(0.10f);
             map = new Map(AssetManager.map3);
         }
 

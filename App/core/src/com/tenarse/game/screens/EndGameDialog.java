@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Timer;
 import com.tenarse.game.Tenarse;
+import com.tenarse.game.helpers.AssetManager;
 
 import io.socket.client.Socket;
 
@@ -94,6 +95,9 @@ public class EndGameDialog extends Dialog {
             if (this.multiplayer){
                 this.socket.disconnect();
             }
+            AssetManager.mapa1Music.stop();
+            AssetManager.mapa2Music.stop();
+            AssetManager.mapa3Music.stop();
         }
     }
 

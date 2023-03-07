@@ -45,6 +45,8 @@ public class MainMenuScreen implements Screen {
     public MainMenuScreen(Tenarse game){
         this.game = game;
 
+        AssetManager.menuMusic.play();
+
         stage = new Stage(new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         background = AssetManager.imgMainMenu;
         imgMenuJoc = new Image(background);

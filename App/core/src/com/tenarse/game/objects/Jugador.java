@@ -223,6 +223,14 @@ public class Jugador extends Actor {
                         arrowList.add(arrow);
                         getStage().addActor(arrow);
                         arrow.setZIndex(0);
+                        AssetManager.arrowSound.play();
+                    }
+                    if (tipusJugador != 1 && currentFrame == 3){
+                        if (tipusJugador == 2){
+                            AssetManager.warSound.play();
+                        } else {
+                            AssetManager.shieldSound.play();
+                        }
                     }
                     if (currentFrame >= animacionAtaqueRight.length) {
                         currentFrame = 0;
@@ -322,6 +330,8 @@ public class Jugador extends Actor {
             if (this.categoria.equals("picker")) {
                 playerDir = animacionDown[0];
             }
+
+
         }else{
             if(firstAnimationDie){
                 currentFrame = 0;

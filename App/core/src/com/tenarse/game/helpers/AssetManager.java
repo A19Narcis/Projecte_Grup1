@@ -1,6 +1,8 @@
 package com.tenarse.game.helpers;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -98,6 +100,18 @@ public class AssetManager {
 
 
     //Sounds
+    public static Music menuMusic;
+
+    public static Music mapa1Music;
+    public static Music mapa2Music;
+    public static Music mapa3Music;
+
+    public static Sound arrowSound;
+    public static Sound shieldSound;
+    public static Sound warSound;
+
+    public static Sound zombiePunch;
+    public static Sound dieSound;
 
 
     //Font
@@ -289,6 +303,27 @@ public class AssetManager {
         mapasPNG.add(mapa_png1);
         mapasPNG.add(mapa_png2);
         mapasPNG.add(mapa_png3);
+
+        //Sonidos
+        menuMusic = Gdx.audio.newMusic(Gdx.files.internal("Sounds/menuMusic.mp3"));
+        menuMusic.setLooping(true);
+
+        mapa1Music = Gdx.audio.newMusic(Gdx.files.internal("Sounds/mapa1Music.mp3"));
+        mapa1Music.setLooping(true);
+
+        mapa2Music = Gdx.audio.newMusic(Gdx.files.internal("Sounds/mapa2Music.mp3"));
+        mapa2Music.setLooping(true);
+
+        mapa3Music = Gdx.audio.newMusic(Gdx.files.internal("Sounds/mapa3Music.mp3"));
+        mapa3Music.setLooping(true);
+
+        warSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/warSound.mp3"));
+        arrowSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/arrowSound.mp3"));
+        shieldSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/shieldSound.mp3"));
+
+        zombiePunch = Gdx.audio.newSound(Gdx.files.internal("Sounds/zombiePunch.mp3"));
+        dieSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/dieSound.mp3"));
+
     }
 
     public static void dispose() {
