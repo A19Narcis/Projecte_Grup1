@@ -76,10 +76,10 @@
    <property name="colisionable" type="bool" value="true"/>
   </properties>
  </tile>
- <tile id="15" probability="0.01"/>
- <tile id="16" probability="0.01"/>
- <tile id="17" probability="0.01"/>
- <tile id="18" probability="0.01"/>
+ <tile id="15" probability="0.005"/>
+ <tile id="16" probability="0.005"/>
+ <tile id="17" probability="0.005"/>
+ <tile id="18" probability="0.005"/>
  <tile id="19">
   <properties>
    <property name="colisionable" type="bool" value="true"/>
@@ -96,8 +96,8 @@
   </properties>
  </tile>
  <tile id="23" probability="0"/>
- <tile id="24" probability="0.01"/>
- <tile id="25" probability="0.01"/>
+ <tile id="24" probability="0.005"/>
+ <tile id="25" probability="0.005"/>
  <tile id="26">
   <properties>
    <property name="colisionable" type="bool" value="true"/>
