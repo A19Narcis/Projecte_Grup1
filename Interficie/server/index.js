@@ -313,7 +313,7 @@ io.on('connection', (socketJugador) => {
         socketJugador.broadcast.emit('new_player', { id: socketJugador.id, xPl: x, yPl: y, tipoPl: tipo, direPl: direccion, vidasPl: vidas, killsPl: kills, usernamePl: username });
     });
 
-    socketJugador.on('coorJugador', function (x, y, direccion, vidas, kills, username) {
+    socketJugador.on('coorJugador', function(x, y, direccion, vidas, kills, username, ataque) {
         for (let i = 0; i < players.length; i++) {
             if (players[i].id == socketJugador.id) {
                 players[i].x = x;
@@ -322,9 +322,10 @@ io.on('connection', (socketJugador) => {
                 players[i].vidas = vidas
                 players[i].username = username
                 players[i].kills = kills
+                players[i].ataque = ataque
                 socketJugador.broadcast.emit('coorNuevas', players[i])
             }
-        }
+        }    
     })
 
     socketJugador.on('updatePuntos', function (puntosKill) {
