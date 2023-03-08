@@ -144,7 +144,6 @@ public class MainMenuScreen implements Screen {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 stage.getActors().get(8).setVisible(false);
                 stage.getActors().get(9).setVisible(true);
-                Settings.isMusicOn = false;
                 AssetManager.menuMusic.pause();
                 Settings.prefs.putBoolean("soundOn", false);
                 Settings.prefs.flush();
@@ -157,7 +156,6 @@ public class MainMenuScreen implements Screen {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 stage.getActors().get(9).setVisible(false);
                 stage.getActors().get(8).setVisible(true);
-                Settings.isMusicOn = true;
                 Settings.prefs.putBoolean("soundOn", true);
                 Settings.prefs.flush();
                 AssetManager.menuMusic.play();

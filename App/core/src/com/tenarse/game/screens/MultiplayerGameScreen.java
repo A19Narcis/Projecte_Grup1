@@ -158,7 +158,6 @@ public class MultiplayerGameScreen implements Screen {
                     JSONObject data = (JSONObject) args[0];
                     try{
                         String id = data.getString("id");
-                        //System.out.println(data);
                     } catch (JSONException e){
                         System.out.println(e);
                     }
@@ -179,9 +178,9 @@ public class MultiplayerGameScreen implements Screen {
                         jugador2.setPosition((float)data.getInt("x"), (float)data.getInt("y"));
                         jugador2.setDirection(data.getInt("direccion"));
                         jugador2.setKillsJugador(data.getInt("kills"));
-                        System.out.println(data);
                         if (!jugador2.isAttack()){
-                            jugador2.setAttack(data.getBoolean("ataque"));
+                            //jugador2.setAttack(data.getBoolean("ataque"));
+                            //NO cargamos el ataque - Problemas de LAG (hilos)
                         }
                     } catch (JSONException e){
                         System.out.println(e);
@@ -261,19 +260,19 @@ public class MultiplayerGameScreen implements Screen {
 
         if(selectedMap == 0){
             map = new Map(AssetManager.map1);
-            if (Settings.isMusicOn){
+            if (Settings.prefs.getBoolean("soundOn")){
                 AssetManager.mapa1Music.play();
                 AssetManager.mapa1Music.setVolume(0.05f);
             }
         }else if(selectedMap == 1){
             map = new Map(AssetManager.map2);
-            if (Settings.isMusicOn){
+            if (Settings.prefs.getBoolean("soundOn")){
                 AssetManager.mapa2Music.play();
                 AssetManager.mapa2Music.setVolume(0.05f);
             }
         } else if (selectedMap == 2){
             map = new Map(AssetManager.map3);
-            if (Settings.isMusicOn){
+            if (Settings.prefs.getBoolean("soundOn")){
                 AssetManager.mapa3Music.play();
                 AssetManager.mapa3Music.setVolume(0.05f);
             }
@@ -317,7 +316,7 @@ public class MultiplayerGameScreen implements Screen {
 
         Skin skin = AssetManager.skinTextBox;
         dialog = new EndGameDialog("Fin de la partida", skin, puntosPartida, jugador.getKillsJugador(), game);
-        dialog.toFront();
+
 
 
 
@@ -652,8 +651,8 @@ public class MultiplayerGameScreen implements Screen {
                 spawnEnemies();
             }
         } else {
-            dialog.setZIndex(150);
             stage.addActor(dialog);
+            dialog.toFront();
             dialog.getTexto().setText("Partida terminada\n\nPuntos: " + puntosPartida + "\nKills: " + jugador.getKillsJugador());
             if (Gdx.app.getType() == Application.ApplicationType.Android) {
                 dialog.getTitleLabel().setFontScale(0.90f);

@@ -107,7 +107,7 @@ public class Zombie extends Actor{
         animacionAtackU = playerSprites.A_U;
         animacionAtackD = playerSprites.A_D;
         damage = AssetManager.fullStats.getJSONObject(tipoZombie + 2).getInt("fuerza");
-        velocity = AssetManager.fullStats.getJSONObject(tipoZombie + 2).getInt("velocidad") * 30;
+        velocity = AssetManager.fullStats.getJSONObject(tipoZombie + 2).getInt("velocidad") * 20;
         points = AssetManager.fullStats.getJSONObject(tipoZombie + 2).getInt("puntos");
         vida = AssetManager.fullStats.getJSONObject(tipoZombie + 2).getInt("vida");
 

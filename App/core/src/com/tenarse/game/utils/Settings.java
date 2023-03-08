@@ -5,7 +5,7 @@ import com.badlogic.gdx.Preferences;
 import com.tenarse.game.helpers.AssetManager;
 
 public class Settings {
-    public static final String IP_SERVER = "192.168.236.185";
+    public static final String IP_SERVER = "labs.inspedralbes.cat";
     public static final String PUERTO_PETICIONES = "7073";
     public static final String PUERTO_SOCKETS = "7074";
 
@@ -53,8 +53,6 @@ public class Settings {
     public static final long BONUS_TIME_DESPAWN = 15000000000l;
     public static final long B_VELOCITY_TIMEOUT = 10000000000l;
     public static final long B_POINTS_TIMEOUT = 10000000000l;
-
-    public static boolean isMusicOn = true;
 
     public static Preferences prefs = Gdx.app.getPreferences("My Preferences");
 
