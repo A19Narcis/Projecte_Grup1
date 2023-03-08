@@ -15,6 +15,7 @@ public class ContadorTiempo {
             @Override
             public void run() {
                 segundos++;
+                System.out.println(segundos);
             }
         }, 0, 1000); // se actualiza cada 1000 milisegundos, es decir, cada segundo
     }
@@ -23,7 +24,12 @@ public class ContadorTiempo {
         String tiempoFinal = "";
         this.minutos = this.segundos / 60;
         this.segundos = this.segundos % 60;
-        tiempoFinal = this.minutos + ":" + this.segundos;
+        if (this.segundos < 10){
+            tiempoFinal = this.minutos + ":0" + this.segundos;
+        } else {
+            tiempoFinal = this.minutos + ":" + this.segundos;
+        }
+
         return tiempoFinal;
     }
 

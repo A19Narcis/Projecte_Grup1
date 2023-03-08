@@ -1,22 +1,16 @@
 package com.tenarse.game.objects;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.TimeUtils;
-import com.tenarse.game.bonus.Bonus;
 import com.tenarse.game.effects.HitEffect;
 import com.tenarse.game.effects.PoolBlood;
 import com.tenarse.game.helpers.AMSprites;
 import com.tenarse.game.helpers.AssetManager;
 import com.tenarse.game.utils.Settings;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -77,7 +71,7 @@ public class Zombie extends Actor{
         rectanguloDeteccion.setPosition(x, y);
     }
 
-    public Zombie(int width, int height, Map map, int tipoZombie) {
+    public Zombie(int width, int height, Map map, final int tipoZombie) {
         this.width = width;
         this.height = height;
         this.map = map;

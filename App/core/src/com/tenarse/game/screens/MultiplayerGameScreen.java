@@ -261,8 +261,22 @@ public class MultiplayerGameScreen implements Screen {
 
         if(selectedMap == 0){
             map = new Map(AssetManager.map1);
+            if (Settings.isMusicOn){
+                AssetManager.mapa1Music.play();
+                AssetManager.mapa1Music.setVolume(0.05f);
+            }
         }else if(selectedMap == 1){
             map = new Map(AssetManager.map2);
+            if (Settings.isMusicOn){
+                AssetManager.mapa2Music.play();
+                AssetManager.mapa2Music.setVolume(0.05f);
+            }
+        } else if (selectedMap == 2){
+            map = new Map(AssetManager.map3);
+            if (Settings.isMusicOn){
+                AssetManager.mapa3Music.play();
+                AssetManager.mapa3Music.setVolume(0.05f);
+            }
         }
 
         this.nomMapa = nomMapa;

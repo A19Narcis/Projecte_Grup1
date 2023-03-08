@@ -2,6 +2,7 @@ package com.tenarse.game.screens;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -19,6 +20,8 @@ import com.tenarse.game.objects.ConnectionNode;
 import com.tenarse.game.objects.Jugador;
 import com.tenarse.game.objects.Map;
 import com.tenarse.game.utils.Settings;
+
+import java.util.Set;
 
 
 public class MainMenuScreen implements Screen {
@@ -40,12 +43,10 @@ public class MainMenuScreen implements Screen {
     private Image imgMenuJoc;
     private Tenarse game;
 
-    private ImageButton jugarBTN, multiBTN, singleBTN, returnBTN;
+    private ImageButton jugarBTN, multiBTN, singleBTN, returnBTN, soundOnBTN, soundOffBTN;
 
     public MainMenuScreen(Tenarse game){
         this.game = game;
-
-        AssetManager.menuMusic.play();
 
         stage = new Stage(new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         background = AssetManager.imgMainMenu;
@@ -78,6 +79,9 @@ public class MainMenuScreen implements Screen {
         singleBTN = new ImageButton(new TextureRegionDrawable(new TextureRegion(btnSingle)));
         returnBTN = new ImageButton(new TextureRegionDrawable(new TextureRegion(btnReturn)));
 
+        soundOnBTN = new ImageButton(new TextureRegionDrawable(new TextureRegion(AssetManager.imgSoundOn)));
+        soundOffBTN = new ImageButton(new TextureRegionDrawable(new TextureRegion(AssetManager.imgSoundOff)));
+
         stage.addActor(jugarBTN);        //1
         stage.addActor(botIniciCrossbow);     //2
         stage.addActor(botIniciWarHam);  //3
@@ -85,11 +89,29 @@ public class MainMenuScreen implements Screen {
         stage.addActor(multiBTN);        //5
         stage.addActor(singleBTN);       //6
         stage.addActor(returnBTN);       //7
+        stage.addActor(soundOnBTN);      //8
+        stage.addActor(soundOffBTN);     //9
 
 
         stage.getActors().get(5).setVisible(false);
         stage.getActors().get(6).setVisible(false);
         stage.getActors().get(7).setVisible(false);
+
+
+        //Sonido on por defecto
+        if (!Settings.prefs.contains("soundOn")){
+            Settings.prefs.putBoolean("soundOn", true);
+            Settings.prefs.flush();
+        }
+
+        if (Settings.prefs.getBoolean("soundOn")){
+            AssetManager.menuMusic.play();
+            stage.getActors().get(9).setVisible(false);
+        } else if (!Settings.prefs.getBoolean("soundOn")) {
+            stage.getActors().get(8).setVisible(false);
+        }
+
+
 
         botIniciCrossbow.desplazarAutomaticamente(-175, Gdx.graphics.getHeight() * 0.163f);
         botIniciWarHam.desplazarAutomaticamente(-375, Gdx.graphics.getHeight() * 0.163f);
@@ -98,9 +120,17 @@ public class MainMenuScreen implements Screen {
         if (Gdx.app.getType() == Application.ApplicationType.Android){
             jugarBTN.setPosition(Gdx.graphics.getWidth() / 2 - jugarBTN.getWidth(), Gdx.graphics.getHeight() / 2 - jugarBTN.getHeight());
             jugarBTN.getImage().setScale(2f);
+            soundOnBTN.setPosition(Gdx.graphics.getWidth() - soundOnBTN.getWidth() * 1.5f, Gdx.graphics.getHeight() - soundOnBTN.getHeight() * 1.5f);
+            soundOnBTN.getImage().setScale(1.25f);
+            soundOffBTN.setPosition(Gdx.graphics.getWidth() - soundOffBTN.getWidth() * 1.5f, Gdx.graphics.getHeight() - soundOffBTN.getHeight() * 1.5f);
+            soundOffBTN.getImage().setScale(1.25f);
 
         } else {
             jugarBTN.setPosition(Gdx.graphics.getWidth() / 2 - jugarBTN.getWidth() / 2, Gdx.graphics.getHeight()/ 2 - jugarBTN.getHeight() / 2);
+            soundOnBTN.setPosition(Gdx.graphics.getWidth() - soundOnBTN.getWidth() * 1.25f, Gdx.graphics.getHeight() - soundOnBTN.getHeight() * 1.5f);
+            soundOnBTN.getImage().setScale(0.75f);
+            soundOffBTN.setPosition(Gdx.graphics.getWidth() - soundOffBTN.getWidth() * 1.25f, Gdx.graphics.getHeight() - soundOffBTN.getHeight() * 1.5f);
+            soundOffBTN.getImage().setScale(0.75f);
         }
 
         Gdx.input.setInputProcessor(stage);
@@ -109,6 +139,42 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void show() {
+        soundOnBTN.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                stage.getActors().get(8).setVisible(false);
+                stage.getActors().get(9).setVisible(true);
+                Settings.isMusicOn = false;
+                AssetManager.menuMusic.pause();
+                Settings.prefs.putBoolean("soundOn", false);
+                Settings.prefs.flush();
+                return true;
+            }
+        });
+
+        soundOffBTN.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                stage.getActors().get(9).setVisible(false);
+                stage.getActors().get(8).setVisible(true);
+                Settings.isMusicOn = true;
+                Settings.prefs.putBoolean("soundOn", true);
+                Settings.prefs.flush();
+                AssetManager.menuMusic.play();
+
+                return true;
+            }
+        });
+
+        soundOnBTN.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                stage.getActors().get(8).setVisible(false);
+                stage.getActors().get(9).setVisible(true);
+                return true;
+            }
+        });
+
         jugarBTN.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {

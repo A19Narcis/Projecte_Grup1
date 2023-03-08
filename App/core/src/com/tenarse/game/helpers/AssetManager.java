@@ -43,6 +43,9 @@ public class AssetManager {
     public static Texture sheetArrowU;
     public static Texture sheetArrowD;
 
+    public static Texture imgSoundOn;
+    public static Texture imgSoundOff;
+
     public static Texture sheetBonusLive;
     public static Texture sheetBonusDamage;
     public static Texture sheetBonusVelocity;
@@ -112,7 +115,7 @@ public class AssetManager {
 
     public static Sound zombiePunch;
     public static Sound dieSound;
-
+    public static Sound zombieSound;
 
     //Font
     public static FreeTypeFontGenerator fontTextBold;
@@ -194,6 +197,12 @@ public class AssetManager {
         sheetArrowR = new Texture(Gdx.files.internal("ArrowRight.png"));
         sheetArrowR.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         sheetArrowD = new Texture(Gdx.files.internal("ArrowDown.png"));
+        sheetArrowD.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+
+        //Imagen sonidos ON / OFF
+        imgSoundOn = new Texture(Gdx.files.internal("sonidoOn.png"));
+        sheetArrowD.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        imgSoundOff = new Texture(Gdx.files.internal("sonidoOff.png"));
         sheetArrowD.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
         //Hit Sangre
@@ -323,6 +332,7 @@ public class AssetManager {
 
         zombiePunch = Gdx.audio.newSound(Gdx.files.internal("Sounds/zombiePunch.mp3"));
         dieSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/dieSound.mp3"));
+        zombieSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/zombieSound.mp3"));
 
     }
 

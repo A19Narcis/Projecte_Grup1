@@ -113,17 +113,23 @@ public class  GameScreen implements Screen {
         this.selectedMap = selectedMap;
 
         if(selectedMap == 0){
-            AssetManager.mapa1Music.play();
             map = new Map(AssetManager.map1);
-            AssetManager.mapa1Music.setVolume(0.10f);
+            if (Settings.isMusicOn && Settings.prefs.getBoolean("soundOn")){
+                AssetManager.mapa1Music.play();
+                AssetManager.mapa1Music.setVolume(0.05f);
+            }
         }else if(selectedMap == 1){
-            AssetManager.mapa2Music.play();
             map = new Map(AssetManager.map2);
-            AssetManager.mapa2Music.setVolume(0.10f);
+            if (Settings.isMusicOn && Settings.prefs.getBoolean("soundOn")){
+                AssetManager.mapa2Music.play();
+                AssetManager.mapa2Music.setVolume(0.05f);
+            }
         } else if (selectedMap == 2){
-            AssetManager.mapa3Music.play();
-            AssetManager.mapa3Music.setVolume(0.10f);
             map = new Map(AssetManager.map3);
+            if (Settings.isMusicOn && Settings.prefs.getBoolean("soundOn")){
+                AssetManager.mapa3Music.play();
+                AssetManager.mapa3Music.setVolume(0.05f);
+            }
         }
 
         this.nomMapa = nomMapa;
@@ -450,6 +456,7 @@ public class  GameScreen implements Screen {
                     contadorTiempo.detener();
                     String tiempo = contadorTiempo.getTiempo();
                     ConnectionNode nodeJS = new ConnectionNode();
+                    System.out.println(tiempo);
                     nodeJS.addNewPartida(this.username, jugador.getTypePlayer(), jugador.getKillsJugador(), tiempo, puntosPartida, this.nomMapa);
                 }
                 i--;

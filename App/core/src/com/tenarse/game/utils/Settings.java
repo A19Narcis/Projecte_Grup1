@@ -1,5 +1,7 @@
 package com.tenarse.game.utils;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.tenarse.game.helpers.AssetManager;
 
 public class Settings {
@@ -51,4 +53,9 @@ public class Settings {
     public static final long BONUS_TIME_DESPAWN = 15000000000l;
     public static final long B_VELOCITY_TIMEOUT = 10000000000l;
     public static final long B_POINTS_TIMEOUT = 10000000000l;
+
+    public static boolean isMusicOn = true;
+
+    public static Preferences prefs = Gdx.app.getPreferences("My Preferences");
+
 }
