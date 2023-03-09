@@ -116,6 +116,7 @@ public class AssetManager {
     public static Sound zombiePunch;
     public static Sound dieSound;
     public static Sound zombieSound;
+    public static Sound gameOver;
 
     //Font
     public static FreeTypeFontGenerator fontTextBold;
@@ -333,6 +334,7 @@ public class AssetManager {
         zombiePunch = Gdx.audio.newSound(Gdx.files.internal("Sounds/zombiePunch.mp3"));
         dieSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/dieSound.mp3"));
         zombieSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/zombieSound.mp3"));
+        gameOver = Gdx.audio.newSound(Gdx.files.internal("Sounds/dies.mp3"));
 
     }
 

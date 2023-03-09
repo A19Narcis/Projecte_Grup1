@@ -452,6 +452,7 @@ public class  GameScreen implements Screen {
                 }
                 players.remove(players.get(i));
                 if (players.size() == 0){
+                    AssetManager.gameOver.play();
                     //Enviar POST de addNewPartida
                     contadorTiempo.detener();
                     String tiempo = contadorTiempo.getTiempo();

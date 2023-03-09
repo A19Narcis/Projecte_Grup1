@@ -115,6 +115,7 @@ public class MultiplayerGameScreen implements Screen {
 
 
     public MultiplayerGameScreen(Tenarse game, Batch prevBatch, Viewport prevViewport, final String username, int tipus, int selectedMap, String nomMapa) {
+        AssetManager.menuMusic.stop();
         try {
             socket = IO.socket("http://" + Settings.IP_SERVER +":" + Settings.PUERTO_SOCKETS +"/");
 
@@ -633,6 +634,7 @@ public class MultiplayerGameScreen implements Screen {
                 players.remove(players.get(i));
                 if (players.size() == 0){
                     socket.disconnect();
+                    AssetManager.gameOver.play();
                     //Enviar POST de addNewPartida
                     contadorTiempo.detener();
                     String tiempo = contadorTiempo.getTiempo();
