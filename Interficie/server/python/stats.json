@@ -40,30 +40,77 @@
     },
     {
         "nombreTipo":"Zombie",
-        "velocidad":1,
+        "velocidad":3,
         "fuerza":1,
         "vida":1,
         "armadura":null,
         "mapa":[
             1,
-            2
+            2,
+            3
         ],
         "__v":0,
-        "cantidadMinuto":20.0,
+        "cantidadMinuto":60.0,
         "puntos":1.0
     },
     {
         "nombreTipo":"Boss",
         "velocidad":2,
-        "fuerza":2,
-        "vida":2,
+        "fuerza":1,
+        "vida":1,
         "armadura":null,
         "mapa":[
             1,
-            2
+            2,
+            3
         ],
         "__v":0,
-        "cantidadMinuto":4.0,
+        "cantidadMinuto":60.0,
         "puntos":5.0
+    },
+    {
+        "nombreTipo":"Tauren",
+        "velocidad":1,
+        "fuerza":3,
+        "vida":2,
+        "armadura":null,
+        "mapa":[
+            0,
+            0,
+            3
+        ],
+        "__v":0,
+        "cantidadMinuto":1.0,
+        "puntos":2.0
+    },
+    {
+        "nombreTipo":"Skeletron",
+        "velocidad":2,
+        "fuerza":4,
+        "vida":4,
+        "armadura":null,
+        "mapa":[
+            1,
+            0,
+            3
+        ],
+        "__v":0,
+        "cantidadMinuto":16.0,
+        "puntos":7.0
+    },
+    {
+        "nombreTipo":"Santa",
+        "velocidad":3,
+        "fuerza":2,
+        "vida":5,
+        "armadura":null,
+        "mapa":[
+            0,
+            2,
+            0
+        ],
+        "__v":0,
+        "cantidadMinuto":1.0,
+        "puntos":10.0
     }
 ]

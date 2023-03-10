@@ -2,40 +2,58 @@
     {
         "jugadores":[
             {
-                "username":"Neisis",
+                "username":"t7i",
                 "tipo":"Warhammer",
-                "kills":10
+                "kills":9
             }
         ],
-        "tiempo":"0:40",
-        "puntos":14,
+        "tiempo":"0:43",
+        "puntos":44,
         "idP":0,
         "__v":0
     },
     {
         "jugadores":[
             {
-                "username":"Neisis",
+                "username":"vg",
                 "tipo":"Warhammer",
-                "kills":1
+                "kills":9
             }
         ],
-        "tiempo":"0:46",
-        "puntos":2,
+        "tiempo":"0:57",
+        "puntos":18,
         "idP":1,
         "__v":0
     },
     {
         "jugadores":[
             {
-                "username":"ewfwe",
+                "username":"NodeJS",
+                "tipo":"Shield",
+                "kills":22
+            },
+            {
+                "username":"rfcflkk",
                 "tipo":"Warhammer",
                 "kills":0
             }
         ],
-        "tiempo":"0:38",
-        "puntos":0,
+        "tiempo":"0:37",
+        "puntos":50,
         "idP":2,
+        "__v":0
+    },
+    {
+        "jugadores":[
+            {
+                "username":"sergi",
+                "tipo":"Warhammer",
+                "kills":609
+            }
+        ],
+        "tiempo":"15:03",
+        "puntos":4145,
+        "idP":3,
         "__v":0
     }
 ]
